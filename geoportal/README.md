@@ -6,8 +6,8 @@
 ### In progress...
 - Estacions (meteo stations)
 - Emissaris submarins (marine outfalls)
-- Granges marines (aquicultura)
-- Àrees protegides
+- Instal·lacions d'aqüicultura (aquaculture)
+- Àrees protegides (natural reserves)
 - Radars VHF
 - Perfiladors ARGO (temps real)
 
