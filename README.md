@@ -6,6 +6,9 @@ Website for development and demonstrations of web apps for the BlueNetCat. The g
 ## Network app
 Visualize all the partners of the BlueNetCat here: https://bluenetcataccio4.github.io/network/
 
+## Geoportal data
+Collection of GeoJSONs that gather different oceanographic items of the Catalan coast and sea. https://github.com/BlueNetCatAccio4/BlueNetCatAccio4.github.io/tree/main/geoportal/data
+
 
 
 ### Funding
