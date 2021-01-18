@@ -9,3 +9,13 @@
 - Granges marines (aquicultura)
 - Àrees protegides
 - Radars VHF
+- Perfiladors ARGO (temps real)
+
+
+### Useful standards:
+Open Geospatial Consortium
+https://www.ogc.org/standards/eo-geojson
+
+
+
+
