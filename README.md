@@ -1,7 +1,7 @@
 # BlueNetCat - Acció 4
 Website for development and demonstrations of web apps for the BlueNetCat. The goal of action 4 is to capitalize the data collected by the researchers of the network.
 
-<img align="left" width="80" height="80" src="img/network_small.png">
+<img align="left" width="80" height="80" src="img/network.png">
 
 ## Network app
 Visualize all the partners of the BlueNetCat here: https://bluenetcataccio4.github.io/network/
