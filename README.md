@@ -5,3 +5,5 @@ Visualize all the partners of the BlueNetCat here: https://bluenetcataccio4.gith
 
 #### Funding
 This project has been financed by the "Generalitat de Catalunya" and by the European Union through the "Fons Europeu de Desenvolupament Regional" (FEDER).
+
+![Funding](img/funding.png)
