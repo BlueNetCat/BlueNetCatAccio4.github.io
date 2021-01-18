@@ -1,0 +1,275 @@
+{
+    "type": "FeatureCollection",
+    "features": [{
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Estartit Webcam",
+            "category": "webcam",
+            "link": "https://webcam-costabrava.com/"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [3.196078, 42.041178]
+        },
+        "id": "fad71836-2286-4d7a-973e-aa62c59cec70"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Lloret de Mar Webcam",
+            "category": "webcam",
+            "link": "https://www.skylinewebcams.com/en/webcam/espana/cataluna/gerona/lloret-de-mar-costa-brava.html"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [2.845422, 41.69743]
+        },
+        "id": "44949753-552a-4e37-82df-9b61aa3fedbc"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Barceloneta Webcam",
+            "category": "webcam",
+            "link": "https://www.skylinewebcams.com/en/webcam/espana/cataluna/barcelona/playa-barceloneta.html"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [2.19128, 41.377131]
+        },
+        "id": "238d985d-6e74-4bec-a666-a16f060f1402"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Sant Sebastià Webcam",
+            "category": "webcam",
+            "link": "https://www.skylinewebcams.com/en/webcam/espana/cataluna/barcelona/playa-sant-sebastia.html"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [2.191387, 41.377501]
+        },
+        "id": "d262f197-dd21-4644-b108-551ed83a968b"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Tossa de Mar Webcam",
+            "category": "webcam",
+            "link": "https://www.infotossa.com/ca/multimedia/cams"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [2.935101, 41.720697]
+        },
+        "id": "c9959980-eaa6-4f25-98fb-8ec762e39be9"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Port Ginesta Webcam",
+            "category": "webcam"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [1.928338, 41.261324]
+        },
+        "id": "019b8534-1560-45ce-89b2-04659ea89acf"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Cambrils Webcam",
+            "category": "webcam",
+            "link": "https://www.feratel.com/webcams/spanien/cambrils.html"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [1.064751, 41.065876]
+        },
+        "id": "9348c914-75a7-44b3-80f0-ad5972a9acad"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Barcelona Llevant Webcam",
+            "category": "webcam",
+            "link": "http://www.bcasa.cat:8888/imatgesaraplatgesbcn/camara6.jpg"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [2.197032, 41.386549]
+        },
+        "id": "fbc686a9-ad28-4385-a497-99a46facbce5"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Barcelona Garbí Webcam",
+            "category": "webcam",
+            "link": "http://www.bcasa.cat:8888/imatgesaraplatgesbcn/camara1.jpg"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [2.196569, 41.386247]
+        },
+        "id": "1fed3fd4-4fef-49ce-9352-fa9157d3b136"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Barceloneta Hotel W Webcam",
+            "category": "webcam",
+            "link": "https://camera.deckchair.com/w-barcelona"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [2.190335, 41.369087]
+        },
+        "id": "546c5225-962e-4b01-baf9-821cf7bd5c91"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Vilassar de Mar Webcam",
+            "category": "webcam",
+            "link": "https://windparadise.com/webcam"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [2.398693, 41.504676]
+        },
+        "id": "8292279c-4de3-4483-8fde-f9d2543fe816"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Castelldefels Webcam",
+            "category": "webcam",
+            "link": "https://www.youtube.com/watch?v=oe5GPi_C7Go&feature=emb_logo&ab_channel=17Nudos"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [1.964322, 41.264872]
+        },
+        "id": "83677966-3569-4627-acc7-b79bea601e5d"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "L'Ametlla de Mar Webcam SO",
+            "category": "webcam",
+            "link": "https://www.youtube.com/watch?v=ZnS_WmBxJok&feature=emb_logo&ab_channel=TurismeL%27AmetlladeMar"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [0.803723, 40.883215]
+        },
+        "id": "d782a918-26d0-4e79-a849-8baef6d850e2"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "L'Ametlla de Mar Webcam NE",
+            "category": "webcam",
+            "link": "https://www.youtube.com/watch?v=BmKJz53YEFg&feature=emb_logo&ab_channel=TurismeL%27AmetlladeMar"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [0.805139, 40.88487]
+        },
+        "id": "89969c52-2dd1-4e9d-a766-f16ca66caf9a"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Roses Webcam",
+            "category": "webcam",
+            "link": "https://www.tiempo.es/livecams/es0gr0133.html"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [3.153428, 42.261923]
+        },
+        "id": "5219da94-7df6-483f-9ff2-7445d889d205"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Badia de Roses Webcam",
+            "category": "webcam",
+            "link": "http://www.roses.net/webcam/wc1.asp"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [3.15481, 42.262383]
+        },
+        "id": "9e9db223-dcb2-4656-983d-23c2179bfb71"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Badia de Lloret de Mar Webcam",
+            "category": "webcam",
+            "link": "https://www.whatsupcams.com/es/webcams/espana/cataluna/lloret-de-mar-es/webcam-lloret-de-mar-la-playa/"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [2.84654, 41.697878]
+        },
+        "id": "263ae4f9-42ca-481e-b9e9-04e2a6d13758"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Calella Webcam",
+            "category": "http://178.237.152.29/cgi-bin/guestimage.html"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [2.647674, 41.60848]
+        },
+        "id": "a4b1f7c3-a5c0-49cc-ac42-ca7a60c03398"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "L'Estartit Webcam Elevada",
+            "category": "webcam",
+            "link": "https://www.ccma.cat/el-temps/embed/lestartit/cameraembed/9/"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [3.190973, 42.055602]
+        },
+        "id": "650ac3a7-1810-4b32-b24f-46be31d1652f"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Vilanova i la Geltrú Webcam",
+            "category": "webcam",
+            "link": "https://www.ccma.cat/el-temps/embed/vilanova-i-la-geltru/cameraembed/10/"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [1.727692, 41.209914]
+        },
+        "id": "a180228c-02f1-42c7-b23a-dbe890da5585"
+    }, {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
+            "name": "Calafell Webcam",
+            "category": "webcam",
+            "link": "https://www.ccma.cat/el-temps/embed/calafell/cameraembed/36/"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [1.605204, 41.188812]
+        },
+        "id": "646b0c76-da94-4fb3-836c-7e4d61f1e2dd"
+    }]
+}
