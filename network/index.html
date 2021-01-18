@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<title>BlueNetCat</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<!--script src="d3.v6.min.js"></script--> <!-- or https://d3js.org/d3.v6.min.js-->
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="Grups.json"></script> <!-- data script (loads from a json) -->
+<script src="createHTML.js"></script> <!-- Script to generate HTML -->
+<!-- Created by Gerard Llorach (gllorach (at) fbg.ub.edu), December 2020-->
+</head>
+
+
+<body>
+
+<video autoplay muted loop id="myVideo" style="z-index:-1">
+  <source src="background.mp4" type="video/mp4"> <!-- Cinemagraph made from Magde Ehlers https://www.pexels.com/es-es/foto/agua-azul-calma-formar-ondas-636353/ -->
+  Your browser does not support HTML5 video.
+</video>
+
+<!-- Container for the network visualization -->
+<div id="network-container"></div>
+
+<!-- Overlay functions are defined in createHTML.js-->
+<div id="overlay">
+  <div id="info">Hello</div>
+</div>
+
+
+<script type="module">
+
+// Based on D3 example: https://observablehq.com/@d3/sticky-force-layout
+// data variable is loaded from Grups.json (header)
+var graph = prepareData(data);
+
+
+// Create the graph
+
+//runApp(document.body, graph);
+runApp(document.getElementById("network-container"), graph);
+
+function runApp(htmlParent, graph){
+
+	var width = 800;
+	var height = 700;
+
+	const svg = d3.create("svg").attr("viewBox", [0, 0, width, height]),
+		link = svg
+		  .selectAll(".link")
+		  .data(graph.links)
+		  .join("line")
+		  .classed("link", true),
+		node = svg
+		  .selectAll(".node")
+		  .data(graph.nodes)
+		  .enter()
+		  .append("g")
+		  //.attr("id", (d,e) => {if ((graph.names[e] == "Generalitat de Catalunya") || (graph.names[e]=="Fons FEDER")) return "needsRect";}), // Require a square for funding (Generalitat and FEDER)
+		  .attr("id", (d,e) => graph.names[e].replace(/[^a-zA-Z ]|\s/g, "")),
+		circle = node
+		  .append("circle")
+		  .attr("r", (d,e) => graph.circleSize[e]) 
+		  .classed("node", true)
+		  .classed("fixed", d => d.fx !== undefined),
+		logo = node
+		  .append("image")
+		  .attr("href", (d,e) => graph.imgSrc[e])
+		  .attr("width", (d,e) => graph.circleSize[e]*1.8)
+		  .attr("height", (d,e) => graph.circleSize[e]*1.8)
+		  .classed("logo", true);
+
+	
+	
+
+
+  // Add the svg to the HTML
+  htmlParent.appendChild(svg.node());
+
+
+
+  // Add rectangles to Generalitat and Feder
+	const rectFundingG = d3.select("#GeneralitatdeCatalunya")
+			.append("rect")
+		  .attr("width", (d,e) => graph.circleSize[e]*1.8)
+		  .attr("height", (d,e) => graph.circleSize[e]*1.8)
+		  .classed("rectFunding", true);
+	const rectFundingF = d3.select("#FonsFEDER")
+			.append("rect")
+		  .attr("width", (d,e) => graph.circleSize[e]*1.8)
+		  .attr("height", (d,e) => graph.circleSize[e]*1.8)
+		  .classed("rectFunding", true);
+
+
+
+  // Forces simulation
+	//https://stackoverflow.com/questions/57277281/d3-how-to-update-force-simulation-when-data-values-change
+	//https://www.d3indepth.com/force-layout/
+	//https://sylhare.github.io/2020/06/10/Advanced-node-network-graph-d3.html
+  const simulation = d3
+	.forceSimulation()
+	.nodes(graph.nodes)
+	.force("charge", d3.forceManyBody())
+	.force("center", d3.forceCenter(width / 2, height / 2))
+	.force("link", d3.forceLink(graph.links).distance(d=>d.dist).strength(0.8)) // distances defined in the links
+	.force('collision', d3.forceCollide().strength(.5).radius(d => graph.circleSize[d.index]*1.2)) // Related to the size of the circle
+	.on("tick", tick);
+
+
+  // Select node
+  node.on("click", click);
+  // Show info node
+  node.on("mouseover", mOver);
+  node.on("pointerleave", mOut);
+
+  // Overlay (HTML with info) click event
+  document.getElementById("overlay").onclick = hideInfo;
+
+  function tick() {
+		link
+		  .attr("x1", d => d.source.x)
+		  .attr("y1", d => d.source.y)
+		  .attr("x2", d => d.target.x)
+		  .attr("y2", d => d.target.y);
+		circle
+		  .attr("cx", d => d.x)
+		  .attr("cy", d => d.y);
+		logo
+		  .attr("x", (d,e) => d.x-graph.circleSize[e]*0.9)
+		  .attr("y", (d,e) => d.y-graph.circleSize[e]*0.9);
+		rectFundingG
+		  .attr("x", (d,e) => d.x-graph.circleSize[e]*0.9)
+		  .attr("y", (d,e) => d.y-graph.circleSize[e]*0.9);
+		rectFundingF
+		  .attr("x", (d,e) => d.x-graph.circleSize[e]*0.9)
+		  .attr("y", (d,e) => d.y-graph.circleSize[e]*0.9);
+		
+  }
+
+  // Add label to node
+  function mOver(event, d){
+		addLabel(d);
+  }
+  function addLabel(d){
+		var idx = d.index;
+		var x = d.x;
+		var y = d.y;
+		// Text
+		var text = 
+		d3.select("svg")
+		.append("text")
+		.text(d => graph.names[idx]) // TODO, NOT POSSIBLE TO DO LINE BREAKS?
+		.attr("x", x)
+		.attr("y", y + graph.circleSize[idx]*2)
+		.attr("width", width*0.6)
+		.classed("label", true)
+		.style("text-anchor", dd => {
+				if (d.x < width/3) return "start";
+				else if (d.x > 2*width/3) return "end";
+				else return "middle";
+			}) // Position the text on the left or right depending on position
+		.style("opacity", 0)
+		.transition()
+		.duration(200)
+		.style("opacity",1);
+
+		// Background
+		var bbox = text.node().getBBox();
+		var padding = 2;
+		var rect = d3.select("svg")
+			.insert("rect", "text")
+			.attr("x", bbox.x - padding)
+			.attr("y", bbox.y - padding)
+			.attr("width", bbox.width + (padding*2))
+			.attr("height", bbox.height + (padding*2))
+			.style("fill", "rgba(180, 220, 255, 0.8)")
+			.classed("labelBox", true);
+  }
+
+
+  // Remove label from node
+  function mOut(event, d){
+		removeLabel(d);
+  }
+  function removeLabel(d){
+		// Fade out text
+		d3.select("svg").selectAll(".label")
+		.style("opacity", 1)
+		.transition()
+		.duration(200)
+		.style("opacity", 0)
+		.remove();
+		// Fade out background
+		d3.select("svg").selectAll(".labelBox")
+		.style("opacity", 1)
+		.transition()
+		.duration(250)
+		.style("opacity", 0)
+		.remove();
+  }
+
+
+
+  // Hide info and deselect graph element
+	function hideInfo(){
+		document.getElementById("overlay").style.display = "none";
+		// Unselect all circles
+		d3.selectAll("circle")
+			.attr("fx", d => delete d.fx)
+			.attr("fy", d => delete d.fy)
+			.classed("fixed", false);
+
+		simulation.alpha(0.8).restart();
+	}
+
+
+	// When a node is clicked
+  function click(event, d) {
+		// Selected
+		// Select
+		d3.select(this).select("circle").classed("fixed", true);
+		
+		d.fx = width*0.2; // TODO: smooth transitions whn clicking. Center and separate? Other strategies? links?
+		d.fy = height*0.1;
+
+		// Show HTML info
+		document.getElementById("overlay").style.display = "block";
+		createHTML(data, graph, d.index, document.getElementById("info"), simulation);
+
+		// Reset simulation
+		simulation.alpha(0.8).restart();
+
+  }
+
+}
+
+
+
+
+// Prepares the data for the graph
+function prepareData (data){
+
+
+	// Array of 64 research groups
+		var numGrups = data.features.length;
+
+
+		// Initialize arrays
+	var nodeNames = []; // Initialize array for nodeNames (grups + centers + FBG) + Generalitat? + Feder?
+	var centersList = []; // Initialize array for centers
+	var linksInfo = [];
+	var imgSources = [];
+	var circleSizes = [];
+	// Circle sizes
+	var smallR = 12; 
+	var middleR = 25;
+	var bigR = 45;
+
+	// Iterate grups
+	for (var i = 0; i < numGrups; i++){
+		// Write grup names
+		nodeNames[i] = data.features[i].properties.grup;
+		// Write size of circle for grup names
+		circleSizes[i] = smallR;
+		
+		// Find out how many centers are there
+		var center = data.features[i].properties.centro;
+		var centerIndex = 0;
+		// Check if the center is already in the centers list
+		var notInList = 1;
+		for (var j = 0; j<centersList.length; j++){
+			if ((center.localeCompare(centersList[j]) == 0) && (notInList)) {
+				notInList = 0;
+				centerIndex = j;
+			}
+		}
+		if (notInList){
+			centersList.push(center);
+			centerIndex = centersList.length-1;
+			// Write center in nodeNames
+			nodeNames[numGrups + centerIndex] = center;
+			// Write size of circle for centers
+			// Make exception for CSIC grups
+			if (((centersList[j] =="ICM") || (centersList[j] == "CEAB") || (centersList[j] == "IDAEA")) == 0)
+				circleSizes[numGrups + centerIndex] = middleR;
+			else
+				circleSizes[numGrups + centerIndex] = middleR*0.9;
+			// Write image source
+			imgSources[numGrups + centerIndex] = "logos/" + center + ".png";
+		} 
+		// Could optimize previous section by comparing with prevCenter (not real-time, not needed)
+
+
+		// Write Links between grup and center
+		linksInfo.push({source: i, target: numGrups + centerIndex, dist: 1});
+		// Write image sources
+		imgSources[i] = "logos/" + center + ".png";
+	}
+
+	// Include manually BlueNetCat
+	nodeNames.push("BlueNetCat");
+	imgSources.push("logos/BlueNetCat.png");
+	circleSizes.push(bigR);
+	for (var j = 0; j<centersList.length; j++){
+		// Connect with BlueNetCat the grups except CSIC
+		if (((centersList[j] =="ICM") || (centersList[j] == "CEAB") || (centersList[j] == "IDAEA")) == 0)
+			linksInfo.push({source: numGrups + j, target: numGrups + centersList.length, dist: 160});
+	}
+	// Include manually FBG, Generalitat and EU
+	nodeNames.push("Fundació Bosch i Gimpera"); nodeNames.push("Generalitat de Catalunya"); nodeNames.push("Fons FEDER");
+	circleSizes.push(smallR);circleSizes.push(smallR);circleSizes.push(smallR);
+	imgSources.push("logos/FBG.png"); imgSources.push("logos/Generalitat.png"); imgSources.push("logos/EU.png");
+	var indexBlueNetCat = numGrups + centersList.length;
+	linksInfo.push({source: indexBlueNetCat + 1, target: indexBlueNetCat, dist: 1});
+	linksInfo.push({source: indexBlueNetCat + 2, target: indexBlueNetCat, dist: 1});
+	linksInfo.push({source: indexBlueNetCat + 3, target: indexBlueNetCat, dist: 1});
+	linksInfo.push({source: indexBlueNetCat + 1, target: indexBlueNetCat + 2, dist: 1});
+	linksInfo.push({source: indexBlueNetCat + 1, target: indexBlueNetCat + 3, dist: 1});
+	// Include CSIC
+	nodeNames.push("CSIC");
+	circleSizes.push(middleR);
+	imgSources.push("logos/CSIC.png");
+	linksInfo.push({source: indexBlueNetCat, target: nodeNames.length-1, dist: 100}); // HARDCODED // Connect CSIC with BlueNetCat
+	linksInfo.push({source: numGrups, target: nodeNames.length-1, dist: 1}); // HARDCODED // Connect CSIC with CSIC grups
+	linksInfo.push({source: numGrups + 1, target: nodeNames.length-1, dist: 1}); // HARDCODED
+	linksInfo.push({source: numGrups + 2, target: nodeNames.length-1, dist: 1}); // HARDCODED
+
+	
+	var graph = {
+		nodes: Array.from({length:nodeNames.length}, () => ({})),
+		links: linksInfo,
+		imgSrc: imgSources,
+		names: nodeNames,
+		circleSize: circleSizes
+	}
+
+
+
+	return graph;
+}
+
+
+</script>
+</body>
+
+</html>
