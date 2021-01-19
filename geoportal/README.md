@@ -7,8 +7,8 @@
 - Estacions (meteo stations)
 - Emissaris submarins (marine outfalls) - http://www.aiguescb.com/web/emissaris-submarins.html, 
 - Instal·lacions d'aqüicultura (aquaculture)
-- Àrees protegides (natural reserves)
-- Radars VHF
+- Àrees protegides (natural reserves) -- waiting for MAPAMED data license clarification
+- Radars VHF - https://bancodatos.puertos.es/BD/informes/INT_6.pdf (puertos del estado)
 - Perfiladors ARGO (temps real)
 
 
