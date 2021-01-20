@@ -29,5 +29,12 @@ https://www.medpan.org/SIG/MAPAMEDvisualisation.html
 Fishing
 http://www.fao.org/gfcm/data
 
+EMODnet data petitions
+https://ows.emodnet-humanactivities.eu/wfs?SERVICE=WFS&VERSION=1.1.0&request=getFeature&typeName=shellfish&bbox=-1.3,0.3,49.2,49.9&outputFormat=application/json
+https://www.emodnet.eu/en/data
+Service features:
+https://ows.emodnet-humanactivities.eu/wfs?SERVICE=WFS&VERSION=1.1.0&request=GetCapabilities
+Data visualizer:
+https://www.emodnet-humanactivities.eu/view-data.php
 
 
