@@ -7,8 +7,9 @@
 - Estacions (meteo stations)
 - Emissaris submarins (marine outfalls) - http://www.aiguescb.com/web/emissaris-submarins.html, 
 - Instal·lacions d'aqüicultura (aquaculture)- EMODnet https://www.emodnet-humanactivities.eu/view-data.php
-- Àrees protegides (natural reserves) -- waiting for MAPAMED data license clarification
+- Àrees protegides (natural reserves) - to upload with MAPAMED data license
 - Radars VHF - https://bancodatos.puertos.es/BD/informes/INT_6.pdf (puertos del estado)
+- Cabal de rius - Esperant a Emili. Aquí també hi ha info: http://aca-web.gencat.cat/aetr/vishid
 - Perfiladors ARGO (temps real)
 - Sentinels?
 
