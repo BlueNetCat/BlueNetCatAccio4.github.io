@@ -11,7 +11,7 @@ Collection of GeoJSONs that gather different oceanographic items of the Catalan 
 
 
 
-### Finançament
+### Funding
 This project has been financed by the "Generalitat de Catalunya" and by the European Union through the "Fons Europeu de Desenvolupament Regional" (FEDER).
 
 ![Funding](img/funding.png)
