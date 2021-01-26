@@ -34,7 +34,7 @@
             "coordinates": [3.227704, 42.07255]
         },
         "id": "boiaestartit"
-    } {
+    }, {
         "type": "Feature",
         "properties": {
             "shape": "CircleMarker",
