@@ -21,6 +21,23 @@
         "type": "Feature",
         "properties": {
             "shape": "CircleMarker",
+            "name": "Boia de l'Estartit",
+            "category": "boia",
+            "link": "https://estartit.icm.csic.es/",
+            "temporalData": ["historical", "real-time"],
+            "measures": ["Onatge", "Temp. aigua", "Temp. aire", "Pressió atmosfèrica", "Humitat", "Precipitació", "Vent", "Corrents"],
+            "dataGroup": "CSIC",
+            "report": ""
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [3.227704, 42.07255]
+        },
+        "id": "boiaestartit"
+    } {
+        "type": "Feature",
+        "properties": {
+            "shape": "CircleMarker",
             "name": "Boia de Palamós",
             "category": "boia",
             "link": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
