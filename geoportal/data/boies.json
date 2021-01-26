@@ -1,6 +1,6 @@
 {
     "type": "FeatureCollection",
-    "attribution": "Data collected by Gerard Llorach (gllorach@fbg.ub.edu). License: CC-BY 4.0",
+    "attribution": "Data collected by Gerard Llorach (gllorach@fbg.ub.edu) 2021. License: CC-BY 4.0",
     "features": [{
         "type": "Feature",
         "properties": {
