@@ -10,6 +10,7 @@
 - Àrees protegides (natural reserves) - to upload with MAPAMED data license
 - Radars VHF - https://bancodatos.puertos.es/BD/informes/INT_6.pdf (puertos del estado)
 - Cabal de rius - Esperant a Emili. Aquí també hi ha info: http://aca-web.gencat.cat/aetr/vishid
+- Pluviometres - info aquí, s'ha de reformatejar: http://aca.gencat.cat/ca/laigua/consulta-de-dades/dades-obertes/dades-obertes-temps-real/
 - Perfiladors ARGO (temps real)
 - Sentinels?
 
@@ -26,6 +27,9 @@ http://www.aiguescb.com/web/emissaris-submarins.html - 12 emissaris
 
 Parcs naturals
 https://www.medpan.org/SIG/MAPAMEDvisualisation.html
+
+Mapa OL amb rius i nuvols (catalunya només, sense província de lleida)
+http://aca-web.gencat.cat/aetr/vishid
 
 Fishing
 http://www.fao.org/gfcm/data
