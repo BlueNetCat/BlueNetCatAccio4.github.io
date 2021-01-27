@@ -42,4 +42,14 @@ https://ows.emodnet-humanactivities.eu/wfs?SERVICE=WFS&VERSION=1.1.0&request=Get
 Data visualizer:
 https://www.emodnet-humanactivities.eu/view-data.php
 
+AEMET - estacions meteo
+https://www.mapama.gob.es/ide/metadatos/index.html?srv=metadata.show&uuid=f334572d-8516-4bbd-8810-6660d4018652
+
+https://sig.mapama.gob.es/Docs/PDFServicios/AEMET_Estaciones.pdf
+
+https://sig.mapama.gob.es/Docs/PDFServicios/SAIHCaudales.pdf
+
+https://www.miteco.gob.es/es/cartografia-y-sig/ide/catalogo_metadatos/default.aspx
+
+https://www.mapa.gob.es/es/cartografia-y-sig/default.aspx
 
