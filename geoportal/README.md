@@ -1,7 +1,7 @@
 ## Items
 - Boies fixes meteo-oceàniques (Buoys)
 - Mareografs (Tide gauges)
-- Webcams
+- Webcams (falta Valencia i Balears)
 
 ### In progress...
 - Estacions (meteo stations)
