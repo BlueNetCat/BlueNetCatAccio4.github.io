@@ -64,7 +64,7 @@ function createHTML(data, graph, index, htmlContainer, simulation){
 		CEAB: "Centre d'Estudis Avançats de Blanes",
 		IRTA: "Institut de Recerca i Tecnologia Agroalimentàries",
 		UdG: "Universitat de Girona",
-		UPC: "Universitat Politècnica de Barcelona",
+		UPC: "Universitat Politècnica de Catalunya",
 		UAB: "Universitat Autònoma de Barcelona",
 		UB: "Universitat de Barcelona",
 		URV: "Universitat Rovira i Virgili",
