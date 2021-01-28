@@ -7,7 +7,7 @@
     "attribution": "Data from EMODNet, modified by Gerard Llorach (gllorach@fbg.ub.edu) 2021, licensed under CC BY 2.0", // Describe author, license and attribution. BlueNetCat standard
     "source": { // Where the data comes from. BlueNetCat standard (optional)
         "href": "", // link (can be WMS)
-        "type": "application/json"
+        "type": "application/json", // text/html, application/pdf, application/json, application/xml, application/zip 
         "homepage": "", // Homepage of the source institution or the data source
         "name": "" // Name of the hosting institution
     },
