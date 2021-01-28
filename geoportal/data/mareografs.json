@@ -1,243 +1,447 @@
 {
-    "type": "FeatureCollection",
-    "attribution": "Data collected by Gerard Llorach (gllorach@fbg.ub.edu) 2021. License: CC-BY 4.0",
-    "features": [{
-        "type": "Feature",
-        "properties": {
-            "shape": "CircleMarker",
-            "name": "Mareograf de Valencia (III)",
-            "category": "mareograf",
-            "link": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
-            "temporalData": ["historical", "real-time"],
-            "measures": ["Agitació (onatge)", "Nivell del mar"],
-            "dataGroup": "REDMAR",
-            "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [-0.31, 39.44]
-        },
-        "id": "48c948e5-91bb-4a75-b434-6fb4aecab8d3"
-    }, {
-        "type": "Feature",
-        "properties": {
-            "shape": "CircleMarker",
-            "name": "Mareograf de Sagunto",
-            "category": "mareograf",
-            "link": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
-            "temporalData": ["historical", "real-time"],
-            "measures": ["Agitació (onatge)", "Nivell del mar"],
-            "dataGroup": "REDMAR",
-            "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [-0.21, 39.63]
-        },
-        "id": "4c35987d-6e50-49ef-ab4c-243722f15564"
-    }, {
-        "type": "Feature",
-        "properties": {
-            "shape": "CircleMarker",
-            "name": "Mareograf de Gandia",
-            "category": "mareograf",
-            "link": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
-            "temporalData": ["historical", "real-time"],
-            "measures": ["Agitació (onatge)", "Nivell del mar"],
-            "dataGroup": "REDMAR",
-            "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [-0.15, 38.99]
-        },
-        "id": "44949753-552a-4e37-82df-9b61aa3fedbc"
-    }, {
-        "type": "Feature",
-        "properties": {
-            "shape": "CircleMarker",
-            "name": "Mareograf de Tarragona",
-            "category": "mareograf",
-            "link": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
-            "temporalData": ["historical", "real-time"],
-            "measures": ["Vent","Agitació (onatge)", "Nivell del mar", "Pressió atmosfèrica"],
-            "dataGroup": "REDMAR",
-            "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [1.21, 41.08]
-        },
-        "id": "cde2fb01-163e-4b00-a695-f8c1383da461"
-    }, {
-        "type": "Feature",
-        "properties": {
-            "shape": "CircleMarker",
-            "name": "Mareograf de Barcelona (II)",
-            "category": "mareograf",
-            "link": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
-            "temporalData": ["historical", "real-time"],
-            "measures": ["Agitació (onatge)", "Nivell del mar"],
-            "dataGroup": "REDMAR",
-            "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [2.17, 41.34]
-        },
-        "id": "238d985d-6e74-4bec-a666-a16f060f1402"
-    }, {
-        "type": "Feature",
-        "properties": {
-            "shape": "CircleMarker",
-            "name": "Mareograf de Palma de Mallorca",
-            "category": "mareograf",
-            "link": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
-            "temporalData": ["historical", "real-time"],
-            "measures": ["Vent","Agitació (onatge)", "Nivell del mar", "Pressió atmosfèrica"],
-            "dataGroup": "REDMAR",
-            "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [2.64, 39.56]
-        },
-        "id": "d262f197-dd21-4644-b108-551ed83a968b"
-    }, {
-        "type": "Feature",
-        "properties": {
-            "shape": "CircleMarker",
-            "name": "Mareograf d'Alcúdia",
-            "category": "mareograf",
-            "link": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
-            "temporalData": ["historical", "real-time"],
-            "measures": ["Vent","Agitació (onatge)", "Nivell del mar", "Pressió atmosfèrica"],
-            "dataGroup": "REDMAR",
-            "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [3.14, 39.83]
-        },
-        "id": "c9959980-eaa6-4f25-98fb-8ec762e39be9"
-    }, {
-        "type": "Feature",
-        "properties": {
-            "shape": "CircleMarker",
-            "name": "Mareograf de Formentera",
-            "category": "mareograf",
-            "link": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
-            "temporalData": ["historical", "real-time"],
-            "measures": ["Vent","Agitació (onatge)", "Nivell del mar", "Pressió atmosfèrica"],
-            "dataGroup": "REDMAR",
-            "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [1.42, 38.73]
-        },
-        "id": "019b8534-1560-45ce-89b2-04659ea89acf"
-    }, {
-        "type": "Feature",
-        "properties": {
-            "shape": "CircleMarker",
-            "name": "Mareograf d'Eivissa (II)",
-            "category": "mareograf",
-            "link": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
-            "temporalData": ["historical", "real-time"],
-            "measures": ["Vent", "Agitació (onatge)", "Nivell del mar", "Pressió atmosfèrica"],
-            "dataGroup": "REDMAR",
-            "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [1.45, 38.91]
-        },
-        "id": "9348c914-75a7-44b3-80f0-ad5972a9acad"
-    }, {
-        "type": "Feature",
-        "properties": {
-            "shape": "CircleMarker",
-            "name": "Mareograf de Mahó",
-            "category": "mareograf",
-            "link": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
-            "temporalData": ["historical", "real-time"],
-            "measures": ["Agitació (onatge)", "Nivell del mar"],
-            "dataGroup": "REDMAR",
-            "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [4.27, 39.89]
-        },
-        "id": "f2bd88d1-a5a1-46ec-bdab-a44cadaf1d6e"
-    }, {
-        "type": "Feature",
-        "properties": {
-            "shape": "CircleMarker",
-            "name": "Mareograf de Pollença (SOCIB)",
-            "category": "mareograf",
-            "link": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
-            "temporalData": ["historical", "real-time"],
-            "measures": ["Nivell del mar"],
-            "dataGroup": "SOCIB",
-            "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [3.09, 39.90]
-        },
-        "id": "17df49a3-32e2-45ba-8f64-96c0b9e5a7ea"
-    }, {
-        "type": "Feature",
-        "properties": {
-            "shape": "CircleMarker",
-            "name": "Mareograf d'Andratx (SOCIB)",
-            "category": "mareograf",
-            "link": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
-            "temporalData": ["historical", "real-time"],
-            "measures": ["Nivell del mar"],
-            "dataGroup": "SOCIB",
-            "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [2.38, 39.54]
-        },
-        "id": "dc9f3c2d-0158-44f0-9cf9-10af642373c6"
-    }, {
-        "type": "Feature",
-        "properties": {
-            "shape": "CircleMarker",
-            "name": "Mareograf de Sa Ràpita",
-            "category": "mareograf",
-            "link": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
-            "temporalData": ["historical", "real-time"],
-            "measures": ["Nivell del mar"],
-            "dataGroup": "SOCIB",
-            "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [2.95, 39.36]
-        },
-        "id": "59cf953f-3228-4417-80e2-9f509c01ef18"
-    }, {
-        "type": "Feature",
-        "properties": {
-            "shape": "CircleMarker",
-            "name": "Mareograf de Sant Antoni",
-            "category": "mareograf",
-            "link": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
-            "temporalData": ["historical", "real-time"],
-            "measures": ["Nivell del mar"],
-            "dataGroup": "SOCIB",
-            "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [1.30, 38.98]
-        },
-        "id": "e40c64e6-d76e-4c97-9844-188e77b1232a"
-    }]
+  "type": "FeatureCollection",
+  "attribution": "Data collected by Gerard Llorach (gllorach@fbg.ub.edu) 2021. License: CC-BY 4.0",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Mareograf de Valencia (III)",
+        "measures": [
+          "AgitaciÃ³ (onatge)",
+          "Nivell del mar"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.31,
+          39.44
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Mareograf de Sagunto",
+        "measures": [
+          "AgitaciÃ³ (onatge)",
+          "Nivell del mar"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.21,
+          39.63
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Mareograf de Gandia",
+        "measures": [
+          "AgitaciÃ³ (onatge)",
+          "Nivell del mar"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.15,
+          38.99
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Mareograf de Tarragona",
+        "measures": [
+          "Vent",
+          "AgitaciÃ³ (onatge)",
+          "Nivell del mar",
+          "PressiÃ³ atmosfÃ¨rica"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.21,
+          41.08
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Mareograf de Barcelona (II)",
+        "measures": [
+          "AgitaciÃ³ (onatge)",
+          "Nivell del mar"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.17,
+          41.34
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Mareograf de Palma de Mallorca",
+        "measures": [
+          "Vent",
+          "AgitaciÃ³ (onatge)",
+          "Nivell del mar",
+          "PressiÃ³ atmosfÃ¨rica"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.64,
+          39.56
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Mareograf d'AlcÃºdia",
+        "measures": [
+          "Vent",
+          "AgitaciÃ³ (onatge)",
+          "Nivell del mar",
+          "PressiÃ³ atmosfÃ¨rica"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.14,
+          39.83
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Mareograf de Formentera",
+        "measures": [
+          "Vent",
+          "AgitaciÃ³ (onatge)",
+          "Nivell del mar",
+          "PressiÃ³ atmosfÃ¨rica"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.42,
+          38.73
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Mareograf d'Eivissa (II)",
+        "measures": [
+          "Vent",
+          "AgitaciÃ³ (onatge)",
+          "Nivell del mar",
+          "PressiÃ³ atmosfÃ¨rica"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.45,
+          38.91
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Mareograf de MahÃ³",
+        "measures": [
+          "AgitaciÃ³ (onatge)",
+          "Nivell del mar"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.27,
+          39.89
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Mareograf de PollenÃ§a (SOCIB)",
+        "measures": [
+          "Nivell del mar"
+        ],
+        "dataGroup": "SOCIB",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.09,
+          39.9
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Mareograf d'Andratx (SOCIB)",
+        "measures": [
+          "Nivell del mar"
+        ],
+        "dataGroup": "SOCIB",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.38,
+          39.54
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Mareograf de Sa RÃ pita",
+        "measures": [
+          "Nivell del mar"
+        ],
+        "dataGroup": "SOCIB",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.95,
+          39.36
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Mareograf de Sant Antoni",
+        "measures": [
+          "Nivell del mar"
+        ],
+        "dataGroup": "SOCIB",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.3,
+          38.98
+        ]
+      }
+    }
+  ],
+  "name": "Tide gauges of the Catalan Sea"
 }
