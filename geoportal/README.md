@@ -3,6 +3,7 @@
 - Tide gauges (mareogràfs)
 - Webcams (falta Valencia i Balears)
 - Rivers (falta el riu Foix i altres rius de menys cabal)
+- Natural parks
 
 ### In progress...
 - Estacions (meteo stations)
