@@ -5,7 +5,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Boia de Cap de Begur",
         "measures": [
           "Onatge",
@@ -40,7 +39,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Boia de l'Estartit",
         "measures": [
           "Onatge",
@@ -78,7 +76,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Boia de Palamós",
         "measures": [
           "Onatge",
@@ -109,7 +106,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Boia de Barcelona (II)",
         "measures": [
           "Onatge",
@@ -142,7 +138,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Boia de Barcelona Port (I)",
         "measures": [
           "Onatge"
@@ -172,7 +167,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "OBSEA",
         "measures": [
           "Onatge, Vent, Corrents, Pressió atmosfèrica, Temp. aire"
@@ -203,7 +197,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Boia de Tarragona (Litoral)",
         "measures": [
           "Onatge",
@@ -236,7 +229,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Boia de Tarragona (Mar Obert)",
         "measures": [
           "Onatge",
@@ -274,7 +266,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Boia Son Blanc (SOCIB)",
         "measures": [
           "Onatge"
@@ -304,7 +295,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Boia de Son Bou (SOCIB)",
         "measures": [
           "Onatge"
@@ -334,7 +324,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Boia de Mahó",
         "measures": [
           "Onatge",
@@ -369,7 +358,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Boia de Capdepera",
         "measures": [
           "Onatge",
@@ -402,7 +390,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Boia de la Cala Millor (SOCIB)",
         "measures": [
           "Onatge",
@@ -434,7 +421,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Boia de la Dragonera",
         "measures": [
           "Onatge",
@@ -471,7 +457,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Boia de Valencia (Mar Obert)",
         "measures": [
           "Onatge",
@@ -509,7 +494,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Boia de Valencia Litoral (II)",
         "measures": [
           "Onatge",
@@ -540,7 +524,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Boia de Valencia Litoral (I)",
         "measures": [
           "Onatge"
