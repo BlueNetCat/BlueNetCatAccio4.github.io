@@ -171,7 +171,6 @@
         "measures": [
           "Onatge, Vent, Corrents, Pressió atmosfèrica, Temp. aire"
         ],
-        "dataGroup": "REDCOS",
         "report": "https://obsea.es/mdSensors/Metadatos/Metadata-OBSEA-Meteo_Boia_v2.pdf",
         "time_of_data": [
           "historical",
