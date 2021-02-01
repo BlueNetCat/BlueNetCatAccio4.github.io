@@ -173,6 +173,37 @@
       "type": "Feature",
       "properties": {
         "shape": "CircleMarker",
+        "name": "OBSEA",
+        "measures": [
+          "Onatge, Vent, Corrents, Pressió atmosfèrica, Temp. aire"
+        ],
+        "dataGroup": "REDCOS",
+        "report": "https://obsea.es/mdSensors/Metadatos/Metadata-OBSEA-Meteo_Boia_v2.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2013/06/04",
+        "end_date": "",
+        "source": {
+          "href": "https://obsea.es/dashboard/",
+          "type": "text/html",
+          "homepage": "https://obsea.es/",
+          "name": "UPC SARTI, Centre Tecnològic de Vilanova i la Geltrú"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.754,
+          41.193
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
         "name": "Boia de Tarragona (Litoral)",
         "measures": [
           "Onatge",
