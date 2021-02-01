@@ -1,7 +1,8 @@
 ## Items
-- Boies fixes meteo-oceàniques (Buoys)
-- Mareografs (Tide gauges)
+- Buoys
+- Tide gauges (mareogràfs)
 - Webcams (falta Valencia i Balears)
+- Rivers (falta el riu Foix?)
 
 ### In progress...
 - Estacions (meteo stations)
