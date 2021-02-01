@@ -5,7 +5,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Estartit Webcam",
         "source": {
           "href": "https://webcam-costabrava.com/",
@@ -25,7 +24,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Lloret de Mar Webcam",
         "source": {
           "href": "https://www.skylinewebcams.com/en/webcam/espana/cataluna/gerona/lloret-de-mar-costa-brava.html",
@@ -45,7 +43,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Barceloneta Webcam",
         "source": {
           "href": "https://www.skylinewebcams.com/en/webcam/espana/cataluna/barcelona/playa-barceloneta.html",
@@ -65,7 +62,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Sant SebastiÃ  Webcam",
         "source": {
           "href": "https://www.skylinewebcams.com/en/webcam/espana/cataluna/barcelona/playa-sant-sebastia.html",
@@ -85,7 +81,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tossa de Mar Webcam",
         "source": {
           "href": "https://www.infotossa.com/ca/multimedia/cams",
@@ -105,7 +100,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Port Ginesta Webcam",
         "source": {
           "href": "http://www.portginesta.com/es/surfspot",
@@ -125,7 +119,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Cambrils Webcam",
         "source": {
           "href": "https://cambrils-turisme.com/clima/",
@@ -145,7 +138,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Barcelona Llevant Webcam",
         "source": {
           "href": "http://www.bcasa.cat:8888/imatgesaraplatgesbcn/camara6.jpg",
@@ -165,7 +157,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Barcelona GarbÃ­ Webcam",
         "source": {
           "href": "http://www.bcasa.cat:8888/imatgesaraplatgesbcn/camara1.jpg",
@@ -185,7 +176,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Barceloneta Hotel W Webcam",
         "source": {
           "href": "https://camera.deckchair.com/w-barcelona",
@@ -205,7 +195,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Vilassar de Mar Webcam",
         "source": {
           "href": "https://www.cnvilassar.com/meteo/#webcam",
@@ -225,7 +214,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Castelldefels Webcam",
         "source": {
           "href": "https://www.youtube.com/watch?v=oe5GPi_C7Go&feature=emb_logo&ab_channel=17Nudos",
@@ -245,7 +233,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "L'Ametlla de Mar Webcam SO",
         "source": {
           "href": "https://www.youtube.com/watch?v=ZnS_WmBxJok&feature=emb_logo&ab_channel=TurismeL%27AmetlladeMar",
@@ -265,7 +252,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "L'Ametlla de Mar Webcam NE",
         "source": {
           "href": "https://www.youtube.com/watch?v=BmKJz53YEFg&feature=emb_logo&ab_channel=TurismeL%27AmetlladeMar",
@@ -285,7 +271,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Roses Webcam",
         "source": {
           "href": "https://www.tiempo.es/livecams/es0gr0133.html",
@@ -305,7 +290,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Badia de Roses Webcam",
         "source": {
           "href": "http://www.roses.net/webcam/wc1.asp",
@@ -325,7 +309,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Badia de Lloret de Mar Webcam",
         "source": {
           "href": "https://www.whatsupcams.com/es/webcams/espana/cataluna/lloret-de-mar-es/webcam-lloret-de-mar-la-playa/",
@@ -345,7 +328,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Calella Webcam",
         "source": {
           "href": "https://www.finquesfrigola.com/webcam.php",
@@ -365,7 +347,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "L'Estartit Webcam Elevada",
         "source": {
           "href": "https://www.ccma.cat/el-temps/L%27Estartit/camera/9/",
@@ -385,7 +366,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Vilanova i la GeltrÃº Webcam",
         "source": {
           "href": "https://www.ccma.cat/el-temps/embed/vilanova-i-la-geltru/cameraembed/10/",
@@ -405,7 +385,25 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
+        "name": "OBSEA Webcam Submarina",
+        "source": {
+          "href": "https://www.youtube.com/watch?v=yJF2QGevhnk",
+          "type": "text/html",
+          "homepage": "https://obsea.es/",
+          "name": "UPC SARTI, Centre Tecnològic de Vilanova i la Geltrú"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.754,
+          41.193
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Calafell Webcam",
         "source": {
           "href": "https://www.ccma.cat/el-temps/embed/calafell/cameraembed/36/",
