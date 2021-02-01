@@ -1,5 +1,6 @@
 {
   "type": "FeatureCollection",
+  "name": "Webcams of the Catalan Sea",
   "attribution": "Data collected by Gerard Llorach (gllorach@fbg.ub.edu) 2021. License: CC-BY 4.0",
   "features": [
     {
