@@ -1,0 +1,2947 @@
+{
+  "type": "FeatureCollection",
+  "name": "Catalan stream gauges (ACA)",
+  "attribution": "Data from Agència Catalana de l'Aigua. Modified by Gerard Llorach (gllorach@fbg.ub.edu) 2021. License: CC-BY 4.0",
+  "source": {
+    "href": "http://aca-web.gencat.cat/sdim2/apirest/catalog?componentType=aforament",
+    "type": "application/json",
+    "homepage": "http://aca.gencat.cat/ca/laigua/consulta-de-dades/dades-obertes/dades-obertes-temps-real/",
+    "name": "Agència Catalana de l'Aigua (ACA)"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.542640569",
+          "41.592783082"
+        ]
+      },
+      "properties": {
+        "name": "Arenys de Munt",
+        "sensor": "080060-001-ANA01",
+        "river": "RIERA ARENYS",
+        "basin": "RIERES DEL MARESME",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.880218115",
+          "41.859536325"
+        ]
+      },
+      "properties": {
+        "name": "Balsareny",
+        "sensor": "080180-005-ANA001",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal canal",
+        "unit": "l/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.880218115",
+          "41.859536325"
+        ]
+      },
+      "properties": {
+        "name": "Balsareny",
+        "sensor": "080180-005-ANA002",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal canal",
+        "unit": "l/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.186391629",
+          "41.48783369"
+        ]
+      },
+      "properties": {
+        "name": "Montcada i Reixac (el Ripoll)",
+        "sensor": "081252-001-ANA02",
+        "river": "RIU RIPOLL",
+        "basin": "EL BESÒS",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.818842216",
+          "41.897979761"
+        ]
+      },
+      "properties": {
+        "name": "Campllong (la Gotarra)",
+        "sensor": "171501-001-ANA001",
+        "river": "RIERA GOTARRA",
+        "basin": "EL TER",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.816478373",
+          "41.898318267"
+        ]
+      },
+      "properties": {
+        "name": "Riudellots de la Selva (Onyar)",
+        "sensor": "171501-001-ANA002",
+        "river": "RIU ONYAR",
+        "basin": "EL TER",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.725462811",
+          "42.015521388"
+        ]
+      },
+      "properties": {
+        "name": "Sant Gregori (Ginestar de Llémena)",
+        "sensor": "171637-001-ANA01",
+        "river": "RIERA DE LLEMANA",
+        "basin": "EL TER",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.243255294",
+          "42.221664291"
+        ]
+      },
+      "properties": {
+        "name": "Sant Joan de les Abadesses",
+        "sensor": "171674-006-ANA004",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.243255294",
+          "42.221664291"
+        ]
+      },
+      "properties": {
+        "name": "Sant Joan de les Abadesses",
+        "sensor": "171674-006-ANA007",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Cabal canal",
+        "unit": "l/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.194229581",
+          "42.172192162"
+        ]
+      },
+      "properties": {
+        "name": "Ripoll",
+        "sensor": "171707-001-ANA010",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Cabal canal",
+        "unit": "l/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.78190903",
+          "42.316501288"
+        ]
+      },
+      "properties": {
+        "name": "Sant Llorenç de la Muga",
+        "sensor": "171714-001-ANA01",
+        "river": "RIU MUGA",
+        "basin": "LA MUGA",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.979121769",
+          "41.81813956"
+        ]
+      },
+      "properties": {
+        "name": "Santa Cristina d'Aro",
+        "sensor": "171812-001-ANA001",
+        "river": "RIU RIDAURA",
+        "basin": "RIERES DEL CAP DE BEGUR-BLANES",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "3.070750566",
+          "42.026086442"
+        ]
+      },
+      "properties": {
+        "name": "Serra de Daró (riu Daró)",
+        "sensor": "171910-001-ANA001",
+        "river": "RIU DARO",
+        "basin": "EL DARÓ",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.673105973",
+          "42.135943463"
+        ]
+      },
+      "properties": {
+        "name": "Guixers (Aigua de Valls)",
+        "sensor": "251116-004-ANA01",
+        "river": "RIERA AIGUA DE VALLS",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.599623007",
+          "42.140275566"
+        ]
+      },
+      "properties": {
+        "name": "Guixers (Cardener) (Monegal)",
+        "sensor": "251116-005-ANA01",
+        "river": "RIU CARDENER",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.6524216",
+          "42.007056419"
+        ]
+      },
+      "properties": {
+        "name": "Navès (Aigua d'Ora)",
+        "sensor": "251462-001-ANA02",
+        "river": "RIERA D'AIGUADORA",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "0.913800784",
+          "41.249642381"
+        ]
+      },
+      "properties": {
+        "name": "Sortida d'Embassament de Siurana (Cornudella de Montsant)",
+        "sensor": "430496-001-ANA003",
+        "river": "E. SIURANA",
+        "basin": "L'EBRE",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "0.913800784",
+          "41.249642381"
+        ]
+      },
+      "properties": {
+        "name": "Sortida d'Embassament de Siurana (Cornudella de Montsant)",
+        "sensor": "430496-001-ANA006",
+        "river": "E. SIURANA",
+        "basin": "L'EBRE",
+        "measures": "Cabal canal",
+        "unit": "l/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "0.913800784",
+          "41.249642381"
+        ]
+      },
+      "properties": {
+        "name": "Sortida d'Embassament de Siurana (Cornudella de Montsant)",
+        "sensor": "430496-001-ANA007",
+        "river": "E. SIURANA",
+        "basin": "L'EBRE",
+        "measures": "Cabal canal",
+        "unit": "l/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "0.882485011999961",
+          "41.23564348"
+        ]
+      },
+      "properties": {
+        "name": "Cornudella de Montsant",
+        "sensor": "430496-001-ANA018",
+        "river": "RIU SIURANA",
+        "basin": "L'EBRE",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "0.887663708",
+          "41.235213719"
+        ]
+      },
+      "properties": {
+        "name": "Trasvàs Siurana-Riudecanyes",
+        "sensor": "430496-002-ANA009",
+        "river": "RIU SIURANA",
+        "basin": "L'EBRE",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "0.922458814",
+          "41.274316176"
+        ]
+      },
+      "properties": {
+        "name": "Cornudella de Montsant (Barranc de l'Argentera)",
+        "sensor": "430496-003-ANA01",
+        "river": "RIU SIURANA",
+        "basin": "L'EBRE",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "0.936718117",
+          "41.142879469"
+        ]
+      },
+      "properties": {
+        "name": "Duesaigües",
+        "sensor": "431270-001-ANA01",
+        "river": "RIERA DE RIUDECANYES",
+        "basin": "RIERA DE RIUDECANYES",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.236276118",
+          "41.148784999"
+        ]
+      },
+      "properties": {
+        "name": "Tarragona",
+        "sensor": "431482-004-ANA01",
+        "river": "RIU FRANCOLÍ",
+        "basin": "EL FRANCOLÍ",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.33729486",
+          "41.233966843"
+        ]
+      },
+      "properties": {
+        "name": "Vilabella",
+        "sensor": "431652-001-ANA001",
+        "river": "RIU GAIÀ",
+        "basin": "EL GAIÀ",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.651034658",
+          "41.255617318"
+        ]
+      },
+      "properties": {
+        "name": "Sortida d'Embassament de Foix (Castellet i la Gornal)",
+        "sensor": "CALC000001",
+        "river": "RIU FOIX",
+        "basin": "EL FOIX",
+        "measures": "Cabal canal",
+        "unit": "l/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.979121769",
+          "41.81813956"
+        ]
+      },
+      "properties": {
+        "name": "Santa Cristina d'Aro",
+        "sensor": "CALC000007",
+        "river": "RIU RIDAURA",
+        "basin": "RIERES DEL CAP DE BEGUR-BLANES",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.236276118",
+          "41.148784999"
+        ]
+      },
+      "properties": {
+        "name": "Tarragona",
+        "sensor": "CALC000008",
+        "river": "RIU FRANCOLÍ",
+        "basin": "EL FRANCOLÍ",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.833225165",
+          "42.340588782"
+        ]
+      },
+      "properties": {
+        "name": "Sortida d'Embassament de Darnius Boadella (Darnius)",
+        "sensor": "CALC000085",
+        "river": "RIU MUGA",
+        "basin": "LA MUGA",
+        "measures": "Cabal canal",
+        "unit": "l/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.833225165",
+          "42.340588782"
+        ]
+      },
+      "properties": {
+        "name": "Sortida d'Embassament de Darnius Boadella (Darnius)",
+        "sensor": "CALC000088",
+        "river": "RIU MUGA",
+        "basin": "LA MUGA",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.58285827",
+          "42.099784969"
+        ]
+      },
+      "properties": {
+        "name": "Sortida d'Embassament de la Llosa del Cavall (Navès)",
+        "sensor": "CALC000719",
+        "river": "RIU CARDENER",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.878559556",
+          "42.122014524"
+        ]
+      },
+      "properties": {
+        "name": "Sortida d'Embassament de la Baells (Cercs)",
+        "sensor": "CALC000736",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "3.008759796",
+          "42.304198759"
+        ]
+      },
+      "properties": {
+        "name": "Peralada (Llobregat de la Muga)",
+        "sensor": "CALC001096",
+        "river": "R LLOBREGAT DE LA MUGA",
+        "basin": "LA MUGA",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.969057765",
+          "42.2377829"
+        ]
+      },
+      "properties": {
+        "name": "Santa Llogaia d'Àlguema (riu Manol)",
+        "sensor": "CALC001097",
+        "river": "RIU MUGA",
+        "basin": "LA MUGA",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "3.071999259",
+          "42.254381062"
+        ]
+      },
+      "properties": {
+        "name": "Castelló d'Empúries",
+        "sensor": "CALC001100",
+        "river": "RIU MUGA",
+        "basin": "LA MUGA",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.510031397",
+          "42.188664947"
+        ]
+      },
+      "properties": {
+        "name": "Olot",
+        "sensor": "CALC001101",
+        "river": "RIU FLUVIÀ",
+        "basin": "EL FLUVIÀ",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.798648637",
+          "42.177583121"
+        ]
+      },
+      "properties": {
+        "name": "Esponellà",
+        "sensor": "CALC001103",
+        "river": "RIU FLUVIÀ",
+        "basin": "EL FLUVIÀ",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "3.071999259",
+          "42.254381062"
+        ]
+      },
+      "properties": {
+        "name": "Castelló d'Empúries",
+        "sensor": "CALC001110",
+        "river": "RIU MUGA",
+        "basin": "LA MUGA",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.194229581",
+          "42.172192162"
+        ]
+      },
+      "properties": {
+        "name": "Ripoll",
+        "sensor": "CALC001130",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.289947431",
+          "41.983733637"
+        ]
+      },
+      "properties": {
+        "name": "Masies de Roda (Gurri)",
+        "sensor": "CALC001139",
+        "river": "RIU GURRI",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.289517946",
+          "41.984361443"
+        ]
+      },
+      "properties": {
+        "name": "Masies de Roda (Ter)",
+        "sensor": "CALC001144",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.302718379",
+          "41.983802"
+        ]
+      },
+      "properties": {
+        "name": "Masies de Roda (Ter i Gurri)",
+        "sensor": "CALC001145",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.818842216",
+          "41.897979761"
+        ]
+      },
+      "properties": {
+        "name": "Campllong (la Gotarra)",
+        "sensor": "CALC001175",
+        "river": "RIERA GOTARRA",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.816478373",
+          "41.898318267"
+        ]
+      },
+      "properties": {
+        "name": "Riudellots de la Selva (Onyar)",
+        "sensor": "CALC001176",
+        "river": "RIU ONYAR",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.824550321",
+          "41.975059495"
+        ]
+      },
+      "properties": {
+        "name": "Girona (Onyar)",
+        "sensor": "CALC001179",
+        "river": "RIU ONYAR",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "3.125380537",
+          "42.035163473"
+        ]
+      },
+      "properties": {
+        "name": "Torroella de Montgrí (Pont de Torroella)",
+        "sensor": "CALC001185",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "3.125380537",
+          "42.035163473"
+        ]
+      },
+      "properties": {
+        "name": "Torroella de Montgrí (Pont de Torroella)",
+        "sensor": "CALC001186",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.991162733",
+          "42.076860022"
+        ]
+      },
+      "properties": {
+        "name": "Colomers (riu i canal de Sentmenat)",
+        "sensor": "CALC001201",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "3.03821947",
+          "41.964586294"
+        ]
+      },
+      "properties": {
+        "name": "Bisbal d'Empordà (Daró)",
+        "sensor": "CALC001204",
+        "river": "RIU DARO",
+        "basin": "EL DARÓ",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "3.070750566",
+          "42.026086442"
+        ]
+      },
+      "properties": {
+        "name": "Serra de Daró (riu Daró)",
+        "sensor": "CALC001206",
+        "river": "RIU DARO",
+        "basin": "EL DARÓ",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.693885954",
+          "41.738958347"
+        ]
+      },
+      "properties": {
+        "name": "Fogars de la Selva (Can Simó)",
+        "sensor": "CALC001209",
+        "river": "RIU TORDERA",
+        "basin": "LA TORDERA",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.488976096",
+          "41.680341221"
+        ]
+      },
+      "properties": {
+        "name": "Sant Celoni",
+        "sensor": "CALC001210",
+        "river": "RIU TORDERA",
+        "basin": "LA TORDERA",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.669320878",
+          "41.745330324"
+        ]
+      },
+      "properties": {
+        "name": "Fogars de la Selva (Pont Eiffel)",
+        "sensor": "CALC001211",
+        "river": "RIERA DE SANTA COLOMA",
+        "basin": "LA TORDERA",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.284059329",
+          "41.697144449"
+        ]
+      },
+      "properties": {
+        "name": "Garriga",
+        "sensor": "CALC001212",
+        "river": "RIU CONGOST",
+        "basin": "EL BESÒS",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.265266528",
+          "41.546723121"
+        ]
+      },
+      "properties": {
+        "name": "Montornès del Vallès (el Mogent)",
+        "sensor": "CALC001213",
+        "river": "RIU MOGENT",
+        "basin": "EL BESÒS",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.819160445",
+          "41.990209392"
+        ]
+      },
+      "properties": {
+        "name": "Girona (Ter)",
+        "sensor": "CALC001218",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.200589117",
+          "41.450597601"
+        ]
+      },
+      "properties": {
+        "name": "Santa Coloma de Gramenet (riu)",
+        "sensor": "CALC001219",
+        "river": "RIU BESÓS",
+        "basin": "EL BESÒS",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.186391629",
+          "41.48783369"
+        ]
+      },
+      "properties": {
+        "name": "Montcada i Reixac (el Ripoll)",
+        "sensor": "CALC001222",
+        "river": "RIU RIPOLL",
+        "basin": "EL BESÒS",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.869705979",
+          "42.214385565"
+        ]
+      },
+      "properties": {
+        "name": "Guardiola de Berguedà (Llobregat)",
+        "sensor": "CALC001227",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal canal",
+        "unit": "l/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.869705979",
+          "42.214385565"
+        ]
+      },
+      "properties": {
+        "name": "Guardiola de Berguedà (Llobregat)",
+        "sensor": "CALC001228",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.880218115",
+          "41.859536325"
+        ]
+      },
+      "properties": {
+        "name": "Balsareny",
+        "sensor": "CALC001230",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.91716489",
+          "41.787629375"
+        ]
+      },
+      "properties": {
+        "name": "Sallent",
+        "sensor": "CALC001237",
+        "river": "RIERA GAVARRESA",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.696075185",
+          "41.920666218"
+        ]
+      },
+      "properties": {
+        "name": "Cardona (túnel)",
+        "sensor": "CALC001241",
+        "river": "RIU CARDENER",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.858396556",
+          "41.646561643"
+        ]
+      },
+      "properties": {
+        "name": "Castellbell i el Vilar",
+        "sensor": "CALC001244",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.788187977",
+          "41.443497484"
+        ]
+      },
+      "properties": {
+        "name": "Sant Sadurní d'Anoia",
+        "sensor": "CALC001249",
+        "river": "RIU ANOIA",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.664099955",
+          "41.458696562"
+        ]
+      },
+      "properties": {
+        "name": "Sant Quintí de Mediona",
+        "sensor": "CALC001266",
+        "river": "RIU RIUDEVITLLES-RIERA DE MEDI",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.413554059",
+          "41.968624956"
+        ]
+      },
+      "properties": {
+        "name": "Sortida d'Embassament de Sau (Vilanova de Sau)",
+        "sensor": "CALC001270",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.762733581",
+          "41.81351335"
+        ]
+      },
+      "properties": {
+        "name": "Súria",
+        "sensor": "CALC001274",
+        "river": "RIU CARDENER",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.878475828",
+          "42.084907637"
+        ]
+      },
+      "properties": {
+        "name": "Berga (Olvan)",
+        "sensor": "CALC001304",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.023355995",
+          "41.386564791"
+        ]
+      },
+      "properties": {
+        "name": "Sant Vicenç dels Horts (escala nova resclosa sifó EMSSA)",
+        "sensor": "CALC001363",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.33729486",
+          "41.233966843"
+        ]
+      },
+      "properties": {
+        "name": "Vilabella",
+        "sensor": "CALC001367",
+        "river": "RIU GAIÀ",
+        "basin": "EL GAIÀ",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.859690504",
+          "42.334743216"
+        ]
+      },
+      "properties": {
+        "name": "Boadella d'Empordà",
+        "sensor": "CALC001389",
+        "river": "RIU MUGA",
+        "basin": "LA MUGA",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "3.043842921",
+          "42.280090102"
+        ]
+      },
+      "properties": {
+        "name": "Vilanova de la Muga (resclosa i rec del Molí)",
+        "sensor": "CALC001405",
+        "river": "RIU MUGA",
+        "basin": "LA MUGA",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "3.043842921",
+          "42.280090102"
+        ]
+      },
+      "properties": {
+        "name": "Vilanova de la Muga (resclosa i rec del Molí)",
+        "sensor": "CALC001406",
+        "river": "RIU MUGA",
+        "basin": "LA MUGA",
+        "measures": "Cabal canal",
+        "unit": "l/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "0.882485011999961",
+          "41.23564348"
+        ]
+      },
+      "properties": {
+        "name": "Cornudella de Montsant",
+        "sensor": "CALC001440",
+        "river": "RIU SIURANA",
+        "basin": "L'EBRE",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "0.922458814",
+          "41.274316176"
+        ]
+      },
+      "properties": {
+        "name": "Cornudella de Montsant (Barranc de l'Argentera)",
+        "sensor": "CALC001442",
+        "river": "RIU SIURANA",
+        "basin": "L'EBRE",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.929286623",
+          "41.47770205"
+        ]
+      },
+      "properties": {
+        "name": "Martorell",
+        "sensor": "CALC001444",
+        "river": "RIU ANOIA",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.933089949",
+          "41.484600949"
+        ]
+      },
+      "properties": {
+        "name": "Castellbisbal (Assut de Salzers)",
+        "sensor": "CALC001446",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.662624502",
+          "41.541509169"
+        ]
+      },
+      "properties": {
+        "name": "Pobla de Claramunt",
+        "sensor": "CALC001510",
+        "river": "RIERA DE CARME",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.885335899",
+          "41.93593541"
+        ]
+      },
+      "properties": {
+        "name": "Puig-reig",
+        "sensor": "CALC001514",
+        "river": "RIERA DE MERLES",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.673105973",
+          "42.135943463"
+        ]
+      },
+      "properties": {
+        "name": "Guixers (Aigua de Valls)",
+        "sensor": "CALC001532",
+        "river": "RIERA AIGUA DE VALLS",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "0.936718117",
+          "41.142879469"
+        ]
+      },
+      "properties": {
+        "name": "Duesaigües",
+        "sensor": "CALC001538",
+        "river": "RIERA DE RIUDECANYES",
+        "basin": "RIERA DE RIUDECANYES",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.603218761",
+          "41.985432993"
+        ]
+      },
+      "properties": {
+        "name": "Cellera de Ter (Pasteral I)",
+        "sensor": "CALC001543",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.6524216",
+          "42.007056419"
+        ]
+      },
+      "properties": {
+        "name": "Navès (Aigua d'Ora)",
+        "sensor": "CALC001550",
+        "river": "RIERA D'AIGUADORA",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.917968379",
+          "42.31551754"
+        ]
+      },
+      "properties": {
+        "name": "Pont de Molins",
+        "sensor": "CALC001553",
+        "river": "RIU MUGA",
+        "basin": "LA MUGA",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.39745801",
+          "41.752629836"
+        ]
+      },
+      "properties": {
+        "name": "Montseny (la Llavina)",
+        "sensor": "CALC001554",
+        "river": "RIU TORDERA",
+        "basin": "LA TORDERA",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "0.913800784",
+          "41.249642381"
+        ]
+      },
+      "properties": {
+        "name": "Sortida d'Embassament de Siurana (Cornudella de Montsant)",
+        "sensor": "CALC001590",
+        "river": "E. SIURANA",
+        "basin": "L'EBRE",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.725462811",
+          "42.015521388"
+        ]
+      },
+      "properties": {
+        "name": "Sant Gregori (Ginestar de Llémena)",
+        "sensor": "CALC001598",
+        "river": "RIERA DE LLEMANA",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.941233913",
+          "42.129490831"
+        ]
+      },
+      "properties": {
+        "name": "Vilada (Merdançol)",
+        "sensor": "CALC001622",
+        "river": "RIU MERDANÇOL",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.78190903",
+          "42.316501288"
+        ]
+      },
+      "properties": {
+        "name": "Sant Llorenç de la Muga",
+        "sensor": "CALC001623",
+        "river": "RIU MUGA",
+        "basin": "LA MUGA",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.789149217",
+          "42.372325751"
+        ]
+      },
+      "properties": {
+        "name": "Maçanet de Cabrenys (Arnera)",
+        "sensor": "CALC001624",
+        "river": "RIU ARNERA",
+        "basin": "LA MUGA",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.603218761",
+          "41.985432993"
+        ]
+      },
+      "properties": {
+        "name": "Cellera de Ter (Pasteral I)",
+        "sensor": "CALC001626",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.939351733",
+          "42.14077635"
+        ]
+      },
+      "properties": {
+        "name": "Vilada (Riera Vilada)",
+        "sensor": "CALC001627",
+        "river": "N/D",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.599623007",
+          "42.140275566"
+        ]
+      },
+      "properties": {
+        "name": "Guixers (Cardener) (Monegal)",
+        "sensor": "CALC001630",
+        "river": "RIU CARDENER",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal canal",
+        "unit": "l/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.599623007",
+          "42.140275566"
+        ]
+      },
+      "properties": {
+        "name": "Guixers (Cardener) (Monegal)",
+        "sensor": "CALC001632",
+        "river": "RIU CARDENER",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.651034658",
+          "41.255617318"
+        ]
+      },
+      "properties": {
+        "name": "Sortida d'Embassament de Foix (Castellet i la Gornal)",
+        "sensor": "CALC001635",
+        "river": "RIU FOIX",
+        "basin": "EL FOIX",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.194229581",
+          "42.172192162"
+        ]
+      },
+      "properties": {
+        "name": "Ripoll",
+        "sensor": "CALC001643",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.542640569",
+          "41.592783082"
+        ]
+      },
+      "properties": {
+        "name": "Arenys de Munt",
+        "sensor": "CALC001658",
+        "river": "RIERA ARENYS",
+        "basin": "RIERES DEL MARESME",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.798988336",
+          "42.100848824"
+        ]
+      },
+      "properties": {
+        "name": "Cornellà del Terri",
+        "sensor": "CALC001660",
+        "river": "RIU TERRI",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.880218115",
+          "41.859536325"
+        ]
+      },
+      "properties": {
+        "name": "Balsareny",
+        "sensor": "080180-005-ANA005",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.696075185",
+          "41.920666218"
+        ]
+      },
+      "properties": {
+        "name": "Cardona (túnel)",
+        "sensor": "080478-006-ANA001",
+        "river": "RIU CARDENER",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.696075185",
+          "41.920666218"
+        ]
+      },
+      "properties": {
+        "name": "Cardona (túnel)",
+        "sensor": "080478-006-ANA003",
+        "river": "RIU CARDENER",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal canal",
+        "unit": "l/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.858396556",
+          "41.646561643"
+        ]
+      },
+      "properties": {
+        "name": "Castellbell i el Vilar",
+        "sensor": "080538-005-ANA001",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.933089949",
+          "41.484600949"
+        ]
+      },
+      "properties": {
+        "name": "Castellbisbal (Assut de Salzers)",
+        "sensor": "080543-002-ANA001",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.693885954",
+          "41.738958347"
+        ]
+      },
+      "properties": {
+        "name": "Fogars de la Selva (Can Simó)",
+        "sensor": "080826-002-ANA001",
+        "river": "RIU TORDERA",
+        "basin": "LA TORDERA",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.284059329",
+          "41.697144449"
+        ]
+      },
+      "properties": {
+        "name": "Garriga",
+        "sensor": "080885-001-ANA001",
+        "river": "RIU CONGOST",
+        "basin": "EL BESÒS",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.869705979",
+          "42.214385565"
+        ]
+      },
+      "properties": {
+        "name": "Guardiola de Berguedà (Llobregat)",
+        "sensor": "080996-007-ANA010",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.929286623",
+          "41.47770205"
+        ]
+      },
+      "properties": {
+        "name": "Martorell",
+        "sensor": "081141-002-ANA001",
+        "river": "RIU ANOIA",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.289517946",
+          "41.984361443"
+        ]
+      },
+      "properties": {
+        "name": "Masies de Roda (Ter)",
+        "sensor": "081167-001-ANA002",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.289517946",
+          "41.984361443"
+        ]
+      },
+      "properties": {
+        "name": "Masies de Roda (Ter)",
+        "sensor": "081167-001-ANA006",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Cabal canal",
+        "unit": "l/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.289947431",
+          "41.983733637"
+        ]
+      },
+      "properties": {
+        "name": "Masies de Roda (Gurri)",
+        "sensor": "081167-001-ANA001",
+        "river": "RIU GURRI",
+        "basin": "EL TER",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.265266528",
+          "41.546723121"
+        ]
+      },
+      "properties": {
+        "name": "Montornès del Vallès (el Mogent)",
+        "sensor": "081363-002-ANA001",
+        "river": "RIU MOGENT",
+        "basin": "EL BESÒS",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.39745801",
+          "41.752629836"
+        ]
+      },
+      "properties": {
+        "name": "Montseny (la Llavina)",
+        "sensor": "081379-001-ANA01",
+        "river": "RIU TORDERA",
+        "basin": "LA TORDERA",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.878475828",
+          "42.084907637"
+        ]
+      },
+      "properties": {
+        "name": "Berga (Olvan)",
+        "sensor": "081445-001-ANA002",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.878475828",
+          "42.084907637"
+        ]
+      },
+      "properties": {
+        "name": "Berga (Olvan)",
+        "sensor": "081445-001-ANA003",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal canal",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.662624502",
+          "41.541509169"
+        ]
+      },
+      "properties": {
+        "name": "Pobla de Claramunt",
+        "sensor": "081653-001-ANA01",
+        "river": "RIERA DE CARME",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.885335899",
+          "41.93593541"
+        ]
+      },
+      "properties": {
+        "name": "Puig-reig",
+        "sensor": "081751-008-ANA01",
+        "river": "RIERA DE MERLES",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.91716489",
+          "41.787629375"
+        ]
+      },
+      "properties": {
+        "name": "Sallent",
+        "sensor": "081918-009-ANA001",
+        "river": "RIERA GAVARRESA",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.488976096",
+          "41.680341221"
+        ]
+      },
+      "properties": {
+        "name": "Sant Celoni",
+        "sensor": "082021-001-ANA002",
+        "river": "RIU TORDERA",
+        "basin": "LA TORDERA",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.046600124",
+          "41.351810642"
+        ]
+      },
+      "properties": {
+        "name": "Sant Joan Despí",
+        "sensor": "082172-002-ANA010",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.664099955",
+          "41.458696562"
+        ]
+      },
+      "properties": {
+        "name": "Sant Quintí de Mediona",
+        "sensor": "082362-001-ANA001",
+        "river": "RIU RIUDEVITLLES-RIERA DE MEDI",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.788187977",
+          "41.443497484"
+        ]
+      },
+      "properties": {
+        "name": "Sant Sadurní d'Anoia",
+        "sensor": "082401-002-ANA001",
+        "river": "RIU ANOIA",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.200589117",
+          "41.450597601"
+        ]
+      },
+      "properties": {
+        "name": "Santa Coloma de Gramenet (riu)",
+        "sensor": "082457-001-ANA001",
+        "river": "RIU BESÓS",
+        "basin": "EL BESÒS",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.023355995",
+          "41.386564791"
+        ]
+      },
+      "properties": {
+        "name": "Sant Vicenç dels Horts (escala nova resclosa sifó EMSSA)",
+        "sensor": "082634-001-ANA013",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.860798151",
+          "42.14576021"
+        ]
+      },
+      "properties": {
+        "name": "Cercs (riera Peguera)",
+        "sensor": "082687-002-ANA01",
+        "river": "RIERA DE PEGUERA",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.762733581",
+          "41.81351335"
+        ]
+      },
+      "properties": {
+        "name": "Súria",
+        "sensor": "082747-007-ANA001",
+        "river": "RIU CARDENER",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.669320878",
+          "41.745330324"
+        ]
+      },
+      "properties": {
+        "name": "Fogars de la Selva (Pont Eiffel)",
+        "sensor": "082845-001-ANA01",
+        "river": "RIERA DE SANTA COLOMA",
+        "basin": "LA TORDERA",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.2646119",
+          "42.049547207"
+        ]
+      },
+      "properties": {
+        "name": "Torelló (Ges)",
+        "sensor": "082858-003-ANA01",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.941233913",
+          "42.129490831"
+        ]
+      },
+      "properties": {
+        "name": "Vilada (Merdançol)",
+        "sensor": "082994-001-ANA01",
+        "river": "RIU MERDANÇOL",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.939351733",
+          "42.14077635"
+        ]
+      },
+      "properties": {
+        "name": "Vilada (Riera Vilada)",
+        "sensor": "082994-002-ANA01",
+        "river": "N/D",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.969057765",
+          "42.2377829"
+        ]
+      },
+      "properties": {
+        "name": "Santa Llogaia d'Àlguema (riu Manol)",
+        "sensor": "170059-001-ANA001",
+        "river": "RIU MUGA",
+        "basin": "LA MUGA",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "3.03821947",
+          "41.964586294"
+        ]
+      },
+      "properties": {
+        "name": "Bisbal d'Empordà (Daró)",
+        "sensor": "170221-002-ANA001",
+        "river": "RIU DARO",
+        "basin": "EL DARÓ",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.991162733",
+          "42.076860022"
+        ]
+      },
+      "properties": {
+        "name": "Colomers (riu i canal de Sentmenat)",
+        "sensor": "170558-002-ANA019",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.798988336",
+          "42.100848824"
+        ]
+      },
+      "properties": {
+        "name": "Cornellà del Terri",
+        "sensor": "170561-001-ANA01",
+        "river": "RIU TERRI",
+        "basin": "EL TER",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.833225165",
+          "42.340588782"
+        ]
+      },
+      "properties": {
+        "name": "Sortida d'Embassament de Darnius Boadella (Darnius)",
+        "sensor": "170600-001-ANA008",
+        "river": "RIU MUGA",
+        "basin": "LA MUGA",
+        "measures": "Cabal canal",
+        "unit": "l/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.859690504",
+          "42.334743216"
+        ]
+      },
+      "properties": {
+        "name": "Boadella d'Empordà",
+        "sensor": "170600-001-ANA024",
+        "river": "RIU MUGA",
+        "basin": "LA MUGA",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.798648637",
+          "42.177583121"
+        ]
+      },
+      "properties": {
+        "name": "Esponellà",
+        "sensor": "170656-005-ANA001",
+        "river": "RIU FLUVIÀ",
+        "basin": "EL FLUVIÀ",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.819160445",
+          "41.990209392"
+        ]
+      },
+      "properties": {
+        "name": "Girona (Ter)",
+        "sensor": "170792-002-ANA001",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.824550321",
+          "41.975059495"
+        ]
+      },
+      "properties": {
+        "name": "Girona (Onyar)",
+        "sensor": "170792-003-ANA001",
+        "river": "RIU ONYAR",
+        "basin": "EL TER",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.789149217",
+          "42.372325751"
+        ]
+      },
+      "properties": {
+        "name": "Maçanet de Cabrenys (Arnera)",
+        "sensor": "171024-001-ANA01",
+        "river": "RIU ARNERA",
+        "basin": "LA MUGA",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.510031397",
+          "42.188664947"
+        ]
+      },
+      "properties": {
+        "name": "Olot",
+        "sensor": "171143-002-ANA001",
+        "river": "RIU FLUVIÀ",
+        "basin": "EL FLUVIÀ",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "3.008759796",
+          "42.304198759"
+        ]
+      },
+      "properties": {
+        "name": "Peralada (Llobregat de la Muga)",
+        "sensor": "171328-001-ANA001",
+        "river": "R LLOBREGAT DE LA MUGA",
+        "basin": "LA MUGA",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "3.043842921",
+          "42.280090102"
+        ]
+      },
+      "properties": {
+        "name": "Vilanova de la Muga (resclosa i rec del Molí)",
+        "sensor": "171328-002-ANA001",
+        "river": "RIU MUGA",
+        "basin": "LA MUGA",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.917968379",
+          "42.31551754"
+        ]
+      },
+      "properties": {
+        "name": "Pont de Molins",
+        "sensor": "171352-003-ANA001",
+        "river": "RIU MUGA",
+        "basin": "LA MUGA",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "0.887663708",
+          "41.235213719"
+        ]
+      },
+      "properties": {
+        "name": "Trasvàs Siurana-Riudecanyes",
+        "sensor": "CALC001682",
+        "river": "RIU SIURANA",
+        "basin": "L'EBRE",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "0.887663708",
+          "41.235213719"
+        ]
+      },
+      "properties": {
+        "name": "Trasvàs Siurana-Riudecanyes",
+        "sensor": "CALC001369",
+        "river": "RIU SIURANA",
+        "basin": "L'EBRE",
+        "measures": "Cabal canal",
+        "unit": "l/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.604416068",
+          "42.247669277"
+        ]
+      },
+      "properties": {
+        "name": "Tortellà de Llierca",
+        "sensor": "CALC001665",
+        "river": "RIU LLIERCA -O OIX-",
+        "basin": "EL FLUVIÀ",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.730572556",
+          "42.169598883"
+        ]
+      },
+      "properties": {
+        "name": "Serinyà",
+        "sensor": "CALC001662",
+        "river": "RIU SER",
+        "basin": "EL FLUVIÀ",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.730572556",
+          "42.169598883"
+        ]
+      },
+      "properties": {
+        "name": "Serinyà",
+        "sensor": "171903-002-ANA01",
+        "river": "RIU SER",
+        "basin": "EL FLUVIÀ",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.604416068",
+          "42.247669277"
+        ]
+      },
+      "properties": {
+        "name": "Tortellà de Llierca",
+        "sensor": "172001-001-ANA01",
+        "river": "RIU LLIERCA -O OIX-",
+        "basin": "EL FLUVIÀ",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.633829253",
+          "41.265610897"
+        ]
+      },
+      "properties": {
+        "name": "Castellet i la Gornal",
+        "sensor": "080581-003-ANA01",
+        "river": "RIU FOIX",
+        "basin": "EL FOIX",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.633829253",
+          "41.265610897"
+        ]
+      },
+      "properties": {
+        "name": "Castellet i la Gornal",
+        "sensor": "CALC001670",
+        "river": "RIU FOIX",
+        "basin": "EL FOIX",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.046600124",
+          "41.351810642"
+        ]
+      },
+      "properties": {
+        "name": "Sant Joan Despí",
+        "sensor": "CALC001261",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.977477661",
+          "42.259779296"
+        ]
+      },
+      "properties": {
+        "name": "Castellar de n'Hug (Clot del Moro)",
+        "sensor": "080522-004-ANA01",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.977477661",
+          "42.259779296"
+        ]
+      },
+      "properties": {
+        "name": "Castellar de n'Hug (Clot del Moro)",
+        "sensor": "CALC001223",
+        "river": "RIU LLOBREGAT",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.243255294",
+          "42.221664291"
+        ]
+      },
+      "properties": {
+        "name": "Sant Joan de les Abadesses",
+        "sensor": "CALC001126",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.860798151",
+          "42.14576021"
+        ]
+      },
+      "properties": {
+        "name": "Cercs (riera Peguera)",
+        "sensor": "CALC001669",
+        "river": "RIERA DE PEGUERA",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.2646119",
+          "42.049547207"
+        ]
+      },
+      "properties": {
+        "name": "Torelló (Ges)",
+        "sensor": "CALC001661",
+        "river": "RIU TER",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.605613258",
+          "41.962942293"
+        ]
+      },
+      "properties": {
+        "name": "Sortida d'Embassament de Sant Ponç (Clariana de Cardener)",
+        "sensor": "CALC000737",
+        "river": "RIU CARDENER",
+        "basin": "EL LLOBREGAT",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.630484738",
+          "41.961160899"
+        ]
+      },
+      "properties": {
+        "name": "Anglès (riera d'Osor)",
+        "sensor": "CALC001512",
+        "river": "RIERA D'OSOR",
+        "basin": "EL TER",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "2.630484738",
+          "41.961160899"
+        ]
+      },
+      "properties": {
+        "name": "Anglès (riera d'Osor)",
+        "sensor": "170084-003-ANA01",
+        "river": "RIERA D'OSOR",
+        "basin": "EL TER",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.179845465",
+          "41.364783119"
+        ]
+      },
+      "properties": {
+        "name": "Montblanc",
+        "sensor": "430862-001-ANA001",
+        "river": "RIU FRANCOLÍ",
+        "basin": "EL FRANCOLÍ",
+        "measures": "Nivell riu",
+        "unit": "cm"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "1.179845465",
+          "41.364783119"
+        ]
+      },
+      "properties": {
+        "name": "Montblanc",
+        "sensor": "CALC001368",
+        "river": "RIU FRANCOLÍ",
+        "basin": "EL FRANCOLÍ",
+        "measures": "Cabal riu",
+        "unit": "m³/s"
+      }
+    }
+  ]
+}
