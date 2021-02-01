@@ -1,0 +1,555 @@
+{
+  "type": "FeatureCollection",
+  "name": "Buoys of the Catalan Sea",
+  "attribution": "Data collected by Gerard Llorach (gllorach@fbg.ub.edu) 2021. License: CC-BY 4.0",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boia de Cap de Begur",
+        "measures": [
+          "Onatge",
+          "Vent",
+          "Pressió atmosfèrica",
+          "Temp. aire"
+        ],
+        "dataGroup": "REDEXT",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_2.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "2001",
+        "end_date": "2017",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.65,
+          41.91
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boia de l'Estartit",
+        "measures": [
+          "Onatge",
+          "Temp. aigua",
+          "Temp. aire",
+          "Pressió atmosfèrica",
+          "Humitat",
+          "Precipitació",
+          "Vent",
+          "Corrents"
+        ],
+        "dataGroup": "CSIC",
+        "report": "",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2020",
+        "end_date": "2021",
+        "source": {
+          "href": "https://estartit.icm.csic.es/",
+          "type": "text/html",
+          "homepage": "https://www.icm.csic.es/",
+          "name": "Institut de les Ciències del Mar"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.227704,
+          42.07255
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boia de Palamós",
+        "measures": [
+          "Onatge",
+          "Temp. aigua"
+        ],
+        "dataGroup": "REDCOS",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_1.pdf",
+        "time_of_data": [
+          "historical"
+        ],
+        "start_date": "1988",
+        "end_date": "2012",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.19,
+          41.83
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boia de Barcelona (II)",
+        "measures": [
+          "Onatge",
+          "Temp. aigua"
+        ],
+        "dataGroup": "REDCOS",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_1.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "2004",
+        "end_date": "2018",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.2,
+          41.32
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boia de Barcelona Port (I)",
+        "measures": [
+          "Onatge"
+        ],
+        "dataGroup": "REDCOS",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_1.pdf",
+        "time_of_data": [
+          "historical"
+        ],
+        "start_date": "2003",
+        "end_date": "2006",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.15,
+          41.29
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "OBSEA",
+        "measures": [
+          "Onatge, Vent, Corrents, Pressió atmosfèrica, Temp. aire"
+        ],
+        "report": "https://obsea.es/mdSensors/Metadatos/Metadata-OBSEA-Meteo_Boia_v2.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2013/06/04",
+        "end_date": "",
+        "source": {
+          "href": "https://obsea.es/dashboard/",
+          "type": "text/html",
+          "homepage": "https://obsea.es/",
+          "name": "UPC SARTI, Centre Tecnològic de Vilanova i la Geltrú"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.754,
+          41.193
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boia de Tarragona (Litoral)",
+        "measures": [
+          "Onatge",
+          "Temp. aigua"
+        ],
+        "dataGroup": "REDCOS",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_1.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "1992",
+        "end_date": "2018",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.19,
+          41.07
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boia de Tarragona (Mar Obert)",
+        "measures": [
+          "Onatge",
+          "Vent",
+          "Temp. aigua",
+          "Corrents",
+          "Salinitat",
+          "Pressió atmosfèrica",
+          "Temp. aire"
+        ],
+        "dataGroup": "REDEXT",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_2.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "2004",
+        "end_date": "2017",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.47,
+          40.68
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boia Son Blanc (SOCIB)",
+        "measures": [
+          "Onatge"
+        ],
+        "dataGroup": "EXTERNOS",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_12.pdf",
+        "time_of_data": [
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "2017",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.83,
+          39.99
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boia de Son Bou (SOCIB)",
+        "measures": [
+          "Onatge"
+        ],
+        "dataGroup": "EXTERNOS",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_12.pdf",
+        "time_of_data": [
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "2017",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.07,
+          39.9
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boia de Mahó",
+        "measures": [
+          "Onatge",
+          "Vent",
+          "Temp. aire",
+          "Pressió atmosfèrica"
+        ],
+        "dataGroup": "REDEXT",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_2.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "1993",
+        "end_date": "2017",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.42,
+          39.72
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boia de Capdepera",
+        "measures": [
+          "Onatge",
+          "Temp. aigua"
+        ],
+        "dataGroup": "REDCOS",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_2.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "1989",
+        "end_date": "2014",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.48,
+          39.65
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boia de la Cala Millor (SOCIB)",
+        "measures": [
+          "Onatge",
+          "Temp. aigua"
+        ],
+        "dataGroup": "EXTERNOS",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_12.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "2017",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.39,
+          39.59
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boia de la Dragonera",
+        "measures": [
+          "Onatge",
+          "Vent",
+          "Temp. aigua",
+          "Corrents",
+          "Pressió atmosfèrica",
+          "Temp. aire"
+        ],
+        "dataGroup": "REDEXT",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_2.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "2006",
+        "end_date": "2017",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.1,
+          39.55
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boia de Valencia (Mar Obert)",
+        "measures": [
+          "Onatge",
+          "Vent",
+          "Temp. aigua",
+          "Corrents",
+          "Salinitat",
+          "Pressió atmosfèrica",
+          "Temp. aire"
+        ],
+        "dataGroup": "REDEXT",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_2.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "2005",
+        "end_date": "2017",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.2,
+          39.52
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boia de Valencia Litoral (II)",
+        "measures": [
+          "Onatge",
+          "Temp. aigua"
+        ],
+        "dataGroup": "REDCOS",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_1.pdf",
+        "time_of_data": [
+          "historical"
+        ],
+        "start_date": "2005",
+        "end_date": "2013",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.2,
+          39.51
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Boia de Valencia Litoral (I)",
+        "measures": [
+          "Onatge"
+        ],
+        "dataGroup": "REDCOS",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_1.pdf",
+        "time_of_data": [
+          "historical"
+        ],
+        "start_date": "1985",
+        "end_date": "2005",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.28,
+          39.46
+        ]
+      }
+    }
+  ],
+  "name": "Boies de la Mar Catalana"
+}
