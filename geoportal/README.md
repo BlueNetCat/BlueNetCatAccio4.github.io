@@ -1,8 +1,10 @@
+The geojsons are limited to the Catalan Sea and the Western Mediterranean. The information coming from third parties has been often modified and reduced in this repository. If you want full datasets, you can find the source in the header or ask the BlueNetCat organization (email in the header).
+
 ## Items
 - Buoys
 - Tide gauges (mareogràfs)
 - Webcams (falta Valencia i Balears)
-- Rivers (falta el riu Foix i altres rius de menys cabal)
+- Rivers: aquesta informació també es pot obtenir a partir d'un servei de Tiles WMS
 - Natural parks
 
 ### In progress...
@@ -20,6 +22,8 @@
 ### Useful standards:
 Open Geospatial Consortium
 https://www.ogc.org/standards/eo-geojson
+BlueNetCat standard
+https://github.com/BlueNetCatAccio4/BlueNetCatAccio4.github.io/blob/main/geoportal/standardBlueNetCat.md
 
 ### Useful links
 Emissaris submarins
