@@ -23,6 +23,7 @@ The geojsons are limited to the Catalan Sea and the Western Mediterranean. The i
 ### Useful standards:
 Open Geospatial Consortium
 https://www.ogc.org/standards/eo-geojson
+
 BlueNetCat standard
 https://github.com/BlueNetCatAccio4/BlueNetCatAccio4.github.io/blob/main/geoportal/standardBlueNetCat.md
 
