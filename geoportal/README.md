@@ -3,21 +3,22 @@ The geojsons are limited to the Catalan Sea and the Western Mediterranean. The i
 ## Items
 - Buoys
 - Tide gauges (mareogràfs)
+- Stream gauges (aforament rius)
 - Webcams (falta Valencia i Balears)
 - Rivers: aquesta informació també es pot obtenir a partir d'un servei de Tiles WMS
-- Natural parks
+- Natural parks (MAPAMED)
+- Weather stations (AEMET)
 
 ### In progress...
-- Estacions (meteo stations)
 - Emissaris submarins (marine outfalls) - http://www.aiguescb.com/web/emissaris-submarins.html, 
 - Instal·lacions d'aqüicultura (aquaculture)- EMODnet https://www.emodnet-humanactivities.eu/view-data.php
-- Àrees protegides (natural reserves) - to upload with MAPAMED data license
 - Radars VHF - https://bancodatos.puertos.es/BD/informes/INT_6.pdf (puertos del estado)
-- Cabal de rius - Esperant a Emili. Aquí també hi ha info: http://aca-web.gencat.cat/aetr/vishid
-- Pluviometres - info aquí, s'ha de reformatejar: http://aca.gencat.cat/ca/laigua/consulta-de-dades/dades-obertes/dades-obertes-temps-real/
+- Cabal de rius - Aquí també hi ha info: http://aca-web.gencat.cat/aetr/vishid
+- Pluviometres - (Estan inclosos a Weather stations) info aquí, s'ha de reformatejar: http://aca.gencat.cat/ca/laigua/consulta-de-dades/dades-obertes/dades-obertes-temps-real/
 - Perfiladors ARGO (temps real): http://www.physocean.icm.csic.es/vado/argo/argo.geojson, http://www.physocean.icm.csic.es/vado/argo/R3901975.geojson
 - Vaixells de la UTM: http://data.utm.csic.es/rtp/udp/ (XXXPOS)
 - Sentinels?
+- Aforament rius
 
 
 ### Useful standards:
