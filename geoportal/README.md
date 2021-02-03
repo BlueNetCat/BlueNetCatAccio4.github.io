@@ -1,6 +1,6 @@
 The geojsons are limited to the Catalan Sea and the Western Mediterranean. The information coming from third parties has been often modified and reduced in this repository. If you want full datasets, you can find the source in the header or ask the BlueNetCat organization (email in the header).
 
-## Items
+## Measurements
 ### [Buoys](data/buoys.geojson)
 Most of the buoys come from Puertos del Estado. The data can be downloaded through their visualizer: http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx. I don't know if there is a service to do queries for real-time data. The data from the buoy of l'Estartit can be seen and accessed here: https://estartit.icm.csic.es/. The buoys from the southern Western Mediterrean need to be included.
 
@@ -16,6 +16,10 @@ In principle you should be able to get the data from https://opendata.aemet.es/c
 
 ### [Webcams](data/webcams.geojson)
 Not much to say here, the data can be found on each geojson feature. Some webcams are real-time and others provide a picture of the last hour or so. I still need to collect webcams from outside Catalunya.
+
+## Human activities
+### [Discharge points of urban treatment plants](data/discharge_urban_treatment_plants.geojson)
+This dataset has been reduced to points that are near the coast. It is limited to the Spanish Mediterranean coast. I still don't know if there is any information available related to each point.
 
 ## Cartography
 ### [National Parks](data/national_parks.geojson)
