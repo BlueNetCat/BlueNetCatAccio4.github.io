@@ -21,7 +21,7 @@ Not much to say here, the data can be found on each geojson feature. Some webcam
 ### [National Parks](data/national_parks.geojson)
 There are more types of natural parks or reserves, like Natura 2000 which are not considered in this geojson. This geojson is orientative. You can find them here: https://www.medpan.org/SIG/MAPAMEDvisualisation.html. 
 
-### [Rivers](rivers_westmed.geojson)
+### [Rivers](data/rivers_westmed.geojson)
 The river data was taken from http://www.fao.org/geonetwork/srv/en/main.home?uuid=e0243940-e5d9-487c-8102-45180cf1a99f. Other shape files of Spain can also be found here: https://www.miteco.gob.es/es/cartografia-y-sig/ide/descargas/agua/red-hidrografica.aspx. This information can also be served with a WMS service.
 
 
