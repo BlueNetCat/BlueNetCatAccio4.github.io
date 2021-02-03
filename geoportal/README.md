@@ -1,10 +1,19 @@
 The geojsons are limited to the Catalan Sea and the Western Mediterranean. The information coming from third parties has been often modified and reduced in this repository. If you want full datasets, you can find the source in the header or ask the BlueNetCat organization (email in the header).
 
 ## Items
-- Buoys
-- Tide gauges (mareogràfs)
-- Stream gauges (aforament rius)
-- Webcams (falta Valencia i Balears)
+### [Buoys](data/buoys.geojson)
+Most of the buoys come from Puertos del Estado. The data can be downloaded through their visualizer: http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx. I don't know if there is a service to do queries for real-time data. The data from the buoy of l'Estartit can be seen and accessed here: https://estartit.icm.csic.es/
+### [Tide gauges (mareogràfs)]((data/tide_gauges.geojson))
+Same as the buoys.
+
+### Stream gauges (aforament rius) ([ACA](data/stream_gauges_ACA.geojson) and [SAIH](data/stream_gauges_med_coast.geojson))
+- ACA (Agència Catalana d'Aigües): the data can be accessed in their website: http://aca.gencat.cat/ca/laigua/consulta-de-dades/dades-obertes/dades-obertes-temps-real/. The data can be seen in their visualizer: http://aca-web.gencat.cat/aetr/vishid. Even rain in real-time can be seen there.
+- SAIH (Sistemas Automáticos de Información Hidrológica): the data can be accessed two ways. The first way is in this webpage: https://www.miteco.gob.es/es/agua/temas/evaluacion-de-los-recursos-hidricos/saih/. Here you can access the different drainage basins and find the data of each stream gauge. Also other information about rain gauges can be found. The second way is to use the file "stream_gauges_med_coast.geojson". Each stream gauge has a property called "ficha" that directs to the data. This seems to be a deprecated service that is still working.
+
+### [Webcams](data/webcams.geojson)
+Not much to say here, the data can be found on each geojson feature. Some webcams are real-time and others provide a picture of the last hour or so. I still need to collect webcams from outside Catalunya.
+
+### Rivers
 - Rivers: aquesta informació també es pot obtenir a partir d'un servei de Tiles WMS
 - Natural parks (MAPAMED)
 - Weather stations (AEMET)
