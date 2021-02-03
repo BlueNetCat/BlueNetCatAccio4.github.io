@@ -1,5 +1,7 @@
 The geojsons are limited to the Catalan Sea and the Western Mediterranean. The information coming from third parties has been often modified and reduced in this repository. If you want full datasets, you can find the source in the header or ask the BlueNetCat organization (email in the header).
 
+This site should provide information about how to download/access the data.
+
 ## Measurements
 ### [Buoys](data/buoys.geojson)
 Most of the buoys come from Puertos del Estado. The data can be downloaded through their visualizer: http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx. I don't know if there is a service to do queries for real-time data. The data from the buoy of l'Estartit can be seen and accessed here: https://estartit.icm.csic.es/. The buoys from the southern Western Mediterrean need to be included.
@@ -7,9 +9,9 @@ Most of the buoys come from Puertos del Estado. The data can be downloaded throu
 ### [Tide gauges (mareogràfs)](data/tide_gauges.geojson)
 Same as the buoys from Puertos del Estado.
 
-### Stream gauges (aforament rius) ([ACA](data/stream_gauges_ACA.geojson) and [SAIH](data/stream_gauges_med_coast.geojson))
-- ACA (Agència Catalana d'Aigües): the data can be accessed in their website: http://aca.gencat.cat/ca/laigua/consulta-de-dades/dades-obertes/dades-obertes-temps-real/. The data can be seen in their visualizer: http://aca-web.gencat.cat/aetr/vishid. Even rain in real-time can be seen there.
+### [Stream gauges (aforament rius)](data/stream_gauges_med_coast.geojson)
 - SAIH (Sistemas Automáticos de Información Hidrológica): only the stations close to the coast have been kept. In the original dataset there are many more locations. The data can be accessed two ways. The first way is in this webpage: https://www.miteco.gob.es/es/agua/temas/evaluacion-de-los-recursos-hidricos/saih/. Here you can access the different drainage basins and find the data of each stream gauge. Also information about rain gauges can be found. The second way is to use the file "stream_gauges_med_coast.geojson". Each stream gauge has a property called "ficha" that directs to the data. This link seems to be a deprecated service that is still working.
+- ACA (Agència Catalana d'Aigües): the data can be accessed in their website: http://aca.gencat.cat/ca/laigua/consulta-de-dades/dades-obertes/dades-obertes-temps-real/. The data can be seen in their visualizer: http://aca-web.gencat.cat/aetr/vishid. Even rain in real-time can be seen there.
 
 ### [Weather stations](data/weather_stations_med.geojson)
 In principle you should be able to get the data from https://opendata.aemet.es/centrodedescargas/inicio. An API key is needed to access it. You can use the id of each station in the geojson to find the data in the AEMET website. In our geojson, four different kinds of weather stations are mixed: complete stations, automatic stations, rain gauges and thermometric.
