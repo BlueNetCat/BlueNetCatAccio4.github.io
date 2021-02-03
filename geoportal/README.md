@@ -21,7 +21,7 @@ Not much to say here, the data can be found on each geojson feature. Some webcam
 
 ## Human activities
 ### [Discharge points of urban treatment plants](data/discharge_urban_treatment_plants.geojson)
-This dataset has been reduced to points that are near the coast. It is limited to the Spanish Mediterranean coast. I still don't know if there is any information available related to each point.
+This dataset has been reduced to points that are near the coast. It is limited to the Spanish Mediterranean coast. I still don't know if there is any information available related to each point. Also, is this related to marine outfalls (emissaris submarins)?
 
 ## Cartography
 ### [National Parks](data/national_parks.geojson)
