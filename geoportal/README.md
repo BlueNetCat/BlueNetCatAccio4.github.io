@@ -16,20 +16,16 @@ In principle you should be able to get the data from https://opendata.aemet.es/c
 Not much to say here, the data can be found on each geojson feature. Some webcams are real-time and others provide a picture of the last hour or so. I still need to collect webcams from outside Catalunya.
 
 ### [Stream gauges (aforament rius)](data/stream_gauges_med_coast.geojson)
-- SAIH (Sistemas Automáticos de Información Hidrológica): only the stations close to the coast have been kept. In the original dataset there are many more locations. The data can be accessed two ways. The first way is in this webpage: https://www.miteco.gob.es/es/agua/temas/evaluacion-de-los-recursos-hidricos/saih/. Here you can access the different drainage basins and find the data of each stream gauge. Also information about rain gauges can be found. The second way is to use the file "stream_gauges_med_coast.geojson". Each stream gauge has a property called "ficha" that directs to the data. This link seems to be a deprecated service that is still working.
+- SAIH (Sistemas Automáticos de Información Hidrológica): only the stations close to the coast have been kept. In the original dataset there are many more locations. The data can be accessed two ways. The first way is in the MITECO (Ministerio para la Transición Ecológica) webpage: https://www.miteco.gob.es/es/agua/temas/evaluacion-de-los-recursos-hidricos/saih/. Here you can access the different drainage basins and find the data of each stream gauge. Also information about rain gauges can be found. The second way is to use the file "stream_gauges_med_coast.geojson". Each stream gauge has a property called "ficha" that directs to the data. This link seems to be a deprecated service that is still working.
 - ACA (Agència Catalana d'Aigües): the data can be accessed in their website: http://aca.gencat.cat/ca/laigua/consulta-de-dades/dades-obertes/dades-obertes-temps-real/. The data can be seen in their visualizer: http://aca-web.gencat.cat/aetr/vishid. Even rain in real-time can be seen there.
 
 ## Human activities
 EMODnet is a great source to find information about human activities. From the visualizer (https://www.emodnet-humanactivities.eu/view-data.php) the data can be found and downloaded. Additionally, for each dataset there is a contact email for each country, thus the original source can be contacted.
 
-### Aquaculture
-
+In some cases, I could only find information about Spain in EMODnet. For example, in EMODnet the data about dredging could not be found in the sources that it references (MITECO, OSPAR). Similarly, the information about discharge points found in EMODnet comes from the European Environment Agency (EEA), but it can also be found in MITECO.
 
 ### [Discharge points of urban treatment plants](data/discharge_urban_treatment_plants.geojson)
 There is some disparity between the data from EMODnet and MITECO. The [data from EMODnet](data/discharge_urban_treatment_plants_EMODnet.geojson) is more complete (more points), but some of the discharge points are in the coast seem to be missing in comparison to the MITECO dataset. Only the discharge points close to the coast have been kept. Question: is this related to marine outfalls (emissaris submarins)?
-
-### [Drainage]
-Drainage information in the MITECO (Spanish Goverment) was not found. 
 
 ## Cartography
 ### [National Parks](data/national_parks.geojson)
@@ -48,7 +44,6 @@ The river data was taken from http://www.fao.org/geonetwork/srv/en/main.home?uui
 - Perfiladors ARGO (temps real): http://www.physocean.icm.csic.es/vado/argo/argo.geojson, http://www.physocean.icm.csic.es/vado/argo/R3901975.geojson
 - Vaixells de la UTM: http://data.utm.csic.es/rtp/udp/ (XXXPOS)
 - Sentinels?
-- Aforament rius
 
 
 ### Useful standards:
