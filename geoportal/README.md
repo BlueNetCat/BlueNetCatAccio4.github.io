@@ -20,10 +20,16 @@ Not much to say here, the data can be found on each geojson feature. Some webcam
 - ACA (Agència Catalana d'Aigües): the data can be accessed in their website: http://aca.gencat.cat/ca/laigua/consulta-de-dades/dades-obertes/dades-obertes-temps-real/. The data can be seen in their visualizer: http://aca-web.gencat.cat/aetr/vishid. Even rain in real-time can be seen there.
 
 ## Human activities
+EMODnet is a great source to find information about human activities. From the visualizer (https://www.emodnet-humanactivities.eu/view-data.php) the data can be found and downloaded. Additionally, for each dataset there is a contact email for each country, thus the original source can be contacted.
+
 ### Aquaculture
 
+
 ### [Discharge points of urban treatment plants](data/discharge_urban_treatment_plants.geojson)
-This dataset has been reduced to points that are near the coast. It is limited to the Spanish Mediterranean coast. I still don't know if there is any information available related to each point. Also, is this related to marine outfalls (emissaris submarins)?
+There is some disparity between the data from EMODnet and MITECO. The [data from EMODnet](data/discharge_urban_treatment_plants_EMODnet.geojson) is more complete (more points), but some of the discharge points are in the coast seem to be missing in comparison to the MITECO dataset. Only the discharge points close to the coast have been kept. Question: is this related to marine outfalls (emissaris submarins)?
+
+### [Drainage]
+Drainage information in the MITECO (Spanish Goverment) was not found. 
 
 ## Cartography
 ### [National Parks](data/national_parks.geojson)
