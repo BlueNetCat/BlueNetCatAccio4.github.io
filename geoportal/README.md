@@ -37,11 +37,8 @@ The river data was taken from http://www.fao.org/geonetwork/srv/en/main.home?uui
 
 ### In progress...
 - Emissaris submarins (marine outfalls) - http://www.aiguescb.com/web/emissaris-submarins.html, 
-- Instal·lacions d'aqüicultura (aquaculture)- EMODnet https://www.emodnet-humanactivities.eu/view-data.php
 - Radars VHF - https://bancodatos.puertos.es/BD/informes/INT_6.pdf (puertos del estado)
-- Cabal de rius - Aquí també hi ha info: http://aca-web.gencat.cat/aetr/vishid
-
-- Perfiladors ARGO (temps real): http://www.physocean.icm.csic.es/vado/argo/argo.geojson, http://www.physocean.icm.csic.es/vado/argo/R3901975.geojson
+- Perfiladors ARGO (temps real): http://www.physocean.icm.csic.es/vado/argo/argo.geojson, http://www.physocean.icm.csic.es/vado/argo/R3901975.geojson. També es pot trobar info aquí: https://www.ocean-ops.org/board
 - Vaixells de la UTM: http://data.utm.csic.es/rtp/udp/ (XXXPOS)
 - Sentinels?
 
