@@ -58,7 +58,7 @@
           "real-time"
         ],
         "start_date": "2020",
-        "end_date": "2021",
+        "end_date": "",
         "source": {
           "href": "https://estartit.icm.csic.es/",
           "type": "text/html",
@@ -177,7 +177,7 @@
           "historical",
           "real-time"
         ],
-        "start_date": "2013/06/04",
+        "start_date": "2013",
         "end_date": "",
         "source": {
           "href": "https://obsea.es/dashboard/",
@@ -571,7 +571,7 @@
           "forecast"
         ],
         "start_date": "2006",
-        "end_date": "2021",
+        "end_date": "",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -608,7 +608,7 @@
           "forecast"
         ],
         "start_date": "1998",
-        "end_date": "2021",
+        "end_date": "",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -645,7 +645,7 @@
           "forecast"
         ],
         "start_date": "1996",
-        "end_date": "2021",
+        "end_date": "",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -675,7 +675,7 @@
           "forecast"
         ],
         "start_date": "2018",
-        "end_date": "2021",
+        "end_date": "",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -745,7 +745,7 @@
           "forecast"
         ],
         "start_date": "2010",
-        "end_date": "2021",
+        "end_date": "",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
