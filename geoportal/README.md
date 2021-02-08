@@ -6,6 +6,8 @@ This site should provide information about how to download/access the data.
 ### [Buoys](data/buoys.geojson)
 Most of the buoys come from Puertos del Estado. The data can be downloaded through their visualizer: http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx. I don't know if there is a service to do queries for real-time data. The data from the buoy of l'Estartit can be seen and accessed here: https://estartit.icm.csic.es/. The buoys from the southern Western Mediterrean need to be included.
 
+Could complete by adding info from: https://www.emodnet-physics.eu/Map/
+
 ### [Tide gauges (mareogràfs)](data/tide_gauges.geojson)
 Same as the buoys from Puertos del Estado.
 
