@@ -7,6 +7,37 @@
       "type": "Feature",
       "properties": {
         "shape": "CircleMarker",
+        "name": "Tide gauge Sete",
+        "measures": [
+          "Waves (harbor)",
+          "Sea Level"
+        ],
+        "dataGroup": "",
+        "report": "http://rgp.ign.fr/STATIONS/#SETE",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2007",
+        "source": {
+          "href": "http://rgp.ign.fr/STATIONS/#SETE",
+          "type": "text/html",
+          "homepage": "http://rgp.ign.fr/",
+          "name": "Institut National de l'Information Géographique et Forestière"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.698,
+          43.397
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
         "name": "Tide gauge Valencia (III)",
         "measures": [
           "Waves (harbor)",
