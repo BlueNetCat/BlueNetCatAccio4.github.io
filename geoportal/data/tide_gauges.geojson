@@ -7,30 +7,184 @@
       "type": "Feature",
       "properties": {
         "shape": "CircleMarker",
-        "name": "Tide gauge Sete",
+        "name": "Tide gauge Toulon",
         "measures": [
-          "Waves (harbor)",
           "Sea Level"
         ],
-        "dataGroup": "",
-        "report": "http://rgp.ign.fr/STATIONS/#SETE",
+        "dataGroup": "RONIM",
+        "report": "http://refmar.shom.fr/en/partenaires/producteurs-de-donnees/reseau-maregraphique-ronim",
         "time_of_data": [
           "historical",
-          "real-time"
+          "real-time",
+          "forecast"
         ],
-        "start_date": "2007",
+        "start_date": "1960",
         "source": {
-          "href": "http://rgp.ign.fr/STATIONS/#SETE",
+          "href": "http://dx.doi.org/10.17183/REFMAR#68",
           "type": "text/html",
-          "homepage": "http://rgp.ign.fr/",
-          "name": "Institut National de l'Information Géographique et Forestière"
+          "homepage": "https://data.shom.fr/",
+          "name": "Shom"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.913,
+          43.117
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Tide gauge Marseille",
+        "measures": [
+          "Sea Level"
+        ],
+        "dataGroup": "RONIM",
+        "report": "http://refmar.shom.fr/en/partenaires/producteurs-de-donnees/reseau-maregraphique-ronim",
+        "time_of_data": [
+          "historical",
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "1849",
+        "source": {
+          "href": "http://dx.doi.org/10.17183/REFMAR#524",
+          "type": "text/html",
+          "homepage": "https://data.shom.fr/",
+          "name": "Shom"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.354,
+          43.279
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Tide gauge Fos-sur-Mer",
+        "measures": [
+          "Sea Level"
+        ],
+        "dataGroup": "RONIM",
+        "report": "http://refmar.shom.fr/en/partenaires/producteurs-de-donnees/reseau-maregraphique-ronim",
+        "time_of_data": [
+          "historical",
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "2006",
+        "source": {
+          "href": "http://dx.doi.org/10.17183/REFMAR#719",
+          "type": "text/html",
+          "homepage": "https://data.shom.fr/",
+          "name": "Shom"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.893,
+          43.405
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Tide gauge Sète",
+        "measures": [
+          "Sea Level"
+        ],
+        "dataGroup": "RONIM",
+        "report": "http://refmar.shom.fr/en/partenaires/producteurs-de-donnees/reseau-maregraphique-ronim",
+        "time_of_data": [
+          "historical",
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "1956",
+        "source": {
+          "href": "http://dx.doi.org/10.17183/REFMAR#250",
+          "type": "text/html",
+          "homepage": "https://data.shom.fr/",
+          "name": "Shom"
         }
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
           3.698,
-          43.397
+          43.399
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Tide gauge Port-la-Nouvelle",
+        "measures": [
+          "Sea Level"
+        ],
+        "dataGroup": "RONIM",
+        "report": "http://refmar.shom.fr/en/partenaires/producteurs-de-donnees/reseau-maregraphique-ronim",
+        "time_of_data": [
+          "historical",
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "2013",
+        "source": {
+          "href": "http://dx.doi.org/10.17183/REFMAR#803",
+          "type": "text/html",
+          "homepage": "https://data.shom.fr/",
+          "name": "Shom"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.064,
+          43.014
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Tide gauge Port-Vendres",
+        "measures": [
+          "Sea Level"
+        ],
+        "dataGroup": "RONIM",
+        "report": "http://refmar.shom.fr/en/partenaires/producteurs-de-donnees/reseau-maregraphique-ronim",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "1981",
+        "source": {
+          "href": "http://dx.doi.org/10.17183/REFMAR#75",
+          "type": "text/html",
+          "homepage": "https://data.shom.fr/",
+          "name": "Shom"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.107,
+          42.520
         ]
       }
     },
