@@ -9,7 +9,7 @@ Most of the buoys come from Puertos del Estado. The data can be downloaded throu
 Could complete by adding info from: https://www.emodnet-physics.eu/Map/. French buoys: http://candhis.cetmef.developpement-durable.gouv.fr/carte/
 
 ### [Tide gauges (mareogràfs)](data/tide_gauges.geojson)
-Same as the buoys from Puertos del Estado.
+Same as the buoys from Puertos del Estado for Spain. For France, the information can be found here: https://data.shom.fr/donnees/catalogue/observation
 
 ### [Weather stations](data/weather_stations_med.geojson)
 In principle you should be able to get the data from https://opendata.aemet.es/centrodedescargas/inicio. An API key is needed to access it. You can use the id of each station in the geojson to find the data in the AEMET website. In our geojson, four different kinds of weather stations are mixed: complete stations, automatic stations, rain gauges and thermometric.
