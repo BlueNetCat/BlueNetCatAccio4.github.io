@@ -1,16 +1,16 @@
 {
   "type": "FeatureCollection",
-  "name": "Tide gauges of the Catalan Sea",
+  "name": "Tide gauges of the Western Mediterranean",
   "attribution": "Data collected by Gerard Llorach (gllorach@fbg.ub.edu) 2021. License: CC-BY 4.0",
   "features": [
     {
       "type": "Feature",
       "properties": {
         "shape": "CircleMarker",
-        "name": "Mareograf de Valencia (III)",
+        "name": "Tide gauge Valencia (III)",
         "measures": [
-          "AgitaciÃ³ (onatge)",
-          "Nivell del mar"
+          "Waves (harbor)",
+          "Sea Level"
         ],
         "dataGroup": "REDMAR",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
@@ -18,7 +18,7 @@
           "historical",
           "real-time"
         ],
-        "start_date": "",
+        "start_date": "1992",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -38,10 +38,10 @@
       "type": "Feature",
       "properties": {
         "shape": "CircleMarker",
-        "name": "Mareograf de Sagunto",
+        "name": "Tide gauge Sagunto",
         "measures": [
-          "AgitaciÃ³ (onatge)",
-          "Nivell del mar"
+          "Waves (harbor)",
+          "Sea Level"
         ],
         "dataGroup": "REDMAR",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
@@ -49,7 +49,7 @@
           "historical",
           "real-time"
         ],
-        "start_date": "",
+        "start_date": "2007",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -69,10 +69,10 @@
       "type": "Feature",
       "properties": {
         "shape": "CircleMarker",
-        "name": "Mareograf de Gandia",
+        "name": "Tide gauge Gandia",
         "measures": [
-          "AgitaciÃ³ (onatge)",
-          "Nivell del mar"
+          "Waves (harbor)",
+          "Sea Level"
         ],
         "dataGroup": "REDMAR",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
@@ -80,7 +80,7 @@
           "historical",
           "real-time"
         ],
-        "start_date": "",
+        "start_date": "2007",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -100,12 +100,12 @@
       "type": "Feature",
       "properties": {
         "shape": "CircleMarker",
-        "name": "Mareograf de Tarragona",
+        "name": "Tide gauge Tarragona",
         "measures": [
-          "Vent",
-          "AgitaciÃ³ (onatge)",
-          "Nivell del mar",
-          "PressiÃ³ atmosfÃ¨rica"
+          "Wind",
+          "Waves (harbor)",
+          "Sea Level",
+          "Atmospheric Pressure"
         ],
         "dataGroup": "REDMAR",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
@@ -113,7 +113,7 @@
           "historical",
           "real-time"
         ],
-        "start_date": "",
+        "start_date": "2011",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -133,10 +133,10 @@
       "type": "Feature",
       "properties": {
         "shape": "CircleMarker",
-        "name": "Mareograf de Barcelona (II)",
+        "name": "Tide gauge Barcelona (II)",
         "measures": [
-          "AgitaciÃ³ (onatge)",
-          "Nivell del mar"
+          "Waves (harbor)",
+          "Sea Level"
         ],
         "dataGroup": "REDMAR",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
@@ -144,7 +144,7 @@
           "historical",
           "real-time"
         ],
-        "start_date": "",
+        "start_date": "1993",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -164,12 +164,12 @@
       "type": "Feature",
       "properties": {
         "shape": "CircleMarker",
-        "name": "Mareograf de Palma de Mallorca",
+        "name": "Tide gauge Palma de Mallorca",
         "measures": [
-          "Vent",
-          "AgitaciÃ³ (onatge)",
-          "Nivell del mar",
-          "PressiÃ³ atmosfÃ¨rica"
+          "Wind",
+          "Waves (harbor)",
+          "Sea Level",
+          "Atmospheric Pressure"
         ],
         "dataGroup": "REDMAR",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
@@ -177,7 +177,7 @@
           "historical",
           "real-time"
         ],
-        "start_date": "",
+        "start_date": "2009",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -197,12 +197,12 @@
       "type": "Feature",
       "properties": {
         "shape": "CircleMarker",
-        "name": "Mareograf d'AlcÃºdia",
+        "name": "Mareograf d'Alcúdia",
         "measures": [
-          "Vent",
-          "AgitaciÃ³ (onatge)",
-          "Nivell del mar",
-          "PressiÃ³ atmosfÃ¨rica"
+          "Wind",
+          "Waves (harbor)",
+          "Sea Level",
+          "Atmospheric Pressure"
         ],
         "dataGroup": "REDMAR",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
@@ -210,7 +210,7 @@
           "historical",
           "real-time"
         ],
-        "start_date": "",
+        "start_date": "2009",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -230,12 +230,12 @@
       "type": "Feature",
       "properties": {
         "shape": "CircleMarker",
-        "name": "Mareograf de Formentera",
+        "name": "Tide gauge Formentera",
         "measures": [
-          "Vent",
-          "AgitaciÃ³ (onatge)",
-          "Nivell del mar",
-          "PressiÃ³ atmosfÃ¨rica"
+          "Wind",
+          "Waves (harbor)",
+          "Sea Level",
+          "Atmospheric Pressure"
         ],
         "dataGroup": "REDMAR",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
@@ -243,7 +243,7 @@
           "historical",
           "real-time"
         ],
-        "start_date": "",
+        "start_date": "2009",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -265,10 +265,10 @@
         "shape": "CircleMarker",
         "name": "Mareograf d'Eivissa (II)",
         "measures": [
-          "Vent",
-          "AgitaciÃ³ (onatge)",
-          "Nivell del mar",
-          "PressiÃ³ atmosfÃ¨rica"
+          "Wind",
+          "Waves (harbor)",
+          "Sea Level",
+          "Atmospheric Pressure"
         ],
         "dataGroup": "REDMAR",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
@@ -276,7 +276,7 @@
           "historical",
           "real-time"
         ],
-        "start_date": "",
+        "start_date": "2003",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -296,10 +296,10 @@
       "type": "Feature",
       "properties": {
         "shape": "CircleMarker",
-        "name": "Mareograf de MahÃ³",
+        "name": "Tide gauge Mahó",
         "measures": [
-          "AgitaciÃ³ (onatge)",
-          "Nivell del mar"
+          "Waves (harbor)",
+          "Sea Level"
         ],
         "dataGroup": "REDMAR",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
@@ -307,7 +307,7 @@
           "historical",
           "real-time"
         ],
-        "start_date": "",
+        "start_date": "2009",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -327,9 +327,9 @@
       "type": "Feature",
       "properties": {
         "shape": "CircleMarker",
-        "name": "Mareograf de PollenÃ§a (SOCIB)",
+        "name": "Tide gauge Pollença (SOCIB)",
         "measures": [
-          "Nivell del mar"
+          "Sea Level"
         ],
         "dataGroup": "SOCIB",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf",
@@ -337,7 +337,7 @@
           "historical",
           "real-time"
         ],
-        "start_date": "",
+        "start_date": "2015",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -359,7 +359,7 @@
         "shape": "CircleMarker",
         "name": "Mareograf d'Andratx (SOCIB)",
         "measures": [
-          "Nivell del mar"
+          "Sea Level"
         ],
         "dataGroup": "SOCIB",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf",
@@ -367,7 +367,7 @@
           "historical",
           "real-time"
         ],
-        "start_date": "",
+        "start_date": "2015",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -387,9 +387,9 @@
       "type": "Feature",
       "properties": {
         "shape": "CircleMarker",
-        "name": "Mareograf de Sa RÃ pita",
+        "name": "Tide gauge Sa Ràpita",
         "measures": [
-          "Nivell del mar"
+          "Sea Level"
         ],
         "dataGroup": "SOCIB",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf",
@@ -397,7 +397,7 @@
           "historical",
           "real-time"
         ],
-        "start_date": "",
+        "start_date": "2015",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -417,9 +417,9 @@
       "type": "Feature",
       "properties": {
         "shape": "CircleMarker",
-        "name": "Mareograf de Sant Antoni",
+        "name": "Tide gauge Sant Antoni",
         "measures": [
-          "Nivell del mar"
+          "Sea Level"
         ],
         "dataGroup": "SOCIB",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf",
@@ -427,7 +427,7 @@
           "historical",
           "real-time"
         ],
-        "start_date": "",
+        "start_date": "2015",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -442,7 +442,326 @@
           38.98
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Tide gauge Alicante (II)",
+        "measures": [
+          "Sea Level"
+        ],
+        "dataGroup": "IGN",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_14.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2017",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.48,
+          38.34
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Tide gauge Cartagena",
+        "measures": [
+          "Sea Level"
+        ],
+        "dataGroup": "IGN",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_14.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2017",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.97,
+          37.6
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Tide gauge Carboneras",
+        "measures": [
+          "Waves (harbor)",
+          "Sea Level",
+          "Atmospheric Pressure",
+          "Wind"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2013",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.9,
+          36.97
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Tide gauge Almería",
+        "measures": [
+          "Waves (harbor)",
+          "Sea Level",
+          "Atmospheric Pressure",
+          "Wind"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2006",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.48,
+          36.83
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Tide gauge Motril",
+        "measures": [
+          "Waves (harbor)",
+          "Sea Level",
+          "Atmospheric Pressure",
+          "Wind"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2005",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.52,
+          36.72
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Tide gauge Málaga (III)",
+        "measures": [
+          "Waves (harbor)",
+          "Sea Level",
+          "Atmospheric Pressure"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "1992",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.42,
+          36.71
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Tide gauge Algeciras",
+        "measures": [
+          "Waves (harbor)",
+          "Sea Level",
+          "Atmospheric Pressure",
+          "Wind"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2009",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.40,
+          36.18
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Tide gauge Tarifa",
+        "measures": [
+          "Waves (harbor)",
+          "Sea Level",
+          "Atmospheric Pressure"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2009",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.6,
+          36.01
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Tide gauge Huelva (IV)",
+        "measures": [
+          "Waves (harbor)",
+          "Sea Level",
+          "Atmospheric Pressure",
+          "Wind"
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "1996",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.73,
+          37.13
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Tide gauge Melilla",
+        "measures": [
+          "Waves (harbor)",
+          "Sea Level",
+        ],
+        "dataGroup": "REDMAR",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2007",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.93,
+          35.29
+        ]
+      }
     }
-  ],
-  "name": "Tide gauges of the Catalan Sea"
+  ]
 }
