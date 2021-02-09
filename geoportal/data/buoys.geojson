@@ -207,7 +207,7 @@
           "forecast"
         ],
         "start_date": "2001",
-        "end_date": "2017",
+        "end_date": "",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -306,7 +306,7 @@
           "forecast"
         ],
         "start_date": "2004",
-        "end_date": "2018",
+        "end_date": "",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -396,7 +396,7 @@
           "forecast"
         ],
         "start_date": "1992",
-        "end_date": "2018",
+        "end_date": "",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -433,7 +433,7 @@
           "forecast"
         ],
         "start_date": "2004",
-        "end_date": "2017",
+        "end_date": "",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -463,6 +463,7 @@
           "forecast"
         ],
         "start_date": "2017",
+        "end_date": "",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -492,6 +493,7 @@
           "forecast"
         ],
         "start_date": "2017",
+        "end_date": "",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -525,7 +527,7 @@
           "forecast"
         ],
         "start_date": "1993",
-        "end_date": "2017",
+        "end_date": "",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -552,9 +554,7 @@
         "dataGroup": "REDCOS",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_2.pdf",
         "time_of_data": [
-          "historical",
-          "real-time",
-          "forecast"
+          "historical"
         ],
         "start_date": "1989",
         "end_date": "2014",
@@ -624,7 +624,7 @@
           "forecast"
         ],
         "start_date": "2006",
-        "end_date": "2017",
+        "end_date": "",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -661,7 +661,7 @@
           "forecast"
         ],
         "start_date": "2005",
-        "end_date": "2017",
+        "end_date": "",
         "source": {
           "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
           "type": "text/html",
@@ -880,6 +880,37 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Buoy Málaga",
+        "measures": [
+          "Waves",
+          "Water Temperature"
+        ],
+        "dataGroup": "REDCOS",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_1.pdf",
+        "time_of_data": [
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "1985",
+        "end_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -4.42,
+          36.69
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Buoy Mar de Alborán",
         "measures": [
           "Waves",
@@ -974,6 +1005,38 @@
         "coordinates": [
           -5.59,
           36.00
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Buoy Ceuta",
+        "measures": [
+          "Waves",
+          "Water Temperature"
+        ],
+        "dataGroup": "REDCOS",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_1.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "1985",
+        "end_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.33,
+          35.90
         ]
       }
     },
