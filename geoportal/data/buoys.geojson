@@ -6,7 +6,193 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Buoy de Cap de Begur",
+        "name": "Buoy Porquerolles",
+        "measures": [
+          "Waves",
+          "Water Temperature"
+        ],
+        "dataGroup": "CANDHIS",
+        "report": "http://candhis.cetmef.developpement-durable.gouv.fr/campagne/?idcampagne=76dc611d6ebaafc66cc0879c71b5db5c",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2018",
+        "end_date": "",
+        "source": {
+          "href": "http://candhis.cetmef.developpement-durable.gouv.fr/campagne/?idcampagne=76dc611d6ebaafc66cc0879c71b5db5c",
+          "type": "text/html",
+          "homepage": "http://candhis.cetmef.developpement-durable.gouv.fr/",
+          "name": "Centre d'Archivage National de Données de Houle In Situ"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.28,
+          42.97
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Buoy Le Planier",
+        "measures": [
+          "Waves",
+          "Water Temperature"
+        ],
+        "dataGroup": "CANDHIS",
+        "report": "http://candhis.cetmef.developpement-durable.gouv.fr/campagne/?idcampagne=26657d5ff9020d2abefe558796b99584",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2018",
+        "end_date": "",
+        "source": {
+          "href": "http://candhis.cetmef.developpement-durable.gouv.fr/campagne/?idcampagne=26657d5ff9020d2abefe558796b99584",
+          "type": "text/html",
+          "homepage": "http://candhis.cetmef.developpement-durable.gouv.fr/",
+          "name": "Centre d'Archivage National de Données de Houle In Situ"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.23,
+          43.21
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Buoy Golfe de Fos",
+        "measures": [
+          "Waves",
+          "Water Temperature"
+        ],
+        "dataGroup": "CANDHIS",
+        "report": "http://candhis.cetmef.developpement-durable.gouv.fr/campagne/?idcampagne=0a09c8844ba8f0936c20bd791130d6b6",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2018",
+        "end_date": "",
+        "source": {
+          "href": "http://candhis.cetmef.developpement-durable.gouv.fr/campagne/?idcampagne=0a09c8844ba8f0936c20bd791130d6b6",
+          "type": "text/html",
+          "homepage": "http://candhis.cetmef.developpement-durable.gouv.fr/",
+          "name": "Centre d'Archivage National de Données de Houle In Situ"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.38,
+          43.58
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Buoy Sète",
+        "measures": [
+          "Waves",
+          "Water Temperature"
+        ],
+        "dataGroup": "CANDHIS",
+        "report": "http://candhis.cetmef.developpement-durable.gouv.fr/campagne/?idcampagne=02e74f10e0327ad868d138f2b4fdd6f0",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2006",
+        "end_date": "",
+        "source": {
+          "href": "http://candhis.cetmef.developpement-durable.gouv.fr/campagne/?idcampagne=02e74f10e0327ad868d138f2b4fdd6f0",
+          "type": "text/html",
+          "homepage": "http://candhis.cetmef.developpement-durable.gouv.fr/",
+          "name": "Centre d'Archivage National de Données de Houle In Situ"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.98,
+          43.44
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Buoy Leucate",
+        "measures": [
+          "Waves",
+          "Water Temperature"
+        ],
+        "dataGroup": "CANDHIS",
+        "report": "http://candhis.cetmef.developpement-durable.gouv.fr/campagne/?idcampagne=c81e728d9d4c2f636f067f89cc14862c",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2006",
+        "end_date": "",
+        "source": {
+          "href": "http://candhis.cetmef.developpement-durable.gouv.fr/campagne/?idcampagne=c81e728d9d4c2f636f067f89cc14862c",
+          "type": "text/html",
+          "homepage": "http://candhis.cetmef.developpement-durable.gouv.fr/",
+          "name": "Centre d'Archivage National de Données de Houle In Situ"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.26,
+          42.92
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Buoy Banyuls",
+        "measures": [
+          "Waves",
+          "Water Temperature"
+        ],
+        "dataGroup": "CANDHIS",
+        "report": "http://candhis.cetmef.developpement-durable.gouv.fr/campagne/?idcampagne=d9d4f495e875a2e075a1a4a6e1b9770f",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2007",
+        "end_date": "",
+        "source": {
+          "href": "http://candhis.cetmef.developpement-durable.gouv.fr/campagne/?idcampagne=d9d4f495e875a2e075a1a4a6e1b9770f",
+          "type": "text/html",
+          "homepage": "http://candhis.cetmef.developpement-durable.gouv.fr/",
+          "name": "Centre d'Archivage National de Données de Houle In Situ"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.17,
+          42.49
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Buoy Cap de Begur",
         "measures": [
           "Waves",
           "Wind",
@@ -40,7 +226,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Buoy de l'Estartit",
+        "name": "Buoy l'Estartit",
         "measures": [
           "Waves",
           "Water Temperature",
@@ -77,7 +263,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Buoy de Palamós",
+        "name": "Buoy Palamós",
         "measures": [
           "Waves",
           "Water Temperature"
@@ -107,7 +293,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Buoy de Barcelona (II)",
+        "name": "Buoy Barcelona (II)",
         "measures": [
           "Waves",
           "Water Temperature"
@@ -139,7 +325,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Buoy de Barcelona Port (I)",
+        "name": "Buoy Barcelona Port (I)",
         "measures": [
           "Waves"
         ],
@@ -168,7 +354,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "OBSEA",
+        "name": "Buoy OBSEA",
         "measures": [
           "Waves, Wind, Currents, Atmospheric Pressure, Air Temperature"
         ],
@@ -197,7 +383,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Buoy de Tarragona (Litoral)",
+        "name": "Buoy Tarragona (Coast)",
         "measures": [
           "Waves",
           "Water Temperature"
@@ -229,7 +415,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Buoy de Tarragona (Mar Obert)",
+        "name": "Buoy Tarragona (Open Sea)",
         "measures": [
           "Waves",
           "Wind",
@@ -295,7 +481,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Buoy de Son Bou (SOCIB)",
+        "name": "Buoy Son Bou (SOCIB)",
         "measures": [
           "Waves"
         ],
@@ -324,7 +510,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Buoy de Mahó",
+        "name": "Buoy Mahó",
         "measures": [
           "Waves",
           "Wind",
@@ -358,7 +544,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Buoy de Capdepera",
+        "name": "Buoy Capdepera",
         "measures": [
           "Waves",
           "Water Temperature"
@@ -390,7 +576,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Buoy de la Cala Millor (SOCIB)",
+        "name": "Buoy la Cala Millor (SOCIB)",
         "measures": [
           "Waves",
           "Water Temperature"
@@ -421,7 +607,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Buoy de la Dragonera",
+        "name": "Buoy la Dragonera",
         "measures": [
           "Waves",
           "Wind",
@@ -457,7 +643,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Buoy de Valencia (Mar Obert)",
+        "name": "Buoy Valencia (Open Sea)",
         "measures": [
           "Waves",
           "Wind",
@@ -494,7 +680,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Buoy de Valencia Litoral (II)",
+        "name": "Buoy Valencia Coast (II)",
         "measures": [
           "Waves",
           "Water Temperature"
@@ -524,7 +710,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Buoy de Valencia Litoral (I)",
+        "name": "Buoy Valencia Coast (I)",
         "measures": [
           "Waves"
         ],
