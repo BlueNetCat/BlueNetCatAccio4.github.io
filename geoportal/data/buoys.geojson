@@ -950,7 +950,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Buoy Mar de Alborán",
+        "name": "Buoy Tarifa",
         "measures": [
           "Waves",
           "Water Temperature"
@@ -974,6 +974,38 @@
         "coordinates": [
           -5.59,
           36.00
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Buoy Melilla",
+        "measures": [
+          "Waves",
+          "Water Temperature"
+        ],
+        "dataGroup": "REDCOS",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_1.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time",
+          "forecast"
+        ],
+        "start_date": "2008",
+        "end_date": "",
+        "source": {
+          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "type": "text/html",
+          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
+          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.94,
+          35.33
         ]
       }
     }
