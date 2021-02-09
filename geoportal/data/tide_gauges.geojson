@@ -1,6 +1,6 @@
 {
   "type": "FeatureCollection",
-  "name": "Tide gauges of the Western Mediterranean",
+  "name": "Tide gauges of the Catalan Sea",
   "attribution": "Data collected by Gerard Llorach (gllorach@fbg.ub.edu) 2021. License: CC-BY 4.0",
   "features": [
     {
@@ -739,7 +739,7 @@
         "name": "Tide gauge Melilla",
         "measures": [
           "Waves (harbor)",
-          "Sea Level",
+          "Sea Level"
         ],
         "dataGroup": "REDMAR",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_3.pdf",
