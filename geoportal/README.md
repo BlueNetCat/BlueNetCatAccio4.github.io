@@ -6,15 +6,15 @@ This site should provide information about how to download/access the data.
 Most information can be found in https://www.emodnet-physics.eu/Map/. Even the data can be downloaded from there.
 
 ### [Buoys](data/buoys.geojson)
-Most of the buoys come from Puertos del Estado. The data can be downloaded through their visualizer: http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx. I don't know if there is a service to do queries for real-time data. The data from the buoy of l'Estartit can be seen and accessed here: https://estartit.icm.csic.es/. The buoys from the southern Western Mediterrean need to be included.
+Most of the buoys come from Puertos del Estado. The data can be downloaded through their visualizer: http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx. I don't know if there is a service to do queries for real-time data. The data from the buoy of l'Estartit can be seen and accessed here: https://estartit.icm.csic.es/. The data from the OBSEA buoy can be found here: https://obsea.es/dashboard/. The French buoys can be found here: http://candhis.cetmef.developpement-durable.gouv.fr/carte/.
 
-Could complete by adding info from: https://www.emodnet-physics.eu/Map/. French buoys: http://candhis.cetmef.developpement-durable.gouv.fr/carte/
+Other observatories: http://www.fixo3.eu/observatory/
 
 ### [Tide gauges (mareogràfs)](data/tide_gauges.geojson)
-Same as the buoys from Puertos del Estado for Spain. For France, the information can be found here: https://data.shom.fr/donnees/catalogue/observation. The data can also be accessed from here: https://www.emodnet-physics.eu/Map/
+Same as the buoys from Puertos del Estado for Spain. For France, the information can be found here: https://data.shom.fr/donnees/catalogue/observation.
 
-### [Weather stations](data/weather_stations_med.geojson)
-In principle you should be able to get the data from https://opendata.aemet.es/centrodedescargas/inicio. An API key is needed to access it. You can use the id of each station in the geojson to find the data in the AEMET website. In our geojson, four different kinds of weather stations are mixed: complete stations, automatic stations, rain gauges and thermometric.
+### [Weather stations (Spain)](data/weather_stations_med.geojson)
+In principle you should be able to get the data from https://opendata.aemet.es/centrodedescargas/inicio for the Spanish weather stations. An API key is needed to access it. You can use the id of each station in the geojson to find the data in the AEMET website. In our geojson, four different kinds of weather stations are mixed: complete stations, automatic stations, rain gauges and thermometric.
 
 ### [Webcams](data/webcams.geojson)
 Not much to say here, the data can be found on each geojson feature. Some webcams are real-time and others provide a picture of the last hour or so. I still need to collect webcams from outside Catalunya.
@@ -23,29 +23,44 @@ Not much to say here, the data can be found on each geojson feature. Some webcam
 - SAIH (Sistemas Automáticos de Información Hidrológica): only the stations close to the coast have been kept. In the original dataset there are many more locations. The data can be accessed two ways. The first way is in the MITECO (Ministerio para la Transición Ecológica) webpage: https://www.miteco.gob.es/es/agua/temas/evaluacion-de-los-recursos-hidricos/saih/. Here you can access the different drainage basins and find the data of each stream gauge. Also information about rain gauges can be found. The second way is to use the file "stream_gauges_med_coast.geojson". Each stream gauge has a property called "ficha" that directs to the data. This link seems to be a deprecated service that is still working.
 - ACA (Agència Catalana d'Aigües): the data can be accessed in their website: http://aca.gencat.cat/ca/laigua/consulta-de-dades/dades-obertes/dades-obertes-temps-real/. The data can be seen in their visualizer: http://aca-web.gencat.cat/aetr/vishid. Even rain in real-time can be seen there.
 
+
+
 ## Human activities
-EMODnet is a great source to find information about human activities. From the visualizer (https://www.emodnet-humanactivities.eu/view-data.php) the data can be found and downloaded. Additionally, for each dataset there is a contact email for each country, thus the original source can be contacted.
+EMODnet is a great source to find information about human activities. From the visualizer (https://www.emodnet-humanactivities.eu/view-data.php) the data can be found and downloaded. Additionally, for each dataset there is a contact email for each country, thus the original source can be contacted. Also the original sources are referenced: https://www.emodnet-humanactivities.eu/sources.php
 
 In some cases, I could only find information about Spain in EMODnet. For example, in EMODnet the data about dredging could not be found in the sources that it references (MITECO, OSPAR). Similarly, the information about discharge points found in EMODnet comes from the European Environment Agency (EEA), but it can also be found in MITECO.
 
 ### [Discharge points of urban treatment plants](data/discharge_urban_treatment_plants.geojson)
-There is some disparity between the data from EMODnet and MITECO. The [data from EMODnet](data/discharge_urban_treatment_plants_EMODnet.geojson) is more complete (more points), but some of the discharge points are in the coast seem to be missing in comparison to the MITECO dataset. Only the discharge points close to the coast have been kept. Question: is this related to marine outfalls (emissaris submarins)?
+There is some disparity between the data from EMODnet and MITECO. The [data from EMODnet](data/discharge_urban_treatment_plants_EMODnet.geojson) is more complete (more points), but some of the discharge points that are in the coast seem to be missing in comparison to the MITECO dataset. Only the discharge points close to the coast have been kept.
+
+A better source for discharge points is the [Urban Waste Water Treatment Directive (UWWTD) site for Europe](https://uwwtd.eu/). For example, information about compliance with the EU directive and linked treatment plants is given. Unfortunatelly, the download links do not work at this moment (10 Febraury 2021) (https://uwwtd.eu/Spain/download) and getting the data required a bit of processing from the web interface. For France, we used the UWWTD source to find the [discharge points in the region](data/discharge_urban_treatment_plants_france.geojson).
+
+### Aquaculture installations
+Regarding Spanish aquaculture, the best source is here: https://servicio.pesca.mapama.es/acuivisor/. Aquaculture installations can be found in EMODnet: https://www.emodnet-humanactivities.eu/view-data.php. TODO: France?
+
+### Air quality
+TODO: GEOJSON ready is ready from MITECO (need to upload/clean)
 
 ## Cartography
 ### [National Parks](data/national_parks.geojson)
 There are more types of natural parks or reserves, like Natura 2000 which are not considered in this geojson. This geojson is orientative. You can find these extra protected areas here: https://www.medpan.org/SIG/MAPAMEDvisualisation.html. 
 
 ### [Rivers](data/rivers_westmed.geojson)
-The river data was taken from http://www.fao.org/geonetwork/srv/en/main.home?uuid=e0243940-e5d9-487c-8102-45180cf1a99f. Other shape files of Spain can also be found here: https://www.miteco.gob.es/es/cartografia-y-sig/ide/descargas/agua/red-hidrografica.aspx. This information can also be served with a WMS service.
+The river data was taken from the Food and Agriculture Organization of the United Nations (http://www.fao.org/geonetwork/srv/en/main.home?uuid=e0243940-e5d9-487c-8102-45180cf1a99f). Other shape files of Spain can also be found here: https://www.miteco.gob.es/es/cartografia-y-sig/ide/descargas/agua/red-hidrografica.aspx. This information can also be served with a WMS service.
 
+### [Shoreline] (data/shoreline_spain.geojson)
+A highly detailed Spanish shoreline can be found in the Instituto Geográfico Nacional (http://www.ign.es/web/ign/portal/ide-area-nodo-ide-ign). The shoreline provided by the European Environment Agency (EEA) has mistakes and lower quality, at least in Spain. We don't recommend it, but here is the link: https://www.eea.europa.eu/data-and-maps/data/shoreline
 
 ### In progress...
-- Emissaris submarins (marine outfalls) - http://www.aiguescb.com/web/emissaris-submarins.html, 
 - Radars VHF - https://bancodatos.puertos.es/BD/informes/INT_6.pdf (puertos del estado)
 - Perfiladors ARGO (temps real): http://www.physocean.icm.csic.es/vado/argo/argo.geojson, http://www.physocean.icm.csic.es/vado/argo/R3901975.geojson. També es pot trobar info aquí: https://www.ocean-ops.org/board
 - Vaixells de la UTM: http://data.utm.csic.es/rtp/udp/ (XXXPOS)
 - Sentinels?
-
+- Underwater acoustics: Is there anything in Western Mediterranean? Nothing on EMODnet-Physics...
+- Macroalgae quality (heavy metals)?
+- Discharge channels to sea
+- Water contamination map?
+- Plastics contamination map?
 
 ### Useful standards:
 Open Geospatial Consortium
