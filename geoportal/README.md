@@ -57,7 +57,6 @@ The river data was taken from the Food and Agriculture Organization of the Unite
 A highly detailed Spanish shoreline can be found in the Instituto Geográfico Nacional (http://www.ign.es/web/ign/portal/ide-area-nodo-ide-ign). The shoreline provided by the European Environment Agency (EEA) has mistakes and lower quality, at least in Spain. We don't recommend it, but here is the link: https://www.eea.europa.eu/data-and-maps/data/shoreline
 
 ### In progress...
-- Radars VHF - https://bancodatos.puertos.es/BD/informes/INT_6.pdf (puertos del estado)
 - Perfiladors ARGO (temps real): http://www.physocean.icm.csic.es/vado/argo/argo.geojson, http://www.physocean.icm.csic.es/vado/argo/R3901975.geojson. També es pot trobar info aquí: https://www.ocean-ops.org/board
 - Vaixells de la UTM: http://data.utm.csic.es/rtp/udp/ (XXXPOS)
 - Sentinels?
