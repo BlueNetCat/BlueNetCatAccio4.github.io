@@ -49,6 +49,49 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Radar Eivissa",
+        "measures": [
+          "Currents"
+        ],
+        "dataGroup": "SOCIB",
+        "report": "https://www.socib.es/?seccion=observingFacilities&facility=radar",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2014",
+        "end_date": "",
+        "source": {
+          "href": "https://thredds.socib.es/lw4nc2/?m=radar",
+          "type": "text/html",
+          "homepage": "https://www.socib.es/",
+          "name": "Sistema d’Observació Costaner i de Predicció de les Illes Balears"
+        },
+        "antennas": "Puig des Gafí, Formentera"
+      },
+      "geometry": {
+         "type": "GeometryCollection",
+         "geometries": [{
+             "type": "MultiPoint",
+             "coordinates": [
+                [1.22, 38.95],
+                [1.39, 38.67]
+              ]
+         }, {
+             "type": "Polygon",
+             "coordinates": [[
+                [0.469666, 39.110883],
+                [0.469666, 38.380422],
+                [1.456017, 38.380422],
+                [1.456017, 39.110883],
+                [0.469666, 39.110883]
+             ]]
+         }]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Radar Estrecho de Gibraltar",
         "measures": [
           "Currents"
