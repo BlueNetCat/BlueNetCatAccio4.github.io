@@ -26,51 +26,24 @@
         "antennas": "Salou, Alfacada and Vinaròs"
       },
       "geometry": {
-        "type": "GeometryCollection",
-        "geometries": [
-          {
-            "type": " MultiPoint",
-            "coordinates": [
-              [
-                1.17,
-                41.06
-              ],
-              [
-                0.83,
-                40.67
-              ],
-              [
-                0.48,
-                40.46
+         "type": "GeometryCollection",
+         "geometries": [{
+             "type": "MultiPoint",
+             "coordinates": [
+                [1.17, 41.06],
+                [0.83, 40.67],
+                [0.48, 40.46]
               ]
-            ]
-          },
-          {
-            "type": "Polygon",
-            "coordinates": [
-              [
-                0.102826,
-                41.236511
-              ],
-              [
-                0.102826,
-                39.564693
-              ],
-              [
-                2.048909,
-                39.564693
-              ],
-              [
-                2.048909,
-                41.236511
-              ],
-              [
-                0.102826,
-                41.236511
-              ]
-            ]
-          }
-        ]
+         }, {
+             "type": "Polygon",
+             "coordinates": [[
+                [0.102826, 41.236511],
+                [0.102826, 39.564693],
+                [2.048909, 39.564693],
+                [2.048909, 41.236511],
+                [0.102826, 41.236511]
+             ]]
+         }]
       }
     },
     {
@@ -96,55 +69,25 @@
         "antennas": "Faro del Punta Carnero, Tarifa, Camarinal, Puerto de Ceuta"
       },
       "geometry": {
-        "type": "GeometryCollection",
-        "geometries": [
-          {
-            "type": " MultiPoint",
-            "coordinates": [
-              [
-                -5.43,
-                36.08
-              ],
-              [
-                -5.61,
-                36.00
-              ],
-              [
-                -5.81,
-                36.09
-              ],
-              [
-                -5.31,
-                35.90
+         "type": "GeometryCollection",
+         "geometries": [{
+             "type": "MultiPoint",
+             "coordinates": [
+                [-5.43, 36.08],
+                [-5.61, 36.00],
+                [-5.81, 36.09],
+                [-5.31, 35.90]
               ]
-            ]
-          },
-          {
-            "type": "Polygon",
-            "coordinates": [
-              [
-                -5.841841,
-                36.177791
-              ],
-              [
-                -5.841841,
-                35.89795
-              ],
-              [
-                -5.089416,
-                35.89795
-              ],
-              [
-                -5.089416,
-                36.177791
-              ],
-              [
-                -5.841841,
-                36.177791
-              ]
-            ]
-          }
-        ]
+         }, {
+             "type": "Polygon",
+             "coordinates": [[
+                [-5.841841, 36.177791],
+                [-5.841841, 35.89795],
+                [-5.089416, 35.89795],
+                [-5.089416, 36.177791],
+                [-5.841841, 36.177791]
+             ]]
+         }]
       }
     },
     {
@@ -170,55 +113,25 @@
         "antennas": "Magazón, Vila Real, Faro Alfanzina, Sagres"
       },
       "geometry": {
-        "type": "GeometryCollection",
-        "geometries": [
-          {
-            "type": " MultiPoint",
-            "coordinates": [
-              [
-                -6.83,
-                37.13
-              ],
-              [
-                -7.44,
-                37.18
-              ],
-              [
-                -8.44,
-                37.09
-              ],
-              [
-                -8.95,
-                36.99
+         "type": "GeometryCollection",
+         "geometries": [{
+             "type": "MultiPoint",
+             "coordinates": [
+                [-6.83, 37.13],
+                [-7.44, 37.18],
+                [-8.44, 37.09],
+                [-8.95, 36.99]
               ]
-            ]
-          },
-          {
-            "type": "Polygon",
-            "coordinates": [
-              [
-                -9.24006,
-                37.225955
-              ],
-              [
-                -9.24006,
-                36.00023
-              ],
-              [
-                -6.361293,
-                36.00023
-              ],
-              [
-                -6.361293,
-                37.225955
-              ],
-              [
-                -9.24006,
-                37.225955
-              ]
-            ]
-          }
-        ]
+         }, {
+             "type": "Polygon",
+             "coordinates": [[
+                [-9.24006, 37.225955],
+                [-9.24006, 36.00023],
+                [-6.361293, 36.00023],
+                [-6.361293, 37.225955],
+                [-9.24006, 37.225955]
+             ]]
+         }]
       }
     }
   ]
