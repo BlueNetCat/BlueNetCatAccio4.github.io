@@ -6,7 +6,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Toulon",
         "measures": [
           "Sea Level"
@@ -37,7 +36,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Marseille",
         "measures": [
           "Sea Level"
@@ -68,7 +66,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Fos-sur-Mer",
         "measures": [
           "Sea Level"
@@ -99,7 +96,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Sète",
         "measures": [
           "Sea Level"
@@ -130,7 +126,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Port-la-Nouvelle",
         "measures": [
           "Sea Level"
@@ -161,7 +156,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Port-Vendres",
         "measures": [
           "Sea Level"
@@ -191,7 +185,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Valencia (III)",
         "measures": [
           "Waves (harbor)",
@@ -222,7 +215,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Sagunto",
         "measures": [
           "Waves (harbor)",
@@ -253,7 +245,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Gandia",
         "measures": [
           "Waves (harbor)",
@@ -284,7 +275,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Tarragona",
         "measures": [
           "Wind",
@@ -317,7 +307,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Barcelona (II)",
         "measures": [
           "Waves (harbor)",
@@ -348,7 +337,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Palma de Mallorca",
         "measures": [
           "Wind",
@@ -381,7 +369,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Mareograf d'Alcúdia",
         "measures": [
           "Wind",
@@ -414,7 +401,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Formentera",
         "measures": [
           "Wind",
@@ -447,7 +433,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Mareograf d'Eivissa (II)",
         "measures": [
           "Wind",
@@ -480,7 +465,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Mahó",
         "measures": [
           "Waves (harbor)",
@@ -511,7 +495,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Pollença (SOCIB)",
         "measures": [
           "Sea Level",
@@ -543,7 +526,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Porto Cristo (SOCIB)",
         "measures": [
           "Sea Level",
@@ -575,7 +557,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Mareograf d'Andratx (SOCIB)",
         "measures": [
           "Sea Level",
@@ -607,7 +588,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Sa Ràpita",
         "measures": [
           "Sea Level",
@@ -639,7 +619,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Sant Antoni",
         "measures": [
           "Sea Level",
@@ -671,7 +650,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Alicante (II)",
         "measures": [
           "Sea Level"
@@ -701,7 +679,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Cartagena",
         "measures": [
           "Sea Level"
@@ -731,7 +708,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Carboneras",
         "measures": [
           "Waves (harbor)",
@@ -764,7 +740,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Almería",
         "measures": [
           "Waves (harbor)",
@@ -797,7 +772,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Motril",
         "measures": [
           "Waves (harbor)",
@@ -830,7 +804,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Málaga (III)",
         "measures": [
           "Waves (harbor)",
@@ -862,7 +835,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Algeciras",
         "measures": [
           "Waves (harbor)",
@@ -895,7 +867,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Tarifa",
         "measures": [
           "Waves (harbor)",
@@ -927,7 +898,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Huelva (IV)",
         "measures": [
           "Waves (harbor)",
@@ -960,7 +930,6 @@
     {
       "type": "Feature",
       "properties": {
-        "shape": "CircleMarker",
         "name": "Tide gauge Melilla",
         "measures": [
           "Waves (harbor)",
