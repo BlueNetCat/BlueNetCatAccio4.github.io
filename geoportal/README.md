@@ -10,13 +10,16 @@ Most of the buoys come from Puertos del Estado. The data can be downloaded throu
 
 What about Besos-SARTI? https://sarti.webs.upc.edu/web/?p=2788
 
-Other observatories: http://www.fixo3.eu/observatory/
+Other observatories (OBSEA included): http://www.fixo3.eu/observatory/, http://earthvo.fixo3.eu/
 
 ### [Tide gauges (mareogràfs)](data/tide_gauges.geojson)
 Same as the buoys from Puertos del Estado for Spain. For France, the information can be found here: https://data.shom.fr/donnees/catalogue/observation.
 
 ### [Weather stations (Spain)](data/weather_stations_med.geojson)
 In principle you should be able to get the data from https://opendata.aemet.es/centrodedescargas/inicio for the Spanish weather stations. An API key is needed to access it. You can use the id of each station in the geojson to find the data in the AEMET website. In our geojson, four different kinds of weather stations are mixed: complete stations, automatic stations, rain gauges and thermometric.
+
+### [Radars HF for currents](data/radars.geojson)
+For the radars coming from Puertos del Estado, you can check http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx. There is even a forecast system for currents. For the currents in Ibiza, you can check the SOCIB website: https://www.socib.es/?seccion=observingFacilities&facility=radar. I haven't found this technology in the French coast.
 
 ### [Webcams](data/webcams.geojson)
 Not much to say here, the data can be found on each geojson feature. Some webcams are real-time and others provide a picture of the last hour or so. I still need to collect webcams from outside Catalunya.
@@ -50,7 +53,7 @@ There are more types of natural parks or reserves, like Natura 2000 which are no
 ### [Rivers](data/rivers_westmed.geojson)
 The river data was taken from the Food and Agriculture Organization of the United Nations (http://www.fao.org/geonetwork/srv/en/main.home?uuid=e0243940-e5d9-487c-8102-45180cf1a99f). Other shape files of Spain can also be found here: https://www.miteco.gob.es/es/cartografia-y-sig/ide/descargas/agua/red-hidrografica.aspx. This information can also be served with a WMS service.
 
-### [Shoreline] (data/shoreline_spain.geojson)
+### [Shoreline](data/shoreline_spain.geojson)
 A highly detailed Spanish shoreline can be found in the Instituto Geográfico Nacional (http://www.ign.es/web/ign/portal/ide-area-nodo-ide-ign). The shoreline provided by the European Environment Agency (EEA) has mistakes and lower quality, at least in Spain. We don't recommend it, but here is the link: https://www.eea.europa.eu/data-and-maps/data/shoreline
 
 ### In progress...
@@ -58,7 +61,7 @@ A highly detailed Spanish shoreline can be found in the Instituto Geográfico Na
 - Perfiladors ARGO (temps real): http://www.physocean.icm.csic.es/vado/argo/argo.geojson, http://www.physocean.icm.csic.es/vado/argo/R3901975.geojson. També es pot trobar info aquí: https://www.ocean-ops.org/board
 - Vaixells de la UTM: http://data.utm.csic.es/rtp/udp/ (XXXPOS)
 - Sentinels?
-- Underwater acoustics: Is there anything in Western Mediterranean? Nothing on EMODnet-Physics...
+- Underwater acoustics: Is there anything in Western Mediterranean? Nothing on EMODnet-Physics... OBSEA seems to be doing something
 - Macroalgae quality (heavy metals)?
 - Discharge channels to sea
 - Water contamination map?
