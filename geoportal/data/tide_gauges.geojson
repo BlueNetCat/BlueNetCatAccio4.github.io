@@ -514,7 +514,9 @@
         "shape": "CircleMarker",
         "name": "Tide gauge Pollença (SOCIB)",
         "measures": [
-          "Sea Level"
+          "Sea Level",
+          "Water Temperature",
+          "Atmospheric Pressure"
         ],
         "dataGroup": "SOCIB",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf",
@@ -524,10 +526,42 @@
         ],
         "start_date": "2015",
         "source": {
-          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "href": "https://www.socib.es/index.php?seccion=observingFacilities&facility=mooring&id=14",
           "type": "text/html",
-          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
-          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+          "homepage": "https://www.socib.es/",
+          "name": "Sistema d’Observació Costaner i de Predicció de les Illes Balears"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.09,
+          39.9
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "shape": "CircleMarker",
+        "name": "Tide gauge Porto Cristo (SOCIB)",
+        "measures": [
+          "Sea Level",
+          "Water Temperature",
+          "Atmospheric Pressure"
+        ],
+        "dataGroup": "SOCIB",
+        "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2015",
+        "source": {
+          "href": "https://www.socib.es/index.php?seccion=observingFacilities&facility=mooring&id=297",
+          "type": "text/html",
+          "homepage": "https://www.socib.es/",
+          "name": "Sistema d’Observació Costaner i de Predicció de les Illes Balears"
         }
       },
       "geometry": {
@@ -544,7 +578,9 @@
         "shape": "CircleMarker",
         "name": "Mareograf d'Andratx (SOCIB)",
         "measures": [
-          "Sea Level"
+          "Sea Level",
+          "Water Temperature",
+          "Atmospheric Pressure"
         ],
         "dataGroup": "SOCIB",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf",
@@ -554,10 +590,10 @@
         ],
         "start_date": "2015",
         "source": {
-          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "href": "https://www.socib.es/index.php?seccion=observingFacilities&facility=mooring&id=26",
           "type": "text/html",
-          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
-          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+          "homepage": "https://www.socib.es/",
+          "name": "Sistema d’Observació Costaner i de Predicció de les Illes Balears"
         }
       },
       "geometry": {
@@ -574,7 +610,9 @@
         "shape": "CircleMarker",
         "name": "Tide gauge Sa Ràpita",
         "measures": [
-          "Sea Level"
+          "Sea Level",
+          "Water Temperature",
+          "Atmospheric Pressure"
         ],
         "dataGroup": "SOCIB",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf",
@@ -584,10 +622,10 @@
         ],
         "start_date": "2015",
         "source": {
-          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "href": "https://www.socib.es/index.php?seccion=observingFacilities&facility=mooring&id=33",
           "type": "text/html",
-          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
-          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+          "homepage": "https://www.socib.es/",
+          "name": "Sistema d’Observació Costaner i de Predicció de les Illes Balears"
         }
       },
       "geometry": {
@@ -604,7 +642,9 @@
         "shape": "CircleMarker",
         "name": "Tide gauge Sant Antoni",
         "measures": [
-          "Sea Level"
+          "Sea Level",
+          "Water Temperature",
+          "Atmospheric Pressure"
         ],
         "dataGroup": "SOCIB",
         "report": "https://bancodatos.puertos.es/BD/informes/INT_13.pdf",
@@ -614,10 +654,10 @@
         ],
         "start_date": "2015",
         "source": {
-          "href": "http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx",
+          "href": "https://www.socib.es/index.php?seccion=observingFacilities&facility=mooring&id=269",
           "type": "text/html",
-          "homepage": "https://www.mitma.gob.es/empresas-fomento/puertos-del-estado",
-          "name": "Ministerio de Transportes, Mobilidad y Agenda Urbana"
+          "homepage": "https://www.socib.es/",
+          "name": "Sistema d’Observació Costaner i de Predicció de les Illes Balears"
         }
       },
       "geometry": {
