@@ -25,6 +25,9 @@ Not much to say here, the data can be found on each geojson feature. Some webcam
 - SAIH (Sistemas Automáticos de Información Hidrológica): only the stations close to the coast have been kept. In the original dataset there are many more locations. The data can be accessed two ways. The first way is in the MITECO (Ministerio para la Transición Ecológica) webpage: https://www.miteco.gob.es/es/agua/temas/evaluacion-de-los-recursos-hidricos/saih/. Here you can access the different drainage basins and find the data of each stream gauge. Also information about rain gauges can be found. The second way is to use the file "stream_gauges_med_coast.geojson". Each stream gauge has a property called "ficha" that directs to the data. This link seems to be a deprecated service that is still working.
 - ACA (Agència Catalana d'Aigües): the data can be accessed in their website: http://aca.gencat.cat/ca/laigua/consulta-de-dades/dades-obertes/dades-obertes-temps-real/. The data can be seen in their visualizer: http://aca-web.gencat.cat/aetr/vishid. Even rain in real-time can be seen there.
 
+### Air quality stations
+TODO: GEOJSON ready is ready from MITECO (need to upload/clean)
+
 
 
 ## Human activities
@@ -39,9 +42,6 @@ A better source for discharge points is the [Urban Waste Water Treatment Directi
 
 ### Aquaculture installations
 Regarding Spanish aquaculture, the best source is here: https://servicio.pesca.mapama.es/acuivisor/. Aquaculture installations can be found in EMODnet: https://www.emodnet-humanactivities.eu/view-data.php. TODO: France?
-
-### Air quality
-TODO: GEOJSON ready is ready from MITECO (need to upload/clean)
 
 ## Cartography
 ### [National Parks](data/national_parks.geojson)
