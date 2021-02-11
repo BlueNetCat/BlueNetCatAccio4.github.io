@@ -31,6 +31,8 @@ Not much to say here, the data can be found on each geojson feature. Some webcam
 ### [Air quality stations](data/air_quality_stations_spain.geojson)
 The data from Spain comes from MITECO (Ministerio para la Transición Ecológica y el Reto Demográfico). The values can be seen in real-time here: https://sig.mapama.gob.es/calidad-aire/. TODO: france
 
+### Ocean Color (AERONETC CASABLANCA)
+https://aeronet.gsfc.nasa.gov/cgi-bin/data_display_inv_v3?site=Casablanca_Platform&nachal=2&level=2&place_code=10&DATA_TYPE=76
 
 
 ## Human activities
