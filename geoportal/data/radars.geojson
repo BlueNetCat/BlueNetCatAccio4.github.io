@@ -6,6 +6,50 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "Radar Antares",
+        "measures": [
+          "Currents"
+        ],
+        "dataGroup": "MIO",
+        "report": "",
+        "time_of_data": [
+          "historical",
+          "real-time"
+        ],
+        "start_date": "2012",
+        "end_date": "",
+        "source": {
+          "href": "http://hfradar.univ-tln.fr/HFRADAR/squel.php?content=leafletClassic.php",
+          "type": "text/html",
+          "homepage": "http://hfradar.univ-tln.fr/",
+          "name": "Insitut Méditerranéen d'Océanologie"
+        },
+        "antennas": "Amphitria, Porquerolles, Cap Benat"
+      },
+      "geometry": {
+         "type": "GeometryCollection",
+         "geometries": [{
+             "type": "MultiPoint",
+             "coordinates": [
+                [5.88, 43.05],
+                [6.21, 42.98],
+                [6.33, 43.08]
+              ]
+         }, {
+             "type": "Polygon",
+             "coordinates": [[
+                [5.717738, 42.418033],
+                [6.590648, 42.418033],
+                [6.590648, 43.085205],
+                [5.717738, 43.085205],
+                [5.717738, 42.418033]
+             ]]
+         }]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "name": "Radar Delta del Ebre",
         "measures": [
           "Currents"
