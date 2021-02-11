@@ -65,6 +65,8 @@ A highly detailed Spanish shoreline can be found in the Instituto Geográfico Na
 - Discharge channels to sea
 - Water contamination map?
 - Plastics contamination map?
+- MOOSE (Lyon mooring) https://www.moose-network.fr/
+- Oil spill reponse vessels (almost none in WestMed) (http://emsa.europa.eu/we-do/sustainability/pollution-response-services/oil-recovery-vessels.html)
 
 ### Useful standards:
 Open Geospatial Consortium
