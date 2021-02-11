@@ -19,7 +19,7 @@ Same as the buoys from Puertos del Estado for Spain. For France, the information
 In principle you should be able to get the data from https://opendata.aemet.es/centrodedescargas/inicio for the Spanish weather stations. An API key is needed to access it. You can use the id of each station in the geojson to find the data in the AEMET website. In our geojson, four different kinds of weather stations are mixed: complete stations, automatic stations, rain gauges and thermometric.
 
 ### [Radars HF for currents](data/radars.geojson)
-For the radars coming from Puertos del Estado, you can check http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx. There is even a forecast system for currents. For the currents in Ibiza, you can check the SOCIB website: https://www.socib.es/?seccion=observingFacilities&facility=radar. I haven't found this technology in the French coast.
+For the radars coming from Puertos del Estado, you can check http://www.puertos.es/es-es/oceanografia/Paginas/portus.aspx. There is even a forecast system for currents. For the currents in Ibiza, you can check the SOCIB website: https://www.socib.es/?seccion=observingFacilities&facility=radar. For the French Med coast, you can find info here: http://hfradar.univ-tln.fr/
 
 ### [Webcams](data/webcams.geojson)
 Not much to say here, the data can be found on each geojson feature. Some webcams are real-time and others provide a picture of the last hour or so. I still need to collect webcams from outside Catalunya.
