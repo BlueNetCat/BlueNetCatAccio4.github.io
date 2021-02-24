@@ -114,9 +114,9 @@ function runApp(htmlContainer, partition,data,d3,width,color,arc,format,radius){
     const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
     const y = (d.y0 + d.y1) / 2 * radius;
     // TODO: Modify here to make the base label go to center
-    //if (d.y0 == 0) // Rotate base label to be horizontal
-    //	return `rotate(${x}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
-   	//else
+    if (d.y0 == 0) // Rotate base label to be horizontal
+    	return `rotate(${x}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
+   	else
     	return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
   }
 
