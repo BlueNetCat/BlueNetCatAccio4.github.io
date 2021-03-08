@@ -39,7 +39,18 @@ A [pie chart](https://bluenetcataccio4.github.io/VISAP/piechart/) is in developm
   - [ ] Discuss color palette (custom or as in report)
   - [x] Species with small biomass in "Altres" group
   - [ ] Ability to select/deselect species (with a checklist?)
+  - [ ] More info about each species when clicked?
 - [ ] Query for data organized per season
+
+Regarding the map visualization, here is the checklist:
+- [ ] Server
+  - [ ] Node js or GeoServer?
+  - [ ] How to serve the data? WMS or csv-alike?
+- [ ] Map visualizer
+  - [x] Openlayers WMS color filter with SVG
+  - [ ] Tile cache client side
+  - [ ] Visualize tracks of the hauls and clickon events
+  - [ ] Pie charts of the samples collected by each haul when clicked
 
 ### Pesca sonsera
 
