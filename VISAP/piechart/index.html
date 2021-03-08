@@ -7,8 +7,7 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 
 <script src="https://d3js.org/d3.v6.min.js"></script>
-<script src="data.json"></script> <!-- data script (loads from a json) -->
-<script src="color.json"></script>
+<script src="palette.json"></script>
 <!-- Created by Gerard Llorach (gllorach (at) fbg.ub.edu), February 2021-->
 </head>
 
@@ -24,8 +23,25 @@
 //import * as portBiomassData from "./portBiomass.json"
 // Based on D3 example: https://observablehq.com/@d3/zoomable-sunburst
 // data variable is loaded from data.json (header)
-function runApp(htmlContainer, partition,data,d3,width,color,arc,format,radius){
+function runApp(htmlContainer, partition,data,d3){
+
 	const root = partition(data);
+
+	var color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
+
+	var format = d3.format(",d");
+
+	var width = 600;
+
+	var radius = width / 6;
+
+	var arc = d3.arc()
+	    .startAngle(d => d.x0)
+	    .endAngle(d => d.x1)
+	    .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
+	    .padRadius(radius * 1.5)
+	    .innerRadius(d => d.y0 * radius)
+	    .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1));
 
   root.each(d => d.current = d);
 
@@ -40,8 +56,8 @@ function runApp(htmlContainer, partition,data,d3,width,color,arc,format,radius){
     .selectAll("path")
     .data(root.descendants().slice(1))
     .join("path")
-      //.attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
-			.attr("fill", d => {return palette[d.data.name] === undefined ? 'rgb(50, 50, 50)' : "rgb(" + palette[d.data.name].color + ")"})// returns 'rgb(1,1,1)'
+      .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
+			//.attr("fill", d => {return palette[d.data.name] === undefined ? 'rgb(50, 50, 50)' : "rgb(" + palette[d.data.name].color + ")"})// returns 'rgb(1,1,1)'
       .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0.2)//0) // Here if you want to show other levels
       .attr("d", d => arc(d.current));
 
@@ -142,26 +158,12 @@ var partition = data => {
     (root);
 }
 
-var color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
 
-var format = d3.format(",d");
-
-var width = 600;
-
-var radius = width / 6;
-
-var arc = d3.arc()
-    .startAngle(d => d.x0)
-    .endAngle(d => d.x1)
-    .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
-    .padRadius(radius * 1.5)
-    .innerRadius(d => d.y0 * radius)
-    .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1));
 
 
 
 // Prepare the data from the server-database
-function prepData(inData, title){
+function prepDataBiomass(inData, title){
 	const outData = {};
 	outData.name = title + ": ";
 	outData.children = [];
@@ -177,19 +179,19 @@ function prepData(inData, title){
 
 		// Create ZonaPort level if it does not exist
 		if (outData.children.find(child => child.name === zonaPort) === undefined)
-			outData.children[outData.children.length] = {"name": zonaPort, "children": []}; // push
+			outData.children.push({"name": zonaPort, "children": []});
 
 		let zonaPortIndex = outData.children.findIndex(child => child.name === zonaPort)
 		// Create Port level if it does not exist
 		let zonaChilds = outData.children[zonaPortIndex].children;
 		if (zonaChilds.find(child => child.name === nomPort) === undefined)
-			outData.children[zonaPortIndex].children[zonaChilds.length] = {"name": nomPort, "children": []};
+			outData.children[zonaPortIndex].children.push({"name": nomPort, "children": []});
 
 		let portIndex = outData.children[zonaPortIndex].children.findIndex(child => child.name === nomPort)
 		// Create category level (Comercial, Rebuig, Restes)
 		let portChilds = outData.children[zonaPortIndex].children[portIndex].children;
 		if (portChilds.find(child => child.name === classCaptura) === undefined)
-			outData.children[zonaPortIndex].children[portIndex].children[portChilds.length] = {"name": classCaptura, "children": []};
+			outData.children[zonaPortIndex].children[portIndex].children.push({"name": classCaptura, "children": []});
 
 		let classIndex =  outData.children[zonaPortIndex].children[portIndex].children.findIndex(child => child.name === classCaptura)
 		// Assign biomass value
@@ -205,8 +207,8 @@ function showBiomassData(address, staticFile, htmlContainer, title){
 	// Try data from server
 	fetch(address)
 		.then(r => r.json())
-		.then(r => prepData(r, title))
-		.then(outData => runApp(htmlContainer, partition,outData,d3,width,color,arc,format,radius))
+		.then(r => prepDataBiomass(r, title))
+		.then(outData => runApp(htmlContainer, partition,outData,d3))
 		.catch(e => {
 			if (staticFile !== undefined){ // Load static file
 				console.error("Could not fetch from " + address + ". Error: " + e + ". Trying with static file.");
