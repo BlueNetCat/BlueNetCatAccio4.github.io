@@ -199,14 +199,32 @@ function prepData(inData){
 	return outData;
 }
 
+function loadBiomassData(address, staticFile){
+	// Try data from server
+	fetch(address)
+		.then(r => r.json())
+		.then(r=>prepData(r))
+		.then(outData => runApp(htmlContainer, partition,outData,d3,width,color,arc,format,radius))
+		.catch(e => {
+			if (staticFile !== undefined){ // Load static file
+				console.error("Could not fetch from " + address + ". Error: " + e + ". Trying with static file.");
+				loadBiomassData(staticFile);
+			} else {
+				console.error("Could not fetch from " + address + ". Error: " + e + ".");
+			}
+		})
+}
+
 
 var htmlContainer = document.getElementById("pie-container");
 
-fetch("http://localhost:8080/portdata")
+loadBiomassData("http://localhost:8080/portBiomass", "portBiomass.json");
+
+/*fetch("http://localhost:8080/portdata")
 	.then(r => r.json())
 	.then(r=>prepData(r))
 	.then(outData => runApp(htmlContainer, partition,outData,d3,width,color,arc,format,radius))
-	.catch(e => console.log(e))
+	.catch(e => console.log(e))*/
 
 //runApp(htmlContainer, partition,data,d3,width,color,arc,format,radius);
 
