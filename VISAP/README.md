@@ -27,6 +27,19 @@ As shown in the report. This could be served with a WMS from a GeoServer. We hav
 As shown in the report. The routes could be served with a GeoJSON. Other info could pop up, like the date and a pie chart of the catches of that boat on that sampling day.
 
 ### Pesca d'encerclament
+A [pie chart](https://bluenetcataccio4.github.io/VISAP/piechart/) is in development. Checklist of milestones:
+- [x] Server
+  - [x] Nodejs server with queries to the database and REST API for web client requests
+  - [x] Backup method for providing (static) data if server and database are down
+  - [ ] Automatically upload of static data to github's visualizer repository
+  - [ ] Install in production server
+  - [ ] Set up with a daemon
+- [x] Basic pie chart visualization of biomass per port
+  - [x] Preprocess data from server to be used in visualizer
+  - [ ] Discuss color palette (custom or as in report)
+  - [x] Species with small biomass in "Altres" group
+  - [ ] Ability to select/deselect species (with a checklist?)
+- [ ] Query for data organized per season
 
 ### Pesca sonsera
 

@@ -58,8 +58,8 @@ function runApp(htmlContainer, partition,data,d3){
     .data(root.descendants().slice(1))
     .join("path")
       //.attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
-			.attr("fill", d => {return palette[d.data.colorId] === undefined ? 'rgb(50, 50, 50)' : "rgb(" + palette[d.data.colorId].color + ")"})// returns 'rgb(1,1,1)'
-      .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0.2)//0) // Here if you want to show other levels
+			.attr("fill", d => {return palette[d.data.species] === undefined ? 'rgb(50, 50, 50)' : "rgb(" + palette[d.data.species].color + ")"})// returns 'rgb(1,1,1)'
+      .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0.1)//0) // Here if you want to show other levels
       .attr("d", d => arc(d.current));
 
   path.filter(d => d.children)
@@ -67,7 +67,7 @@ function runApp(htmlContainer, partition,data,d3){
       .on("click", clicked);
 
   path.append("title")
-      .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}` + " kg/km2"); // TODO show label, modify label https://chartio.com/resources/tutorials/how-to-show-data-on-mouseover-in-d3js/#creating-a-tooltip-using-the-title-tag
+      .text(d => `${d.ancestors().map(d => d.data.species).reverse().join("/")}\n${format(d.value)}` + " kg/km2"); // TODO show label, modify label https://chartio.com/resources/tutorials/how-to-show-data-on-mouseover-in-d3js/#creating-a-tooltip-using-the-title-tag
 
   const label = g.append("g")
       .attr("pointer-events", "none")
@@ -78,7 +78,8 @@ function runApp(htmlContainer, partition,data,d3){
     .join("text")
       .attr("dy", "0.35em")
       .attr("fill-opacity", d => +labelVisible(d.current))
-      .attr("transform", d => labelTransform(d.current))
+			.style("font", d => (d.x1 - d.x0) < 0.01 ?  (d.x1-d.x0)*100 * 15 +"px sans-serif" : "15px sans-serif")//(d.y1 - d.y0) * (d.x1 - d.x0) > 0.03 ? "15px sans-serif" : "8px sans-serif")
+      .attr("transform", d => labelTransform(d.current, d.target))
       .text(d => d.data.name);
 
   const parent = g.append("circle")
@@ -111,14 +112,18 @@ function runApp(htmlContainer, partition,data,d3){
       .filter(function(d) {
         return +this.getAttribute("fill-opacity") || arcVisible(d.target);
       })
-        .attr("fill-opacity", d => arcVisible(d.target) ? (d.children ? 0.6 : 0.4) : 0.2)//0) // Here if you want to show other levels
+        .attr("fill-opacity", d => arcVisible(d.target) ? (d.children ? 0.6 : 0.4) : 0.1)//0) // Here if you want to show other levels
         .attrTween("d", d => () => arc(d.current));
 
     label.filter(function(d) {
         return +this.getAttribute("fill-opacity") || labelVisible(d.target);
       }).transition(t)
         .attr("fill-opacity", d => +labelVisible(d.target))
-        .attrTween("transform", d => () => labelTransform(d.current));
+				.style("font", d => { // Modify font for small portions
+					let percentage = 100*(d.target.x1 - d.target.x0)/(2*Math.PI);
+					 return percentage < 2 ? Math.max(15*percentage/2,9)+"px sans-serif" : "15px sans-serif";
+				})
+        .attrTween("transform", d => () => labelTransform(d.current, d.target));
   }
 
   function arcVisible(d) {
@@ -130,14 +135,18 @@ function runApp(htmlContainer, partition,data,d3){
     //return d.y1 <= 3 && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03;
   }
 
-  function labelTransform(d) {
+  function labelTransform(d, target) {
+
     const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
     const y = (d.y0 + d.y1) / 2 * radius;
     // TODO: Modify here to make the base label go to center
-    if (d.y0 == 0) // Rotate base label to be horizontal
-    	return `rotate(${x}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
-   	else
-    	return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
+
+		if (target === undefined)
+			return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`; // Default
+    else if (d.y0 < 1 && target.y0 <= 1) // Rotate base label to be horizontal
+			return "rotate("+ (x - 90*d.y0) +") translate("+y*d.y0+",0) rotate("+(x < 180 ? 0 : 180)+")";
+		else
+			return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`; // Default
   }
 
   //return svg.node();
@@ -153,7 +162,8 @@ function runApp(htmlContainer, partition,data,d3){
 var partition = data => {
   const root = d3.hierarchy(data)
       .sum(d => d.value) // Assing a value to each partition, based on the value of the smallest items
-      .sort((a, b) => b.value - a.value); // Organize partitions (here from big to small)
+      .sort((a, b) => b.value - a.value) // Organize partitions (here from big to small)
+			.sort((a, b) => a.data.name == "Altres" ? 1 : -1)
   return d3.partition()
       .size([2 * Math.PI, root.height + 1])
     (root);
@@ -178,29 +188,43 @@ function prepDataBiomass(inData, title){
 		let nomComu = item.NomCatala || item.NomEspecie;
 		let classCaptura = item.ClassificacioCaptura;
 		let biomass = item.Biomassa_Kg_Km2;
+
 		if (biomass < 1) // Do not display items with little biomass
 			continue;
 
 		// Create ZonaPort level if it does not exist
 		if (outData.children.find(child => child.name === zonaPort) === undefined)
-			outData.children.push({"name": zonaPort, "children": [], "colorId": zonaPort});
+			outData.children.push({"name": zonaPort, "children": [], "species": zonaPort});
 
 		let zonaPortIndex = outData.children.findIndex(child => child.name === zonaPort)
 		// Create Port level if it does not exist
 		let zonaChilds = outData.children[zonaPortIndex].children;
 		if (zonaChilds.find(child => child.name === nomPort) === undefined)
-			outData.children[zonaPortIndex].children.push({"name": nomPort, "children": [], "colorId": nomPort});
+			outData.children[zonaPortIndex].children.push({"name": nomPort, "children": [], "species": nomPort});
 
 		let portIndex = outData.children[zonaPortIndex].children.findIndex(child => child.name === nomPort)
 		// Create category level (Comercial, Rebuig, Restes)
 		let portChilds = outData.children[zonaPortIndex].children[portIndex].children;
 		if (portChilds.find(child => child.name === classCaptura) === undefined)
-			outData.children[zonaPortIndex].children[portIndex].children.push({"name": classCaptura, "children": [], "colorId": classCaptura});
+			outData.children[zonaPortIndex].children[portIndex].children.push({"name": classCaptura, "children": [], "species": classCaptura});
 
 		let classIndex =  outData.children[zonaPortIndex].children[portIndex].children.findIndex(child => child.name === classCaptura)
-		// Assign biomass value
-		outData.children[zonaPortIndex].children[portIndex].children[classIndex].children.push({"name": nomComu, "value": biomass, "colorId": nomEspecie});
-
+		// If biomass is very small, put to others
+		if ((biomass < 9 && classCaptura == "Comercial") || (biomass < 5 && classCaptura == "Rebuig")){
+			let altresIndex =  outData.children[zonaPortIndex].children[portIndex].children[classIndex].children.findIndex(child => child.name === "Altres");
+			// Define Altres group
+			if (altresIndex == -1) {
+				outData.children[zonaPortIndex].children[portIndex].children[classIndex].children.push({"name": "Altres", "children": [], "species": "Altres"});
+				altresIndex = outData.children[zonaPortIndex].children[portIndex].children[classIndex].children.length - 1;
+			}
+			// Assign to Altres
+			outData.children[zonaPortIndex].children[portIndex].children[classIndex].children[altresIndex].children.push({"name": nomComu, "value": biomass, "species": nomEspecie});
+		}
+		// Biomass is bigger
+		else {
+			// Assign biomass value
+			outData.children[zonaPortIndex].children[portIndex].children[classIndex].children.push({"name": nomComu, "value": biomass, "species": nomEspecie});
+		}
 	}
 
 	return outData;
