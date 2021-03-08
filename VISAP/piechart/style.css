@@ -1,6 +1,8 @@
 
 
-#pie-container{
+#pie-container,#pie-container2{
   max-width: 700px;
+  width: 50%;
   margin: auto;
+  float: left;
 }

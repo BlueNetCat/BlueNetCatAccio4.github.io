@@ -17,6 +17,7 @@
 
 <!-- Container for the network visualization -->
 <div id="pie-container"></div>
+<div id="pie-container2"></div>
 
 <script type="module">
 
@@ -56,8 +57,8 @@ function runApp(htmlContainer, partition,data,d3){
     .selectAll("path")
     .data(root.descendants().slice(1))
     .join("path")
-      .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
-			//.attr("fill", d => {return palette[d.data.name] === undefined ? 'rgb(50, 50, 50)' : "rgb(" + palette[d.data.name].color + ")"})// returns 'rgb(1,1,1)'
+      //.attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
+			.attr("fill", d => {return palette[d.data.colorId] === undefined ? 'rgb(50, 50, 50)' : "rgb(" + palette[d.data.colorId].color + ")"})// returns 'rgb(1,1,1)'
       .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0.2)//0) // Here if you want to show other levels
       .attr("d", d => arc(d.current));
 
@@ -174,28 +175,31 @@ function prepDataBiomass(inData, title){
 		let zonaPort = item.ZonaPort;
 		let nomPort = item.NomPort;
 		let nomEspecie = item.NomEspecie;
+		let nomComu = item.NomCatala || item.NomEspecie;
 		let classCaptura = item.ClassificacioCaptura;
 		let biomass = item.Biomassa_Kg_Km2;
+		if (biomass < 1) // Do not display items with little biomass
+			continue;
 
 		// Create ZonaPort level if it does not exist
 		if (outData.children.find(child => child.name === zonaPort) === undefined)
-			outData.children.push({"name": zonaPort, "children": []});
+			outData.children.push({"name": zonaPort, "children": [], "colorId": zonaPort});
 
 		let zonaPortIndex = outData.children.findIndex(child => child.name === zonaPort)
 		// Create Port level if it does not exist
 		let zonaChilds = outData.children[zonaPortIndex].children;
 		if (zonaChilds.find(child => child.name === nomPort) === undefined)
-			outData.children[zonaPortIndex].children.push({"name": nomPort, "children": []});
+			outData.children[zonaPortIndex].children.push({"name": nomPort, "children": [], "colorId": nomPort});
 
 		let portIndex = outData.children[zonaPortIndex].children.findIndex(child => child.name === nomPort)
 		// Create category level (Comercial, Rebuig, Restes)
 		let portChilds = outData.children[zonaPortIndex].children[portIndex].children;
 		if (portChilds.find(child => child.name === classCaptura) === undefined)
-			outData.children[zonaPortIndex].children[portIndex].children.push({"name": classCaptura, "children": []});
+			outData.children[zonaPortIndex].children[portIndex].children.push({"name": classCaptura, "children": [], "colorId": classCaptura});
 
 		let classIndex =  outData.children[zonaPortIndex].children[portIndex].children.findIndex(child => child.name === classCaptura)
 		// Assign biomass value
-		outData.children[zonaPortIndex].children[portIndex].children[classIndex].children.push({"name": nomEspecie, "value": biomass});
+		outData.children[zonaPortIndex].children[portIndex].children[classIndex].children.push({"name": nomComu, "value": biomass, "colorId": nomEspecie});
 
 	}
 
@@ -223,6 +227,7 @@ function showBiomassData(address, staticFile, htmlContainer, title){
 var htmlContainer = document.getElementById("pie-container");
 // Loads the data and starts the visualizer
 showBiomassData("http://localhost:8080/portBiomass", "portBiomass.json", htmlContainer, "Pesca per port en Biomassa");
+showBiomassData("http://localhost:8080/portBiomass", "portBiomass.json", document.getElementById("pie-container2"), "Pesca per port en Biomassa");
 
 /*fetch("http://localhost:8080/portdata")
 	.then(r => r.json())
