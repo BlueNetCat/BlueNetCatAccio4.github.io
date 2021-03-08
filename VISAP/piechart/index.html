@@ -201,7 +201,7 @@ function prepData(inData){
 
 function loadBiomassData(address, staticFile){
 	// Try data from server
-	fetch(address)
+	fetch(address, {mode: 'no-cors'})
 		.then(r => r.json())
 		.then(r=>prepData(r))
 		.then(outData => runApp(htmlContainer, partition,outData,d3,width,color,arc,format,radius))
