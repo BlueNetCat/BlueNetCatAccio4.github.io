@@ -240,7 +240,7 @@ function showBiomassData(address, staticFile, htmlContainer, title){
 		.catch(e => {
 			if (staticFile !== undefined){ // Load static file
 				console.error("Could not fetch from " + address + ". Error: " + e + ". Trying with static file.");
-				loadBiomassData(staticFile);
+				showBiomassData(staticFile, undefined, htmlContainer, title);
 			} else {
 				console.error("Could not fetch from " + address + ". Error: " + e + ".");
 			}
