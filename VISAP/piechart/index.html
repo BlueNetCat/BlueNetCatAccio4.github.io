@@ -21,6 +21,7 @@
 
 <script type="module">
 
+//import * as portBiomassData from "./portBiomass.json"
 // Based on D3 example: https://observablehq.com/@d3/zoomable-sunburst
 // data variable is loaded from data.json (header)
 function runApp(htmlContainer, partition,data,d3,width,color,arc,format,radius){
@@ -159,10 +160,10 @@ var arc = d3.arc()
 
 
 
-// Get the data from the server-database
-function prepData(inData){
+// Prepare the data from the server-database
+function prepData(inData, title){
 	const outData = {};
-	outData.name = "Pesca per Port en Biomassa: ";
+	outData.name = title + ": ";
 	outData.children = [];
 
 	// Iterate over all rows
@@ -199,11 +200,12 @@ function prepData(inData){
 	return outData;
 }
 
-function loadBiomassData(address, staticFile){
+// Server address to make a GET, static file in directory, html DIV element, string for title
+function showBiomassData(address, staticFile, htmlContainer, title){
 	// Try data from server
-	fetch(address, {mode: 'no-cors'})
+	fetch(address)
 		.then(r => r.json())
-		.then(r=>prepData(r))
+		.then(r => prepData(r, title))
 		.then(outData => runApp(htmlContainer, partition,outData,d3,width,color,arc,format,radius))
 		.catch(e => {
 			if (staticFile !== undefined){ // Load static file
@@ -217,8 +219,8 @@ function loadBiomassData(address, staticFile){
 
 
 var htmlContainer = document.getElementById("pie-container");
-
-loadBiomassData("http://localhost:8080/portBiomass", "portBiomass.json");
+// Loads the data and starts the visualizer
+showBiomassData("http://localhost:8080/portBiomass", "portBiomass.json", htmlContainer, "Pesca per port en Biomassa");
 
 /*fetch("http://localhost:8080/portdata")
 	.then(r => r.json())
