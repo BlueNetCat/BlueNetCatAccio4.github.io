@@ -36,16 +36,18 @@ A [pie chart](https://bluenetcataccio4.github.io/VISAP/piechart/) is in developm
   - [ ] Set up with a daemon
 - [x] Basic pie chart visualization of biomass per port
   - [x] Preprocess data from server to be used in visualizer
-  - [ ] Discuss color palette (custom or as in report)
+  - [x] Discuss color palette (custom or as in report)
   - [x] Species with small biomass in "Altres" group
+  - [ ] Add tab location in pie chart
   - [ ] Ability to select/deselect species (with a checklist?)
   - [ ] More info about each species when clicked?
-- [ ] Query for data organized per season
+  - [ ] Add fishing per stratum (requires new query from J. Ribera)
+- [ ] Query for data organized per season (requires new query)
 
 Regarding the map visualization, here is the checklist:
 - [ ] Server
-  - [ ] Node js or GeoServer?
-  - [ ] How to serve the data? WMS or csv-alike?
+  - [ ] GeoServer for WMS
+  - [ ] Nodejs for static files (csv-like)
 - [ ] Map visualizer
   - [x] Openlayers WMS color filter with SVG
   - [ ] Tile cache client side
