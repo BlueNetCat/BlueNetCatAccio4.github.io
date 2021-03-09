@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<style>
+
+.square {
+  width: 20px;
+  height: 20px;
+  float: left;
+  border-color: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  border-style: solid;
+  margin-top: 1.5%;
+  pointer-events: none;
+}
+
+.label {
+  float: left;
+  vertical-align: middle;
+  padding-left: 10px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.speciesItem, .selSpeciesItem {
+	color: black;
+	font-family: sans-serif;
+  font-size: 12px;
+	text-align: left;
+	box-shadow:inset 0px 1px 0px 0px rgba(200, 200, 200, 0.3);
+	background-color: rgba(249, 249, 249, 0.3);
+	border-radius:6px;
+	border: 1px solid grey;
+	cursor: pointer;
+  padding-left: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-left: 15px;
+
+}
+.speciesItem:hover{
+	background-color: rgba(200,200,200,0.8);
+  cursor: pointer;
+}
+
+.selSpeciesItem {
+  background-color: rgba(220,220,220,0.8);
+  box-shadow:inset 0px 1px 0px 0px rgba(255, 255, 255, 0.5);
+  border: 2px solid grey;
+}
+
+
+
+#overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255,255,255,0.80);
+  z-index: 2;
+  cursor: pointer;
+  overflow: scroll;
+}
+
+}
+
+</style>
+<head>
+<meta charset="utf-8">
+<title>Filter</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<script src="list.min.js"></script>
+<script src="palette.json"></script>
+<!-- Created by Gerard Llorach (gllorach (at) fbg.ub.edu), February 2021-->
+</head>
+
+
+<body>
+
+  <div id="container">
+
+
+
+    <div id="selSpeciesEl">
+      <div class="list"></div>
+    </div>
+
+    <div id="speciesEl">
+      <input class="search" placeholder="Search" />
+      <!--button class="sort" data-sort="name">
+        Sort by Name
+      </button-->
+      <button onclick="selectAll()"> Select all </button>
+      <div class="list"></div>
+    </div>
+  </div>
+
+<script>
+
+
+
+
+// Prepare data for List.js
+var values = [];
+var keys = Object.keys(palette);
+keys.forEach(item => values.push({"name": item, "color": palette[item].color}));
+
+// https://listjs.com/api/
+var options = {
+  item: (values) => "<button onclick=\"selectItem(event)\" class='speciesItem'>" +
+                    "<div class='square' style=background-color:rgb("+values.color.toString()+")>"+
+                    "</div>" +
+                    "<label class='label' style=text-align:center>"+
+                    values.name + "</label>"+
+                    "</button>"
+};
+
+var optionsSel = {
+  item: (values) => "<button onclick=\"deselectItem(event)\" class='selSpeciesItem'>" +
+                    "<div class='square' style=background-color:rgb("+values.color.toString()+")>"+
+                    "</div>" +
+                    "<label class='label' style=text-align:center>"+
+                    values.name + "</label>"+
+                    "</button>"
+}
+
+// Select item
+const selectItem = (e) => {
+  let speciesName = e.srcElement.children[1].innerText;
+  switchFromList(speciesName, speciesList, selSpeciesList);
+};
+
+// Deselect item
+const deselectItem = (e) => {
+  let speciesName = e.srcElement.children[1].innerText;
+  switchFromList(speciesName, selSpeciesList, speciesList);
+}
+
+
+// Switch values from one list to the other
+function switchFromList(speciesName, removeFromList, insertFromList){
+  let item = removeFromList.get("name", speciesName)[0];
+  removeFromList.remove("name", speciesName);
+
+  insertFromList.add({
+    "name": speciesName,
+    "color":  item._values.color
+  })
+}
+
+function selectAll(){
+  // TODO
+}
+
+
+
+   /*"<button style=background-color:rgb("+values.color.toString()+")>"+
+                    "<p style=text-align:center;color:"+
+                    //(values.color.reduce((a,b)=>a+b) > 255*1.5 ? "black;" : "white;") + // Conditional coloring
+                    ">" + values.name + "</p></button>"*/
+
+
+/*
+var values = [
+  {
+    name: 'Jonny Strömberg',
+    born: 1986
+  },
+  {
+    name: 'Jonas Arnklint',
+    born: 1985
+  },
+  {
+    name: 'Martina Elm',
+    born: 1986
+  }
+];*/
+
+var speciesList = new List('speciesEl', options, values);
+var selSpeciesList = new List('selSpeciesEl', optionsSel);
+
+</script>
+
+</body
+
+
+</html>
