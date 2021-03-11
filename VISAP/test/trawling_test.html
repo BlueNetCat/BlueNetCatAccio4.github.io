@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Test trawling</title>
+
+    <!-- Custom styles for this template -->
+    <link href="../css/dashboard.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="../lib/bootstrap.min.css" rel="stylesheet">
+
+  </head>
+<body>
+<main>
+  <!-- Here goes the content -->
+</main>
+
+<!-- D3 library -->
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<!-- Scripts -->
+<script src="../js/trawling.js"></script>
+<script src="../data/palette.json"></script>
+
+<script>
+// Testing inner html
+fetch("../html/" + "trawling.html")
+  .then(response => response.text())
+  .then(text => {
+    document.getElementsByTagName("main")[0].innerHTML = text;
+    startTrawling("../data/portBiomass.json");
+  });
+
+</script>
+</body>
+</html>
