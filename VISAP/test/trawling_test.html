@@ -4,17 +4,28 @@
     <meta charset="utf-8">
     <title>Test trawling</title>
 
+
+
+    <!-- Latest compiled and minified CSS -->
+    <!-- CONFLICT WITH BOOTSTRAP STYLES??? CHECK 5.0 DROPDOWNS!?? from 4.0 https://getbootstrap.com/docs/4.0/components/dropdowns/-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Bootstrap core CSS (LATEST) -->
+    <link href="../lib/bootstrap.min.css" rel="stylesheet">
+
+
+
     <!-- Custom styles for this template -->
     <link href="../css/dashboard.css" rel="stylesheet">
-    <!-- Bootstrap core CSS -->
-    <link href="../lib/bootstrap.min.css" rel="stylesheet">
 
   </head>
 <body>
+
 <main>
   <!-- Here goes the content -->
 </main>
 
+<!-- Icons library -->
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
 <!-- D3 library -->
 <script src="https://d3js.org/d3.v6.min.js"></script>
 <!-- Scripts -->
@@ -28,8 +39,19 @@ fetch("../html/" + "trawling.html")
   .then(text => {
     document.getElementsByTagName("main")[0].innerHTML = text;
     startTrawling("../data/portBiomass.json");
+
+    // Feather Icons
+    feather.replace()
   });
 
 </script>
+
+
+
+<!-- Boostrap bundle -->
+ <script src="https://code.jquery.com/jquery.js"></script>
+ <!-- Latest compiled and minified JavaScript -->
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 </body>
 </html>

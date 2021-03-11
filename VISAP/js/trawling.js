@@ -13,6 +13,7 @@ var startTrawling =  (staticDataFile) => {
 }
 
 // HTML button events
+
 var compareTrawling = (event) => {
   if (this.data === undefined)
     return;
@@ -22,18 +23,27 @@ var compareTrawling = (event) => {
   document.getElementById("closeCompare").style.visibility = null;
 
   // Create pie chart
-  var compEl = document.getElementById("compare");
+  //var compEl = document.getElementById("comparePie");
+  let piechart = document.getElementById("piechart");
+  let compEl = piechart.cloneNode(false);
+  compEl.id = "comparePie";
+  piechart.parentElement.insertBefore(compEl, piechart);
   runApp(compEl, partition, this.data, d3);
 }
+
 // HTML button events
 var closeCompare = (event) => {
   // Hide compare button
   event.target.style.visibility="hidden";
+
   // Show close compare button
-  var cmp = document.getElementById("compare");
-  cmp.getElementsByTagName('svg')[0].remove();
-  cmp.children[0].style.visibility=null;
+  var cmp = document.getElementById("compareBtn");
+  cmp.style.visibility=null;
+  //cmp.className ="";// I don't understand why
   // Remove pie chart
+  console.log(document.getElementById("comparePie"));
+  document.getElementById("comparePie").remove();
+
 
 }
 
