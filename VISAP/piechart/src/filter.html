@@ -73,10 +73,10 @@
 <head>
 <meta charset="utf-8">
 <title>Filter</title>
-<link rel="stylesheet" type="text/css" href="style.css">
+<!--link rel="stylesheet" type="text/css" href="style.css"-->
 
 <script src="list.min.js"></script>
-<script src="palette.json"></script>
+<script src="../palette.json"></script>
 <!-- Created by Gerard Llorach (gllorach (at) fbg.ub.edu), February 2021-->
 </head>
 
@@ -93,10 +93,11 @@
 
     <div id="speciesEl">
       <input class="search" placeholder="Search" />
-      <!--button class="sort" data-sort="name">
+      <button class="sort" data-sort="name">
         Sort by Name
-      </button-->
+      </button>
       <button onclick="selectAll()"> Select all </button>
+      <button onclick="deselectAll()"> Deselect all </button>
       <div class="list"></div>
     </div>
   </div>
@@ -142,45 +143,30 @@ const deselectItem = (e) => {
   switchFromList(speciesName, selSpeciesList, speciesList);
 }
 
+const selectAll= () => {
+  for (var i = 0; i<speciesList.items.length; i++){
+    switchFromList(speciesList.items[i]._values.name, speciesList, selSpeciesList)
+    i--;
+  }
+}
+
+const deselectAll= () => {
+  for (var i = 0; i<selSpeciesList.items.length; i++){
+    switchFromList(selSpeciesList.items[i]._values.name, selSpeciesList, speciesList)
+    i--;
+  }
+}
 
 // Switch values from one list to the other
-function switchFromList(speciesName, removeFromList, insertFromList){
+const switchFromList = (speciesName, removeFromList, insertToList) => {
   let item = removeFromList.get("name", speciesName)[0];
   removeFromList.remove("name", speciesName);
 
-  insertFromList.add({
+  insertToList.add({
     "name": speciesName,
     "color":  item._values.color
   })
 }
-
-function selectAll(){
-  // TODO
-}
-
-
-
-   /*"<button style=background-color:rgb("+values.color.toString()+")>"+
-                    "<p style=text-align:center;color:"+
-                    //(values.color.reduce((a,b)=>a+b) > 255*1.5 ? "black;" : "white;") + // Conditional coloring
-                    ">" + values.name + "</p></button>"*/
-
-
-/*
-var values = [
-  {
-    name: 'Jonny Strömberg',
-    born: 1986
-  },
-  {
-    name: 'Jonas Arnklint',
-    born: 1985
-  },
-  {
-    name: 'Martina Elm',
-    born: 1986
-  }
-];*/
 
 var speciesList = new List('speciesEl', options, values);
 var selSpeciesList = new List('selSpeciesEl', optionsSel);
