@@ -1,8 +1,9 @@
 # VISAP
+A [temporary dashboard](https://bluenetcataccio4.github.io/VISAP/) has been created to show the visualizations.
 ## Information to visualize
 ### Pesca d'arrossegament (Trawling)
 #### Catches Pie charts
-Something like a [d3 pie chart](https://bluenetcataccio4.github.io/VISAP/piechart/) could be used.
+Catches (Captures) are shown as a [pie chart](https://bluenetcataccio4.github.io/VISAP/test/trawling_test.html).
 ##### Options available in the given report
 These options will probably require new queries to the server/BBDD. For example, the aforementioned pie chart is divided in areas/harbours.
 - Per area/harbour (Roses, l'Escala, Palamós...)
