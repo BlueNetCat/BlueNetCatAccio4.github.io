@@ -1,39 +1,109 @@
-<!DOCTYPE html>
-<html>
+// Needs d3 library
 
-<head>
-<meta charset="utf-8">
-<title>VISAP Pie Chart</title>
-<link rel="stylesheet" type="text/css" href="style.css">
+// Import filter module
+import selectAll from './filter.js'; // TODO HERE
 
-<script src="https://d3js.org/d3.v6.min.js"></script>
-<script src="palette.json"></script>
-<!-- Created by Gerard Llorach (gllorach (at) fbg.ub.edu), February 2021-->
-</head>
+var dataForD3 = undefined;
+var filteredDataForD3 = undefined;
+export const startTrawling =  (staticDataFile) => {
+  'use strict'
+
+  // Expose onclick functions
+  // https://stackoverflow.com/questions/44590393/es6-modules-undefined-onclick-function-after-import
+  window.compareTrawling = compareTrawling;
+  window.closeCompare = closeCompare;
+  window.exportJSON = exportJSON;
+  window.exportCSV = exportCSV;
+  window.filterSpecies = filterSpecies;
+
+  var htmlContainer = document.getElementById("piechart");
+  // Loads the data and starts the visualizer
+  if (dataForD3 === undefined)
+    showBiomassData("http://localhost:8080/portBiomass", staticDataFile, htmlContainer, "Pesca per port en Biomassa");
+  else
+    runApp(htmlContainer, partition, dataForD3, d3);
+}
+
+// HTML button events
+const compareTrawling = (event) => {
+  if (dataForD3 === undefined)
+    return;
+  // Hide compare button
+  event.target.style.visibility="hidden";
+  // Show close compare button
+  document.getElementById("closeCompare").style.visibility = null;
+
+  // Create pie chart
+  //var compEl = document.getElementById("comparePie");
+  let piechart = document.getElementById("piechart");
+  let compEl = piechart.cloneNode(false);
+  compEl.id = "comparePie";
+  piechart.parentElement.insertBefore(compEl, piechart);
+  runApp(compEl, partition, dataForD3, d3);
+}
+
+// HTML button events
+const closeCompare = (event) => {
+  // Hide compare button
+  event.target.style.visibility="hidden";
+
+  // Show close compare button
+  var cmp = document.getElementById("compareBtn");
+  cmp.style.visibility=null;
+  //cmp.className ="";// I don't understand why
+  // Remove pie chart
+  document.getElementById("comparePie").remove();
+}
+
+// Filter Species button event
+const filterSpecies = (event) => {
+  if (dataForD3 === undefined) // Data is not loaded yet
+    return;
+  // Show GUI
+  if (event.target.isOn == false){ // If filter is not active (should be something related to class)
+    // Fetch HTML?
+
+    // Add/Show HTML to container
+    // Change button state
+
+  } else {
+    // Remove/Hide HTML
+
+    // If filter exists
+      // Show RemoveFilter button HTML
+      document.getElementById("removeFilterBtn").style.visibility = "null";
+      // Preprocess data
+
+      // Re-start graph with filter parameters
+
+  }
+}
+// Remove filter and show unfitered data
+const removeFilter = (event) => {
+  // When clicked, hide this button
+  event.target.style.visibility = 'hidden';
+  // Remove previos graph
+
+  // Restart graph without filters
+  runApp(htmlContainer, partition, dataForD3, d3);
+}
 
 
-<body>
-
-
-<!-- Container for the network visualization -->
-<div id="pie-container"></div>
-<div id="pie-container2"></div>
-
-<script type="module">
 
 // Based on D3 example: https://observablehq.com/@d3/zoomable-sunburst
 // d3 label center: https://observablehq.com/@kerryrodden/sequences-sunburst
 // data variable is loaded from data.json (header)
+
+// Optional todo: https://stackoverflow.com/questions/29978957/transitions-in-d3-on-load
 function runApp(htmlContainer, partition,data,d3){
 
+  // Store data
+  dataForD3 = data;
+
 	const root = partition(data);
-
 	var color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
-
 	var format = d3.format(",d");
-
 	var width = 600;
-
 	var radius = width / 6;
 
 	var arc = d3.arc()
@@ -136,7 +206,6 @@ function runApp(htmlContainer, partition,data,d3){
     });
 
 		// Show biomass
-		console.log(p);
 		centerLabel
 			.select(".biomassText")
 			.style("visibility", null)
@@ -193,6 +262,8 @@ function runApp(htmlContainer, partition,data,d3){
   }
 
   //return svg.node();
+  // Remove loader class
+  htmlContainer.className = "my-4 w-100 mx-auto";
   htmlContainer.appendChild(svg.node());
 }
 
@@ -216,8 +287,40 @@ var partition = data => {
 
 
 
+
+
+
+
+
+// Server address to make a GET, static file in directory, html DIV element, string for title
+function showBiomassData(address, staticFile, htmlContainer, title){
+  console.log("getting biomass data per port: " + address +", "+ staticFile +", ")
+	// Try data from server
+	fetch(address)
+		.then(r => r.json())
+		.then(r => prepDataBiomass(r, title))
+		.then(outData => runApp(htmlContainer, partition,outData,d3))
+		.catch(e => {
+			if (staticFile !== undefined){ // Load static file
+				console.error("Could not fetch from " + address + ". Error: " + e + ". Trying with static file.");
+				showBiomassData(staticFile, undefined, htmlContainer, title);
+			} else {
+				console.error("Could not fetch from " + address + ". Error: " + e + ".");
+			}
+		})
+}
+
+
+
+
+
+
+
+
 // Prepare the data from the server-database
+var databaseJSONBiomass = null;
 function prepDataBiomass(inData, title){
+  databaseJSONBiomass = inData;
 	const outData = {};
 	outData.name = title + ": ";
 	outData.children = [];
@@ -273,40 +376,58 @@ function prepDataBiomass(inData, title){
 	return outData;
 }
 
-// Server address to make a GET, static file in directory, html DIV element, string for title
-function showBiomassData(address, staticFile, htmlContainer, title){
-	// Try data from server
-	fetch(address)
-		.then(r => r.json())
-		.then(r => prepDataBiomass(r, title))
-		.then(outData => runApp(htmlContainer, partition,outData,d3))
-		.catch(e => {
-			if (staticFile !== undefined){ // Load static file
-				console.error("Could not fetch from " + address + ". Error: " + e + ". Trying with static file.");
-				showBiomassData(staticFile, undefined, htmlContainer, title);
-			} else {
-				console.error("Could not fetch from " + address + ". Error: " + e + ".");
-			}
-		})
+
+
+// Export data
+// https://www.codevoila.com/post/30/export-json-data-to-downloadable-file-using-javascript
+const exportJSON = function(event){
+  // Data not yet loaded
+  if (databaseJSONBiomass === null)
+    return;
+  // Create
+  let dataStr = JSON.stringify(databaseJSONBiomass);
+  let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+  let exportFileDefaultName = 'pesca_arrossegament_biomassa.json';
+  let linkElement = event.target;//document.createElement('a');
+  linkElement.setAttribute('href', dataUri);
+  linkElement.setAttribute('download', exportFileDefaultName);
+  // Now the "a" element has already the data, then remove the function
+  linkElement.removeEventListener("onclick", exportJSON);
+}
+
+const exportCSV = function(event){
+  // Data not yet loaded
+  if (databaseJSONBiomass === null)
+    return;
+  // Parse JSON to CSV
+  let jsonData = databaseJSONBiomass;
+  let keys = Object.keys(jsonData[0]);
+
+  let columnDelimiter = ',';
+  let lineDelimiter = '\n';
+
+  let csvColumnHeader = keys.join(columnDelimiter);
+  let csvStr = csvColumnHeader + lineDelimiter;
+
+  jsonData.forEach(item => {
+      keys.forEach((key, index) => {
+          if( (index > 0) && (index < keys.length) ) {
+              csvStr += columnDelimiter;
+          }
+          csvStr += item[key];
+      });
+      csvStr += lineDelimiter;
+  });
+
+  // Now make downlodable element
+  let dataUri = 'data:text/csv;charset=utf-8,'+ encodeURIComponent(csvStr);
+  let exportFileDefaultName = 'pesca_arrossegament_biomassa.csv';
+  let linkElement = event.target;//document.createElement('a');
+  linkElement.setAttribute('href', dataUri);
+  linkElement.setAttribute('download', exportFileDefaultName);
+  // Now the "a" element has already the data, then remove the function
+  linkElement.removeEventListener("onclick", exportJSON);
 }
 
 
-var htmlContainer = document.getElementById("pie-container");
-// Loads the data and starts the visualizer
-showBiomassData("http://localhost:8080/portBiomass", "portBiomass.json", htmlContainer, "Pesca per port en Biomassa");
-showBiomassData("http://localhost:8080/portBiomass", "portBiomass.json", document.getElementById("pie-container2"), "Pesca per port en Biomassa");
-
-/*fetch("http://localhost:8080/portdata")
-	.then(r => r.json())
-	.then(r=>prepData(r))
-	.then(outData => runApp(htmlContainer, partition,outData,d3,width,color,arc,format,radius))
-	.catch(e => console.log(e))*/
-
-//runApp(htmlContainer, partition,data,d3,width,color,arc,format,radius);
-
-
-
-</script>
-</body>
-
-</html>
+export default startTrawling;
