@@ -4,6 +4,7 @@
 import selectAll from './filter.js'; // TODO HERE
 
 var dataForD3 = undefined;
+var filteredDataForD3 = undefined;
 export const startTrawling =  (staticDataFile) => {
   'use strict'
 
@@ -13,6 +14,7 @@ export const startTrawling =  (staticDataFile) => {
   window.closeCompare = closeCompare;
   window.exportJSON = exportJSON;
   window.exportCSV = exportCSV;
+  window.filterSpecies = filterSpecies;
 
   var htmlContainer = document.getElementById("piechart");
   // Loads the data and starts the visualizer
@@ -51,16 +53,48 @@ const closeCompare = (event) => {
   //cmp.className ="";// I don't understand why
   // Remove pie chart
   document.getElementById("comparePie").remove();
-
-
 }
 
+// Filter Species button event
+const filterSpecies = (event) => {
+  if (dataForD3 === undefined) // Data is not loaded yet
+    return;
+  // Show GUI
+  if (event.target.isOn == false){ // If filter is not active (should be something related to class)
+    // Fetch HTML?
+
+    // Add/Show HTML to container
+    // Change button state
+
+  } else {
+    // Remove/Hide HTML
+
+    // If filter exists
+      // Show RemoveFilter button HTML
+      document.getElementById("removeFilterBtn").style.visibility = "null";
+      // Preprocess data
+
+      // Re-start graph with filter parameters
+
+  }
+}
+// Remove filter and show unfitered data
+const removeFilter = (event) => {
+  // When clicked, hide this button
+  event.target.style.visibility = 'hidden';
+  // Remove previos graph
+
+  // Restart graph without filters
+  runApp(htmlContainer, partition, dataForD3, d3);
+}
 
 
 
 // Based on D3 example: https://observablehq.com/@d3/zoomable-sunburst
 // d3 label center: https://observablehq.com/@kerryrodden/sequences-sunburst
 // data variable is loaded from data.json (header)
+
+// Optional todo: https://stackoverflow.com/questions/29978957/transitions-in-d3-on-load
 function runApp(htmlContainer, partition,data,d3){
 
   // Store data
