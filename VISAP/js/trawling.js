@@ -1,21 +1,30 @@
 // Needs d3 library
 
+// Import filter module
+import selectAll from './filter.js'; // TODO HERE
 
-var startTrawling =  (staticDataFile) => {
+var dataForD3 = undefined;
+export const startTrawling =  (staticDataFile) => {
   'use strict'
+
+  // Expose onclick functions
+  // https://stackoverflow.com/questions/44590393/es6-modules-undefined-onclick-function-after-import
+  window.compareTrawling = compareTrawling;
+  window.closeCompare = closeCompare;
+  window.exportJSON = exportJSON;
+  window.exportCSV = exportCSV;
 
   var htmlContainer = document.getElementById("piechart");
   // Loads the data and starts the visualizer
-  if (this.data === undefined)
+  if (dataForD3 === undefined)
     showBiomassData("http://localhost:8080/portBiomass", staticDataFile, htmlContainer, "Pesca per port en Biomassa");
   else
-    runApp(htmlContainer, partition, this.data, d3);
+    runApp(htmlContainer, partition, dataForD3, d3);
 }
 
 // HTML button events
-
-var compareTrawling = (event) => {
-  if (this.data === undefined)
+const compareTrawling = (event) => {
+  if (dataForD3 === undefined)
     return;
   // Hide compare button
   event.target.style.visibility="hidden";
@@ -28,11 +37,11 @@ var compareTrawling = (event) => {
   let compEl = piechart.cloneNode(false);
   compEl.id = "comparePie";
   piechart.parentElement.insertBefore(compEl, piechart);
-  runApp(compEl, partition, this.data, d3);
+  runApp(compEl, partition, dataForD3, d3);
 }
 
 // HTML button events
-var closeCompare = (event) => {
+const closeCompare = (event) => {
   // Hide compare button
   event.target.style.visibility="hidden";
 
@@ -41,7 +50,6 @@ var closeCompare = (event) => {
   cmp.style.visibility=null;
   //cmp.className ="";// I don't understand why
   // Remove pie chart
-  console.log(document.getElementById("comparePie"));
   document.getElementById("comparePie").remove();
 
 
@@ -56,7 +64,7 @@ var closeCompare = (event) => {
 function runApp(htmlContainer, partition,data,d3){
 
   // Store data
-  this.data = data;
+  dataForD3 = data;
 
 	const root = partition(data);
 	var color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
@@ -386,3 +394,6 @@ const exportCSV = function(event){
   // Now the "a" element has already the data, then remove the function
   linkElement.removeEventListener("onclick", exportJSON);
 }
+
+
+export default startTrawling;

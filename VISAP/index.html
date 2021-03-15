@@ -151,13 +151,18 @@
       <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
       <!-- D3 library -->
       <script src="https://d3js.org/d3.v6.min.js"></script>
+      <!-- List library (only useful for search options?) -->
+      <script src="lib/list.min.js"></script>
 
 
       <script src="js/dashboard.js"></script>
-      <script src="js/trawling.js"></script>
+      <!--script type="module" src="js/trawling.js"></script-->
       <script src="data/palette.json"></script>
 
-      <script>
+      <script type="module">
+
+      // Import
+      import startTrawling from './js/trawling.js';
 
 
         // TESTING
