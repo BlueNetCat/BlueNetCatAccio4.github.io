@@ -143,7 +143,7 @@
   </div>
 </div>
 
-
+      <!-- Bootstrap -->
       <script src="lib/bootstrap.bundle.min.js"></script>
       <!-- Icons library -->
       <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
@@ -155,15 +155,13 @@
       <script src="lib/list.min.js"></script>
 
 
-      <script src="js/dashboard.js"></script>
-      <!--script type="module" src="js/trawling.js"></script-->
       <script src="data/palette.json"></script>
 
       <script type="module">
 
-      // Import
+      // Import inner html scripts
       import startTrawling from './js/trawling.js';
-
+      import startDashboard from './js/dashboard.js';
 
         // TESTING
         // Testing inner html
@@ -207,6 +205,9 @@
 
             });
         }
+
+        // Expose onclick events
+        window.clickSidebarMenu = clickSidebarMenu;
 
       </script>
 

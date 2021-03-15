@@ -1,10 +1,10 @@
 /* globals Chart:false, feather:false */
 
-var startDashboard =  () => {
+export const startDashboard =  () => {
   'use strict'
 
   feather.replace()
-  
+
   // Graphs
   var ctx = document.getElementById('myChart')
   // eslint-disable-next-line no-unused-vars
@@ -51,3 +51,5 @@ var startDashboard =  () => {
     }
   })
 }
+
+export default startDashboard;
