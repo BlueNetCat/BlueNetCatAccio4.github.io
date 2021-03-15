@@ -17,14 +17,13 @@
   <div class="btn-toolbar mb-2 mb-mb-0"><!--class="btn-group me-2"-->
     <button type="button" class="btn btn-sm btn-outline-secondary"><span data-feather="filter"></span> Filtrar per espècie</button>
     <div class="dropdown">
-      <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span data-feather="download"></span>
         Exportar
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="#">Action</a>
-        <a class="dropdown-item" href="#">Another action</a>
-        <a class="dropdown-item" href="#">Something else here</a>
+        <a class="dropdown-item" onclick="exportCSV(event)">.csv</a>
+        <a class="dropdown-item" onclick="exportJSON(event)">.json</a>
       </div>
     </div>
   </div>

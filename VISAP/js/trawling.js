@@ -59,13 +59,9 @@ function runApp(htmlContainer, partition,data,d3){
   this.data = data;
 
 	const root = partition(data);
-
 	var color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
-
 	var format = d3.format(",d");
-
 	var width = 600;
-
 	var radius = width / 6;
 
 	var arc = d3.arc()
@@ -280,7 +276,9 @@ function showBiomassData(address, staticFile, htmlContainer, title){
 
 
 // Prepare the data from the server-database
+var databaseJSONBiomass = null;
 function prepDataBiomass(inData, title){
+  databaseJSONBiomass = inData;
 	const outData = {};
 	outData.name = title + ": ";
 	outData.children = [];
@@ -334,4 +332,57 @@ function prepDataBiomass(inData, title){
 	}
 
 	return outData;
+}
+
+
+
+// Export data
+// https://www.codevoila.com/post/30/export-json-data-to-downloadable-file-using-javascript
+const exportJSON = function(event){
+  // Data not yet loaded
+  if (databaseJSONBiomass === null)
+    return;
+  // Create
+  let dataStr = JSON.stringify(databaseJSONBiomass);
+  let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+  let exportFileDefaultName = 'pesca_arrossegament_biomassa.json';
+  let linkElement = event.target;//document.createElement('a');
+  linkElement.setAttribute('href', dataUri);
+  linkElement.setAttribute('download', exportFileDefaultName);
+  // Now the "a" element has already the data, then remove the function
+  linkElement.removeEventListener("onclick", exportJSON);
+}
+
+const exportCSV = function(event){
+  // Data not yet loaded
+  if (databaseJSONBiomass === null)
+    return;
+  // Parse JSON to CSV
+  let jsonData = databaseJSONBiomass;
+  let keys = Object.keys(jsonData[0]);
+
+  let columnDelimiter = ',';
+  let lineDelimiter = '\n';
+
+  let csvColumnHeader = keys.join(columnDelimiter);
+  let csvStr = csvColumnHeader + lineDelimiter;
+
+  jsonData.forEach(item => {
+      keys.forEach((key, index) => {
+          if( (index > 0) && (index < keys.length) ) {
+              csvStr += columnDelimiter;
+          }
+          csvStr += item[key];
+      });
+      csvStr += lineDelimiter;
+  });
+
+  // Now make downlodable element
+  let dataUri = 'data:text/csv;charset=utf-8,'+ encodeURIComponent(csvStr);
+  let exportFileDefaultName = 'pesca_arrossegament_biomassa.csv';
+  let linkElement = event.target;//document.createElement('a');
+  linkElement.setAttribute('href', dataUri);
+  linkElement.setAttribute('download', exportFileDefaultName);
+  // Now the "a" element has already the data, then remove the function
+  linkElement.removeEventListener("onclick", exportJSON);
 }
