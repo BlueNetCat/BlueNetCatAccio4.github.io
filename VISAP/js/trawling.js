@@ -1,7 +1,7 @@
 // Needs d3 library
 
 // Import filter module
-import selectAll from './filter.js'; // TODO HERE
+import * as FilterSpecies from './filter.js'; // TODO HERE
 
 var dataForD3 = undefined;
 var filteredDataForD3 = undefined;
@@ -15,6 +15,7 @@ export const startTrawling =  (staticDataFile) => {
   window.exportJSON = exportJSON;
   window.exportCSV = exportCSV;
   window.filterSpecies = filterSpecies;
+  window.closeFilterGUI = closeFilterGUI;
 
   var htmlContainer = document.getElementById("piechart");
   // Loads the data and starts the visualizer
@@ -57,33 +58,63 @@ const closeCompare = (event) => {
 
 // Filter Species button event
 const filterSpecies = (event) => {
+
   if (dataForD3 === undefined) // Data is not loaded yet
     return;
   // Show GUI
-  if (event.target.isOn == false){ // If filter is not active (should be something related to class)
-    // Fetch HTML?
+  if (event.target.isOn == false || event.target.isOn == undefined){ // If filter is not active (should be something related to class)
+    // Fetch HTML
+    console.log("Fetching html for filter");
+    fetch("html/" + event.target.getAttribute("w3-include-html"))
+      .then(response => response.text())
+      .then(text => {
+        // Add/Show HTML to container
+        let overlay = document.getElementById("overlay");
+        overlay.innerHTML = text;
+        // Set style properties
+        let posHTML = overlay.parentElement.getClientRects()[0];
+        overlay.style.top = posHTML.top + "px";
+        overlay.style.left = posHTML.left  + "px";
+        overlay.style.width = posHTML.width  + "px";
+        overlay.style.height = posHTML.height  + "px";
+        overlay.style.visibility = null;
+        // Start List buttons
+        FilterSpecies.init();
+        // Reload missing icons from new HTML
+        feather.replace();
+      });
 
-    // Add/Show HTML to container
     // Change button state
-
-  } else {
+    event.target.isOn = true;
+    // visibility hidden null
+  }
+  // Hide GUI
+  else {
     // Remove/Hide HTML
-
+    document.getElementById("overlay").innerHTML = "";
+    document.getElementById("overlay").style.visibility = "hidden";
     // If filter exists
       // Show RemoveFilter button HTML
-      document.getElementById("removeFilterBtn").style.visibility = "null";
+      //document.getElementById("removeFilterBtn").style.visibility = "null";
       // Preprocess data
 
       // Re-start graph with filter parameters
 
+    // Hide overlay
+    event.target.isOn = false;
   }
 }
-// Remove filter and show unfitered data
-const removeFilter = (event) => {
+
+
+// Close filter GUI and show filtered data
+const closeFilterGUI = (event) => {
+  event.stopPropagation();
   // When clicked, hide this button
-  event.target.style.visibility = 'hidden';
+  event.target.closest("#overlay").style.visibility = 'hidden';
   // Remove previos graph
 
+
+  return;
   // Restart graph without filters
   runApp(htmlContainer, partition, dataForD3, d3);
 }

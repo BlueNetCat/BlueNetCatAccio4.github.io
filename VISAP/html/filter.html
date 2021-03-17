@@ -6,12 +6,12 @@
   </div>
   <!-- Unselected list -->
   <div id="speciesEl">
-    <input class="search" placeholder="Search" />
-    <button class="sort" data-sort="name">
+    <input class="search btn-sm btn-outline-light" onclick="event.stopPropagation();" placeholder="Search" />
+    <button class="sort btn btn-sm btn-outline-light" onclick="event.stopPropagation();" data-sort="name">
       Sort by Name
     </button>
-    <button onclick="selectAll()"> Select all </button>
-    <button onclick="deselectAll()"> Deselect all </button>
-    <div class="list"></div>
+    <button class="btn btn-sm btn-outline-light" onclick="selectAll()"> Select all </button>
+    <button class="btn btn-sm btn-outline-light" onclick="deselectAll()"> Deselect all </button>
+    <div class="list col-xs-3"></div>
   </div>
 </div>

@@ -153,8 +153,7 @@
       <script src="https://d3js.org/d3.v6.min.js"></script>
       <!-- List library (only useful for search options?) -->
       <script src="lib/list.min.js"></script>
-
-
+      <!-- Color palette -->
       <script src="data/palette.json"></script>
 
       <script type="module">
@@ -169,7 +168,7 @@
           .then(response => response.text())
           .then(text => {
             document.getElementsByTagName("main")[0].innerHTML = text;
-            startTrawling("data/portBiomass.json");
+            startTrawling("data/pesca_arrossegament_biomassa.json");
             // Reload missing icons from new HTML
             feather.replace();
           });
@@ -194,7 +193,7 @@
               // Depening on the HTML, start one or the other js
               switch (htmlFileToLoad){
                 case "trawling.html":
-                  startTrawling("data/portBiomass.json");
+                  startTrawling("data/pesca_arrossegament_biomassa.json");
                   break;
                 case "dashboard.html":
                   startDashboard();
