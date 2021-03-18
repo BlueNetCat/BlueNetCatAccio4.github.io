@@ -14,14 +14,14 @@ var optionsSel;
 export const selectItem = (e) => {
   event.stopPropagation();
   //console.log(e.srcElement.innerText.split("■ ")[1]);
-  let speciesName = e.srcElement.innerText.split("■ ")[1];
+  let speciesName = e.currentTarget.innerText.split("■ ")[1];
   switchFromList(speciesName, speciesList, selSpeciesList);
 };
 
 // Deselect item
 export const deselectItem = (e) => {
   event.stopPropagation();
-  let speciesName = e.srcElement.innerText.split("■ ")[1];
+  let speciesName = e.currentTarget.innerText.split("■ ")[1];
   switchFromList(speciesName, selSpeciesList, speciesList);
 }
 
@@ -39,6 +39,15 @@ export const deselectAll= () => {
     switchFromList(selSpeciesList.items[i]._values.name, selSpeciesList, speciesList)
     i--;
   }
+}
+
+// Return a list with the species names
+export const getSelected = () => {
+  let selectedSpecies = [];
+  for (var i = 0; i<selSpeciesList.items.length; i++)
+    selectedSpecies[i] = selSpeciesList.items[i]._values.name;
+
+  return selectedSpecies;
 }
 
 // Switch values from one list to the other
@@ -60,30 +69,52 @@ export const init = () => {
   window.selectAll = selectAll;
   window.deselectAll = deselectAll;
 
-  // Prepare data for List.js
-  keys = Object.keys(palette);
-  keys.forEach(item => values.push({"name": item, "color": palette[item].color}));
+  // Prepare data for List.js once
+  if (keys === undefined){
+    keys = Object.keys(palette);
+    keys.forEach(item => values.push({"name": item, "color": palette[item].color}));
 
-  // https://listjs.com/api/
-  options = {
-    item: (values) => "<button onclick=\"selectItem(event)\" class='btn btn-sm btn-outline-light m-2 speciesItem'>" +
-                      "<span style='color:rgb("+values.color.toString()+")'> ■ </span>" +
-                      values.name +
-                      "</button>"
-  };
+    // https://listjs.com/api/
+    options = {
+      item: (values) => "<button onclick=\"selectItem(event)\" class='btn btn-sm btn-outline-light m-2 speciesItem'>" +
+                        "<span style='color:rgb("+values.color.toString()+")'> ■ </span>" +
+                        values.name +
+                        "</button>"
+    };
 
-  optionsSel = {
-    item: (values) => "<button onclick=\"deselectItem(event)\" class='btn btn-sm btn-light m-2 selSpeciesItem'>" +
-                      "<span style='color:red'> ✖ </span>" +
-                      "<span style='color:rgb("+values.color.toString()+")'> ■ </span>" +
-                      values.name +
-                      "</button>"
+    optionsSel = {
+      item: (values) => "<button onclick=\"deselectItem(event)\" class='btn btn-sm btn-light m-2 selSpeciesItem'>" +
+                        "<span style='color:red'> ✖ </span>" +
+                        "<span style='color:rgb("+values.color.toString()+")'> ■ </span>" +
+                        values.name +
+                        "</button>"
+    }
+
   }
 
   // Create HTML button elements
   speciesList = new List('speciesEl', options, values);
   selSpeciesList = new List('selSpeciesEl', optionsSel);
+
 }
 
 
-export default {selectAll, selectItem, deselectItem, deselectAll, init};
+
+// Filter the data
+export const filterData = (selectedSpecies, dataForD3) => {
+  let filteredData = JSON.parse(JSON.stringify(dataForD3));
+
+  markItems(filteredData, selectedSpecies);
+  return filteredData;
+}
+
+const markItems = (itemJSON, selectedSpecies) => {
+  if (itemJSON.children) {
+    itemJSON.children.forEach((child) => markItems(child, selectedSpecies));
+  } else if (selectedSpecies.indexOf(itemJSON.species) == -1){ // If species is not in the array
+    itemJSON.value = 0;
+  }
+}
+
+
+export default {selectAll, selectItem, deselectItem, deselectAll, init, getSelected};

@@ -6,7 +6,7 @@
   <h2 class="h3">Captura en biomassa per port</h2>
   <div class="btn-toolbar mb-2 mb-mb-0"><!--class="btn-group me-2"-->
     <div class="btn-group me-2">
-      <button type="button" onclick="filterSpecies(event)" w3-include-html="filter.html" class="btn btn-sm btn-outline-secondary"><span data-feather="filter"></span> Filtrar per espècie</button>
+      <button type="button" id="filterSpeciesBtn" onclick="filterSpecies(event)" w3-include-html="filter.html" class="btn btn-sm btn-outline-secondary"><span data-feather="filter"></span> Filtrar per espècie</button>
     </div>
     <div class="dropdown">
       <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -29,7 +29,7 @@
   <button type="button" id="compareBtn" onclick="compareTrawling(event)" class="btn btn-sm btn-outline-secondary mx-auto"><span data-feather="plus-circle"></span> Comparar</button>
   <button type="button" id="closeCompare" onclick="closeCompare(event)" style="visibility:hidden;" class="btn btn-sm btn-outline-secondary mx-auto">Tancar comparació</button>
   <!-- Overlay functions are defined in createHTML.js-->
-  <div id="overlay" onclick="closeFilterGUI(event)">
+  <div id="overlay" style="visibility:hidden" onclick="closeFilterGUI(event)">
     <div id="info"></div>
   </div>
 </div>

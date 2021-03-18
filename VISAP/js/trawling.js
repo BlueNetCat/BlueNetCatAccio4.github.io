@@ -3,8 +3,9 @@
 // Import filter module
 import * as FilterSpecies from './filter.js'; // TODO HERE
 
-var dataForD3 = undefined;
+var originalDataForD3 = undefined;
 var filteredDataForD3 = undefined;
+var currentData = undefined;
 export const startTrawling =  (staticDataFile) => {
   'use strict'
 
@@ -19,15 +20,16 @@ export const startTrawling =  (staticDataFile) => {
 
   var htmlContainer = document.getElementById("piechart");
   // Loads the data and starts the visualizer
-  if (dataForD3 === undefined)
+  if (originalDataForD3 === undefined)
     showBiomassData("http://localhost:8080/portBiomass", staticDataFile, htmlContainer, "Pesca per port en Biomassa");
   else
-    runApp(htmlContainer, partition, dataForD3, d3);
+    runApp(htmlContainer, partition, originalDataForD3, d3);
+
 }
 
 // HTML button events
 const compareTrawling = (event) => {
-  if (dataForD3 === undefined)
+  if (originalDataForD3 === undefined)
     return;
   // Hide compare button
   event.target.style.visibility="hidden";
@@ -40,7 +42,7 @@ const compareTrawling = (event) => {
   let compEl = piechart.cloneNode(false);
   compEl.id = "comparePie";
   piechart.parentElement.insertBefore(compEl, piechart);
-  runApp(compEl, partition, dataForD3, d3);
+  runApp(compEl, partition, currentData, d3);
 }
 
 // HTML button events
@@ -59,7 +61,7 @@ const closeCompare = (event) => {
 // Filter Species button event
 const filterSpecies = (event) => {
 
-  if (dataForD3 === undefined) // Data is not loaded yet
+  if (originalDataForD3 === undefined) // Data is not loaded yet
     return;
   // Show GUI
   if (event.target.isOn == false || event.target.isOn == undefined){ // If filter is not active (should be something related to class)
@@ -69,7 +71,7 @@ const filterSpecies = (event) => {
       .then(response => response.text())
       .then(text => {
         // Add/Show HTML to container
-        let overlay = document.getElementById("overlay");
+        let overlay = document.getElementById("overlay"); // ALERT: might cause problems when more overlays are present
         overlay.innerHTML = text;
         // Set style properties
         let posHTML = overlay.parentElement.getClientRects()[0];
@@ -86,22 +88,16 @@ const filterSpecies = (event) => {
 
     // Change button state
     event.target.isOn = true;
-    // visibility hidden null
   }
   // Hide GUI
   else {
+    console.log("Hiding Filter GUI");
     // Remove/Hide HTML
-    document.getElementById("overlay").innerHTML = "";
     document.getElementById("overlay").style.visibility = "hidden";
-    // If filter exists
-      // Show RemoveFilter button HTML
-      //document.getElementById("removeFilterBtn").style.visibility = "null";
-      // Preprocess data
-
-      // Re-start graph with filter parameters
-
     // Hide overlay
     event.target.isOn = false;
+    // Filter and update graphs
+    exitFilterGUI();
   }
 }
 
@@ -110,15 +106,51 @@ const filterSpecies = (event) => {
 const closeFilterGUI = (event) => {
   event.stopPropagation();
   // When clicked, hide this button
-  event.target.closest("#overlay").style.visibility = 'hidden';
-  // Remove previos graph
-
-
-  return;
-  // Restart graph without filters
-  runApp(htmlContainer, partition, dataForD3, d3);
+  event.currentTarget.style.visibility = 'hidden';
+  // Hide overlay
+  document.getElementById("filterSpeciesBtn").isOn = false; // ALERT: problem if more than one element with this ID
+  // Exit filter GUI
+  exitFilterGUI();
 }
 
+// Filter and update graphs
+const exitFilterGUI = () => {
+  // Get selected species
+  let selectedSpecies = FilterSpecies.getSelected();
+  // If filter exists
+  if (selectedSpecies.length != 0)
+    // Preprocess data and re-start graph
+    createFilteredGraph(selectedSpecies);
+  else
+    // Restart graph with original data
+    updateTrawlingChart(originalDataForD3);
+}
+
+
+// Filter data and update graphs
+const createFilteredGraph = (selectedSpecies) => {
+  // Filter the data
+  let filteredDataForD3 = FilterSpecies.filterData(selectedSpecies, originalDataForD3);
+  // Assign to pie chart
+  updateTrawlingChart(filteredDataForD3);
+}
+
+
+// Update the pie chart with filtered or unfiltered data
+const updateTrawlingChart = (inDataForD3) => {
+  // Find the pie charts
+  let piechart = document.getElementById("piechart");
+  let comparePie = document.getElementById("comparePie");
+
+  piechart.innerHTML = "";
+  runApp(piechart, partition, inDataForD3, d3);
+
+  if (comparePie !== null){
+    comparePie.innerHTML = "";
+    runApp(comparePie, partition, inDataForD3, d3);
+  }
+
+}
 
 
 // Based on D3 example: https://observablehq.com/@d3/zoomable-sunburst
@@ -126,10 +158,10 @@ const closeFilterGUI = (event) => {
 // data variable is loaded from data.json (header)
 
 // Optional todo: https://stackoverflow.com/questions/29978957/transitions-in-d3-on-load
+// Basically create the graph with empty values and then fill with transition
 function runApp(htmlContainer, partition,data,d3){
 
-  // Store data
-  dataForD3 = data;
+  currentData = data;
 
 	const root = partition(data);
 	var color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
@@ -330,7 +362,7 @@ function showBiomassData(address, staticFile, htmlContainer, title){
 	fetch(address)
 		.then(r => r.json())
 		.then(r => prepDataBiomass(r, title))
-		.then(outData => runApp(htmlContainer, partition,outData,d3))
+		.then(outData => {originalDataForD3 = outData; runApp(htmlContainer, partition,outData,d3)})
 		.catch(e => {
 			if (staticFile !== undefined){ // Load static file
 				console.error("Could not fetch from " + address + ". Error: " + e + ". Trying with static file.");
