@@ -1,10 +1,11 @@
 // Needs d3 library
 
 // Import filter module
-import selectAll from './filter.js'; // TODO HERE
+import * as FilterSpecies from './filter.js'; // TODO HERE
 
-var dataForD3 = undefined;
+var originalDataForD3 = undefined;
 var filteredDataForD3 = undefined;
+var currentData = undefined;
 export const startTrawling =  (staticDataFile) => {
   'use strict'
 
@@ -15,18 +16,20 @@ export const startTrawling =  (staticDataFile) => {
   window.exportJSON = exportJSON;
   window.exportCSV = exportCSV;
   window.filterSpecies = filterSpecies;
+  window.closeFilterGUI = closeFilterGUI;
 
   var htmlContainer = document.getElementById("piechart");
   // Loads the data and starts the visualizer
-  if (dataForD3 === undefined)
+  if (originalDataForD3 === undefined)
     showBiomassData("http://localhost:8080/portBiomass", staticDataFile, htmlContainer, "Pesca per port en Biomassa");
   else
-    runApp(htmlContainer, partition, dataForD3, d3);
+    runApp(htmlContainer, partition, originalDataForD3, d3);
+
 }
 
 // HTML button events
 const compareTrawling = (event) => {
-  if (dataForD3 === undefined)
+  if (originalDataForD3 === undefined)
     return;
   // Hide compare button
   event.target.style.visibility="hidden";
@@ -39,7 +42,7 @@ const compareTrawling = (event) => {
   let compEl = piechart.cloneNode(false);
   compEl.id = "comparePie";
   piechart.parentElement.insertBefore(compEl, piechart);
-  runApp(compEl, partition, dataForD3, d3);
+  runApp(compEl, partition, currentData, d3);
 }
 
 // HTML button events
@@ -57,37 +60,97 @@ const closeCompare = (event) => {
 
 // Filter Species button event
 const filterSpecies = (event) => {
-  if (dataForD3 === undefined) // Data is not loaded yet
+
+  if (originalDataForD3 === undefined) // Data is not loaded yet
     return;
   // Show GUI
-  if (event.target.isOn == false){ // If filter is not active (should be something related to class)
-    // Fetch HTML?
+  if (event.target.isOn == false || event.target.isOn == undefined){ // If filter is not active (should be something related to class)
+    // Fetch HTML
+    console.log("Fetching html for filter");
+    fetch("html/" + event.target.getAttribute("w3-include-html"))
+      .then(response => response.text())
+      .then(text => {
+        // Add/Show HTML to container
+        let overlay = document.getElementById("overlay"); // ALERT: might cause problems when more overlays are present
+        overlay.innerHTML = text;
+        // Set style properties
+        let posHTML = overlay.parentElement.getClientRects()[0];
+        overlay.style.top = posHTML.top + "px";
+        overlay.style.left = posHTML.left  + "px";
+        overlay.style.width = posHTML.width  + "px";
+        overlay.style.height = posHTML.height  + "px";
+        overlay.style.visibility = null;
+        // Start List buttons
+        FilterSpecies.init();
+        // Reload missing icons from new HTML
+        feather.replace();
+      });
 
-    // Add/Show HTML to container
     // Change button state
-
-  } else {
+    event.target.isOn = true;
+  }
+  // Hide GUI
+  else {
+    console.log("Hiding Filter GUI");
     // Remove/Hide HTML
-
-    // If filter exists
-      // Show RemoveFilter button HTML
-      document.getElementById("removeFilterBtn").style.visibility = "null";
-      // Preprocess data
-
-      // Re-start graph with filter parameters
-
+    document.getElementById("overlay").style.visibility = "hidden";
+    // Hide overlay
+    event.target.isOn = false;
+    // Filter and update graphs
+    exitFilterGUI();
   }
 }
-// Remove filter and show unfitered data
-const removeFilter = (event) => {
-  // When clicked, hide this button
-  event.target.style.visibility = 'hidden';
-  // Remove previos graph
 
-  // Restart graph without filters
-  runApp(htmlContainer, partition, dataForD3, d3);
+
+// Close filter GUI and show filtered data
+const closeFilterGUI = (event) => {
+  event.stopPropagation();
+  // When clicked, hide this button
+  event.currentTarget.style.visibility = 'hidden';
+  // Hide overlay
+  document.getElementById("filterSpeciesBtn").isOn = false; // ALERT: problem if more than one element with this ID
+  // Exit filter GUI
+  exitFilterGUI();
 }
 
+// Filter and update graphs
+const exitFilterGUI = () => {
+  // Get selected species
+  let selectedSpecies = FilterSpecies.getSelected();
+  // If filter exists
+  if (selectedSpecies.length != 0)
+    // Preprocess data and re-start graph
+    createFilteredGraph(selectedSpecies);
+  else
+    // Restart graph with original data
+    updateTrawlingChart(originalDataForD3);
+}
+
+
+// Filter data and update graphs
+const createFilteredGraph = (selectedSpecies) => {
+  // Filter the data
+  let filteredDataForD3 = FilterSpecies.filterData(selectedSpecies, originalDataForD3);
+  // Assign to pie chart
+  updateTrawlingChart(filteredDataForD3);
+}
+
+
+// Update the pie chart with filtered or unfiltered data
+const updateTrawlingChart = (inDataForD3) => {
+  // Find the pie charts
+  let piechart = document.getElementById("piechart");
+  let comparePie = document.getElementById("comparePie");
+
+  piechart.innerHTML = "";
+  runApp(piechart, partition, inDataForD3, d3);
+
+  if (comparePie !== null){
+    comparePie.innerHTML = "";
+    runApp(comparePie, partition, inDataForD3, d3);
+  }
+
+}
 
 
 // Based on D3 example: https://observablehq.com/@d3/zoomable-sunburst
@@ -95,10 +158,10 @@ const removeFilter = (event) => {
 // data variable is loaded from data.json (header)
 
 // Optional todo: https://stackoverflow.com/questions/29978957/transitions-in-d3-on-load
+// Basically create the graph with empty values and then fill with transition
 function runApp(htmlContainer, partition,data,d3){
 
-  // Store data
-  dataForD3 = data;
+  currentData = data;
 
 	const root = partition(data);
 	var color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
@@ -299,7 +362,7 @@ function showBiomassData(address, staticFile, htmlContainer, title){
 	fetch(address)
 		.then(r => r.json())
 		.then(r => prepDataBiomass(r, title))
-		.then(outData => runApp(htmlContainer, partition,outData,d3))
+		.then(outData => {originalDataForD3 = outData; runApp(htmlContainer, partition,outData,d3)})
 		.catch(e => {
 			if (staticFile !== undefined){ // Load static file
 				console.error("Could not fetch from " + address + ". Error: " + e + ". Trying with static file.");

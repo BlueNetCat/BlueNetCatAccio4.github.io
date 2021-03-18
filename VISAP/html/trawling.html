@@ -3,7 +3,41 @@
 </div>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h2 class="h3">Captura en biomassa</h2>
+  <h2 class="h3">Captura en biomassa per port</h2>
+  <div class="btn-toolbar mb-2 mb-mb-0"><!--class="btn-group me-2"-->
+    <div class="btn-group me-2">
+      <button type="button" id="filterSpeciesBtn" onclick="filterSpecies(event)" w3-include-html="filter.html" class="btn btn-sm btn-outline-secondary"><span data-feather="filter"></span> Filtrar per espècie</button>
+    </div>
+    <div class="dropdown">
+      <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span data-feather="download"></span>
+        Exportar
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" onclick="exportCSV(event)">.csv</a>
+        <a class="dropdown-item" onclick="exportJSON(event)">.json</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pie chart -->
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <!-- Class will change when loaded -->
+  <div class="loader mx-auto" id="piechart" width="600" height="600" style="max-width: 600px;"></div>
+  <!--div class="mx-auto" id="comparePie" width="500" height="500" style="max-width: 500px;"></div-->
+  <button type="button" id="compareBtn" onclick="compareTrawling(event)" class="btn btn-sm btn-outline-secondary mx-auto"><span data-feather="plus-circle"></span> Comparar</button>
+  <button type="button" id="closeCompare" onclick="closeCompare(event)" style="visibility:hidden;" class="btn btn-sm btn-outline-secondary mx-auto">Tancar comparació</button>
+  <!-- Overlay functions are defined in createHTML.js-->
+  <div id="overlay" style="visibility:hidden" onclick="closeFilterGUI(event)">
+    <div id="info"></div>
+  </div>
+</div>
+
+
+<!-- Per year -->
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h2 class="h3">Captura en biomassa per estació de l'any</h2>
   <div class="btn-toolbar mb-2 mb-mb-0"><!--class="btn-group me-2"-->
     <div class="btn-group me-2">
       <button type="button" class="btn btn-sm btn-outline-secondary"><span data-feather="filter"></span> Filtrar per espècie</button>
@@ -19,12 +53,4 @@
       </div>
     </div>
   </div>
-</div>
-
-<!-- Class will change when loaded -->
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <div class="loader mx-auto" id="piechart" width="600" height="600" style="max-width: 600px;"></div>
-  <!--div class="mx-auto" id="comparePie" width="500" height="500" style="max-width: 500px;"></div-->
-  <button type="button" id="compareBtn" onclick="compareTrawling(event)" class="btn btn-sm btn-outline-secondary mx-auto"><span data-feather="plus-circle"></span> Comparar</button>
-  <button type="button" id="closeCompare" onclick="closeCompare(event)" style="visibility:hidden;" class="btn btn-sm btn-outline-secondary mx-auto">Tancar comparació</button>
 </div>
