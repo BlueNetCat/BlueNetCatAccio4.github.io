@@ -15,8 +15,9 @@ export const startTrawling =  (staticDataFile) => {
   window.closeCompare = closeCompare;
   window.exportJSON = exportJSON;
   window.exportCSV = exportCSV;
-  window.filterSpecies = filterSpecies;
+  window.filterSpeciesGUI = filterSpeciesGUI;
   window.closeFilterGUI = closeFilterGUI;
+  window.deactivateFilter = deactivateFilter;
 
   var htmlContainer = document.getElementById("piechart");
   // Loads the data and starts the visualizer
@@ -59,12 +60,12 @@ const closeCompare = (event) => {
 }
 
 // Filter Species button event
-const filterSpecies = (event) => {
+const filterSpeciesGUI = (event) => {
 
   if (originalDataForD3 === undefined) // Data is not loaded yet
     return;
   // Show GUI
-  if (event.target.isOn == false || event.target.isOn == undefined){ // If filter is not active (should be something related to class)
+  if (event.target.GUIshow == false || event.target.GUIshow == undefined){ // If filter is not active (should be something related to class)
     // Fetch HTML
     console.log("Fetching html for filter");
     fetch("html/" + event.target.getAttribute("w3-include-html"))
@@ -87,7 +88,7 @@ const filterSpecies = (event) => {
       });
 
     // Change button state
-    event.target.isOn = true;
+    event.target.GUIshow = true;
   }
   // Hide GUI
   else {
@@ -95,7 +96,7 @@ const filterSpecies = (event) => {
     // Remove/Hide HTML
     document.getElementById("overlay").style.visibility = "hidden";
     // Hide overlay
-    event.target.isOn = false;
+    event.target.GUIshow = false;
     // Filter and update graphs
     exitFilterGUI();
   }
@@ -108,7 +109,7 @@ const closeFilterGUI = (event) => {
   // When clicked, hide this button
   event.currentTarget.style.visibility = 'hidden';
   // Hide overlay
-  document.getElementById("filterSpeciesBtn").isOn = false; // ALERT: problem if more than one element with this ID
+  document.getElementById("filterSpeciesBtn").GUIshow = false; // ALERT: problem if more than one element with this ID
   // Exit filter GUI
   exitFilterGUI();
 }
@@ -118,12 +119,26 @@ const exitFilterGUI = () => {
   // Get selected species
   let selectedSpecies = FilterSpecies.getSelected();
   // If filter exists
-  if (selectedSpecies.length != 0)
+  if (selectedSpecies.length != 0){
+    // Show filter is on button
+    document.getElementById("filterIsOnBtn").style.visibility = null;
     // Preprocess data and re-start graph
     createFilteredGraph(selectedSpecies);
-  else
+  } else {
+    // Hide filter is on button
+    document.getElementById("filterIsOnBtn").style.visibility = "hidden";
     // Restart graph with original data
     updateTrawlingChart(originalDataForD3);
+  }
+}
+
+// Remove active filter
+const deactivateFilter = (event) => {
+  // Remove/Hide HTML overlay
+  document.getElementById("overlay").style.visibility = "hidden";
+  event.currentTarget.style.visibility = "hidden";
+  // Update graphs to original data
+  updateTrawlingChart(originalDataForD3);
 }
 
 
@@ -149,7 +164,6 @@ const updateTrawlingChart = (inDataForD3) => {
     comparePie.innerHTML = "";
     runApp(comparePie, partition, inDataForD3, d3);
   }
-
 }
 
 

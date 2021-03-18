@@ -68,11 +68,20 @@ export const init = () => {
   window.deselectItem = deselectItem;
   window.selectAll = selectAll;
   window.deselectAll = deselectAll;
+  // Selected items
+  let selValues = undefined;
 
   // Prepare data for List.js once
   if (keys === undefined){
     keys = Object.keys(palette);
     keys.forEach(item => values.push({"name": item, "color": palette[item].color}));
+  } // Filter was already used
+  else {
+    values = [];
+    speciesList.items.forEach(item => values.push(item._values));
+    selValues = [];
+    selSpeciesList.items.forEach(item => selValues.push(item._values));
+  }
 
     // https://listjs.com/api/
     options = {
@@ -90,11 +99,12 @@ export const init = () => {
                         "</button>"
     }
 
-  }
+
+
 
   // Create HTML button elements
   speciesList = new List('speciesEl', options, values);
-  selSpeciesList = new List('selSpeciesEl', optionsSel);
+  selSpeciesList = new List('selSpeciesEl', optionsSel, selValues);
 
 }
 
@@ -104,16 +114,34 @@ export const init = () => {
 export const filterData = (selectedSpecies, dataForD3) => {
   let filteredData = JSON.parse(JSON.stringify(dataForD3));
 
-  markItems(filteredData, selectedSpecies);
+  markItems(filteredData, selectedSpecies, null);
   return filteredData;
 }
 
-const markItems = (itemJSON, selectedSpecies) => {
-  if (itemJSON.children) {
-    itemJSON.children.forEach((child) => markItems(child, selectedSpecies));
-  } else if (selectedSpecies.indexOf(itemJSON.species) == -1){ // If species is not in the array
+// This function is not optimal, but real-time is not requiered
+const markItems = (itemJSON, selectedSpecies, parentJSON) => {
+  // Has children and its not selected (higher level than species)
+  if (itemJSON.children && selectedSpecies.indexOf(itemJSON.name) == -1) {
+    itemJSON.children.forEach((child) => markItems(child, selectedSpecies, itemJSON)); // Go to children
+  }
+  // One of the higher levels is selected
+  else if (itemJSON.children && selectedSpecies.indexOf(itemJSON.name) != -1) {
+    // Get the tags in the same level
+    parentJSON.children.forEach((child) => {if((selectedSpecies.indexOf(child.name) == -1) || (selectedSpecies.indexOf(child.species) == -1) ) hideHigherLevel(child)})
+  }
+  // Lower level (species)
+  else if (selectedSpecies.indexOf(itemJSON.species) == -1){ // If species is not in the array
     itemJSON.value = 0;
   }
+}
+
+// Set children values to 0
+const hideHigherLevel = (itemJSON) => {
+  // Has children, continue
+  if (itemJSON.children)
+    itemJSON.children.forEach((child) => hideHigherLevel(child));
+  else
+    itemJSON.value = 0;
 }
 
 
