@@ -56,7 +56,7 @@ There are more types of natural parks or reserves, like Natura 2000 which are no
 The river data was taken from the Food and Agriculture Organization of the United Nations (http://www.fao.org/geonetwork/srv/en/main.home?uuid=e0243940-e5d9-487c-8102-45180cf1a99f). Other shape files of Spain can also be found here: https://www.miteco.gob.es/es/cartografia-y-sig/ide/descargas/agua/red-hidrografica.aspx. This information can also be served with a WMS service.
 
 ### [Shoreline](data/shoreline_spain.geojson)
-A highly detailed Spanish shoreline can be found in the Instituto Geográfico Nacional (http://www.ign.es/web/ign/portal/ide-area-nodo-ide-ign). The shoreline provided by the European Environment Agency (EEA) has mistakes and lower quality, at least in Spain. We don't recommend it, but here is the link: https://www.eea.europa.eu/data-and-maps/data/shoreline
+A highly detailed Spanish shoreline can be found in the Instituto Geográfico Nacional (http://www.ign.es/web/ign/portal/ide-area-nodo-ide-ign). The shoreline provided by the European Environment Agency (EEA) has lower quality, at least in Spain. Here is the link: https://www.eea.europa.eu/data-and-maps/data/eea-coastline-for-analysis-1/gis-data/europe-coastline-shapefile
 
 ### In progress...
 - Perfiladors ARGO (temps real): http://www.physocean.icm.csic.es/vado/argo/argo.geojson, http://www.physocean.icm.csic.es/vado/argo/R3901975.geojson. També es pot trobar info aquí: https://www.ocean-ops.org/board
