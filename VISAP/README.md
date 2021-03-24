@@ -59,3 +59,6 @@ As shown in the report. The routes could be served with a GeoJSON. Other info co
 ### Pesca sonsera
 
 ### Pesca de pop roquer
+
+### Other info
+- Seabeds, EMODnet provides useful information (https://www.emodnet-seabedhabitats.eu/access-data/launch-map-viewer/, https://www.emodnet-geology.eu/services/, https://www.emodnet-seabedhabitats.eu/access-data/web-services/)
