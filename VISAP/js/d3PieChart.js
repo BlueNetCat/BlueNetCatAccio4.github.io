@@ -36,13 +36,24 @@ export function runApp(htmlContainer,data,d3){
     .attr("fill", "#888")
     //.style("visibility", "hidden");
 
+    // Title
 		centerLabel
 			.append("tspan")
 			.attr("x", width/2)
 			.attr("y", width/2)
-			.attr("dy", "-2em")
+			.attr("dy", "-2.2em")
 			.text("Pesca per ports");
-
+    // Breadcrumb
+    centerLabel
+      .append("tspan")
+      .attr("x", width/2)
+      .attr("y", width/2)
+      .attr("dy", "-1.2em")
+      .attr("font-size", "0.8em")
+      .attr("fill", "black")
+      .attr("class", "breadcrumb")
+      .text("");
+    // Selected
     centerLabel
 			.append("tspan")
 			.attr("x", width/2)
@@ -52,26 +63,26 @@ export function runApp(htmlContainer,data,d3){
       .attr("fill", "black")
       .attr("class", "centerText")
 			.text("");
-
+    // Measure
 		centerLabel
 	    .append("tspan")
 	    .attr("x", width/2)
 	    .attr("y", width/2)
-	    .attr("dy", "2.5em")
+	    .attr("dy", "2.2em")
 			.attr("font-size", "0.8em")
 	    .text("Biomassa");
-
+    // Units
 	  centerLabel
 	    .append("tspan")
 	    .attr("x", width/2)
 	    .attr("y", width/2)
-	    .attr("dy", "3.8em")
+	    .attr("dy", "3.5em")
 			.attr("font-size", "0.8em")
 			.attr("class", "biomassText")
 	    .text(format(root.value) + " kg / km2");
 
 
-  // Breadcrumb TODO
+
 
 
 
@@ -140,6 +151,15 @@ export function runApp(htmlContainer,data,d3){
       .select(".centerText")
       .style("visibility", "hidden")
       .text("")
+
+
+    // Breadcrumb
+    let bcrumbstr = "";
+    p.ancestors().reverse().forEach((item,i) => bcrumbstr += (i == 0 || i == p.ancestors().length-1 || i > 2) ? "" : item.data.name + " > ");
+    centerLabel
+      .select(".breadcrumb")
+      .text(bcrumbstr)
+
 
     const t = g.transition().duration(750);
 
