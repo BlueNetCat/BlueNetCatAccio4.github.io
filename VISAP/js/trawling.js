@@ -6,10 +6,11 @@ import * as FilterSpecies from './filter.js'; // TODO HERE
 var originalDataForD3 = undefined;
 var filteredDataForD3 = undefined;
 var currentData = undefined;
+// Init function
 export const startTrawling =  (staticDataFile) => {
   'use strict'
 
-  // Expose onclick functions
+  // Expose onclick Button functions from imported html
   // https://stackoverflow.com/questions/44590393/es6-modules-undefined-onclick-function-after-import
   window.compareTrawling = compareTrawling;
   window.closeCompare = closeCompare;
@@ -22,9 +23,10 @@ export const startTrawling =  (staticDataFile) => {
   var htmlContainer = document.getElementById("piechart");
   // Loads the data and starts the visualizer
   if (originalDataForD3 === undefined)
-    showBiomassData("http://localhost:8080/portBiomass", staticDataFile, htmlContainer, "Pesca per port en Biomassa");
+    //showBiomassData("http://localhost:8080/portBiomass", staticDataFile, htmlContainer, "Pesca per port en Biomassa");
+    showBiomassData(staticDataFile, undefined, htmlContainer, "Pesca per port en Biomassa");
   else
-    runApp(htmlContainer, partition, originalDataForD3, d3);
+    runApp(htmlContainer, originalDataForD3, d3);
 
 }
 
@@ -43,7 +45,7 @@ const compareTrawling = (event) => {
   let compEl = piechart.cloneNode(false);
   compEl.id = "comparePie";
   piechart.parentElement.insertBefore(compEl, piechart);
-  runApp(compEl, partition, currentData, d3);
+  runApp(compEl, currentData, d3);
 }
 
 // HTML button events
@@ -68,7 +70,8 @@ const filterSpeciesGUI = (event) => {
   if (event.target.GUIshow == false || event.target.GUIshow == undefined){ // If filter is not active (should be something related to class)
     // Fetch HTML
     console.log("Fetching html for filter");
-    fetch("html/" + event.target.getAttribute("w3-include-html"))
+    let filename = event.target.getAttribute("w3-include-html") || "filter.html";
+    fetch("html/" + filename)
       .then(response => response.text())
       .then(text => {
         // Add/Show HTML to container
@@ -137,6 +140,8 @@ const deactivateFilter = (event) => {
   // Remove/Hide HTML overlay
   document.getElementById("overlay").style.visibility = "hidden";
   event.currentTarget.style.visibility = "hidden";
+  // Deselect species
+  FilterSpecies.deselectAll();
   // Update graphs to original data
   updateTrawlingChart(originalDataForD3);
 }
@@ -158,11 +163,11 @@ const updateTrawlingChart = (inDataForD3) => {
   let comparePie = document.getElementById("comparePie");
 
   piechart.innerHTML = "";
-  runApp(piechart, partition, inDataForD3, d3);
+  runApp(piechart, inDataForD3, d3);
 
   if (comparePie !== null){
     comparePie.innerHTML = "";
-    runApp(comparePie, partition, inDataForD3, d3);
+    runApp(comparePie, inDataForD3, d3);
   }
 }
 
@@ -173,7 +178,7 @@ const updateTrawlingChart = (inDataForD3) => {
 
 // Optional todo: https://stackoverflow.com/questions/29978957/transitions-in-d3-on-load
 // Basically create the graph with empty values and then fill with transition
-function runApp(htmlContainer, partition,data,d3){
+function runApp(htmlContainer,data,d3){
 
   currentData = data;
 
@@ -212,6 +217,15 @@ function runApp(htmlContainer, partition,data,d3){
 			.attr("dy", "-2em")
 			.text("Pesca per ports");
 
+    centerLabel
+			.append("tspan")
+			.attr("x", width/2)
+			.attr("y", width/2)
+      .attr("dy", "0.3em")
+      .attr("font-size", "0.9em")
+      .attr("fill", "black")
+      .attr("class", "centerText")
+			.text("");
 
 		centerLabel
 	    .append("tspan")
@@ -249,6 +263,9 @@ function runApp(htmlContainer, partition,data,d3){
       .style("cursor", "pointer")
       .on("click", clicked);
 
+  path.on("mouseenter", mouseOnPath)
+      .on("mouseleave", mouseOffPath);
+
   path.append("title")
       .text(d => `${d.ancestors().map(d => d.data.species).reverse().join("/")}\n${format(d.value)}` + " kg/km2"); // TODO show label, modify label https://chartio.com/resources/tutorials/how-to-show-data-on-mouseover-in-d3js/#creating-a-tooltip-using-the-title-tag
 
@@ -282,11 +299,18 @@ function runApp(htmlContainer, partition,data,d3){
       y1: Math.max(0, d.y1 - p.depth)
     });
 
+
 		// Show biomass
 		centerLabel
 			.select(".biomassText")
 			.style("visibility", null)
-			.text(format(p.value) +  " kg / km2")
+			.text(format(p.value) +  " kg / km2");
+
+    // Hide center mouse hover label
+    centerLabel
+      .select(".centerText")
+      .style("visibility", "hidden")
+      .text("")
 
     const t = g.transition().duration(750);
 
@@ -315,6 +339,75 @@ function runApp(htmlContainer, partition,data,d3){
         .attrTween("transform", d => () => labelTransform(d.current, d.target));
   }
 
+
+
+
+
+
+
+  // Show information about the path when mouse hover
+  function mouseOnPath(event, p){
+    if (p.current.y0 % 1 != 0) // During transition
+      return;
+    // Show biomass
+		centerLabel
+			.select(".biomassText")
+			.style("visibility", null)
+			.text(format(p.value) +  " kg / km2");
+    centerLabel
+      .select(".centerText")
+      .style("visibility", null)
+      .text(p.data.species || p.data.name)
+
+    // Get the ancestors of the current segment, minus the root
+    const sequence = [];
+    let pCenter = p;
+    for (let i = 0; i<Math.floor(p.current.y0); i++){
+      sequence.push(pCenter);
+      pCenter = pCenter.parent;
+    }
+    // Highlight ancestors
+    path.attr("fill-opacity", d =>
+        sequence.indexOf(d) >= 0 ? 0.8 : arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0.1
+      );
+    // Hide center label node
+    label.attr("fill-opacity", d =>
+      (pCenter == d ) ? 0 : +labelVisible(d.current)
+    );
+  }
+
+  function mouseOffPath(event, p){
+    if (p.current.y0 % 1 != 0) // During transition
+      return;
+    let pCenter = p;
+    const sequence = [];
+    // Find element on center
+    for (let i = 0; i<Math.ceil(p.current.y0); i++){
+      sequence.push(pCenter);
+      pCenter = pCenter.parent;
+    }
+    // Unhighlight ancestors
+    path.attr("fill-opacity", d =>
+      sequence.indexOf(d) >= 0 ? 0.6 : arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0.1
+    );
+    // Show center label node
+    label.attr("fill-opacity", d =>
+      pCenter == d ? 1 : +labelVisible(d.current)
+    );
+    // Show center label biomass
+		centerLabel
+			.select(".biomassText")
+			.style("visibility", null)
+			.text(format(pCenter.value) +  " kg / km2");
+    centerLabel
+      .select(".centerText")
+      .style("visibility", "hidden")
+      .text("")
+  }
+
+
+
+
   function arcVisible(d) {
     return d.y1 <= 3 && d.y0 >= 1 && d.x1 > d.x0;
   }
@@ -328,7 +421,7 @@ function runApp(htmlContainer, partition,data,d3){
 
     const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
     const y = (d.y0 + d.y1) / 2 * radius;
-    // TODO: Modify here to make the base label go to center
+    // Make the base label go to center
 
 		if (target === undefined)
 			return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`; // Default
@@ -336,6 +429,18 @@ function runApp(htmlContainer, partition,data,d3){
 			return "rotate("+ (x - 90*d.y0) +") translate("+y*d.y0+",0) rotate("+(x < 180 ? 0 : 180)+")";
 		else
 			return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`; // Default
+  }
+
+
+
+  function partition(data){
+    const root = d3.hierarchy(data)
+        .sum(d => d.value) // Assing a value to each partition, based on the value of the smallest items
+        .sort((a, b) => b.value - a.value) // Organize partitions (here from big to small)
+  			.sort((a, b) => b.data.name == "Altres" ? -1 : 1)
+    return d3.partition()
+        .size([2 * Math.PI, root.height + 1])
+      (root);
   }
 
   //return svg.node();
@@ -347,18 +452,6 @@ function runApp(htmlContainer, partition,data,d3){
 
 
 
-
-
-
-var partition = data => {
-  const root = d3.hierarchy(data)
-      .sum(d => d.value) // Assing a value to each partition, based on the value of the smallest items
-      .sort((a, b) => b.value - a.value) // Organize partitions (here from big to small)
-			.sort((a, b) => b.data.name == "Altres" ? -1 : 1)
-  return d3.partition()
-      .size([2 * Math.PI, root.height + 1])
-    (root);
-}
 
 
 
@@ -376,7 +469,7 @@ function showBiomassData(address, staticFile, htmlContainer, title){
 	fetch(address)
 		.then(r => r.json())
 		.then(r => prepDataBiomass(r, title))
-		.then(outData => {originalDataForD3 = outData; runApp(htmlContainer, partition,outData,d3)})
+		.then(outData => {originalDataForD3 = outData; runApp(htmlContainer, outData,d3)})
 		.catch(e => {
 			if (staticFile !== undefined){ // Load static file
 				console.error("Could not fetch from " + address + ". Error: " + e + ". Trying with static file.");
