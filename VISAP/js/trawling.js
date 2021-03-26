@@ -4,6 +4,7 @@
 import * as FilterSpecies from './filter.js'; // TODO HERE
 import * as PieChart from './d3PieChart.js';
 
+// TODO: REFACTOR CODE: 1) MAKE D3PIECHART A MODULE CLASS 2) MAKE EACH BYYEAR BYPORT CLASSES?
 
 var originalDataForD3 = undefined;
 var filteredDataForD3 = undefined;
