@@ -2,6 +2,8 @@
 
 // Import filter module
 import * as FilterSpecies from './filter.js'; // TODO HERE
+import * as PieChart from './d3PieChart.js';
+
 
 var originalDataForD3 = undefined;
 var filteredDataForD3 = undefined;
@@ -25,8 +27,10 @@ export const startTrawling =  (staticDataFile) => {
   if (originalDataForD3 === undefined)
     //showBiomassData("http://localhost:8080/portBiomass", staticDataFile, htmlContainer, "Pesca per port en Biomassa");
     showBiomassData(staticDataFile, undefined, htmlContainer, "Pesca per port en Biomassa");
-  else
-    runApp(htmlContainer, originalDataForD3, d3);
+  else{
+    PieChart.runApp(htmlContainer, originalDataForD3, d3);
+    currentData = originalDataForD3;
+  }
 
 }
 
@@ -45,7 +49,7 @@ const compareTrawling = (event) => {
   let compEl = piechart.cloneNode(false);
   compEl.id = "comparePie";
   piechart.parentElement.insertBefore(compEl, piechart);
-  runApp(compEl, currentData, d3);
+  PieChart.runApp(compEl, currentData, d3);
 }
 
 // HTML button events
@@ -163,296 +167,14 @@ const updateTrawlingChart = (inDataForD3) => {
   let comparePie = document.getElementById("comparePie");
 
   piechart.innerHTML = "";
-  runApp(piechart, inDataForD3, d3);
+  PieChart.runApp(piechart, inDataForD3, d3);
+  currentData = inDataForD3;
 
   if (comparePie !== null){
     comparePie.innerHTML = "";
-    runApp(comparePie, inDataForD3, d3);
+    PieChart.runApp(comparePie, inDataForD3, d3);
   }
 }
-
-
-// Based on D3 example: https://observablehq.com/@d3/zoomable-sunburst
-// d3 label center: https://observablehq.com/@kerryrodden/sequences-sunburst
-// data variable is loaded from data.json (header)
-
-// Optional todo: https://stackoverflow.com/questions/29978957/transitions-in-d3-on-load
-// Basically create the graph with empty values and then fill with transition
-function runApp(htmlContainer,data,d3){
-
-  currentData = data;
-
-	const root = partition(data);
-	var color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
-	var format = d3.format(",d");
-	var width = 600;
-	var radius = width / 6;
-
-	var arc = d3.arc()
-	    .startAngle(d => d.x0)
-	    .endAngle(d => d.x1)
-	    .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
-	    .padRadius(radius * 1.5)
-	    .innerRadius(d => d.y0 * radius)
-	    .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1));
-
-  root.each(d => d.current = d);
-
-  const svg = d3.create("svg")
-      .attr("viewBox", [0, 0, width, width])
-      .style("font", "15px sans-serif");
-
-
-	// Center label
-	const centerLabel = svg
-    .append("text")
-    .attr("text-anchor", "middle")
-    .attr("fill", "#888")
-    //.style("visibility", "hidden");
-
-		centerLabel
-			.append("tspan")
-			.attr("x", width/2)
-			.attr("y", width/2)
-			.attr("dy", "-2em")
-			.text("Pesca per ports");
-
-    centerLabel
-			.append("tspan")
-			.attr("x", width/2)
-			.attr("y", width/2)
-      .attr("dy", "0.3em")
-      .attr("font-size", "0.9em")
-      .attr("fill", "black")
-      .attr("class", "centerText")
-			.text("");
-
-		centerLabel
-	    .append("tspan")
-	    .attr("x", width/2)
-	    .attr("y", width/2)
-	    .attr("dy", "2.5em")
-			.attr("font-size", "0.8em")
-	    .text("Biomassa");
-
-	  centerLabel
-	    .append("tspan")
-	    .attr("x", width/2)
-	    .attr("y", width/2)
-	    .attr("dy", "3.8em")
-			.attr("font-size", "0.8em")
-			.attr("class", "biomassText")
-	    .text(format(root.value) + " kg / km2");
-
-
-
-	// Pie chart
-  const g = svg.append("g")
-      .attr("transform", `translate(${width / 2},${width / 2})`);
-
-  const path = g.append("g")
-    .selectAll("path")
-    .data(root.descendants().slice(1))
-    .join("path")
-      //.attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
-			.attr("fill", d => {return palette[d.data.species] === undefined ? 'rgb(50, 50, 50)' : "rgb(" + palette[d.data.species].color + ")"})// returns 'rgb(1,1,1)'
-      .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0.1)//0) // Here if you want to show other levels
-      .attr("d", d => arc(d.current));
-
-  path.filter(d => d.children)
-      .style("cursor", "pointer")
-      .on("click", clicked);
-
-  path.on("mouseenter", mouseOnPath)
-      .on("mouseleave", mouseOffPath);
-
-  path.append("title")
-      .text(d => `${d.ancestors().map(d => d.data.species).reverse().join("/")}\n${format(d.value)}` + " kg/km2"); // TODO show label, modify label https://chartio.com/resources/tutorials/how-to-show-data-on-mouseover-in-d3js/#creating-a-tooltip-using-the-title-tag
-
-  const label = g.append("g")
-      .attr("pointer-events", "none")
-      .attr("text-anchor", "middle")
-      .style("user-select", "none")
-    .selectAll("text")
-    .data(root.descendants().slice(1))
-    .join("text")
-      .attr("dy", "0.35em")
-      .attr("fill-opacity", d => +labelVisible(d.current))
-			.style("font", d => (d.x1 - d.x0) < 0.01 ?  (d.x1-d.x0)*100 * 15 +"px sans-serif" : "15px sans-serif")//(d.y1 - d.y0) * (d.x1 - d.x0) > 0.03 ? "15px sans-serif" : "8px sans-serif")
-      .attr("transform", d => labelTransform(d.current, d.target))
-      .text(d => d.data.name);
-
-  const parent = g.append("circle")
-      .datum(root)
-      .attr("r", radius)
-      .attr("fill", "none")
-      .attr("pointer-events", "all")
-      .on("click", clicked);
-
-  function clicked(event, p) {
-    parent.datum(p.parent || root);
-
-    root.each(d => d.target = {
-      x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
-      x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
-      y0: Math.max(0, d.y0 - p.depth),
-      y1: Math.max(0, d.y1 - p.depth)
-    });
-
-
-		// Show biomass
-		centerLabel
-			.select(".biomassText")
-			.style("visibility", null)
-			.text(format(p.value) +  " kg / km2");
-
-    // Hide center mouse hover label
-    centerLabel
-      .select(".centerText")
-      .style("visibility", "hidden")
-      .text("")
-
-    const t = g.transition().duration(750);
-
-    // Transition the data on all arcs, even the ones that aren’t visible,
-    // so that if this transition is interrupted, entering arcs will start
-    // the next transition from the desired position.
-    path.transition(t)
-        .tween("data", d => {
-          const i = d3.interpolate(d.current, d.target);
-          return t => d.current = i(t);
-        })
-      .filter(function(d) {
-        return +this.getAttribute("fill-opacity") || arcVisible(d.target);
-      })
-        .attr("fill-opacity", d => arcVisible(d.target) ? (d.children ? 0.6 : 0.4) : 0.1)//0) // Here if you want to show other levels
-        .attrTween("d", d => () => arc(d.current));
-
-    label.filter(function(d) {
-        return +this.getAttribute("fill-opacity") || labelVisible(d.target);
-      }).transition(t)
-        .attr("fill-opacity", d => +labelVisible(d.target))
-				.style("font", d => { // Modify font for small portions
-					let percentage = 100*(d.target.x1 - d.target.x0)/(2*Math.PI);
-					 return percentage < 2 ? Math.max(15*percentage/2,9)+"px sans-serif" : "15px sans-serif";
-				})
-        .attrTween("transform", d => () => labelTransform(d.current, d.target));
-  }
-
-
-
-
-
-
-
-  // Show information about the path when mouse hover
-  function mouseOnPath(event, p){
-    if (p.current.y0 % 1 != 0) // During transition
-      return;
-    // Show biomass
-		centerLabel
-			.select(".biomassText")
-			.style("visibility", null)
-			.text(format(p.value) +  " kg / km2");
-    centerLabel
-      .select(".centerText")
-      .style("visibility", null)
-      .text(p.data.species || p.data.name)
-
-    // Get the ancestors of the current segment, minus the root
-    const sequence = [];
-    let pCenter = p;
-    for (let i = 0; i<Math.floor(p.current.y0); i++){
-      sequence.push(pCenter);
-      pCenter = pCenter.parent;
-    }
-    // Highlight ancestors
-    path.attr("fill-opacity", d =>
-        sequence.indexOf(d) >= 0 ? 0.8 : arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0.1
-      );
-    // Hide center label node
-    label.attr("fill-opacity", d =>
-      (pCenter == d ) ? 0 : +labelVisible(d.current)
-    );
-  }
-
-  function mouseOffPath(event, p){
-    if (p.current.y0 % 1 != 0) // During transition
-      return;
-    let pCenter = p;
-    const sequence = [];
-    // Find element on center
-    for (let i = 0; i<Math.ceil(p.current.y0); i++){
-      sequence.push(pCenter);
-      pCenter = pCenter.parent;
-    }
-    // Unhighlight ancestors
-    path.attr("fill-opacity", d =>
-      sequence.indexOf(d) >= 0 ? 0.6 : arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0.1
-    );
-    // Show center label node
-    label.attr("fill-opacity", d =>
-      pCenter == d ? 1 : +labelVisible(d.current)
-    );
-    // Show center label biomass
-		centerLabel
-			.select(".biomassText")
-			.style("visibility", null)
-			.text(format(pCenter.value) +  " kg / km2");
-    centerLabel
-      .select(".centerText")
-      .style("visibility", "hidden")
-      .text("")
-  }
-
-
-
-
-  function arcVisible(d) {
-    return d.y1 <= 3 && d.y0 >= 1 && d.x1 > d.x0;
-  }
-
-  function labelVisible(d) {
-    return d.y1 <= 3 && d.y0 >= 0 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03; // Make the base label appear
-    //return d.y1 <= 3 && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03;
-  }
-
-  function labelTransform(d, target) {
-
-    const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
-    const y = (d.y0 + d.y1) / 2 * radius;
-    // Make the base label go to center
-
-		if (target === undefined)
-			return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`; // Default
-    else if (d.y0 < 1 && target.y0 <= 1) // Rotate base label to be horizontal
-			return "rotate("+ (x - 90*d.y0) +") translate("+y*d.y0+",0) rotate("+(x < 180 ? 0 : 180)+")";
-		else
-			return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`; // Default
-  }
-
-
-
-  function partition(data){
-    const root = d3.hierarchy(data)
-        .sum(d => d.value) // Assing a value to each partition, based on the value of the smallest items
-        .sort((a, b) => b.value - a.value) // Organize partitions (here from big to small)
-  			.sort((a, b) => b.data.name == "Altres" ? -1 : 1)
-    return d3.partition()
-        .size([2 * Math.PI, root.height + 1])
-      (root);
-  }
-
-  //return svg.node();
-  // Remove loader class
-  htmlContainer.className = "my-4 w-100 mx-auto";
-  htmlContainer.appendChild(svg.node());
-}
-
-
-
-
-
 
 
 
@@ -469,7 +191,7 @@ function showBiomassData(address, staticFile, htmlContainer, title){
 	fetch(address)
 		.then(r => r.json())
 		.then(r => prepDataBiomass(r, title))
-		.then(outData => {originalDataForD3 = outData; runApp(htmlContainer, outData,d3)})
+		.then(outData => {originalDataForD3 = outData; PieChart.runApp(htmlContainer, outData,d3); currentData = outData;})
 		.catch(e => {
 			if (staticFile !== undefined){ // Load static file
 				console.error("Could not fetch from " + address + ". Error: " + e + ". Trying with static file.");
