@@ -2,13 +2,13 @@
 
 // Import filter module
 import * as FilterSpecies from './filter.js'; // TODO HERE
-import * as PieChart from './d3PieChart.js';
+import {PieChart} from './PieChart.js';
 
 // TODO: REFACTOR CODE: 1) MAKE D3PIECHART A MODULE CLASS 2) MAKE EACH BYYEAR BYPORT CLASSES?
 
-var originalDataForD3 = undefined;
 var filteredDataForD3 = undefined;
-var currentData = undefined;
+var byPortChart = undefined;
+
 // Init function
 export const startTrawling =  (staticDataFile) => {
   'use strict'
@@ -23,21 +23,20 @@ export const startTrawling =  (staticDataFile) => {
   window.closeFilterGUI = closeFilterGUI;
   window.deactivateFilter = deactivateFilter;
 
-  var htmlContainer = document.getElementById("piechart");
+  var htmlContainer = document.getElementById("piePortsBiomass");
   // Loads the data and starts the visualizer
-  if (originalDataForD3 === undefined)
+  if (byPortChart === undefined)
     //showBiomassData("http://localhost:8080/portBiomass", staticDataFile, htmlContainer, "Pesca per port en Biomassa");
     showBiomassData(staticDataFile, undefined, htmlContainer, "Pesca per port en Biomassa");
   else{
-    PieChart.runApp(htmlContainer, originalDataForD3, d3);
-    currentData = originalDataForD3;
+    byPortChart.runApp(htmlContainer, byPortChart.originalData, d3);
   }
 
 }
 
 // HTML button events
 const compareTrawling = (event) => {
-  if (originalDataForD3 === undefined)
+  if (byPortChart === undefined)
     return;
   // Hide compare button
   event.target.style.visibility="hidden";
@@ -46,11 +45,11 @@ const compareTrawling = (event) => {
 
   // Create pie chart
   //var compEl = document.getElementById("comparePie");
-  let piechart = document.getElementById("piechart");
+  let piechart = document.getElementById("piePortsBiomass");
   let compEl = piechart.cloneNode(false);
   compEl.id = "comparePie";
   piechart.parentElement.insertBefore(compEl, piechart);
-  PieChart.runApp(compEl, currentData, d3);
+  byPortChart.runApp(compEl, byPortChart.currentData, d3);
 }
 
 // HTML button events
@@ -69,7 +68,7 @@ const closeCompare = (event) => {
 // Filter Species button event
 const filterSpeciesGUI = (event) => {
 
-  if (originalDataForD3 === undefined) // Data is not loaded yet
+  if (byPortChart === undefined) // Data is not loaded yet
     return;
   // Show GUI
   if (event.target.GUIshow == false || event.target.GUIshow == undefined){ // If filter is not active (should be something related to class)
@@ -136,7 +135,7 @@ const exitFilterGUI = () => {
     // Hide filter is on button
     document.getElementById("filterIsOnBtn").style.visibility = "hidden";
     // Restart graph with original data
-    updateTrawlingChart(originalDataForD3);
+    updateTrawlingChart(byPortChart.originalData);
   }
 }
 
@@ -148,14 +147,14 @@ const deactivateFilter = (event) => {
   // Deselect species
   FilterSpecies.deselectAll();
   // Update graphs to original data
-  updateTrawlingChart(originalDataForD3);
+  updateTrawlingChart(byPortChart.originalData);
 }
 
 
 // Filter data and update graphs
 const createFilteredGraph = (selectedSpecies) => {
   // Filter the data
-  let filteredDataForD3 = FilterSpecies.filterData(selectedSpecies, originalDataForD3);
+  let filteredDataForD3 = FilterSpecies.filterData(selectedSpecies, byPortChart.originalData);
   // Assign to pie chart
   updateTrawlingChart(filteredDataForD3);
 }
@@ -164,16 +163,15 @@ const createFilteredGraph = (selectedSpecies) => {
 // Update the pie chart with filtered or unfiltered data
 const updateTrawlingChart = (inDataForD3) => {
   // Find the pie charts
-  let piechart = document.getElementById("piechart");
+  let piechart = document.getElementById("piePortsBiomass");
   let comparePie = document.getElementById("comparePie");
 
   piechart.innerHTML = "";
-  PieChart.runApp(piechart, inDataForD3, d3);
-  currentData = inDataForD3;
+  byPortChart.runApp(piechart, inDataForD3, d3);
 
   if (comparePie !== null){
     comparePie.innerHTML = "";
-    PieChart.runApp(comparePie, inDataForD3, d3);
+    byPortChart.runApp(comparePie, inDataForD3, d3);
   }
 }
 
@@ -191,8 +189,10 @@ function showBiomassData(address, staticFile, htmlContainer, title){
 	// Try data from server
 	fetch(address)
 		.then(r => r.json())
-		.then(r => prepDataBiomass(r, title))
-		.then(outData => {originalDataForD3 = outData; PieChart.runApp(htmlContainer, outData,d3); currentData = outData;})
+		.then(r => prepPortDataBiomass(r, title))
+		.then(outData => {
+      byPortChart = new PieChart(outData);
+      byPortChart.runApp(htmlContainer, outData,d3)})
 		.catch(e => {
 			if (staticFile !== undefined){ // Load static file
 				console.error("Could not fetch from " + address + ". Error: " + e + ". Trying with static file.");
@@ -211,9 +211,9 @@ function showBiomassData(address, staticFile, htmlContainer, title){
 
 
 // Prepare the data from the server-database
-var databaseJSONBiomass = null;
-function prepDataBiomass(inData, title){
-  databaseJSONBiomass = inData;
+var pesca_arrossegament_port_biomassa = null;
+function prepPortDataBiomass(inData, title){
+  pesca_arrossegament_port_biomassa = inData;
 	const outData = {};
 	outData.name = title + ": ";
 	outData.children = [];
@@ -273,27 +273,26 @@ function prepDataBiomass(inData, title){
 
 // Export data
 // https://www.codevoila.com/post/30/export-json-data-to-downloadable-file-using-javascript
-const exportJSON = function(event){
+const exportJSON = function(event, dataName){
   // Data not yet loaded
-  if (databaseJSONBiomass === null)
+  if (pesca_arrossegament_port_biomassa === null)
     return;
   // Create
-  let dataStr = JSON.stringify(databaseJSONBiomass);
+  let dataStr = JSON.stringify(pesca_arrossegament_port_biomassa);
   let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-  let exportFileDefaultName = 'pesca_arrossegament_biomassa.json';
   let linkElement = event.target;//document.createElement('a');
   linkElement.setAttribute('href', dataUri);
-  linkElement.setAttribute('download', exportFileDefaultName);
+  linkElement.setAttribute('download', dataName + 'json');
   // Now the "a" element has already the data, then remove the function
   linkElement.removeEventListener("onclick", exportJSON);
 }
 
-const exportCSV = function(event){
+const exportCSV = function(event, dataName){
   // Data not yet loaded
-  if (databaseJSONBiomass === null)
+  if (pesca_arrossegament_port_biomassa === null)
     return;
   // Parse JSON to CSV
-  let jsonData = databaseJSONBiomass;
+  let jsonData = pesca_arrossegament_port_biomassa;
   let keys = Object.keys(jsonData[0]);
 
   let columnDelimiter = ',';
@@ -314,12 +313,11 @@ const exportCSV = function(event){
 
   // Now make downlodable element
   let dataUri = 'data:text/csv;charset=utf-8,'+ encodeURIComponent(csvStr);
-  let exportFileDefaultName = 'pesca_arrossegament_biomassa.csv';
   let linkElement = event.target;//document.createElement('a');
   linkElement.setAttribute('href', dataUri);
-  linkElement.setAttribute('download', exportFileDefaultName);
+  linkElement.setAttribute('download', dataName + '.csv');
   // Now the "a" element has already the data, then remove the function
-  linkElement.removeEventListener("onclick", exportJSON);
+  linkElement.removeEventListener("onclick", exportJSON); // ????
 }
 
 
