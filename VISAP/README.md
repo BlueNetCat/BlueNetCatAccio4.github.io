@@ -14,8 +14,7 @@ A [pie chart](https://bluenetcataccio4.github.io/VISAP/piechart/) is in developm
   - [x] Preprocess data from server to be used in visualizer
   - [x] Discuss color palette (custom or as in report)
   - [x] Species with small biomass in "Altres" group
-  - [ ] Add tab location in pie chart (Sud/L'Ametlla de Mar/Comercial)
-  - [ ] Fix long names
+  - [x] Add tab location in pie chart (Sud/L'Ametlla de Mar/Comercial)
   - [x] Ability to select/deselect species
   - [ ] More info about each species when clicked?
   - [ ] Add fishing per stratum (requires new query from J. Ribera)
