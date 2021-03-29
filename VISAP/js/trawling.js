@@ -43,12 +43,11 @@ const compareTrawling = (event) => {
   // Show close compare button
   document.getElementById("closeCompare").style.visibility = null;
 
-  // Create pie chart
-  //var compEl = document.getElementById("comparePie");
+  // Create compare pie chart
   let piechart = document.getElementById("piePortsBiomass");
   let compEl = piechart.cloneNode(false);
   compEl.id = "comparePie";
-  piechart.parentElement.insertBefore(compEl, piechart);
+  piechart.insertAdjacentElement("afterend",compEl);
   byPortChart.runApp(compEl, byPortChart.currentData, d3);
 }
 
