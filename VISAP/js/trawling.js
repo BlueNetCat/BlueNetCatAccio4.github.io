@@ -3,15 +3,14 @@
 // Import filter module
 import * as FilterSpecies from './filter.js'; // TODO HERE
 import {PieChart} from './PieChart.js';
+import {PieHTMLSection} from './PieHTMLSection.js';
 
-// TODO: REFACTOR CODE: 1) MAKE D3PIECHART A MODULE CLASS 2) MAKE EACH BYYEAR BYPORT CLASSES?
+// TODO:  MAKE EACH BYYEAR BYPORT CLASSES?
 
-var filteredDataForD3 = undefined;
 var byPortChart = undefined;
 
 // Init function
 export const startTrawling =  (staticDataFile) => {
-  'use strict'
 
   // Expose onclick Button functions from imported html
   // https://stackoverflow.com/questions/44590393/es6-modules-undefined-onclick-function-after-import
@@ -32,7 +31,16 @@ export const startTrawling =  (staticDataFile) => {
     byPortChart.runApp(htmlContainer, byPortChart.originalData, d3);
   }
 
+  // Refactored PieChart Section
+  let htmlTitleEl = document.getElementById("biomassYearHTMLTitleSection");
+  let htmlPieSectionEl = document.getElementById("biomassYearHTMLPieSection");
+  let title = "Captura en biomassa per port";
+  const biomassYearSection = new PieHTMLSection(htmlTitleEl, htmlPieSectionEl, title);
+  biomassYearSection.createPieChart('data/pesca_arrossegament_port_biomassa.json', undefined, prepPortDataBiomass, 'Pesca per ports', 'Biomassa', 'kg / km2'); // (address, staticFile, callbackPrepareData, title, measure, unit)
 }
+
+
+
 
 // HTML button events
 const compareTrawling = (event) => {

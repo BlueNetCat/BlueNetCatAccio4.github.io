@@ -13,7 +13,7 @@ class PieChart {
 		this.originalData = originalData;
 	}
 
-	runApp(htmlContainer,data,d3){
+	runApp(htmlContainer,data,d3, title, measure, unit){
 
 		this.currentData = data;
 
@@ -51,7 +51,7 @@ class PieChart {
 				.attr("x", width/2)
 				.attr("y", width/2)
 				.attr("dy", "-2.2em")
-				.text("Pesca per ports");
+				.text(title || "Pesca per ports");
 	    // Breadcrumb
 	    centerLabel
 	      .append("tspan")
@@ -79,7 +79,7 @@ class PieChart {
 		    .attr("y", width/2)
 		    .attr("dy", "2.2em")
 				.attr("font-size", "0.8em")
-		    .text("Biomassa");
+		    .text(measure || "Biomassa");
 	    // Units
 		  centerLabel
 		    .append("tspan")
@@ -88,7 +88,7 @@ class PieChart {
 		    .attr("dy", "3.5em")
 				.attr("font-size", "0.8em")
 				.attr("class", "biomassText")
-		    .text(format(root.value) + " kg / km2");
+		    .text(format(root.value) + " " + (unit||"kg / km2"));
 
 
 
