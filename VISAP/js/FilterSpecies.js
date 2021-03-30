@@ -2,13 +2,14 @@
 
 class FilterSpecies {
 
-  constructor(originalData){
+  constructor(){
     // Prepare data for List.js
     this.keys;
 
     // Lists objects
-    this.speciesList;//new List('speciesEl', options, values);
-    this.selSpeciesList;//new List('selSpeciesEl', optionsSel);
+    this.speciesList;
+    this.selSpeciesList;
+
   }
 
   // Select item
@@ -16,28 +17,28 @@ class FilterSpecies {
     e.stopPropagation();
     //console.log(e.srcElement.innerText.split("■ ")[1]);
     let speciesName = e.currentTarget.innerText.split("■ ")[1];
-    this.switchFromList(speciesName, this.speciesList, this.selSpeciesList);
+    this.switchFromList(speciesName, this.speciesList, this.selSpeciesList, this.deselectItem);
   };
 
   // Deselect item
   deselectItem(e){
     e.stopPropagation();
     let speciesName = e.currentTarget.innerText.split("■ ")[1];
-    this.switchFromList(speciesName, this.selSpeciesList, this.speciesList);
+    this.switchFromList(speciesName, this.selSpeciesList, this.speciesList, this.selectItem);
   }
 
   selectAll(e){
     e.stopPropagation();
     for (var i = 0; i<this.speciesList.items.length; i++){
-      this.switchFromList(this.speciesList.items[i]._values.name, this.speciesList, this.selSpeciesList)
+      this.switchFromList(this.speciesList.items[i]._values.name, this.speciesList, this.selSpeciesList, this.deselectItem)
       i--;
     }
   }
 
-  deselectAll(){
+  deselectAll(e){
     event.stopPropagation();
     for (var i = 0; i<this.selSpeciesList.items.length; i++){
-      this.switchFromList(this.selSpeciesList.items[i]._values.name, this.selSpeciesList, this.speciesList)
+      this.switchFromList(this.selSpeciesList.items[i]._values.name, this.selSpeciesList, this.speciesList, this.selectItem)
       i--;
     }
   }
@@ -52,18 +53,24 @@ class FilterSpecies {
   }
 
   // Switch values from one list to the other
-  switchFromList(speciesName, removeFromList, insertToList){
+  switchFromList(speciesName, removeFromList, insertToList, callbackFuncBtn){
     let item = removeFromList.get("name", speciesName)[0];
     removeFromList.remove("name", speciesName);
 
-    insertToList.add({
+    let itNew = insertToList.add({
       "name": speciesName,
       "color":  item._values.color
-    })
+    });
+    // Add event listener
+    callbackFuncBtn = callbackFuncBtn.bind(this); // bind callback with this
+    itNew[0].elm.addEventListener("click", (e)=>callbackFuncBtn(e));
   }
 
+
+
+
   // Initalization function
-  init(){
+  init(containerEl, pieHTMLSectionObj){
 
     // Selected items
     let selValues = undefined;
@@ -100,15 +107,18 @@ class FilterSpecies {
 
 
     // Create HTML button elements
-    this.speciesList = new List('speciesEl', options, values);
+    this.speciesList = new List(containerEl.querySelector('#speciesEl'), options, values);
+    this.selSpeciesList = new List(containerEl.querySelector('#selSpeciesEl'), optionsSel, selValues);
+
     // Add click events
     this.speciesList.list.childNodes.forEach((el)=>el.addEventListener("click", (e)=>this.selectItem(e)));
-    // HTML list of selected items
-    this.selSpeciesList = new List('selSpeciesEl', optionsSel, selValues);
-    // Add click events
-    this.selSpeciesList.list.childNodes.forEach((el)=>el.addEventListener("click", (e)=>this.deselectItem(e)));
-
+    this.selSpeciesList.list.childNodes.forEach((el)=>el.addEventListener("click", (e)=> this.deselectItem(e)));
+    containerEl.querySelector("#selectAll").addEventListener("click", (e)=>this.selectAll(e));
+    containerEl.querySelector("#deselectAll").addEventListener("click", (e)=>this.deselectAll(e));
+    containerEl.querySelector('#closeGUI').addEventListener("click", (e) => pieHTMLSectionObj.closeFilterGUI(e)); // Tancar button // ALERT: this depends on the functions defined on PieHTMLSection.js
   }
+
+
 
 
 
@@ -119,6 +129,7 @@ class FilterSpecies {
     this.markItems(filteredData, selectedSpecies, null);
     return filteredData;
   }
+
 
   // This function is not optimal, but real-time is not requiered
   markItems(itemJSON, selectedSpecies, parentJSON){

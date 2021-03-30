@@ -33,7 +33,6 @@ class PieHTMLSection {
 		this.closeCompareBtnEl.addEventListener("click", (e) => this.closeCompare(e));
 		this.overlayEl.addEventListener("click", (e) => this.closeFilterGUI(e));
 
-
 		// Pie chart HTML container
 		this.pieChartEl = htmlPieSectionEl.querySelector('#pieChart');
 
@@ -64,7 +63,7 @@ class PieHTMLSection {
   		.then(r => r.json())
   		.then(r => {
         this.dataFromServer = r;
-        let outData = callbackPrepareData(r, title); // returns prepared data for d3
+        let outData = callbackPrepareData(r); // returns prepared data for d3
         this.pieChart = new PieChart(outData);
         this.pieChart.runApp(this.pieChartEl, outData, d3, title, measure, unit);
 			})
@@ -130,7 +129,7 @@ class PieHTMLSection {
 	        this.overlayEl.style.height = posHTML.height  + "px";
 	        this.overlayEl.style.visibility = null;
 	        // Start List buttons
-	        this.filter.init();
+	        this.filter.init(this.overlayEl, this);
 	        // Reload missing icons from new HTML
 	        feather.replace();
 	      });
@@ -140,12 +139,7 @@ class PieHTMLSection {
 	  }
 	  // Hide GUI
 	  else {
-	    console.log("Hiding Filter GUI");
-	    // Remove/Hide HTML
-	    this.overlayEl.style.visibility = "hidden";
-	    // Hide overlay
-	    this.filterIsOnBtnEl.GUIshow = false;
-			console.log("here")
+
 	    // Filter and update graphs
 	    this.exitFilterGUI();
 	  }
@@ -154,6 +148,11 @@ class PieHTMLSection {
 
 	// Filter and update graphs
 	exitFilterGUI(){
+		console.log("Hiding Filter GUI");
+		// Remove/Hide HTML
+		this.overlayEl.style.visibility = "hidden";
+		// Hide overlay
+	  this.filterIsOnBtnEl.GUIshow = false;
 	  // Get selected species
 	  let selectedSpecies = this.filter.getSelected();
 	  // If filter exists
@@ -173,10 +172,6 @@ class PieHTMLSection {
 	// Close filter GUI and show filtered data
 	closeFilterGUI(event){
 	  event.stopPropagation();
-	  // When clicked, hide this button
-	  event.currentTarget.style.visibility = 'hidden';
-	  // Hide overlay
-	  this.filterIsOnBtnEl.GUIshow = false; // ALERT: problem if more than one element with this ID
 	  // Exit filter GUI
 	  this.exitFilterGUI();
 	}
