@@ -121,7 +121,7 @@ class PieHTMLSection {
 	      .then(text => {
 	        // Add/Show HTML to container
 	        this.overlayEl.innerHTML = text;
-	        // Set style properties
+	        // Position the overlay on top of the section. Set style properties
 	        let posHTML = this.overlayEl.parentElement.getClientRects()[0];
 	        this.overlayEl.style.top = window.scrollY + posHTML.top + "px";
 	        this.overlayEl.style.left = posHTML.left  + "px";
