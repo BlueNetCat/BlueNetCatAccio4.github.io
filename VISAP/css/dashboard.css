@@ -127,7 +127,7 @@ body {
 
 
 /* Filter overlay */
-#overlay {
+#overlayDiv, #overlay {
   position: absolute;
   visibility: null;
   background-color: rgba(0,0,0,0.80);

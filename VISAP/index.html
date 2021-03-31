@@ -168,7 +168,7 @@
           .then(response => response.text())
           .then(text => {
             document.getElementsByTagName("main")[0].innerHTML = text;
-            startTrawling("data/pesca_arrossegament_biomassa.json");
+            startTrawling("data/pesca_arrossegament_port_biomassa.json");
             // Reload missing icons from new HTML
             feather.replace();
           });
