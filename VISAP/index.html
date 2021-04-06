@@ -15,6 +15,9 @@
     <!-- Bootstrap core CSS -->
     <link href="lib/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Openlayers library -->
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css">
 
 
     <style>
@@ -95,7 +98,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" w3-include-html="map.html" onclick="clickSidebarMenu(event)" href="#">
               <span data-feather="map-pin"></span>
               Mapa
             </a>
@@ -161,17 +164,26 @@
       // Import inner html scripts
       import startTrawling from './js/trawling.js';
       import startDashboard from './js/dashboard.js';
+      import startMap from './js/map.js';
 
         // TESTING
         // Testing inner html
-        fetch("html/" + "trawling.html")
+        fetch("html/" + "map.html")
+          .then(response => response.text())
+          .then(text => {
+            document.getElementsByTagName("main")[0].innerHTML = text;
+            startMap();
+            // Reload missing icons from new HTML
+            feather.replace();
+          });
+        /*fetch("html/" + "trawling.html")
           .then(response => response.text())
           .then(text => {
             document.getElementsByTagName("main")[0].innerHTML = text;
             startTrawling("data/pesca_arrossegament_port_biomassa.json");
             // Reload missing icons from new HTML
             feather.replace();
-          });
+          });*/
 
 
 
@@ -197,6 +209,9 @@
                   break;
                 case "dashboard.html":
                   startDashboard();
+                  break;
+                case "map.html":
+                  startMap();
                   break;
               }
               // Reload missing icons from new HTML

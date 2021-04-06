@@ -116,7 +116,7 @@ const compCoastlineLayer = new ol.layer.Vector({
   }),
   style: compCoastlineStyle
 });
-// Ports trawling / arrossegament
+// Port labels trawling / arrossegament
 const portsTextStyle = textStyleLat.clone(true);
 portsTextStyle.setTextAlign('right');
 portsTextStyle.setOffsetX(-10);
@@ -204,10 +204,10 @@ selectHover.on('select', function(e){
 
 
 
-var once = false;
+// SVG FILTER
+let once = false;
 // Canvas 2D filter
 map.on('postrender', function(e){ // https://openlayers.org/en/latest/apidoc/module-ol_MapEvent-MapEvent.html#event:moveend
-  // TODO: Should only happen once...
   if (!once){
     var ctx = document.getElementsByTagName("canvas")[0].getContext("2d");
     ctx.filter = 'grayscale(100%) contrast(1.2) brightness(1.1) hue-rotate(-10deg)';
