@@ -1,3 +1,5 @@
+/*globals feather*/
+
 import {PieChart} from './PieChart.js';
 import {FilterSpecies} from './FilterSpecies.js';
 

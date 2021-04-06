@@ -1,4 +1,4 @@
-
+/* globals palette*/
 
 class FilterSpecies {
 

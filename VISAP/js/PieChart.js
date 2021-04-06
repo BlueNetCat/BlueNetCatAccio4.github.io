@@ -1,4 +1,4 @@
-
+/*globals palette*/
 
 // Based on D3 example: https://observablehq.com/@d3/zoomable-sunburst
 // d3 label center: https://observablehq.com/@kerryrodden/sequences-sunburst
