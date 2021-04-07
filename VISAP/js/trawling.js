@@ -104,7 +104,7 @@ function prepDataYearBiomass(inData){
     let any = item.Any;
 		let estacio = item.Estacio;
 		let nomEspecie = item.NomEspecie;
-		let nomComu = item.NomCatala || item.NomEspecie;
+		let nomComu = item.NomComu || item.NomEspecie;
 		let classCaptura = item.ClassificacioCaptura;
 		let biomass = item.Biomassa_Kg_Km2;
 
@@ -129,7 +129,7 @@ function prepDataYearBiomass(inData){
 
 		let classIndex =  outData.children[anyIndex].children[estacioIndex].children.findIndex(child => child.name === classCaptura)
 		// If biomass is very small, put to others
-		if ((biomass < 9 && classCaptura == "Comercial") || (biomass < 5 && classCaptura == "Rebuig")){
+		if ((biomass < 7 && classCaptura == "Comercial") || (biomass < 4 && classCaptura == "Rebuig")){
 			let altresIndex =  outData.children[anyIndex].children[estacioIndex].children[classIndex].children.findIndex(child => child.name === "Altres");
 			// Define Altres group
 			if (altresIndex == -1) {
@@ -146,9 +146,53 @@ function prepDataYearBiomass(inData){
 		}
   }
 
+
+  // Because there is port area, several repeated species appear
+  // Iterate to remove duplicated entries. The values are averaged
+  /*outData.children.forEach(
+    (anyItem) => anyItem.children.forEach(
+      (estacioItem) => estacioItem.children.forEach(
+        (classItem) => {
+          averageChildren(classItem);
+        }
+      )
+    )
+  );*/
+
   return outData;
 }
 
+/*
+function averageChildren(classItem){
+  let tempChildren = []; // New array with children
+  let tempValues = []; // Values to average
+  for (let i = 0; i<classItem.children.length; i++){
+    // If Altres?
+    if (classItem.children[i] === undefined)
+      continue;
+    if( classItem.children[i].name == "Altres"){
+      //averageChildren(classItem.children[i]);
+      continue;
+    }
+    tempValues = [];
+    let tempName = classItem.children[i].name;
+    tempChildren.push(classItem.children[i]); // Move item to temp
+    delete classItem.children[i]; // Remove from array
 
+    //Check if there is another item with the same name
+    let indexRepetition = classItem.children.findIndex((item) => item !== undefined ? item.name == tempName : false);
+    // Iterate until all repeated elements are removed
+    tempValues.push(parseFloat(tempChildren[tempChildren.length -1].value));
+    while (indexRepetition != -1){
+      tempValues.push(parseFloat(classItem.children[indexRepetition].value)); // Store value to average
+      delete classItem.children[indexRepetition];// Remove from array
+      indexRepetition = classItem.children.findIndex((item) => item !== undefined ? item.name == tempName : false);
+    }
+    let avgBiomass = tempValues.reduce((a,b) => a + b) / tempValues.length;
+    tempChildren[tempChildren.length -1].value = avgBiomass;
+  }
+  classItem.children = tempChildren;
+}
+*/
 
 export default startTrawling;
