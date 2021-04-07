@@ -9,6 +9,7 @@ export const startMap = () => {
     //preload: 15,
     source: new ol.source.XYZ ({ // https://openlayers.org/en/latest/examples/xyz.html
             url: 'https://tiles.emodnet-bathymetry.eu/2020/baselayer/web_mercator/{z}/{x}/{y}.png', // https://tiles.emodnet-bathymetry.eu/
+            attributions: "© EMODnet Bathymetry Consortium (Basemap)",
           }),
   });
   // Avoids requesting the same tile constantly
@@ -17,7 +18,32 @@ export const startMap = () => {
 
 
 
+// WKT information
+const wkt =
+  'MULTIPOLYGON(((276240.375653729 4457472.095957,277240.375653729 4457472.095957,277240.375653729 4456472.095957,276240.375653729 4456472.095957,276240.375653729 4457472.095957)))';
 
+  var format = new ol.format.WKT();
+
+  var feature = format.readFeature(wkt, {
+    dataProjection: 'EPSG:25831',
+    featureProjection: 'EPSG:3857',
+  });
+
+  var vectorWKT = new ol.layer.Vector({
+    source: new ol.source.Vector({
+      features: [feature],
+    }),
+  });
+
+
+
+
+
+
+  // Attributions
+  const attributions = new ol.control.Attribution({
+     collapsible: true
+   });
 
 
   // Graticule Layer style
@@ -69,6 +95,7 @@ export const startMap = () => {
     source: new ol.source.Vector({
       url: 'data/shoreline_cat.geojson',
       format: new ol.format.GeoJSON(),
+      attributions: "© Instituto Geográfico Nacional (Catalan coastline)",
     }),
     style: catCoastlineStyle
   });
@@ -84,9 +111,13 @@ export const startMap = () => {
     source: new ol.source.Vector({
       url: 'data/coastline_complementary_cat.geojson',
       format: new ol.format.GeoJSON(),
+      attributions: "© European Environment Agency (european coastline)",
     }),
     style: compCoastlineStyle
   });
+
+
+
   // Port labels trawling / arrossegament
   const portsTextStyle = textStyleLat.clone(true);
   portsTextStyle.setTextAlign('right');
@@ -102,7 +133,7 @@ export const startMap = () => {
   const portsLayer = new ol.layer.Vector({
     source: new ol.source.Vector({
       url: 'data/ports.geojson',
-      format: new ol.format.GeoJSON(),
+      format: new ol.format.GeoJSON()
     }),
     //declutter: true,
     style: function(feature) {
@@ -114,21 +145,23 @@ export const startMap = () => {
   });
 
 
+
+
+
   // Mouse position
   const mousePositionControl = new ol.control.MousePosition({
-    coordinateFormat: ol.coordinate.createStringXY(2),
+    coordinateFormat: (coord) => ol.coordinate.format(coord, '{x}º E / {y}º N', 2),//ol.coordinate.createStringXY(2),
     projection: 'EPSG:4326',
-    //className: 'custom-mouse-position', // Text style defined in CSS class outside
-    //undefinedHTML: '&nbsp;', // What to show when mouse is out of map
+    className: 'custom-mouse-position', // Text style defined in CSS class outside
+    target: document.getElementById('mouse-position'), // ALERT IF SEVERAL MAPS EXIST
+    undefinedHTML: '&nbsp;', // What to show when mouse is out of map
   });
-
-
 
   // View
   const mapView = new ol.View({
     center: ol.proj.fromLonLat([3,41.5]),
-    zoom: 7,
-    extent: ol.proj.fromLonLat([-1,39.5]).concat(ol.proj.fromLonLat([7, 43]))//extent: [-2849083.336923, 3025194.250092, 4931105.568733, 6502406.032920]//olProj.get("EPSG:3857").getExtent()
+    zoom: 8,
+    extent: ol.proj.fromLonLat([-2,39.5]).concat(ol.proj.fromLonLat([7, 43.5]))//extent: [-2849083.336923, 3025194.250092, 4931105.568733, 6502406.032920]//olProj.get("EPSG:3857").getExtent()
   });
 
 
@@ -136,23 +169,27 @@ export const startMap = () => {
   // Map
   const map = new ol.Map({
     target: 'map-container',
+    //controls: ol.control.defaults().extend([mousePositionControl]),
+    controls: ol.control.defaults({attributions: false}).extend([attributions, mousePositionControl]),
     layers: [
       bathymetryTileLayer,
       graticuleLayer,
       catCoastlineLayer,
       compCoastlineLayer,
+      portsLayer,
+      vectorWKT
     ],
     view: mapView
   });
 
-  const mapColor = new ol.Map({
+/*  const mapColor = new ol.Map({
     target: 'mapColor-container',
     controls: ol.control.defaults().extend([mousePositionControl]),
     layers: [
       portsLayer
     ],
     view: mapView
-  })
+  })*/
 
 
 
@@ -160,7 +197,7 @@ export const startMap = () => {
 
   // Mouse hover/onclick
   // https://openlayers.org/en/latest/examples/select-features.html
-  const selectHover = new ol.interaction.Select({
+/*  const selectHover = new ol.interaction.Select({
     condition: ol.events.condition.pointerMove
   });
   const selectClick = new ol.interaction.Select({
@@ -171,7 +208,7 @@ export const startMap = () => {
   selectHover.on('select', function(e){
     console.log(e.selected[0]);
   })
-
+*/
 
 
 /*
