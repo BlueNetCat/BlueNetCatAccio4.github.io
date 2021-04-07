@@ -67,7 +67,7 @@ export const startMap = () => {
   });
   const catCoastlineLayer = new ol.layer.Vector({
     source: new ol.source.Vector({
-      url: '../data/shoreline_cat.geojson',
+      url: 'data/shoreline_cat.geojson',
       format: new ol.format.GeoJSON(),
     }),
     style: catCoastlineStyle
@@ -82,7 +82,7 @@ export const startMap = () => {
   });
   const compCoastlineLayer = new ol.layer.Vector({
     source: new ol.source.Vector({
-      url: '../data/coastline_complementary_cat.geojson',
+      url: 'data/coastline_complementary_cat.geojson',
       format: new ol.format.GeoJSON(),
     }),
     style: compCoastlineStyle
@@ -101,7 +101,7 @@ export const startMap = () => {
   });
   const portsLayer = new ol.layer.Vector({
     source: new ol.source.Vector({
-      url: '../data/ports.geojson',
+      url: 'data/ports.geojson',
       format: new ol.format.GeoJSON(),
     }),
     //declutter: true,
@@ -169,12 +169,12 @@ export const startMap = () => {
   // https://openlayers.org/en/latest/examples/icon-negative.html
   mapColor.addInteraction(selectHover);
   selectHover.on('select', function(e){
-    console.log(e.selected[0].getStyle());
+    console.log(e.selected[0]);
   })
 
 
 
-
+/*
   // SVG FILTER
   let once = false;
   // Canvas 2D filter
@@ -183,7 +183,7 @@ export const startMap = () => {
       var ctx = document.getElementsByTagName("canvas")[0].getContext("2d");
       ctx.filter = 'grayscale(100%) contrast(1.2) brightness(1.1) hue-rotate(-10deg)';
     }
-  });
+  });*/
 }
 
 export default startMap;

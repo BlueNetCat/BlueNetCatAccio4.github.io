@@ -129,7 +129,7 @@ function prepDataYearBiomass(inData){
 
 		let classIndex =  outData.children[anyIndex].children[estacioIndex].children.findIndex(child => child.name === classCaptura)
 		// If biomass is very small, put to others
-		if ((biomass < 9 && classCaptura == "Comercial") || (biomass < 5 && classCaptura == "Rebuig")){
+		if ((biomass < 7 && classCaptura == "Comercial") || (biomass < 4 && classCaptura == "Rebuig")){
 			let altresIndex =  outData.children[anyIndex].children[estacioIndex].children[classIndex].children.findIndex(child => child.name === "Altres");
 			// Define Altres group
 			if (altresIndex == -1) {
