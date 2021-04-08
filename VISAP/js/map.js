@@ -1,5 +1,6 @@
-
-
+// https://github.com/cschwarz/wkx
+var Buffer = require('buffer').Buffer;
+var wkx = require('wkx');
 
 export const startMap = () => {
   // EMODNET Bathymetry
@@ -18,22 +19,8 @@ export const startMap = () => {
 
 
 
-// WKT information
-const wkt =
-  'MULTIPOLYGON(((276240.375653729 4457472.095957,277240.375653729 4457472.095957,277240.375653729 4456472.095957,276240.375653729 4456472.095957,276240.375653729 4457472.095957)))';
 
-  var format = new ol.format.WKT();
 
-  var feature = format.readFeature(wkt, {
-    dataProjection: 'EPSG:25831',
-    featureProjection: 'EPSG:3857',
-  });
-
-  var vectorWKT = new ol.layer.Vector({
-    source: new ol.source.Vector({
-      features: [feature],
-    }),
-  });
 
 
 
@@ -176,11 +163,74 @@ const wkt =
       graticuleLayer,
       catCoastlineLayer,
       compCoastlineLayer,
-      portsLayer,
-      vectorWKT
+      portsLayer
     ],
     view: mapView
   });
+
+
+
+  // Get track lines information
+  // Load and create pie chart
+  const getTrackLines = (address, staticFile) => {
+    console.log("Getting data: " + address +", "+ staticFile +", ");
+
+  	// Try data from server
+  	fetch(address)
+  		.then(r => r.json())
+  		.then(r => {
+        createTrackLines(r);
+			})
+			.catch(e => {
+  			if (staticFile !== undefined){ // Load static file
+  				console.error("Could not fetch from " + address + ". Error: " + e + ". Trying with static file.");
+  				getTrackLines(staticFile, undefined);
+  			} else {
+  				console.error("Could not fetch from " + address + ". Error: " + e + ".");
+  			}
+  		})
+  }
+
+  getTrackLines('http://localhost:8080/trackLines', 'data/trackLines.json');
+
+  const createTrackLines = (data)=>{
+    let geoJSONData = {
+      'type': 'FeatureCollection',
+      'features': []
+    };
+
+    for (let i = 0; i < data.length; i++){
+
+      //https://github.com/cschwarz/wkx
+      //Parsing a node Buffer containing a WKB object
+      if (data[i].geom === null)
+        continue;
+
+      let wkbBuffer = new Buffer(data[i].geom, 'hex');
+      let geometry = wkx.Geometry.parse(wkbBuffer);
+      let gJSON = geometry.toGeoJSON();
+      // Create geoJSON
+      let feature = {
+        'type': 'Feature',
+        'properties': {"id": data[i].id},
+        'geometry': gJSON,
+      }
+
+      geoJSONData.features.push(feature);
+    }
+    //console.log(JSON.stringify(geoJSONData));
+    let vectorTrackLines = new ol.layer.Vector({
+      source: new ol.source.Vector({
+        //features: new ol.format.GeoJSON().readFeatures(geoJSONData), // This is not working??
+        url: 'data/trackLines.geojson',
+        format: new ol.format.GeoJSON(),
+      }),
+      style: catCoastlineStyle,
+    });
+
+
+    map.addLayer(vectorTrackLines);
+  }
 
 /*  const mapColor = new ol.Map({
     target: 'mapColor-container',
