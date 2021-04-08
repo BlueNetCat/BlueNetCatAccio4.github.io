@@ -1,5 +1,6 @@
-
-
+// https://github.com/cschwarz/wkx
+var Buffer = require('buffer').Buffer;
+var wkx = require('wkx');
 
 export const startMap = () => {
   // EMODNET Bathymetry
@@ -9,6 +10,7 @@ export const startMap = () => {
     //preload: 15,
     source: new ol.source.XYZ ({ // https://openlayers.org/en/latest/examples/xyz.html
             url: 'https://tiles.emodnet-bathymetry.eu/2020/baselayer/web_mercator/{z}/{x}/{y}.png', // https://tiles.emodnet-bathymetry.eu/
+            attributions: "© EMODnet Bathymetry Consortium (Basemap)",
           }),
   });
   // Avoids requesting the same tile constantly
@@ -18,6 +20,17 @@ export const startMap = () => {
 
 
 
+
+
+
+
+
+
+
+  // Attributions
+  const attributions = new ol.control.Attribution({
+     collapsible: true
+   });
 
 
   // Graticule Layer style
@@ -69,6 +82,7 @@ export const startMap = () => {
     source: new ol.source.Vector({
       url: 'data/shoreline_cat.geojson',
       format: new ol.format.GeoJSON(),
+      attributions: "© Instituto Geográfico Nacional (Catalan coastline)",
     }),
     style: catCoastlineStyle
   });
@@ -84,9 +98,13 @@ export const startMap = () => {
     source: new ol.source.Vector({
       url: 'data/coastline_complementary_cat.geojson',
       format: new ol.format.GeoJSON(),
+      attributions: "© European Environment Agency (european coastline)",
     }),
     style: compCoastlineStyle
   });
+
+
+
   // Port labels trawling / arrossegament
   const portsTextStyle = textStyleLat.clone(true);
   portsTextStyle.setTextAlign('right');
@@ -102,7 +120,7 @@ export const startMap = () => {
   const portsLayer = new ol.layer.Vector({
     source: new ol.source.Vector({
       url: 'data/ports.geojson',
-      format: new ol.format.GeoJSON(),
+      format: new ol.format.GeoJSON()
     }),
     //declutter: true,
     style: function(feature) {
@@ -114,21 +132,23 @@ export const startMap = () => {
   });
 
 
+
+
+
   // Mouse position
   const mousePositionControl = new ol.control.MousePosition({
-    coordinateFormat: ol.coordinate.createStringXY(2),
+    coordinateFormat: (coord) => ol.coordinate.format(coord, '{x}º E / {y}º N', 2),//ol.coordinate.createStringXY(2),
     projection: 'EPSG:4326',
-    //className: 'custom-mouse-position', // Text style defined in CSS class outside
-    //undefinedHTML: '&nbsp;', // What to show when mouse is out of map
+    className: 'custom-mouse-position', // Text style defined in CSS class outside
+    target: document.getElementById('mouse-position'), // ALERT IF SEVERAL MAPS EXIST
+    undefinedHTML: '&nbsp;', // What to show when mouse is out of map
   });
-
-
 
   // View
   const mapView = new ol.View({
     center: ol.proj.fromLonLat([3,41.5]),
-    zoom: 7,
-    extent: ol.proj.fromLonLat([-1,39.5]).concat(ol.proj.fromLonLat([7, 43]))//extent: [-2849083.336923, 3025194.250092, 4931105.568733, 6502406.032920]//olProj.get("EPSG:3857").getExtent()
+    zoom: 8,
+    extent: ol.proj.fromLonLat([-2,39.5]).concat(ol.proj.fromLonLat([7, 43.5]))//extent: [-2849083.336923, 3025194.250092, 4931105.568733, 6502406.032920]//olProj.get("EPSG:3857").getExtent()
   });
 
 
@@ -136,23 +156,90 @@ export const startMap = () => {
   // Map
   const map = new ol.Map({
     target: 'map-container',
+    //controls: ol.control.defaults().extend([mousePositionControl]),
+    controls: ol.control.defaults({attributions: false}).extend([attributions, mousePositionControl]),
     layers: [
       bathymetryTileLayer,
       graticuleLayer,
       catCoastlineLayer,
       compCoastlineLayer,
+      portsLayer
     ],
     view: mapView
   });
 
-  const mapColor = new ol.Map({
+
+
+  // Get track lines information
+  // Load and create pie chart
+  const getTrackLines = (address, staticFile) => {
+    console.log("Getting data: " + address +", "+ staticFile +", ");
+
+  	// Try data from server
+  	fetch(address)
+  		.then(r => r.json())
+  		.then(r => {
+        createTrackLines(r);
+			})
+			.catch(e => {
+  			if (staticFile !== undefined){ // Load static file
+  				console.error("Could not fetch from " + address + ". Error: " + e + ". Trying with static file.");
+  				getTrackLines(staticFile, undefined);
+  			} else {
+  				console.error("Could not fetch from " + address + ". Error: " + e + ".");
+  			}
+  		})
+  }
+
+  getTrackLines('http://localhost:8080/trackLines', 'data/trackLines.json');
+
+  const createTrackLines = (data)=>{
+    let geoJSONData = {
+      'type': 'FeatureCollection',
+      'features': []
+    };
+
+    for (let i = 0; i < data.length; i++){
+
+      //https://github.com/cschwarz/wkx
+      //Parsing a node Buffer containing a WKB object
+      if (data[i].geom === null)
+        continue;
+
+      let wkbBuffer = new Buffer(data[i].geom, 'hex');
+      let geometry = wkx.Geometry.parse(wkbBuffer);
+      let gJSON = geometry.toGeoJSON();
+      // Create geoJSON
+      let feature = {
+        'type': 'Feature',
+        'properties': {"id": data[i].id},
+        'geometry': gJSON,
+      }
+
+      geoJSONData.features.push(feature);
+    }
+    //console.log(JSON.stringify(geoJSONData));
+    let vectorTrackLines = new ol.layer.Vector({
+      source: new ol.source.Vector({
+        //features: new ol.format.GeoJSON().readFeatures(geoJSONData), // This is not working??
+        url: 'data/trackLines.geojson',
+        format: new ol.format.GeoJSON(),
+      }),
+      style: catCoastlineStyle,
+    });
+
+
+    map.addLayer(vectorTrackLines);
+  }
+
+/*  const mapColor = new ol.Map({
     target: 'mapColor-container',
     controls: ol.control.defaults().extend([mousePositionControl]),
     layers: [
       portsLayer
     ],
     view: mapView
-  })
+  })*/
 
 
 
@@ -160,7 +247,7 @@ export const startMap = () => {
 
   // Mouse hover/onclick
   // https://openlayers.org/en/latest/examples/select-features.html
-  const selectHover = new ol.interaction.Select({
+/*  const selectHover = new ol.interaction.Select({
     condition: ol.events.condition.pointerMove
   });
   const selectClick = new ol.interaction.Select({
@@ -171,7 +258,7 @@ export const startMap = () => {
   selectHover.on('select', function(e){
     console.log(e.selected[0]);
   })
-
+*/
 
 
 /*
