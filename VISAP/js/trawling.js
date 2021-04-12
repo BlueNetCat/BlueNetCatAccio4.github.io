@@ -45,7 +45,7 @@ function prepDataPortBiomass(inData){
 		let zonaPort = item.ZonaPort;
 		let nomPort = item.NomPort;
 		let nomEspecie = item.NomEspecie;
-		let nomComu = item.NomCatala || item.NomEspecie;
+		let nomComu = item.NomCatala || item.NomComu || item.NomEspecie;
 		let classCaptura = item.ClassificacioCaptura;
 		let biomass = item.Biomassa_Kg_Km2;
 
