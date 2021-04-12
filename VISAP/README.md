@@ -18,17 +18,17 @@ A [pie chart](https://bluenetcataccio4.github.io/VISAP/piechart/) is in developm
   - [x] Ability to select/deselect species
   - [ ] More info about each species when clicked?
   - [ ] Add fishing per stratum (requires new query from J. Ribera)
-- [ ] Query for data organized per season (requires new query)
+- [x] Query for data organized per season (requires new query)
 
 Regarding the map visualization, here is the checklist:
 - [ ] Server
   - [ ] GeoServer for WMS
-  - [ ] Nodejs for static files (csv-like)
-- [ ] Map visualizer
+  - [x] Nodejs for static files (csv-like)
+- [x] Map visualizer
   - [x] Openlayers WMS color filter with SVG
-  - [ ] Tile cache client side
-  - [ ] Visualize tracks of the hauls and clickon events
-  - [ ] Pie charts of the samples collected by each haul when clicked
+  - [x] Tile cache client side
+  - [x] Visualize tracks of the hauls and clickon events
+  - [x] Pie charts of the samples collected by each haul when clicked
 
 A simple dashboard made with bootstrap
  - [x] Basic dashboard
