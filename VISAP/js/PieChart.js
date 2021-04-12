@@ -13,6 +13,7 @@ class PieChart {
 		this.originalData = originalData;
 	}
 
+	// Create the pie chart
 	runApp(htmlContainer,data,d3, title, measure, unit){
 
 		this.currentData = data;
@@ -307,7 +308,40 @@ class PieChart {
 	  htmlContainer.appendChild(svg.node());
 	}
 
+
+
+
+	// Processes a basic sample with maximum categories being Comercial/Resta/Rebuig
+	processSample(inData){
+		const outData = {};
+		outData.children = [];
+
+		// Iterate over all rows
+		for (let i = 0; i<inData.length; i++){
+			let item = inData[i];
+			let nomEspecie = item.NomEspecie;
+			let nomComu = item.NomCatala || item.NomComu || item.NomEspecie;
+			let classCaptura = item.ClassificacioCaptura;
+			let biomass = item.Biomassa_Kg_Km2 || item.Biomassa;
+
+			if (biomass < 0.01) // Do not display items with little biomass
+				continue;
+
+
+			// Create ClassificacioCaptura level if it does not exist
+			if (outData.children.find(child => child.name === classCaptura) === undefined)
+				outData.children.push({"name": classCaptura, "children": [], "species": classCaptura});
+
+			let classIndex = outData.children.findIndex(child => child.name === classCaptura)
+			// Assign biomass value
+			outData.children[classIndex].children.push({"name": nomComu, "value": biomass, "species": nomEspecie});
+		}
+
+		this.originalData = outData;
+		return outData;
+	}
 }
+
 
 
 

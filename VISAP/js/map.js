@@ -1,3 +1,7 @@
+// Popup piechart
+import {PieChart} from './PieChart.js';
+
+
 // https://github.com/cschwarz/wkx
 var Buffer = require('buffer').Buffer;
 var wkx = require('wkx');
@@ -137,8 +141,8 @@ export const startMap = () => {
   // Track lines styles
   const trackLineStyle = new ol.style.Style({
     stroke: new ol.style.Stroke({
-      color: 'rgba(255,0,0,0.4)', // TODO: depening on the feature port
-      width: 5,
+      color: 'rgba(255,0,0,0.6)', // TODO: depening on the feature port
+      width: 2,
     })
   });
   const trackLineHighlightStyle = new ol.style.Style({
@@ -169,6 +173,25 @@ export const startMap = () => {
   });
 
 
+  // Popup info overlay
+  const popupContainerEl = document.getElementById('popup'); // ALERT IF SEVERAL MAPS EXIST
+  const popupContentEl = popupContainerEl.querySelector('#popup-content');
+  const popupCloserEl = popupContainerEl.querySelector('#popup-closer');
+  const popupOverlay = new ol.Overlay({
+    element: popupContainerEl,
+    positioning: 'center-right',
+    autoPan: true,
+    autoPanAnimation: {
+      duration: 250,
+    },
+  });
+  popupOverlay.setPositioning('bottom-left');
+  popupCloserEl.onclick = function () {
+    popupOverlay.setPosition(undefined);
+    popupCloserEl.blur();
+    return false;
+  };
+
 
   // Map
   const map = new ol.Map({
@@ -182,6 +205,7 @@ export const startMap = () => {
       compCoastlineLayer,
       portsLayer
     ],
+    overlays: [popupOverlay],
     view: mapView
   });
 
@@ -191,7 +215,6 @@ export const startMap = () => {
   // Load and create pie chart
   const getTrackLines = (address, staticFile) => {
     console.log("Getting data: " + address +", "+ staticFile +", ");
-
   	// Try data from server
   	fetch(address)
   		.then(r => r.json())
@@ -207,7 +230,6 @@ export const startMap = () => {
   			}
   		})
   }
-
   getTrackLines('http://localhost:8080/trackLines', 'data/trackLines.json');
 
 
@@ -219,7 +241,6 @@ export const startMap = () => {
     };
 
     for (let i = 0; i < data.length; i++){
-
       //https://github.com/cschwarz/wkx
       //Parsing a node Buffer containing a WKB object
       if (data[i].geom === null)
@@ -228,6 +249,7 @@ export const startMap = () => {
       let wkbBuffer = new Buffer(data[i].geom, 'hex');
       let geometry = wkx.Geometry.parse(wkbBuffer);
       let gJSON = geometry.toGeoJSON();
+      delete data[i].geom; // delete geom, as we do not want it in the features
       // Create geoJSON
       let feature = {
         'type': 'Feature',
@@ -245,29 +267,58 @@ export const startMap = () => {
     // Create URL
     let dataStr = JSON.stringify(geoJSONData);
     let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-
+    // Create layer
     let vectorTrackLines = new ol.layer.Vector({
       source: new ol.source.Vector({
-        //features: new ol.format.GeoJSON().readFeatures(geoJSONData), // This is not working??
+        //features: new ol.format.GeoJSON().readFeatures(geoJSONData), // This is not working??? https://openlayers.org/en/latest/examples/geojson.html
         url: dataUri,//'data/trackLines.geojson',
         format: new ol.format.GeoJSON(),
       }),
       style: trackLineStyle,
     });
 
-
+    // Add layer to map
     map.addLayer(vectorTrackLines);
   }
 
   // Add map interaction for trackLine
+  // https://openlayers.org/en/latest/examples/popup.html
+  // https://openlayers.org/en/latest/examples/select-features.html
   const selectInteraction = new ol.interaction.Select();
   selectInteraction.on('select', (e) => {
-    // var results = fetch("http://localhost:8080/haulSpecies?HaulId=" + haulId).then(r => r.json()).then(r => results = r).catch(e => console.log(e))
+    if (e.selected[0] === undefined)
+      return false;
+
     // Show pop-up
-    console.log(e.selected[0].getProperties().info);
+    //console.log(e.selected[0].getProperties().info);
+    let info = e.selected[0].getProperties().info;
+    // Create HTML
+    let htmlInfo = "<ul>";
+    for (let key in info)
+      htmlInfo += "<li>" + key + ": "+ info[key] + "</li>";
+    htmlInfo += "</ul>";
+    popupContentEl.innerHTML = htmlInfo;
+    popupOverlay.setPosition(e.mapBrowserEvent.coordinate);
+
+
+
+    // Get data from server to create pie chart
+    // var results = fetch("http://localhost:8080/haulSpecies?HaulId=" + haulId).then(r => r.json()).then(r => results = r).catch(e => console.log(e))
+    let haulId = info.Id;
+    fetch("http://localhost:8080/haulSpecies?HaulId=" + haulId).then(r => r.json()).then(r => {
+      console.log(r)
+      // Create PieChart
+      let pieChart = new PieChart();
+      let preparedData = pieChart.processSample(r);
+      pieChart.runApp(popupContentEl, preparedData, d3, info.Port + ", " + info.Data, "Biomassa", "kg / km2");
+
+    }).catch(e => console.log(e));
   });
+  // Add interaction to map
   map.addInteraction(selectInteraction);
 
+
+  // Interaction of moveover
   let selectedTrack = null;
   map.on('pointermove', function (e) {
     // Reset style
@@ -284,11 +335,6 @@ export const startMap = () => {
       return true;
     });
 
-    /*if (selected) {
-      status.innerHTML = '&nbsp;Hovering: ' + selected.get('name');
-    } else {
-      status.innerHTML = '&nbsp;';
-    }*/
   });
 
 /*  const mapColor = new ol.Map({
