@@ -134,6 +134,23 @@ export const startMap = () => {
 
 
 
+  // Track lines styles
+  const trackLineStyle = new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: 'rgba(255,0,0,0.4)', // TODO: depening on the feature port
+      width: 5,
+    })
+  });
+  const trackLineHighlightStyle = new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: 'rgba(255,0,0,0.9)', // TODO: depening on the feature port
+      width: 8
+    })
+  });
+
+
+
+
 
   // Mouse position
   const mousePositionControl = new ol.control.MousePosition({
@@ -193,6 +210,8 @@ export const startMap = () => {
 
   getTrackLines('http://localhost:8080/trackLines', 'data/trackLines.json');
 
+
+  // Create trackLines GEOJSON object and add vector layer
   const createTrackLines = (data)=>{
     let geoJSONData = {
       'type': 'FeatureCollection',
@@ -212,25 +231,65 @@ export const startMap = () => {
       // Create geoJSON
       let feature = {
         'type': 'Feature',
-        'properties': {"id": data[i].id},
+        'properties': {
+          "id": data[i].Id,
+          "info": data[i],
+          "featType": "trackLine",
+        },
         'geometry': gJSON,
       }
 
       geoJSONData.features.push(feature);
     }
     //console.log(JSON.stringify(geoJSONData));
+    // Create URL
+    let dataStr = JSON.stringify(geoJSONData);
+    let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+
     let vectorTrackLines = new ol.layer.Vector({
       source: new ol.source.Vector({
         //features: new ol.format.GeoJSON().readFeatures(geoJSONData), // This is not working??
-        url: 'data/trackLines.geojson',
+        url: dataUri,//'data/trackLines.geojson',
         format: new ol.format.GeoJSON(),
       }),
-      style: catCoastlineStyle,
+      style: trackLineStyle,
     });
 
 
     map.addLayer(vectorTrackLines);
   }
+
+  // Add map interaction for trackLine
+  const selectInteraction = new ol.interaction.Select();
+  selectInteraction.on('select', (e) => {
+    // var results = fetch("http://localhost:8080/haulSpecies?HaulId=" + haulId).then(r => r.json()).then(r => results = r).catch(e => console.log(e))
+    // Show pop-up
+    console.log(e.selected[0].getProperties().info);
+  });
+  map.addInteraction(selectInteraction);
+
+  let selectedTrack = null;
+  map.on('pointermove', function (e) {
+    // Reset style
+    if (selectedTrack !== null && selectedTrack.getProperties().featType == "trackLine") {
+      selectedTrack.setStyle(trackLineStyle);
+      selectedTrack = null;
+    }
+    // Highlight style
+    map.forEachFeatureAtPixel(e.pixel, function (f) {
+      if (f.getProperties().featType != "trackLine")
+        return true;
+      selectedTrack = f;
+      f.setStyle(trackLineHighlightStyle);
+      return true;
+    });
+
+    /*if (selected) {
+      status.innerHTML = '&nbsp;Hovering: ' + selected.get('name');
+    } else {
+      status.innerHTML = '&nbsp;';
+    }*/
+  });
 
 /*  const mapColor = new ol.Map({
     target: 'mapColor-container',
