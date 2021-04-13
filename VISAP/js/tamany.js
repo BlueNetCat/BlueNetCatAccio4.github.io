@@ -109,7 +109,6 @@ export const startTamany = () => {
   const removeSerieBtnEl = myChart.container.querySelector('[aria-label="Show -"]');
   addSerieBtnEl.addEventListener('click', () => {
     myChart.addSeries(graph2);
-    addSerieBtnEl.
   });
   removeSerieBtnEl.addEventListener('click', () => {
     if (myChart.series.length > 3)
