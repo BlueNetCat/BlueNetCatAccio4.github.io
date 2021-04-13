@@ -20,6 +20,13 @@ A [pie chart](https://bluenetcataccio4.github.io/VISAP/piechart/) is in developm
   - [ ] Add fishing per stratum (requires new query from J. Ribera)
 - [x] Query for data organized per season (requires new query)
 
+Histogram Sizes
+- [ ] Query talles abundància from J. Ribera (agrupacions per bins)
+- [ ] Filter by time (bottom time scale)
+- [ ] Filter by port (rigth-sided button selector)
+- [ ] Species selector (drop-down menu)
+- [ ] Compare buttons and superposition of histograms
+
 Regarding the map visualization, here is the checklist:
 - [ ] Server
   - [ ] GeoServer for WMS
@@ -29,6 +36,8 @@ Regarding the map visualization, here is the checklist:
   - [x] Tile cache client side
   - [x] Visualize tracks of the hauls and clickon events
   - [x] Pie charts of the samples collected by each haul when clicked
+  - [ ] Pie chart per port (without being affected by time?)
+  - [ ] Temporal slider
 
 A simple dashboard made with bootstrap
  - [x] Basic dashboard
