@@ -10,10 +10,10 @@ export const startTamany = () => {
         description: 'Image description: blabla'
     },
     title: {
-        text: 'Freqüència de talles '
+        text:'' //'Freqüència de talles '
     },
     subtitle: {
-        text: 'per espècie'
+        text: ''//'per espècie'
     },
     legend: {
         align: 'left',
@@ -114,6 +114,11 @@ export const startTamany = () => {
     if (myChart.series.length > 3)
       myChart.series[myChart.series.length-1].remove()
   });
+
+
+  // Create timeSlider
+  var timeSlider = new TimeSliderArcGIS("timeSliderContainer", undefined,undefined,undefined);
+  timeSlider.createTimeSlider();
 
 
 

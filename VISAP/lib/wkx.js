@@ -1,4 +1,4 @@
-require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+require2=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require2=="function"&&require2;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require2=="function"&&require2;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require2,module,exports){
 (function (Buffer){
 module.exports = BinaryReader;
 
@@ -48,8 +48,8 @@ BinaryReader.prototype.readVarInt = function () {
     return result;
 };
 
-}).call(this,require("buffer").Buffer)
-},{"buffer":"buffer"}],2:[function(require,module,exports){
+}).call(this,require2("buffer").Buffer)
+},{"buffer":"buffer"}],2:[function(require2,module,exports){
 (function (Buffer){
 module.exports = BinaryWriter;
 
@@ -117,23 +117,23 @@ BinaryWriter.prototype.ensureSize = function (size) {
     }
 };
 
-}).call(this,require("buffer").Buffer)
-},{"buffer":"buffer"}],3:[function(require,module,exports){
+}).call(this,require2("buffer").Buffer)
+},{"buffer":"buffer"}],3:[function(require2,module,exports){
 (function (Buffer){
 module.exports = Geometry;
 
-var Types = require('./types');
-var Point = require('./point');
-var LineString = require('./linestring');
-var Polygon = require('./polygon');
-var MultiPoint = require('./multipoint');
-var MultiLineString = require('./multilinestring');
-var MultiPolygon = require('./multipolygon');
-var GeometryCollection = require('./geometrycollection');
-var BinaryReader = require('./binaryreader');
-var BinaryWriter = require('./binarywriter');
-var WktParser = require('./wktparser');
-var ZigZag = require('./zigzag.js');
+var Types = require2('./types');
+var Point = require2('./point');
+var LineString = require2('./linestring');
+var Polygon = require2('./polygon');
+var MultiPoint = require2('./multipoint');
+var MultiLineString = require2('./multilinestring');
+var MultiPolygon = require2('./multipolygon');
+var GeometryCollection = require2('./geometrycollection');
+var BinaryReader = require2('./binaryreader');
+var BinaryWriter = require2('./binarywriter');
+var WktParser = require2('./wktparser');
+var ZigZag = require2('./zigzag.js');
 
 function Geometry() {
     this.srid = 0;
@@ -384,15 +384,15 @@ Geometry.prototype.toGeoJSON = function (options) {
     return geoJSON;
 };
 
-}).call(this,require("buffer").Buffer)
-},{"./binaryreader":1,"./binarywriter":2,"./geometrycollection":4,"./linestring":5,"./multilinestring":6,"./multipoint":7,"./multipolygon":8,"./point":9,"./polygon":10,"./types":11,"./wktparser":12,"./zigzag.js":13,"buffer":"buffer"}],4:[function(require,module,exports){
+}).call(this,require2("buffer").Buffer)
+},{"./binaryreader":1,"./binarywriter":2,"./geometrycollection":4,"./linestring":5,"./multilinestring":6,"./multipoint":7,"./multipolygon":8,"./point":9,"./polygon":10,"./types":11,"./wktparser":12,"./zigzag.js":13,"buffer":"buffer"}],4:[function(require2,module,exports){
 module.exports = GeometryCollection;
 
-var util = require('util');
+var util = require2('util');
 
-var Types = require('./types');
-var Geometry = require('./geometry');
-var BinaryWriter = require('./binarywriter');
+var Types = require2('./types');
+var Geometry = require2('./geometry');
+var BinaryWriter = require2('./binarywriter');
 
 function GeometryCollection(geometries) {
     Geometry.call(this);
@@ -522,16 +522,16 @@ GeometryCollection.prototype.toGeoJSON = function (options) {
     return geoJSON;
 };
 
-},{"./binarywriter":2,"./geometry":3,"./types":11,"util":20}],5:[function(require,module,exports){
+},{"./binarywriter":2,"./geometry":3,"./types":11,"util":20}],5:[function(require2,module,exports){
 module.exports = LineString;
 
-var util = require('util');
+var util = require2('util');
 
-var Geometry = require('./geometry');
-var Types = require('./types');
-var Point = require('./point');
-var BinaryWriter = require('./binarywriter');
-var ZigZag = require('./zigzag.js');
+var Geometry = require2('./geometry');
+var Types = require2('./types');
+var Point = require2('./point');
+var BinaryWriter = require2('./binarywriter');
+var ZigZag = require2('./zigzag.js');
 
 function LineString(points) {
     Geometry.call(this);
@@ -675,17 +675,17 @@ LineString.prototype.toGeoJSON = function (options) {
     return geoJSON;
 };
 
-},{"./binarywriter":2,"./geometry":3,"./point":9,"./types":11,"./zigzag.js":13,"util":20}],6:[function(require,module,exports){
+},{"./binarywriter":2,"./geometry":3,"./point":9,"./types":11,"./zigzag.js":13,"util":20}],6:[function(require2,module,exports){
 module.exports = MultiLineString;
 
-var util = require('util');
+var util = require2('util');
 
-var Types = require('./types');
-var Geometry = require('./geometry');
-var Point = require('./point');
-var LineString = require('./linestring');
-var BinaryWriter = require('./binarywriter');
-var ZigZag = require('./zigzag.js');
+var Types = require2('./types');
+var Geometry = require2('./geometry');
+var Point = require2('./point');
+var LineString = require2('./linestring');
+var BinaryWriter = require2('./binarywriter');
+var ZigZag = require2('./zigzag.js');
 
 function MultiLineString(lineStrings) {
     Geometry.call(this);
@@ -845,16 +845,16 @@ MultiLineString.prototype.toGeoJSON = function (options) {
     return geoJSON;
 };
 
-},{"./binarywriter":2,"./geometry":3,"./linestring":5,"./point":9,"./types":11,"./zigzag.js":13,"util":20}],7:[function(require,module,exports){
+},{"./binarywriter":2,"./geometry":3,"./linestring":5,"./point":9,"./types":11,"./zigzag.js":13,"util":20}],7:[function(require2,module,exports){
 module.exports = MultiPoint;
 
-var util = require('util');
+var util = require2('util');
 
-var Types = require('./types');
-var Geometry = require('./geometry');
-var Point = require('./point');
-var BinaryWriter = require('./binarywriter');
-var ZigZag = require('./zigzag');
+var Types = require2('./types');
+var Geometry = require2('./geometry');
+var Point = require2('./point');
+var BinaryWriter = require2('./binarywriter');
+var ZigZag = require2('./zigzag');
 
 function MultiPoint(points) {
     Geometry.call(this);
@@ -993,17 +993,17 @@ MultiPoint.prototype.toGeoJSON = function (options) {
     return geoJSON;
 };
 
-},{"./binarywriter":2,"./geometry":3,"./point":9,"./types":11,"./zigzag":13,"util":20}],8:[function(require,module,exports){
+},{"./binarywriter":2,"./geometry":3,"./point":9,"./types":11,"./zigzag":13,"util":20}],8:[function(require2,module,exports){
 module.exports = MultiPolygon;
 
-var util = require('util');
+var util = require2('util');
 
-var Types = require('./types');
-var Geometry = require('./geometry');
-var Point = require('./point');
-var Polygon = require('./polygon');
-var BinaryWriter = require('./binarywriter');
-var ZigZag = require('./zigzag.js');
+var Types = require2('./types');
+var Geometry = require2('./geometry');
+var Point = require2('./point');
+var Polygon = require2('./polygon');
+var BinaryWriter = require2('./binarywriter');
+var ZigZag = require2('./zigzag.js');
 
 function MultiPolygon(polygons) {
     Geometry.call(this);
@@ -1214,15 +1214,15 @@ MultiPolygon.prototype.toGeoJSON = function (options) {
     return geoJSON;
 };
 
-},{"./binarywriter":2,"./geometry":3,"./point":9,"./polygon":10,"./types":11,"./zigzag.js":13,"util":20}],9:[function(require,module,exports){
+},{"./binarywriter":2,"./geometry":3,"./point":9,"./polygon":10,"./types":11,"./zigzag.js":13,"util":20}],9:[function(require2,module,exports){
 module.exports = Point;
 
-var util = require('util');
+var util = require2('util');
 
-var Geometry = require('./geometry');
-var Types = require('./types');
-var BinaryWriter = require('./binarywriter');
-var ZigZag = require('./zigzag.js');
+var Geometry = require2('./geometry');
+var Types = require2('./types');
+var BinaryWriter = require2('./binarywriter');
+var ZigZag = require2('./zigzag.js');
 
 function Point(x, y) {
     Geometry.call(this);
@@ -1336,16 +1336,16 @@ Point.prototype.toGeoJSON = function (options) {
     return geoJSON;
 };
 
-},{"./binarywriter":2,"./geometry":3,"./types":11,"./zigzag.js":13,"util":20}],10:[function(require,module,exports){
+},{"./binarywriter":2,"./geometry":3,"./types":11,"./zigzag.js":13,"util":20}],10:[function(require2,module,exports){
 module.exports = Polygon;
 
-var util = require('util');
+var util = require2('util');
 
-var Geometry = require('./geometry');
-var Types = require('./types');
-var Point = require('./point');
-var BinaryWriter = require('./binarywriter');
-var ZigZag = require('./zigzag');
+var Geometry = require2('./geometry');
+var Types = require2('./types');
+var Point = require2('./point');
+var BinaryWriter = require2('./binarywriter');
+var ZigZag = require2('./zigzag');
 
 function Polygon(exteriorRing, interiorRings) {
     Geometry.call(this);
@@ -1612,7 +1612,7 @@ Polygon.prototype.toGeoJSON = function (options) {
     return geoJSON;
 };
 
-},{"./binarywriter":2,"./geometry":3,"./point":9,"./types":11,"./zigzag":13,"util":20}],11:[function(require,module,exports){
+},{"./binarywriter":2,"./geometry":3,"./point":9,"./types":11,"./zigzag":13,"util":20}],11:[function(require2,module,exports){
 module.exports = {
     wkt: {
         Point: 'POINT',
@@ -1643,11 +1643,11 @@ module.exports = {
     }
 };
 
-},{}],12:[function(require,module,exports){
+},{}],12:[function(require2,module,exports){
 module.exports = WktParser;
 
-var Types = require('./types');
-var Point = require('./point');
+var Types = require2('./types');
+var Point = require2('./point');
 
 function WktParser(value) {
     this.value = value;
@@ -1739,7 +1739,7 @@ WktParser.prototype.skipWhitespaces = function () {
         this.position++;
 };
 
-},{"./point":9,"./types":11}],13:[function(require,module,exports){
+},{"./point":9,"./types":11}],13:[function(require2,module,exports){
 module.exports = {
     encode: function (value) {
         return (value << 1) ^ (value >> 31);
@@ -1749,7 +1749,7 @@ module.exports = {
     }
 };
 
-},{}],14:[function(require,module,exports){
+},{}],14:[function(require2,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -1875,7 +1875,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],15:[function(require,module,exports){
+},{}],15:[function(require2,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -1961,7 +1961,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],16:[function(require,module,exports){
+},{}],16:[function(require2,module,exports){
 
 /**
  * isArray
@@ -1996,7 +1996,7 @@ module.exports = isArray || function (val) {
   return !! val && '[object Array]' == str.call(val);
 };
 
-},{}],17:[function(require,module,exports){
+},{}],17:[function(require2,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -2021,7 +2021,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],18:[function(require,module,exports){
+},{}],18:[function(require2,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2113,14 +2113,14 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],19:[function(require,module,exports){
+},{}],19:[function(require2,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],20:[function(require,module,exports){
+},{}],20:[function(require2,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -2647,7 +2647,7 @@ function isPrimitive(arg) {
 }
 exports.isPrimitive = isPrimitive;
 
-exports.isBuffer = require('./support/isBuffer');
+exports.isBuffer = require2('./support/isBuffer');
 
 function objectToString(o) {
   return Object.prototype.toString.call(o);
@@ -2691,7 +2691,7 @@ exports.log = function() {
  *     prototype.
  * @param {function} superCtor Constructor function to inherit prototype from.
  */
-exports.inherits = require('inherits');
+exports.inherits = require2('inherits');
 
 exports._extend = function(origin, add) {
   // Don't do anything if add isn't an object
@@ -2709,8 +2709,8 @@ function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":19,"_process":18,"inherits":17}],"buffer":[function(require,module,exports){
+}).call(this,require2('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./support/isBuffer":19,"_process":18,"inherits":17}],"buffer":[function(require2,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -2718,9 +2718,9 @@ function hasOwnProperty(obj, prop) {
  * @license  MIT
  */
 
-var base64 = require('base64-js')
-var ieee754 = require('ieee754')
-var isArray = require('is-array')
+var base64 = require2('base64-js')
+var ieee754 = require2('ieee754')
+var isArray = require2('is-array')
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -4232,14 +4232,14 @@ function blitBuffer (src, dst, offset, length) {
   return i
 }
 
-},{"base64-js":14,"ieee754":15,"is-array":16}],"wkx":[function(require,module,exports){
-exports.Types = require('./types');
-exports.Geometry = require('./geometry');
-exports.Point = require('./point');
-exports.LineString = require('./linestring');
-exports.Polygon = require('./polygon');
-exports.MultiPoint = require('./multipoint');
-exports.MultiLineString = require('./multilinestring');
-exports.MultiPolygon = require('./multipolygon');
-exports.GeometryCollection = require('./geometrycollection');
+},{"base64-js":14,"ieee754":15,"is-array":16}],"wkx":[function(require2,module,exports){
+exports.Types = require2('./types');
+exports.Geometry = require2('./geometry');
+exports.Point = require2('./point');
+exports.LineString = require2('./linestring');
+exports.Polygon = require2('./polygon');
+exports.MultiPoint = require2('./multipoint');
+exports.MultiLineString = require2('./multilinestring');
+exports.MultiPolygon = require2('./multipolygon');
+exports.GeometryCollection = require2('./geometrycollection');
 },{"./geometry":3,"./geometrycollection":4,"./linestring":5,"./multilinestring":6,"./multipoint":7,"./multipolygon":8,"./point":9,"./polygon":10,"./types":11}]},{},["wkx"]);
