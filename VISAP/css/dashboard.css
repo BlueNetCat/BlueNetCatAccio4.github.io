@@ -79,6 +79,72 @@ body {
  }
 
 /*
+ * Tamany css chart
+ */
+
+ .highcharts-figure, .highcharts-data-table table {
+    min-width: 320px;
+    max-width: 90%;
+    margin: 1em auto;
+ }
+
+ #tamanyContainer {
+     height: 450px;
+ }
+
+ .highcharts-data-table table {
+ 	border-collapse: collapse;
+ 	border: 1px solid #EBEBEB;
+ 	margin: 10px auto;
+ 	text-align: center;
+ 	width: 100%;
+ 	max-width: 500px;
+ }
+ .highcharts-data-table caption {
+     padding: 1em 0;
+     font-size: 1.2em;
+     color: #555;
+ }
+ .highcharts-data-table th {
+ 	font-weight: 600;
+     padding: 0.5em;
+ }
+ .highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+     padding: 0.5em;
+ }
+ .highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+     background: #f8f8f8;
+ }
+ .highcharts-data-table tr:hover {
+     background: #f1f7ff;
+ }
+
+ /*
+  * Timeslider ArcGIS
+  */
+
+  .timeSlider {
+    bottom: -68vh;
+    max-width: 400px;
+    position: relative;
+    left: calc(100% - 400px);
+  }
+   /* Widget custom colors */
+  .esri-time-slider__time-extent-date {
+    color: #1b7db8;
+  }
+  .esri-time-slider__mode--time-window .esri-slider__segment-1 {
+    background-color: #3fa8e7;
+  }
+  .esri-slider__thumb {
+    background-color: #e8f6ff;
+    border: 2px solid #4292c2;
+  }
+  .esri-time-slider__animation {/* Hide Play button*/
+    visibility: hidden;
+  }
+
+/*
  * Sidebar
  */
 

@@ -3,8 +3,9 @@ import {PieChart} from './PieChart.js';
 
 
 // https://github.com/cschwarz/wkx
-var Buffer = require('buffer').Buffer;
-var wkx = require('wkx');
+// There was a redifinition of require, which caused errors with ArcGIS widget
+var Buffer = require2('buffer').Buffer;
+var wkx = require2('wkx');
 
 export const startMap = () => {
   // EMODNET Bathymetry
@@ -240,11 +241,25 @@ export const startMap = () => {
       'features': []
     };
 
+    // For the timeSlider and selecting track lines
+    let startDate = '2020-1-1';
+    let endDate = '2020-12-31';
     for (let i = 0; i < data.length; i++){
       //https://github.com/cschwarz/wkx
       //Parsing a node Buffer containing a WKB object
       if (data[i].geom === null)
         continue;
+
+      // Only data until end of 2020
+      if (data[i].Data.split('-')[0] > "2020")
+        continue;
+      // Find earliest date
+      if (startDate.split('-')[0] >= data[i].Data.split('-')[0]) {
+        if (startDate.split('-')[1] >= data[i].Data.split('-')[1]) {
+          if (startDate.split('-')[2] > data[i].Data.split('-')[2]) {
+            startDate = data[i].Data;
+      }}}
+
 
       let wkbBuffer = new Buffer(data[i].geom, 'hex');
       let geometry = wkx.Geometry.parse(wkbBuffer);
@@ -263,7 +278,7 @@ export const startMap = () => {
 
       geoJSONData.features.push(feature);
     }
-    //console.log(JSON.stringify(geoJSONData));
+    //console.log(JSON.stringify(geoJSONData)); // To write static file
     // Create URL
     let dataStr = JSON.stringify(geoJSONData);
     let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
@@ -276,6 +291,14 @@ export const startMap = () => {
       }),
       style: trackLineStyle,
     });
+
+    // Remove 1 to month! https://www.w3schools.com/js/js_dates.asp
+    let sDate = startDate.split('-');
+    let eDate = endDate.split('-');
+    sDate[1] -= 1;
+    eDate[1] -= 1;
+    var timeSlider = new TimeSliderArcGIS("trackLinesTimeslider", new Date(...sDate), new Date(...eDate),undefined);
+    timeSlider.createTimeSlider();
 
     // Add layer to map
     map.addLayer(vectorTrackLines);
@@ -306,7 +329,7 @@ export const startMap = () => {
     // var results = fetch("http://localhost:8080/haulSpecies?HaulId=" + haulId).then(r => r.json()).then(r => results = r).catch(e => console.log(e))
     let haulId = info.Id;
     fetch("http://localhost:8080/haulSpecies?HaulId=" + haulId).then(r => r.json()).then(r => {
-      console.log(r)
+      //console.log(r)
       // Create PieChart
       let pieChart = new PieChart();
       let preparedData = pieChart.processSample(r);

@@ -36,8 +36,6 @@
       }
     </style>
 
-    <!-- Custom styles for this template -->
-    <link href="css/dashboard.css" rel="stylesheet">
 
   </head>
   <body>
@@ -92,9 +90,9 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" onclick="clickSidebarMenu(event)" href="#">
+            <a class="nav-link" w3-include-html="tamany.html" onclick="clickSidebarMenu(event)" href="#">
               <span data-feather="bar-chart-2"></span>
-              Tamany
+              Freqüència de talles
             </a>
           </li>
           <li class="nav-item">
@@ -160,6 +158,18 @@
       <script src="data/palette.json"></script>
       <!-- WKB converter https://github.com/cschwarz/wkx -->
       <script src="lib/wkx.js"></script>
+      <!-- Highcharts https://www.highcharts.com/demo/area-basic-->
+      <script src="https://code.highcharts.com/highcharts.js"></script>
+      <script src="https://code.highcharts.com/modules/exporting.js"></script>
+      <script src="https://code.highcharts.com/modules/export-data.js"></script>
+      <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+      <!-- Timeslider //https://developers.arcgis.com/javascript/latest/sample-code/timeslider-filter/ -->
+      <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light-blue/main.css" />
+      <script src="https://js.arcgis.com/4.18/"></script>
+      <script src="./js/TimeSliderArcGIS.js"></script>
+
+      <!-- Custom styles for this template -->
+      <link href="css/dashboard.css" rel="stylesheet">
 
       <script type="module">
 
@@ -167,6 +177,7 @@
       import startTrawling from './js/trawling.js';
       import startDashboard from './js/dashboard.js';
       import startMap from './js/map.js';
+      import startTamany from './js/tamany.js';
 
         // TESTING
         // Testing inner html
@@ -186,6 +197,14 @@
             // Reload missing icons from new HTML
             feather.replace();
           });
+          /*fetch("html/" + "tamany.html")
+            .then(response => response.text())
+            .then(text => {
+              document.getElementsByTagName("main")[0].innerHTML = text;
+              startTamany();
+              // Reload missing icons from new HTML
+              feather.replace();
+            });*/
 
 
 
@@ -214,6 +233,9 @@
                   break;
                 case "map.html":
                   startMap();
+                  break;
+                case "tamany.html":
+                  startTamany();
                   break;
               }
               // Reload missing icons from new HTML
