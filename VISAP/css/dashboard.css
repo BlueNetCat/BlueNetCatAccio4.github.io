@@ -119,6 +119,21 @@ body {
      background: #f1f7ff;
  }
 
+/*
+ * Tamany selector especies
+ * https://stackoverflow.com/questions/12332528/how-to-display-list-items-as-columns
+ */
+
+  #limheight {
+    -webkit-column-count: 5;
+       -moz-column-count: 5;
+            column-count: 5; /*3 in those rules is just placeholder -- can be anything*/
+  }
+
+  #limheight li {
+    display: inline-block; /*necessary*/
+  }
+
  /*
   * Timeslider ArcGIS
   */
