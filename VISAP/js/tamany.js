@@ -102,7 +102,7 @@ const createChart = (serieSpecies) => {
         allowDecimals: false,
         labels: {
             formatter: function () {
-                return this.value + ' cm'; // clean, unformatted number for year
+                return this.value/10 + ' cm'; // clean, unformatted number for year
             }
         },
         /*accessibility: {
@@ -111,7 +111,7 @@ const createChart = (serieSpecies) => {
     },
     yAxis: {
         title: {
-            text: 'Nombre d\'individus'//'Nuclear weapon states'
+            text: 'Abundància (Número d\'individus per km2)'//'Nuclear weapon states'
         },
         labels: {
             formatter: function () {
@@ -120,7 +120,10 @@ const createChart = (serieSpecies) => {
         }
     },
     tooltip: {
-        pointFormat: 'Hi ha {point.y} que fan {point.x} cm de l\'espècie {series.name}'//'{series.name} had stockpiled <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
+        //pointFormat: 'Hi ha {point.y} que fan {point.x} cm de l\'espècie {series.name}'//'{series.name} had stockpiled <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
+        formatter: function() {
+          return 'Abundància: ' + parseInt(this.y) + ' individus de ' + this.x/10 + " cm per km2."//  + 'individus de ' + this.x + ' cm d\'un total de '  + ' ' + series.name;
+        }
     },
     loading: {
       hideDuration: 500,
@@ -229,11 +232,13 @@ const getDataForSpecieX = (inData, inSpecies) => {
   let categories = getUnique(dataSelSpecies, "Talla"); // Important to create X axis
   categories.forEach((cat, index) => categories[index] = parseFloat(cat)); // Transform into numbers
   categories.sort((a, b) => a - b); // Sort
-  // Number of individuals per size
-  let numInd = getNumIndPerCategories(dataSelSpecies, categories);
+  // Abundance per size
+  let abundance = getAbundancePerCategories(dataSelSpecies, categories);
+  //let numInd = getNumIndPerCategories(dataSelSpecies, categories); // How to include number of individuals?
   // Prepare for highcharts
   let dataHC = [];
-  categories.forEach((catItem, index) => dataHC[index] = [catItem, numInd[index]]); // Make an array as [categoryA,numIndInA], [categoryB,numIndInB],...
+  //categories.forEach((catItem, index) => dataHC[index] = [catItem, abundance[index]]); // Make an array as [categoryA,abundanceInA], [categoryB,abundanceInB],...
+  categories.forEach((catItem, index) => dataHC[index] = [catItem, abundance[index]]); // Make an array as [categoryA,abundanceInA], [categoryB,abundanceInB],...
   // https://www.highcharts.com/demo/spline-irregular-time
 
   // Add common name if exists
@@ -276,7 +281,7 @@ const selectData = (inData, especie) => {
 
 
 
-// Get sizes given the categories
+// Get num individuals given the categories
 const getNumIndPerCategories = (inData, categories) => {
   let numInd = [];
   inData.forEach(item => {
@@ -286,6 +291,20 @@ const getNumIndPerCategories = (inData, categories) => {
   })
   return numInd;
 }
+
+
+// Get abundance given the categories
+const getAbundancePerCategories = (inData, categories) => {
+  let numInd = [];
+  inData.forEach(item => {
+    // Find the category index
+    let catIndex = categories.findIndex((catItem) => catItem == item.Talla);
+    numInd[catIndex] = numInd[catIndex] === undefined ? parseFloat(item.Abundancia_NIndividus_Km2) : numInd[catIndex] + parseFloat(item.Abundancia_NIndividus_Km2);
+  })
+  return numInd;
+}
+
+
 
 
 
