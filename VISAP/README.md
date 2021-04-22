@@ -21,11 +21,11 @@ A [pie chart](https://bluenetcataccio4.github.io/VISAP/piechart/) is in developm
 - [x] Query for data organized per season (requires new query)
 
 Histogram Sizes
-- [ ] Query talles abundància from J. Ribera (agrupacions per bins)
+- [x] Query talles abundància from J. Ribera (agrupacions per bins)
 - [ ] Filter by time (bottom time scale)
 - [ ] Filter by port (rigth-sided button selector)
-- [ ] Species selector (drop-down menu)
-- [ ] Compare buttons and superposition of histograms
+- [x] Species selector (drop-down menu)
+- [x] Compare buttons and superposition of histograms
 
 Regarding the map visualization, here is the checklist:
 - [ ] Server
