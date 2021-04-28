@@ -2,15 +2,20 @@
 A [temporary dashboard](https://bluenetcataccio4.github.io/VISAP/) has been created to show the visualizations.
 ## Information to visualize
 ### Pesca d'arrossegament (Trawling)
+- Catches (captures): a zoomable pie chart, which would integrate several pie charts from the report into one. The pie chart could be divided by area/harbour (Roses, l'Escala, Palamós...) or by seasons (Autumn, Winter, Spring...)
+
+- Density (fishing effort, catches, economic performance): As shown in the report. This could be served with a WMS from a GeoServer. We have to agree on the temporal resolution (and projection).
+
+- Individual sampled boats (mostreig): As shown in the report. The routes could be served with a GeoJSON. Other info could pop up, like the date and a pie chart of the catches of that boat on that sampling day.
+
 #### Checkpoints
-A [pie chart](https://bluenetcataccio4.github.io/VISAP/piechart/) is in development. Checklist of milestones:
 - [x] Server
   - [x] Nodejs server with queries to the database and REST API for web client requests
   - [x] Backup method for providing (static) data if server and database are down
   - [ ] Automatically upload of static data to github's visualizer repository
   - [ ] Install in production server
-  - [ ] Set up with a daemon
-- [x] Basic pie chart visualization of biomass per port
+  - [ ] Set up with a pm2 (restarts server if the computer or server is shutdown)
+- [x] Basic pie chart visualization of biomass per port with D3
   - [x] Preprocess data from server to be used in visualizer
   - [x] Discuss color palette (custom or as in report)
   - [x] Species with small biomass in "Altres" group
@@ -42,31 +47,20 @@ Regarding the map visualization, here is the checklist:
 A simple dashboard made with bootstrap
  - [x] Basic dashboard
 
-#### Catches Pie charts
-Catches (Captures) are shown as a [pie chart](https://bluenetcataccio4.github.io/VISAP/test/trawling_test.html).
-##### Options available in the given report
-These options will probably require new queries to the server/BBDD. For example, the aforementioned pie chart is divided in areas/harbours.
-- Per area/harbour (Roses, l'Escala, Palamós...)
-- Per season (Autumn, Winter, Spring...)
-
-##### Other thoughts
-This pie chart could be used when checking at individual sampling of trawling (mostreig) on the map.
-
-#### Routes Map
-A map where the routes of the fishing vessels could be checked, as in the given report.
-
-##### Density (fishing effort, catches, economic performance)
-As shown in the report. This could be served with a WMS from a GeoServer. We have to agree on the temporal resolution (and projection).
-
-##### Individual sampled boats (mostreig)
-As shown in the report. The routes could be served with a GeoJSON. Other info could pop up, like the date and a pie chart of the catches of that boat on that sampling day.
-
-
 ### Pesca d'encerclament
 
 ### Pesca sonsera
 
 ### Pesca de pop roquer
+
+### Length frequency (freqüència de talles)
+- Show the length frequency of each species, as in the report.
+#### Checkpoints
+- [x] Basic chart with highcharts
+ - [x] Select and search species
+ - [ ] Filter by depth
+ - [ ] Filter by season
+ - [ ] Filter by port?
 
 ### Other info
 - Seabeds, EMODnet provides useful information (https://www.emodnet-seabedhabitats.eu/access-data/launch-map-viewer/, https://www.emodnet-geology.eu/services/, https://www.emodnet-seabedhabitats.eu/access-data/web-services/)
