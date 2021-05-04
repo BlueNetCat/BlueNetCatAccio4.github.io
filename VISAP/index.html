@@ -59,36 +59,18 @@
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
-          <!--li class="nav-item">
+          <li class="nav-item">
             <a class="nav-link" w3-include-html="dashboard.html" onclick="clickSidebarMenu(event)" aria-current="page" href="#">
               <span data-feather="home"></span>
-              Dashboard
+              Inici
             </a>
-          </li-->
+          </li>
           <li class="nav-item">
             <a class="nav-link active" w3-include-html="trawling.html" onclick="clickSidebarMenu(event)" href="#">
               <span data-feather="anchor"></span>
               Pesca d'arrosegament
             </a>
           </li>
-          <!--li class="nav-item">
-            <a class="nav-link" onclick="clickSidebarMenu(event)" href="#">
-              <span data-feather="circle"></span>
-              Pesca d'encerclament
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" onclick="clickSidebarMenu(event)" href="#">
-              <span data-feather="target"></span>
-              Pesca sonsera
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" onclick="clickSidebarMenu(event)" href="#">
-              <span data-feather="minimize"></span>
-              Pesca de pop roquer
-            </a>
-          </li-->
           <li class="nav-item">
             <a class="nav-link" w3-include-html="tamany.html" onclick="clickSidebarMenu(event)" href="#">
               <span data-feather="bar-chart-2"></span>
@@ -98,11 +80,48 @@
           <li class="nav-item">
             <a class="nav-link" w3-include-html="map.html" onclick="clickSidebarMenu(event)" href="#">
               <span data-feather="map-pin"></span>
-              Mapa
+              Mapa de mostreig
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled"  onclick="clickSidebarMenu(event)" href="#" style="color: gray">
+              <span data-feather="circle"></span>
+              Pesca d'encerclament
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" onclick="clickSidebarMenu(event)" href="#" style="color: gray">
+              <span data-feather="target"></span>
+              Pesca sonsera
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" onclick="clickSidebarMenu(event)" href="#" style="color: gray">
+              <span data-feather="minimize"></span>
+              Pesca de pop roquer
             </a>
           </li>
         </ul>
-
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Informes anuals</span>
+          <!--a class="link-secondary" href="#" aria-label="Add a new report">
+            <span data-feather="plus-circle"></span>
+          </a-->
+        </h6>
+        <ul class="nav flex-column mb-2">
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Informe 2020
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Informe 2019
+            </a>
+          </li>
+        </ul>
         <!--h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
           <span>Saved reports</span>
           <a class="link-secondary" href="#" aria-label="Add a new report">
@@ -189,14 +208,14 @@
             // Reload missing icons from new HTML
             feather.replace();
           });*/
-        fetch("html/" + "trawling.html")
+        /*fetch("html/" + "trawling.html")
           .then(response => response.text())
           .then(text => {
             document.getElementsByTagName("main")[0].innerHTML = text;
             startTrawling("data/pesca_arrossegament_port_biomassa.json");
             // Reload missing icons from new HTML
             feather.replace();
-          });
+          });*/
           /*fetch("html/" + "tamany.html")
             .then(response => response.text())
             .then(text => {
@@ -205,6 +224,14 @@
               // Reload missing icons from new HTML
               feather.replace();
             });*/
+            fetch("html/" + "dashboard.html")
+              .then(response => response.text())
+              .then(text => {
+                document.getElementsByTagName("main")[0].innerHTML = text;
+                //startDashboard();
+                // Reload missing icons from new HTML
+                feather.replace();
+              });
 
 
 
