@@ -328,15 +328,29 @@ export const startMap = () => {
     // Get data from server to create pie chart
     // var results = fetch("http://localhost:8080/haulSpecies?HaulId=" + haulId).then(r => r.json()).then(r => results = r).catch(e => console.log(e))
     let haulId = info.Id;
-    fetch("http://localhost:8080/haulSpecies?HaulId=" + haulId).then(r => r.json()).then(r => {
+    getHaul("http://localhost:8080/haulSpecies?HaulId=" + haulId, 'data/hauls/' + haulId + '.json', info)
+  });
+
+
+  // Fetch haul data from server of static file
+  const getHaul = (address, staticFile, info) => {
+    fetch(address).then(r => r.json()).then(r => {
       //console.log(r)
       // Create PieChart
       let pieChart = new PieChart();
       let preparedData = pieChart.processSample(r);
       pieChart.runApp(popupContentEl, preparedData, d3, info.Port + ", " + info.Data, "Biomassa", "kg / km2");
 
-    }).catch(e => console.log(e));
-  });
+    }).catch(e => {
+      if (staticFile !== undefined){ // Load static file
+        console.error("Could not fetch from " + address + ". Error: " + e + ".");
+        getHaul(staticFile, undefined, info);
+      } else {
+        console.error("Could not fetch from " + address + ". Error: " + e + ".");
+      }
+    })
+  }
+
   // Add interaction to map
   map.addInteraction(selectInteraction);
 
