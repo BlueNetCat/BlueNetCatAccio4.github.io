@@ -72,6 +72,7 @@ class PieHTMLSection {
 			.catch(e => {
   			if (staticFile !== undefined){ // Load static file
   				console.error("Could not fetch from " + address + ". Error: " + e + ". Trying with static file.");
+					window.serverConnection = false;
   				this.createPieChart(staticFile, undefined, callbackPrepareData, title, measure, unit);
   			} else {
   				console.error("Could not fetch from " + address + ". Error: " + e + ".");
