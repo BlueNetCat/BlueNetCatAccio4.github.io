@@ -5,11 +5,14 @@ let myChart = undefined;
 let dataFromServer = undefined;
 let count = 0;
 
+
 export const startTamany = () => {
 
   // Load information
-  getSizes('http://localhost:8080/sizes', 'data/sizes.json', createGraphInterface);
-
+  if (window.serverConnection)
+    getSizes('http://localhost:8080/sizes', 'data/sizes.json', createGraphInterface);
+  else
+    getSizes('data/sizes.json', undefined, createGraphInterface);
 }
 
 // Processes the data and creates the chart
@@ -215,6 +218,7 @@ const getSizes = async (address, staticUrl, callbackPrepareData) => {
     .catch(e => {
       if (staticUrl !== undefined){ // Load static file
         console.error("Could not fetch from " + address + ". Error: " + e + ". Trying with static file.");
+        window.serverConnection = false;
         getSizes(staticUrl, undefined, callbackPrepareData);
       } else {
         console.error("Could not fetch from " + address + ". Error: " + e + ".");

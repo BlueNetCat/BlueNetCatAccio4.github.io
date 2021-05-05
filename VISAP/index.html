@@ -103,22 +103,22 @@
           </li>
         </ul>
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-          <span>Informes anuals</span>
+          <span>Altres enllaços</span>
           <!--a class="link-secondary" href="#" aria-label="Add a new report">
             <span data-feather="plus-circle"></span>
           </a-->
         </h6>
         <ul class="nav flex-column mb-2">
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" target="_blank" rel="noreferrer noopener" href="http://agricultura.gencat.cat/ca/departament/dar_plans_programes_sectorials/politica-maritima/icatmar/">
               <span data-feather="file-text"></span>
-              Informe 2020
+              ICATMAR
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" target="_blank" rel="noreferrer noopener" href="http://agricultura.gencat.cat/web/.content/08-pesca/politica-maritima/enllacos-documents/fitxers-binaris/EstatPesqueresCatalunya_2019_Part1_ICATMAR_090720.pdf">
               <span data-feather="file-text"></span>
-              Informe 2019
+              Informe Pesca 2019
             </a>
           </li>
         </ul>
@@ -198,41 +198,43 @@
       import startMap from './js/map.js';
       import startTamany from './js/tamany.js';
 
-        // TESTING
-        // Testing inner html
-      /*  fetch("html/" + "map.html")
-          .then(response => response.text())
-          .then(text => {
-            document.getElementsByTagName("main")[0].innerHTML = text;
-            startMap();
-            // Reload missing icons from new HTML
-            feather.replace();
-          });*/
-        /*fetch("html/" + "trawling.html")
-          .then(response => response.text())
-          .then(text => {
-            document.getElementsByTagName("main")[0].innerHTML = text;
-            startTrawling("data/pesca_arrossegament_port_biomassa.json");
-            // Reload missing icons from new HTML
-            feather.replace();
-          });*/
-          /*fetch("html/" + "tamany.html")
-            .then(response => response.text())
-            .then(text => {
-              document.getElementsByTagName("main")[0].innerHTML = text;
-              startTamany();
-              // Reload missing icons from new HTML
-              feather.replace();
-            });*/
-            fetch("html/" + "dashboard.html")
-              .then(response => response.text())
-              .then(text => {
-                document.getElementsByTagName("main")[0].innerHTML = text;
-                //startDashboard();
-                // Reload missing icons from new HTML
-                feather.replace();
-              });
+      // Server connection to fetch directly static files if server is off
+      window.serverConnection = true; // Assume that server is on
 
+      // TESTING
+      // Testing inner html
+  /*  fetch("html/" + "map.html")
+      .then(response => response.text())
+      .then(text => {
+        document.getElementsByTagName("main")[0].innerHTML = text;
+        startMap();
+        // Reload missing icons from new HTML
+        feather.replace();
+      });*/
+    /*fetch("html/" + "trawling.html")
+      .then(response => response.text())
+      .then(text => {
+        document.getElementsByTagName("main")[0].innerHTML = text;
+        startTrawling();
+        // Reload missing icons from new HTML
+        feather.replace();
+      });*/
+      /*fetch("html/" + "tamany.html")
+        .then(response => response.text())
+        .then(text => {
+          document.getElementsByTagName("main")[0].innerHTML = text;
+          startTamany();
+          // Reload missing icons from new HTML
+          feather.replace();
+        });*/
+      fetch("html/" + "dashboard.html")
+        .then(response => response.text())
+        .then(text => {
+          document.getElementsByTagName("main")[0].innerHTML = text;
+          //startDashboard();
+          // Reload missing icons from new HTML
+          feather.replace();
+        });
 
 
         // When clicking a sidebarMenu
@@ -253,7 +255,7 @@
               // Depening on the HTML, start one or the other js
               switch (htmlFileToLoad){
                 case "trawling.html":
-                  startTrawling("data/pesca_arrossegament_biomassa.json");
+                  startTrawling();
                   break;
                 case "dashboard.html":
                   startDashboard();

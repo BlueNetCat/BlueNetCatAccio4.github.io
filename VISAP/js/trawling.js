@@ -3,10 +3,9 @@
 // Import modules
 import {PieHTMLSection} from './PieHTMLSection.js';
 
-// TODO:  MAKE EACH BYYEAR BYPORT CLASSES?
 
 // Init function
-export const startTrawling =  (staticDataFile) => {
+export const startTrawling =  () => {
 
   // Create PieChart Section
   // Get title and pie divs
@@ -15,8 +14,10 @@ export const startTrawling =  (staticDataFile) => {
   let title = "Captura en biomassa per port";
   const biomassPortSection = new PieHTMLSection(htmlTitleEl, htmlPieSectionEl, title);
   // Fetch data and create piechart
-  biomassPortSection.createPieChart('data/pesca_arrossegament_port_biomassa.json', undefined, prepDataPortBiomass, 'Pesca per ports', 'Biomassa', 'kg / km2'); // (address, staticFile, callbackPrepareData, title, measure, unit)
-
+  if (window.serverConnection)
+    biomassPortSection.createPieChart('http://localhost:8080/portBiomass', 'data/pesca_arrossegament_port_biomassa.json', prepDataPortBiomass, 'Pesca per ports', 'Biomassa', 'kg / km2'); // (address, staticFile, callbackPrepareData, title, measure, unit)
+  else
+    biomassPortSection.createPieChart('data/pesca_arrossegament_port_biomassa.json', undefined, prepDataPortBiomass, 'Pesca per ports', 'Biomassa', 'kg / km2'); // (address, staticFile, callbackPrepareData, title, measure, unit)
 
   // TODO: create prep data for year-season
   // Create PieChart Section
@@ -26,7 +27,10 @@ export const startTrawling =  (staticDataFile) => {
   title = "Captura en biomassa per estació";
   const biomassYearSection = new PieHTMLSection(htmlTitleEl, htmlPieSectionEl, title);
   // Fetch data and create piechart
-  biomassYearSection.createPieChart('data/pesca_arrossegament_any_biomassa.json', undefined, prepDataYearBiomass, 'Pesca per estació', 'Biomassa', 'kg / km2'); // (address, staticFile, callbackPrepareData, title, measure, unit)
+  if (window.serverConnection)
+    biomassYearSection.createPieChart('http://localhost:8080/seasonBiomass', 'data/pesca_arrossegament_any_biomassa.json', prepDataYearBiomass, 'Pesca per estació', 'Biomassa', 'kg / km2'); // (address, staticFile, callbackPrepareData, title, measure, unit)
+  else
+    biomassYearSection.createPieChart('data/pesca_arrossegament_any_biomassa.json', undefined, prepDataYearBiomass, 'Pesca per estació', 'Biomassa', 'kg / km2'); // (address, staticFile, callbackPrepareData, title, measure, unit)
 
 }
 

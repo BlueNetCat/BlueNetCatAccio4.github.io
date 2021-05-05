@@ -170,7 +170,7 @@ export const startMap = () => {
   const mapView = new ol.View({
     center: ol.proj.fromLonLat([3,41.5]),
     zoom: 8,
-    extent: ol.proj.fromLonLat([-2,39.5]).concat(ol.proj.fromLonLat([7, 43.5]))//extent: [-2849083.336923, 3025194.250092, 4931105.568733, 6502406.032920]//olProj.get("EPSG:3857").getExtent()
+    extent: ol.proj.fromLonLat([-2,39.5]).concat(ol.proj.fromLonLat([7.5, 46]))//extent: [-2849083.336923, 3025194.250092, 4931105.568733, 6502406.032920]//olProj.get("EPSG:3857").getExtent()
   });
 
 
@@ -225,13 +225,18 @@ export const startMap = () => {
 			.catch(e => {
   			if (staticFile !== undefined){ // Load static file
   				console.error("Could not fetch from " + address + ". Error: " + e + ". Trying with static file.");
+          window.serverConnection = false;
   				getTrackLines(staticFile, undefined);
   			} else {
   				console.error("Could not fetch from " + address + ". Error: " + e + ".");
   			}
   		})
   }
-  getTrackLines('http://localhost:8080/trackLines', 'data/trackLines.json');
+  if (window.serverConnection)
+    getTrackLines('http://localhost:8080/trackLines', 'data/trackLines.json');
+  else
+    getTrackLines('data/trackLines.json', undefined);
+
 
 
   // Create trackLines GEOJSON object and add vector layer
@@ -328,7 +333,10 @@ export const startMap = () => {
     // Get data from server to create pie chart
     // var results = fetch("http://localhost:8080/haulSpecies?HaulId=" + haulId).then(r => r.json()).then(r => results = r).catch(e => console.log(e))
     let haulId = info.Id;
-    getHaul("http://localhost:8080/haulSpecies?HaulId=" + haulId, 'data/hauls/' + haulId + '.json', info)
+    if (window.serverConnection)
+      getHaul("http://localhost:8080/haulSpecies?HaulId=" + haulId, 'data/hauls/' + haulId + '.json', info);
+    else
+      getHaul('data/hauls/' + haulId + '.json', undefined, info);
   });
 
 
@@ -344,6 +352,7 @@ export const startMap = () => {
     }).catch(e => {
       if (staticFile !== undefined){ // Load static file
         console.error("Could not fetch from " + address + ". Error: " + e + ".");
+        window.serverConnection = false;
         getHaul(staticFile, undefined, info);
       } else {
         console.error("Could not fetch from " + address + ". Error: " + e + ".");
