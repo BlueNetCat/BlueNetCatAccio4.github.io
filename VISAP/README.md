@@ -64,3 +64,8 @@ A simple dashboard made with bootstrap
 
 ### Other info
 - Seabeds, EMODnet provides useful information (https://www.emodnet-seabedhabitats.eu/access-data/launch-map-viewer/, https://www.emodnet-geology.eu/services/, https://www.emodnet-seabedhabitats.eu/access-data/web-services/)
+
+### Similar projects
+- The International Bottom Trawl Survey Working Group (IBTSWG) https://gis.ices.dk/sf/index.html?widget=visa&assessmentKey=13960
+- Irish GroundFish Survey (IGFS) https://shiny.marine.ie/igfs/
+- Bird migration ebird https://ebird.org/science/status-and-trends/wooduc/abundance-map-weekly
