@@ -317,6 +317,20 @@ export const startMap = () => {
     if (e.selected[0] === undefined)
       return false;
 
+    // Track line is cliked
+    if (e.selected[0].getProperties().featType == "trackLine"){
+        trackLineClicked(e);
+    }
+    // Port is clicked
+    else {
+      let portName = e.selected[0].getProperties().name;
+      
+    }
+
+  });
+
+  // When a track line is clicked
+  const trackLineClicked = (e) => {
     // Show pop-up
     //console.log(e.selected[0].getProperties().info);
     let info = e.selected[0].getProperties().info;
@@ -328,8 +342,6 @@ export const startMap = () => {
     popupContentEl.innerHTML = htmlInfo;
     popupOverlay.setPosition(e.mapBrowserEvent.coordinate);
 
-
-
     // Get data from server to create pie chart
     // var results = fetch("http://localhost:8080/haulSpecies?HaulId=" + haulId).then(r => r.json()).then(r => results = r).catch(e => console.log(e))
     let haulId = info.Id;
@@ -337,8 +349,7 @@ export const startMap = () => {
       getHaul("http://localhost:8080/haulSpecies?HaulId=" + haulId, 'data/hauls/' + haulId + '.json', info);
     else
       getHaul('data/hauls/' + haulId + '.json', undefined, info);
-  });
-
+  }
 
   // Fetch haul data from server of static file
   const getHaul = (address, staticFile, info) => {
@@ -373,13 +384,20 @@ export const startMap = () => {
       selectedTrack = null;
     }
     // Highlight style
-    map.forEachFeatureAtPixel(e.pixel, function (f) {
-      if (f.getProperties().featType != "trackLine")
-        return true;
-      selectedTrack = f;
-      f.setStyle(trackLineHighlightStyle);
+    let hit = map.forEachFeatureAtPixel(e.pixel, function (f) {
+      // Track line hovered
+      if (f.getProperties().featType == "trackLine"){
+        selectedTrack = f;
+        f.setStyle(trackLineHighlightStyle);
+      }
+      // Port is hovered
+      else {
+
+      }
       return true;
     });
+    // Mouse pointer
+    map.getTargetElement().style.cursor = hit ? 'pointer' : '';
 
   });
 
