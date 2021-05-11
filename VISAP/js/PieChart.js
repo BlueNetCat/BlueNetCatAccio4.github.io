@@ -1,5 +1,5 @@
 /*globals palette*/
-
+import {SizeChart} from './SizeChart.js';
 // Based on D3 example: https://observablehq.com/@d3/zoomable-sunburst
 // d3 label center: https://observablehq.com/@kerryrodden/sequences-sunburst
 // data variable is loaded from data.json (header)
@@ -11,10 +11,13 @@ class PieChart {
 	constructor(originalData){
 		this.currentData = null;
 		this.originalData = originalData;
+
+		this.sizeChart = new SizeChart();
 	}
 
 	// Create the pie chart
 	runApp(htmlContainer,data,d3, title, measure, unit){
+		var that = this;
 
 		this.currentData = data;
 
@@ -109,7 +112,7 @@ class PieChart {
 	      .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0.1)//0) // Here if you want to show other levels
 	      .attr("d", d => arc(d.current));
 
-	  path.filter(d => d.children)
+	  path//.filter(d => d.children)
 	      .style("cursor", "pointer")
 	      .on("click", clicked);
 
@@ -141,6 +144,14 @@ class PieChart {
 
 	  function clicked(event, p) {
 	    parent.datum(p.parent || root);
+			// Create pop-up with length frequency for specie
+			if (p.children === undefined){
+				if (p.depth < 3) // No depth (only commercial/rebuig/restes)
+					that.sizeChart.createGraphInterface(p.data.species, p.parent.parent.data.name, undefined, event); // Port or Season, Zona or Year
+				else
+					that.sizeChart.createGraphInterface(p.data.species, p.parent.parent.data.name, p.parent.parent.parent.data.name, event); // Port or Season, Zona or Year
+				return;
+			}
 
 	    root.each(d => d.target = {
 	      x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
