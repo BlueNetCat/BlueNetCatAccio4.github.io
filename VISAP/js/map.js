@@ -324,7 +324,7 @@ export const startMap = () => {
     // Port is clicked
     else {
       let portName = e.selected[0].getProperties().name;
-      
+
     }
 
   });
