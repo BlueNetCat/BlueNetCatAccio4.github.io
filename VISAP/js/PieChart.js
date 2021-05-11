@@ -143,7 +143,7 @@ class PieChart {
 	      .on("click", clicked);
 
 	  function clicked(event, p) {
-	    parent.datum(p.parent || root);
+
 			// Create pop-up with length frequency for specie
 			if (p.children === undefined){
 				if (p.depth < 3) // No depth (only commercial/rebuig/restes)
@@ -152,6 +152,8 @@ class PieChart {
 					that.sizeChart.createGraphInterface(p.data.species, p.parent.parent.data.name, p.parent.parent.parent.data.name, event); // Port or Season, Zona or Year
 				return;
 			}
+
+			parent.datum(p.parent || root);
 
 	    root.each(d => d.target = {
 	      x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
