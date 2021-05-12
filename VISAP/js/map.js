@@ -319,12 +319,11 @@ export const startMap = () => {
 
     // Track line is cliked
     if (e.selected[0].getProperties().featType == "trackLine"){
-        trackLineClicked(e);
+      trackLineClicked(e);
     }
     // Port is clicked
-    else {
-      let portName = e.selected[0].getProperties().name;
-
+    else if (e.selected[0].getProperties().featType == "port") {
+      portClicked(e);
     }
 
   });
@@ -369,6 +368,43 @@ export const startMap = () => {
         console.error("Could not fetch from " + address + ". Error: " + e + ".");
       }
     })
+  };
+
+
+  // Port is clicked
+  const portClicked = (e) => {
+    // Position popup
+    popupContentEl.innerHTML = "";
+    popupOverlay.setPosition(e.mapBrowserEvent.coordinate);
+
+    let portName = e.selected[0].getProperties().name;
+
+    // Get data and crete piechart
+    if (window.serverConnection)
+      getPortBiomass("http://localhost:8080/portBiomass", 'pesca_arrossegament_port_biomassa.json', portName);
+    else
+      getPortBiomass('data/pesca_arrossegament_port_biomassa.json', undefined, portName);
+
+  }
+
+  // Get biomass by port
+  const getPortBiomass = (address, staticFile, portName) => {
+    fetch(address).then(r => r.json()).then(r => {
+      //console.log(r)
+      // Create PieChart
+      let pieChart = new PieChart();
+      let preparedData = pieChart.processPortBiomass(r, portName);
+      pieChart.runApp(popupContentEl, preparedData, d3, portName, "Biomassa", "kg / km2");
+
+    }).catch(e => {
+      if (staticFile !== undefined){ // Load static file
+        console.error("Could not fetch from " + address + ". Error: " + e + ".");
+        window.serverConnection = false;
+        getHaul(staticFile, undefined, portName);
+      } else {
+        console.error("Could not fetch from " + address + ". Error: " + e + ".");
+      }
+    })
   }
 
   // Add interaction to map
@@ -376,24 +412,25 @@ export const startMap = () => {
 
 
   // Interaction of moveover
-  let selectedTrack = null;
+  //let selectedTrack = null;
   map.on('pointermove', function (e) {
     // Reset style
-    if (selectedTrack !== null && selectedTrack.getProperties().featType == "trackLine") {
+    /*if (selectedTrack !== null && selectedTrack.getProperties().featType == "trackLine") {
       selectedTrack.setStyle(trackLineStyle);
       selectedTrack = null;
-    }
+    }*/
     // Highlight style
     let hit = map.forEachFeatureAtPixel(e.pixel, function (f) {
       // Track line hovered
-      if (f.getProperties().featType == "trackLine"){
+      /*if (f.getProperties().featType == "trackLine"){
         selectedTrack = f;
         f.setStyle(trackLineHighlightStyle);
       }
       // Port is hovered
       else {
 
-      }
+      }*/
+
       return true;
     });
     // Mouse pointer

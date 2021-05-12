@@ -4,7 +4,8 @@
       {
          "type":"Feature",
          "properties":{
-            "name":"Roses"
+            "name":"Roses",
+            "featType": "port"
          },
          "geometry":{
             "type":"Point",
@@ -17,7 +18,8 @@
       {
          "type":"Feature",
          "properties":{
-            "name":"Palamós"
+            "name":"Palamós",
+            "featType": "port"
          },
          "geometry":{
             "type":"Point",
@@ -30,7 +32,8 @@
       {
          "type":"Feature",
          "properties":{
-            "name":"Blanes"
+            "name":"Blanes",
+            "featType": "port"
          },
          "geometry":{
             "type":"Point",
@@ -43,7 +46,8 @@
       {
          "type":"Feature",
          "properties":{
-            "name":"Arenys de Mar"
+            "name":"Arenys de Mar",
+            "featType": "port"
          },
          "geometry":{
             "type":"Point",
@@ -56,7 +60,8 @@
       {
          "type":"Feature",
          "properties":{
-            "name":"Barcelona"
+            "name":"Barcelona",
+            "featType": "port"
          },
          "geometry":{
             "type":"Point",
@@ -69,7 +74,8 @@
       {
          "type":"Feature",
          "properties":{
-            "name":"Vilanova i la Geltrú"
+            "name":"Vilanova i la Geltrú",
+            "featType": "port"
          },
          "geometry":{
             "type":"Point",
@@ -82,7 +88,8 @@
       {
          "type":"Feature",
          "properties":{
-            "name":"Tarragona"
+            "name":"Tarragona",
+            "featType": "port"
          },
          "geometry":{
             "type":"Point",
@@ -95,7 +102,8 @@
       {
          "type":"Feature",
          "properties":{
-            "name":"L'Ametlla de Mar"
+            "name":"L'Ametlla de Mar",
+            "featType": "port"
          },
          "geometry":{
             "type":"Point",
@@ -108,7 +116,8 @@
       {
          "type":"Feature",
          "properties":{
-            "name":"Sant Carles de la Ràpita"
+            "name":"Sant Carles de la Ràpita",
+            "featType": "port"
          },
          "geometry":{
             "type":"Point",
