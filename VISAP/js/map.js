@@ -186,7 +186,7 @@ export const startMap = () => {
       duration: 250,
     },
   });
-  popupOverlay.setPositioning('bottom-left');
+  //popupOverlay.setPositioning('center-center');
   popupCloserEl.onclick = function () {
     popupOverlay.setPosition(undefined);
     popupCloserEl.blur();
@@ -340,6 +340,7 @@ export const startMap = () => {
     htmlInfo += "</ul>";
     popupContentEl.innerHTML = htmlInfo;
     popupOverlay.setPosition(e.mapBrowserEvent.coordinate);
+
 
     // Get data from server to create pie chart
     // var results = fetch("http://localhost:8080/haulSpecies?HaulId=" + haulId).then(r => r.json()).then(r => results = r).catch(e => console.log(e))

@@ -11,7 +11,9 @@ class SizeChart {
     this.popupEl.innerHTML = '<h5>Freqüència de talles</h5>'+
                               '<a id="popup-closer" class="ol-popup-closer"></a>'+
                               '<div id="popup-content" style="display: inline-flex"></div>';
-    this.popupEl.style.left = "20%";
+    this.popupEl.style.left = "33%";
+		this.popupEl.style.top = "33%";
+		this.popupEl.style.position = "absolute";
 
     // Close button
     this.popupEl.children[1].onclick = (e) => e.target.parentElement.remove();//hidden = true;
@@ -42,7 +44,6 @@ class SizeChart {
     // Append to DOM
     document.body.appendChild(this.popupEl);
     // Position the overlay
-    this.popupEl.style.top = window.scrollY + event.clientY + "px";
     this.popupEl.style.bottom = "auto";
 
     let filteredData = dataFromServer;
