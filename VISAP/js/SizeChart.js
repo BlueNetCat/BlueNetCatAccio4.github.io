@@ -17,7 +17,7 @@ class SizeChart {
 
     // Close button
     this.popupEl.children[1].onclick = (e) => e.target.parentElement.remove();//hidden = true;
-
+		this.popupEl.onclick = (e) => this.popupEl.remove();//hidden = true;
     /*<div id="popup" class="ol-popup">
       <a href="#" id="popup-closer" class="ol-popup-closer"></a>
       <div id="popup-content" style="display: inline-flex"></div>
@@ -40,11 +40,6 @@ class SizeChart {
   // Processes the data and creates the chart
   createGraphInterface(speciesName, portOrSeason, zoneOrYear, event){ // e.g. "Merluccius merluccius", "Blanes", "Nord"
 
-    // Show popup
-    // Append to DOM
-    document.body.appendChild(this.popupEl);
-    // Position the overlay
-    this.popupEl.style.bottom = "auto";
 
     let filteredData = dataFromServer;
     // Filter if port or year-season are specified
@@ -71,6 +66,16 @@ class SizeChart {
 
     // Get data for a specific species for first chart
     let dataSpeciesForGraph = this.getDataForSpecieX(filteredData, speciesName);
+		// If this species was never measured
+		if (dataSpeciesForGraph === undefined)
+			return;
+
+		// Show popup
+    // Append to DOM
+    document.body.appendChild(this.popupEl);
+    // Position the overlay
+		this.popupEl.style.position = "fixed";
+    this.popupEl.style.bottom = "auto";
 
     // Create Highchart
     let myChart = this.createChart(dataSpeciesForGraph, this.popupEl.children[2]);
@@ -175,6 +180,12 @@ class SizeChart {
   getDataForSpecieX(inData, inSpecies){
     // Select the data from a species
     let dataSelSpecies = inData.filter((item) => item.NomEspecie == inSpecies);
+		// If it was never measured
+		if (dataSelSpecies.length == 0){
+			console.log("This species was never measured: ", inSpecies);
+			return undefined;
+		}
+
     // Categories (sizes)
     let categories = this.getUnique(dataSelSpecies, "Talla"); // Important to create X axis
     categories.forEach((cat, index) => categories[index] = parseFloat(cat)); // Transform into numbers
