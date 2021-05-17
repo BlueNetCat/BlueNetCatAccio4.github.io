@@ -17,7 +17,7 @@ class SizeChart {
 
     // Close button
     this.popupEl.children[1].onclick = (e) => e.target.parentElement.remove();//hidden = true;
-
+		this.popupEl.onclick = (e) => this.popupEl.remove();//hidden = true;
     /*<div id="popup" class="ol-popup">
       <a href="#" id="popup-closer" class="ol-popup-closer"></a>
       <div id="popup-content" style="display: inline-flex"></div>
@@ -74,6 +74,7 @@ class SizeChart {
     // Append to DOM
     document.body.appendChild(this.popupEl);
     // Position the overlay
+		this.popupEl.style.position = "fixed";
     this.popupEl.style.bottom = "auto";
 
     // Create Highchart

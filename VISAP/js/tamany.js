@@ -137,6 +137,7 @@ const createChart = (serieSpecies) => {
       ],
     plotOptions: {
         area: {
+            fillOpacity: 0.2,
             pointStart: 1,//1940,
             marker: {
                 enabled: false,
