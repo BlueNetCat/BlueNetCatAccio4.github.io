@@ -8,6 +8,15 @@ A [temporary dashboard](https://bluenetcataccio4.github.io/VISAP/) has been crea
 
 - Individual sampled boats (mostreig): As shown in the report. The routes could be served with a GeoJSON. Other info could pop up, like the date and a pie chart of the catches of that boat on that sampling day.
 
+### Pesca d'encerclament
+
+### Pesca sonsera
+
+### Pesca de pop roquer
+
+### Length frequency (freqüència de talles)
+- Show the length frequency of each species, as in the report.
+
 #### Checkpoints
 - [x] Server
   - [x] Nodejs server with queries to the database and REST API for web client requests
@@ -27,10 +36,13 @@ A [temporary dashboard](https://bluenetcataccio4.github.io/VISAP/) has been crea
 
 Length Frequency
 - [x] Query talles abundància from J. Ribera (agrupacions per bins)
+- [x] Basic chart with length frequency
+- [x] Species selector with search(drop-down menu)
+- [x] Compare buttons and superposition of histograms
 - [ ] Filter by time (bottom time scale)
 - [ ] Filter by port (rigth-sided button selector)
-- [x] Species selector (drop-down menu)
-- [x] Compare buttons and superposition of histograms
+- [ ] Filter by depth
+
 
 Regarding the map visualization, here is the checklist:
 - [ ] Server
@@ -48,20 +60,6 @@ Regarding the map visualization, here is the checklist:
 A simple dashboard made with bootstrap
  - [x] Basic dashboard
 
-### Pesca d'encerclament
-
-### Pesca sonsera
-
-### Pesca de pop roquer
-
-### Length frequency (freqüència de talles)
-- Show the length frequency of each species, as in the report.
-#### Checkpoints
-- [x] Basic chart with highcharts
- - [x] Select and search species
- - [ ] Filter by depth
- - [ ] Filter by season
- - [ ] Filter by port?
 
 ### Other info
 - Seabeds, EMODnet provides useful information (https://www.emodnet-seabedhabitats.eu/access-data/launch-map-viewer/, https://www.emodnet-geology.eu/services/, https://www.emodnet-seabedhabitats.eu/access-data/web-services/)
