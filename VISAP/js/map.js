@@ -32,7 +32,8 @@ export const startMap = () => {
   const mapView = new ol.View({
     center: ol.proj.fromLonLat([3,41.5]),
     zoom: 8,
-    extent: ol.proj.fromLonLat([-2,39.5]).concat(ol.proj.fromLonLat([7.5, 46]))//extent: [-2849083.336923, 3025194.250092, 4931105.568733, 6502406.032920]//olProj.get("EPSG:3857").getExtent()
+    minZoom: 8,
+    extent: ol.proj.fromLonLat([-2,39.5]).concat(ol.proj.fromLonLat([12, 50]))//extent: [-2849083.336923, 3025194.250092, 4931105.568733, 6502406.032920]//olProj.get("EPSG:3857").getExtent()
   });
 
 
@@ -294,8 +295,17 @@ export const startMap = () => {
       else {
 
       }*/
+      // Track line is hovered
+      if (f.getProperties().featType == "trackLine"){
+        return true
+      }
+      // Port is hovered
+      else if (f.getProperties().featType == "port") {
+        return true
+      } else {
+        return false
+      }
 
-      return true;
     });
     // Mouse pointer
     map.getTargetElement().style.cursor = hit ? 'pointer' : '';
