@@ -12,6 +12,9 @@ Collection of GeoJSONs that gather different oceanographic items of the Catalan 
 ## VISAP
 VISAP (Servei d'Assessorament Pesquer). Application to visualize the fishing effort in the Catalan Sea. [VISAP repository](https://github.com/BlueNetCatAccio4/BlueNetCatAccio4.github.io/tree/main/VISAP)
 
+## OBSEA
+Data from an underwater observatory. The application should visualize the data collected by the sensors over the years. [OBSEA repository](https://github.com/BlueNetCatAccio4/BlueNetCatAccio4.github.io/tree/main/OBSEA)
+
 ### Funding
 This project has been financed by the "Generalitat de Catalunya" and by the European Union through the "Fons Europeu de Desenvolupament Regional" (FEDER).
 
