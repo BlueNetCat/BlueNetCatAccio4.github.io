@@ -68,3 +68,6 @@ A simple dashboard made with bootstrap
 - The International Bottom Trawl Survey Working Group (IBTSWG) https://gis.ices.dk/sf/index.html?widget=visa&assessmentKey=13960
 - Irish GroundFish Survey (IGFS) https://shiny.marine.ie/igfs/
 - Bird migration ebird https://ebird.org/science/status-and-trends/wooduc/abundance-map-weekly
+- Global fishing watch: https://globalfishingwatch.org/map/
+- Emodnet human activities: https://www.emodnet-humanactivities.eu/view-data.php
+- Visor de Información Geográfica Marina: http://infomar.cedex.es/visor.html
