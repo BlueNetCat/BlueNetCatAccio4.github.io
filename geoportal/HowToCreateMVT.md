@@ -16,7 +16,7 @@ brew install gdal
 or
 conda install -c conda-forge gdal
 conda create -n mygdal gdal
-source activate mygdal)
+source activate mygdal
 
 ogr2ogr -f GeoJSON in.geojson -t_srs EPSG:4326 your_data.shp
 ```
