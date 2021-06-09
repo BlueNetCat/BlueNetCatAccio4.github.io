@@ -13,6 +13,11 @@ You need to work with Linux and install these packages:
 Install gdal and transform the data
 ```
 brew install gdal
+or
+conda install -c conda-forge gdal
+conda create -n mygdal gdal
+source activate mygdal)
+
 ogr2ogr -f GeoJSON in.geojson -t_srs EPSG:4326 your_data.shp
 ```
 ### 1. Create a .mbtiles file with tippecanoe
