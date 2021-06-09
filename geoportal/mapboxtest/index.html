@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Add a raster tile source</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+
+<body>
+  <div id="map"></div>
+  <script>
+    /*
+    * MAPBOX IS NOT FREE (50K loads a month free)
+    * https://www.geoapify.com/mapbox-gl-new-license-and-6-free-alternatives
+    */
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZ2VyYXJkbGxvcmFjaCIsImEiOiJja2w2anZrb2MweW9nMm9wNjJ6anZjcGZ0In0.DPRX4XeYLWIGeZSn8Hn-5A'; // https://account.mapbox.com
+    // https://studio.mapbox.com/tilesets/
+
+    var map = new mapboxgl.Map({
+      container: 'map', // container id
+      style: {
+        'version': 8,
+        'sources': {
+          'bathymetry-tiles': {
+            'type': 'raster',
+            'tiles': [
+              'https://tiles.emodnet-bathymetry.eu/2020/baselayer/web_mercator/{z}/{x}/{y}.png'
+            ],
+            'tileSize': 256,
+            'attribution':
+              '© <a target="_top" rel="noopener" href="https://tiles.emodnet-bathymetry.eu/">EMODnet</a> Bathymetry Consortium (Basemap)'
+          },
+          'country-boundaries': { // https://docs.mapbox.com/mapbox-gl-js/example/vector-source/
+            type: 'vector',
+            url: 'mapbox://mapbox.country-boundaries-v1'
+          }
+        },
+        'layers': [
+          {
+            'id': 'basemap',
+            'type': 'raster',
+            'source': 'bathymetry-tiles',
+            'minzoom': 0,
+            'maxzoom': 22
+          },
+          {
+            'id': 'boundaries',
+            'type': 'line',
+            'source': 'country-boundaries',
+            'source-layer': 'country_boundaries',
+            'layout': {
+              'line-join': 'round',
+              'line-cap': 'round'
+            },
+            'paint': {
+              'line-color': '#000000',
+              'line-width': 1
+            }
+          }
+
+        ]
+      },
+      center: [2  , 41.5], // starting position [Lat, Long]
+      zoom: 7// starting zoom
+    });
+  </script>
+
+</body>
+</html>
