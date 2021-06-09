@@ -9,21 +9,26 @@ You need to work with Linux and install these packages:
 - [mbutil](https://github.com/mapbox/mbutil)
 
 ## Steps
-### 1. Transform your data to geojson
-### 2. Create a .mbtiles file with tippecanoe
+### 0. Transform your data to geojson if it isn't
+Install gdal and transform the data
+```
+brew install gdal
+ogr2ogr -f GeoJSON in.geojson -t_srs EPSG:4326 your_data.shp
+```
+### 1. Create a .mbtiles file with tippecanoe
 ```
 tippecanoe -zg -o out.mbtiles --drop-densest-as-needed in.geojson
 ```
 The .mbtiles file can be decompressed into .pbf files, which contain the final vector data but gzipped. The .mbtiles file is the recommended option if you want to have a service to provide MVTs.
-### 3. Decompress the .mbtiles file with mb-util
+### 2. Decompress the .mbtiles file with mb-util
 ```
 mb-util --image_format=pbf out.mbtiles outDirectory
 ```
-### 4. Unzip the .pbf files
+### 3. Unzip the .pbf files
 ```
 gzip -d -r -S .pbf *
 ```
-### 5. Add the .pbf extension (it was removed in the previous step)
+### 4. Add the .pbf extension (it was removed in the previous step)
 ```
 find . -type f -exec mv '{}' '{}'.pbf \;
 ```
