@@ -8,10 +8,15 @@
     <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=fetch,requestAnimationFrame,Element.prototype.classList,URL,TextDecoder"></script>
     <script src="https://openlayers.org/en/v6.5.0/examples/resources/mapbox-streets-v6-style.js"></script>
+
+    <!-- Openlayers library -->
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css">
     <style>
       .map {
         width: 100%;
-        height:100%;
+        height: 100%;
+        position: absolute;
       }
       .map {
         background: #f8f4f0;
@@ -25,25 +30,27 @@
 
       var map = new ol.Map({
         layers: [
+          /*new ol.layer.Tile({
+            //preload: 15,
+            source: new ol.source.XYZ ({ // https://openlayers.org/en/latest/examples/xyz.html
+                    url: 'https://tiles.emodnet-bathymetry.eu/2020/baselayer/web_mercator/{z}/{x}/{y}.png', // https://tiles.emodnet-bathymetry.eu/
+                    attributions: "© EMODnet Bathymetry Consortium (Basemap)",
+                  }),
+          }),*/
           new ol.layer.VectorTile({
             declutter: true,
             source: new ol.source.VectorTile({
               attributions:
-                '© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> ' +
-                '© <a href="https://www.openstreetmap.org/copyright">' +
-                'OpenStreetMap contributors</a>',
+                '© Test ',
               format: new ol.format.MVT(),
-              url:
-                'https://{a-d}.tiles.mapbox.com/v4/mapbox.mapbox-streets-v6/' +
-                '{z}/{x}/{y}.vector.pbf?access_token=' +
-                key,
+              url: 'data/rivers_westmed/{z}/{x}/{y}.pbf',
             }),
-            style: new ol.style.Style({
+            /*style: new ol.style.Style({
               stroke: new ol.style.Stroke({
                 color: 'rgba(0,0,0,1)',
                 width: 1
               })
-            }),
+            }),*/
           }) ],
         target: 'map',
         view: new ol.View({
