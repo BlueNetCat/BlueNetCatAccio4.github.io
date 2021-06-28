@@ -30,20 +30,23 @@
 
       var map = new ol.Map({
         layers: [
-          /*new ol.layer.Tile({
+          new ol.layer.Tile({
             //preload: 15,
             source: new ol.source.XYZ ({ // https://openlayers.org/en/latest/examples/xyz.html
                     url: 'https://tiles.emodnet-bathymetry.eu/2020/baselayer/web_mercator/{z}/{x}/{y}.png', // https://tiles.emodnet-bathymetry.eu/
                     attributions: "© EMODnet Bathymetry Consortium (Basemap)",
                   }),
-          }),*/
+          }),
+          //https://gis.stackexchange.com/questions/210188/unzipping-osm2vectortiles-after-extracing-with-mbutil
           new ol.layer.VectorTile({
-            declutter: true,
+            //declutter: true,
+            maxZoom: 22,
             source: new ol.source.VectorTile({
               attributions:
                 '© Test ',
               format: new ol.format.MVT(),
               url: 'data/rivers_westmed/{z}/{x}/{y}.pbf',
+              maxZoom: 5
             }),
             /*style: new ol.style.Style({
               stroke: new ol.style.Stroke({
@@ -56,6 +59,7 @@
         view: new ol.View({
           center: [0, 0],
           zoom: 2,
+          maxZoom: 22,
         }),
       });
 

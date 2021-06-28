@@ -41,7 +41,7 @@ body { margin: 0; padding: 0; }
             type: 'vector',
             url: 'mapbox://mapbox.country-boundaries-v1'
           },
-          'rivers-mvt': {
+          'rivers-mvt': { //https://gis.stackexchange.com/questions/210188/unzipping-osm2vectortiles-after-extracing-with-mbutil
             type: 'vector',
             tiles: ['http://127.0.0.1:3000/geoportal/data/rivers_westmed/{z}/{x}/{y}.pbf'],
             "maxzoom": 5
