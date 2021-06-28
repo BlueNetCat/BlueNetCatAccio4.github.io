@@ -52,8 +52,8 @@ Regarding Spanish aquaculture, the best source is here: https://servicio.pesca.m
 ### [National Parks](data/national_parks.geojson)
 There are more types of natural parks or reserves, like Natura 2000 which are not considered in this geojson. This geojson is orientative. You can find these extra protected areas here: https://www.medpan.org/SIG/MAPAMEDvisualisation.html. 
 
-### [Marine Regions]
-https://marineregions.org/
+### Marine Regions
+Exclusive Economical Zones (EEZ) https://marineregions.org/. Marine regions according to the MSFD from EEA: https://www.eea.europa.eu/data-and-maps/data/europe-seas-1
 
 ### [Rivers](data/rivers_westmed.geojson)
 The river data was taken from the Food and Agriculture Organization of the United Nations (http://www.fao.org/geonetwork/srv/en/main.home?uuid=e0243940-e5d9-487c-8102-45180cf1a99f). Other shape files of Spain can also be found here: https://www.miteco.gob.es/es/cartografia-y-sig/ide/descargas/agua/red-hidrografica.aspx. This information can also be served with a WMS service.
