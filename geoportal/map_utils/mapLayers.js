@@ -202,6 +202,7 @@ const buoysLabelLayer = new ol.layer.Vector({
 
 
 // Radars layer
+// TODO STYLE
 const radarsLayer = new ol.layer.Vector({
   source: new ol.source.Vector({
     url: 'data/radars.geojson',
@@ -252,6 +253,59 @@ const radarsLabelLayer = new ol.layer.Vector({
 
 
 
+// Discharge Points layer
+const dischargePointsLayer = new ol.layer.Vector({
+  minZoom: 10,
+  source: new ol.source.Vector({
+    url: 'data/discharge_urban_treatment_plants.geojson',
+    format: new ol.format.GeoJSON(),
+    attributions: '© Ministerio para la Transición Ecológica y el Reto Demográfico',
+  }),
+  style: function (feature, resolution) {
+    var zoom = map.getView().getZoomForResolution(resolution); // ALERT, THIS DEPENDS ON THE map VARIABLE
+    return new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: Math.min(zoom/5,5),
+        fill: new ol.style.Fill({color: 'rgba(0, 0, 0, 0.1)'}),
+        stroke: new ol.style.Stroke({color: 'black', width: 1}),
+      }),
+    });
+  },
+});
+// Discharge points label layer
+const dischargePointsLabelLayer = new ol.layer.Vector({
+  minZoom: 10,
+  source: new ol.source.Vector({
+    url: 'data/discharge_urban_treatment_plants.geojson',
+    format: new ol.format.GeoJSON(),
+    attributions: '© Ministerio para la Transición Ecológica y el Reto Demográfico',
+  }),
+  style: function (feature) {
+    return new ol.style.Style({
+      text: new ol.style.Text({
+        text: feature.get('dcpName'),
+        textBaseline: 'bottom',
+        offsetY: -5,
+        font: '9px Calibri,sans-serif',
+        overflow: true,
+        fill: new ol.style.Fill({
+          color: 'rgba(0, 0, 0, 1)',
+        }),
+        stroke: new ol.style.Stroke({
+          color: 'rgba(120, 120, 120, 0.3)',
+          width: 3,
+        }),
+      }),
+    });
+  },
+  declutter: true,
+});
+
+
+
+
+
+
 
 
 
@@ -260,6 +314,7 @@ const radarsLabelLayer = new ol.layer.Vector({
 
 
 // National national parks
+// TODO STYLE
 const nationalParksLayer = new ol.layer.Vector({
   minZoom: 10,
   source: new ol.source.Vector({
