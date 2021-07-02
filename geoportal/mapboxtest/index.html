@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Add a raster tile source</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<script src="https://unpkg.com/maplibre-gl@1.14.0-rc.1/dist/maplibre-gl.js"></script>
+<link href="https://unpkg.com/maplibre-gl@1.14.0-rc.1/dist/maplibre-gl.css" rel="stylesheet" />
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+
+<body>
+  <div id="map"></div>
+  <script>
+    /*
+    * MAPBOX IS NOT FREE (50K loads a month free)
+    * https://www.geoapify.com/mapbox-gl-new-license-and-6-free-alternatives
+    */
+
+    //mapboxgl.accessToken = 'pk.eyJ1IjoiZ2VyYXJkbGxvcmFjaCIsImEiOiJja2w2anZrb2MweW9nMm9wNjJ6anZjcGZ0In0.DPRX4XeYLWIGeZSn8Hn-5A'; // https://account.mapbox.com
+    // https://studio.mapbox.com/tilesets/
+
+    var map = new maplibregl.Map({
+      container: 'map', // container id
+      style: {
+        'version': 8,
+        'sources': {
+          'bathymetry-tiles': {
+            'type': 'raster',
+            'tiles': [
+              'https://tiles.emodnet-bathymetry.eu/2020/baselayer/web_mercator/{z}/{x}/{y}.png'
+            ],
+            'tileSize': 256,
+            'attribution':
+              '© <a target="_top" rel="noopener" href="https://tiles.emodnet-bathymetry.eu/">EMODnet</a> Bathymetry Consortium (Basemap)'
+          },
+          /*'country-boundaries': { // https://docs.mapbox.com/mapbox-gl-js/example/vector-source/
+            type: 'vector',
+            url: 'mapbox://mapbox.country-boundaries-v1'
+          },
+          'rivers-mvt': { //https://gis.stackexchange.com/questions/210188/unzipping-osm2vectortiles-after-extracing-with-mbutil
+            type: 'vector',
+            tiles: ['http://127.0.0.1:3000/geoportal/data/rivers_westmed/{z}/{x}/{y}.pbf'],
+            "maxzoom": 5
+          },
+          'shoreline-mvt': {
+            type: 'vector',
+            tiles: ['http://127.0.0.1:3000/geoportal/data/shoreline-tiles/{z}/{x}/{y}.pbf'],
+            "maxzoom": 10
+          }
+        },
+        'layers': [
+          {
+            'id': 'basemap',
+            'type': 'raster',
+            'source': 'bathymetry-tiles',
+            'minzoom': 0,
+            'maxzoom': 22
+          },
+          /*{
+            'id': 'boundaries',
+            'type': 'line',
+            'source': 'country-boundaries',
+            'source-layer': 'country_boundaries',
+            'layout': {
+              'line-join': 'round',
+              'line-cap': 'round'
+            },
+            'paint': {
+              'line-color': '#000000',
+              'line-width': 1
+            }
+          },*/
+          {
+            "id": "rivers",
+            "type": "line",
+            "source": "rivers-mvt",
+            "source-layer": "rivers",
+            'paint': {
+              'line-color': "rgb(135, 176, 255)",
+              'line-width': 0.8,
+              'line-opacity': 0.7,
+            },
+            'minzoom': 6
+          },
+          {
+            "id": "shoreline",
+            "type": "line",
+            "source": "shoreline-mvt",
+            "source-layer": "shoreline",
+            'paint': {
+              'line-color': '#000000',
+              'line-width': 1
+            }
+          }
+        ]
+      },
+      center: [0  , 0], // starting position [Lat, Long]
+      zoom: 1// starting zoom
+    });
+  </script>
+
+</body>
+</html>
