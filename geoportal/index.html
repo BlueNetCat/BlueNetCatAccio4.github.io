@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css">
     <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
 
+    <!-- HTML menus -->
+    <link rel="stylesheet" href="css/menu.css">
 
     <!-- Map Layers -->
     <script src="map_utils/mapLayers.js"></script>
@@ -22,8 +24,38 @@
     </style>
   </head>
   <body>
+    <!-- Open layers map -->
     <div id="map" class="map"></div>
+
+
+    <!-- Buttons -->
+    <button class="ol-control ol-unselectable layers-button" id="layersButton">
+      <img  src="img/ol_icon.png" style="max-height: 80%"></img>
+    </button>
+
+    <!-- Panels -->
+    <nav class="menu menu-horizontal menu-bottom" id="menu-bottom">
+      Hello world
+		</nav>
+    <nav class="menu menu-vertical menu-right" id="menu-right">
+      My new menu
+		</nav>
+
+
     <script>
+
+      // Button events
+      document.getElementById("layersButton").onclick = (e) => {
+        /*e.preventDefault();
+        e.stopPropagation();
+        let el = document.getElementById("menu-bottom");
+        el.classList.contains("menu-open") ? el.classList.remove("menu-open") : el.classList.add("menu-open");
+
+        let elMap = document.getElementById("layersButton");
+        elMap.contains("menu-push-toright") ? elMap.classList.remove("menu-push-toright") : elMap.classList.add("menu-push-toright")
+        //el.classList.contains("menu-open") ? el.classList.remove("menu-open") : el.classList.add("menu-open");
+        */
+      }
 
 
       var map = new ol.Map({
@@ -32,17 +64,26 @@
           graticuleLayer,
           riversLayer,
           shorelineLayer,
+
           buoysLayer,
           buoysLabelLayer,
+
           webcamLayer,
           webcamLabelLayer,
+
           nationalParksLayer,
           nationalParksLabelsLayer,
+
           radarsLayer,
           radarsLabelLayer,
+
           dischargePointsLayer,
           dischargePointsLabelLayer,
-          //riversLabelsLayer
+
+          weatherStationsLayer,
+          weatherStationsLabelLayer,
+
+          riversLabelsLayer
          ],
         target: 'map',
         view: new ol.View({
@@ -56,12 +97,46 @@
 
 
 
+      // Interaction
+      map.on('singleclick', function (e) {
+        let el = document.getElementById("menu-bottom");
+        el.classList.remove("menu-open")
+        map.forEachFeatureAtPixel(e.pixel, function (f, layer) {
+          console.log(f);
+
+          el.classList.contains("menu-open") ? 1 : el.classList.add("menu-open");
+
+          // Display information
+          props = f.getProperties();
+          delete props.geometry;
+          createFeatureInnerHTML(props, el);
+        });
+      });
 
 
+      // Creates html for feature
+      const createFeatureInnerHTML = (props, el) => {
+        let innerHTML = "<div class='container'>";
+        let keys = Object.keys(props);
+        keys.forEach(key => {
+          if (typeof props[key] === 'string' || Array.isArray(props[key])){
+            innerHTML += "<div class='row'><strong>" + key +"</strong>: " + props[key] + "</div>";
+          } else if (typeof props[key] === 'object' && props[key] !== null){
+            innerHTML += "<div class='row'><strong>" + key +"</strong><ul>";
+            Object.keys(props[key]).forEach(subkey => {
+              innerHTML += "<li>" + subkey +": ";
+              innerHTML += props[key][subkey].substr(0,4) == "http" ?
+                "<a href='" + props[key][subkey] + "' target='_blank'>" + props[key][subkey] + "</a></li>" : // Make hyperlink
+                props[key][subkey] + "</li>";
+            });
+            innerHTML += "</ul></div>";
+            // TODO: if source does not exist, take it from geojson file with fetch and layer.get("source").getUrl()
+          }
+        });
 
-
-
-
+        innerHTML += "</div>";
+        el.innerHTML = innerHTML;
+      }
 
     </script>
   </body>

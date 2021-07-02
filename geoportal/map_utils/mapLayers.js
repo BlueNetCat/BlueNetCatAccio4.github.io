@@ -204,6 +204,7 @@ const buoysLabelLayer = new ol.layer.Vector({
 // Radars layer
 // TODO STYLE
 const radarsLayer = new ol.layer.Vector({
+  maxZoom: 9,
   source: new ol.source.Vector({
     url: 'data/radars.geojson',
     format: new ol.format.GeoJSON(),
@@ -223,6 +224,7 @@ const radarsLayer = new ol.layer.Vector({
 // Radars Label layer
 const radarsLabelLayer = new ol.layer.Vector({
   minZoom: 7,
+  maxZoom: 9,
   source: new ol.source.Vector({
     url: 'data/radars.geojson',
     format: new ol.format.GeoJSON(),
@@ -292,7 +294,60 @@ const dischargePointsLabelLayer = new ol.layer.Vector({
           color: 'rgba(0, 0, 0, 1)',
         }),
         stroke: new ol.style.Stroke({
-          color: 'rgba(120, 120, 120, 0.3)',
+          color: 'rgba(170, 170, 170, 0.3)',
+          width: 3,
+        }),
+      }),
+    });
+  },
+  declutter: true,
+});
+
+
+
+
+
+
+// Weather Stations layer
+const weatherStationsLayer = new ol.layer.Vector({
+  minZoom: 10,
+  source: new ol.source.Vector({
+    url: 'data/weather_stations_med.geojson',
+    format: new ol.format.GeoJSON(),
+    attributions: '© Ministerio para la Transición Ecológica y el Reto Demográfico',
+  }),
+  style: function (feature, resolution) {
+    var zoom = map.getView().getZoomForResolution(resolution); // ALERT, THIS DEPENDS ON THE map VARIABLE
+    return new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: Math.min(zoom/5,5),
+        fill: new ol.style.Fill({color: 'rgba(255, 50, 25, 0.1)'}),
+        stroke: new ol.style.Stroke({color: 'rgba(255, 50, 25, 0.9)', width: 1}),
+      }),
+    });
+  },
+});
+// Weather Stations label layer
+const weatherStationsLabelLayer = new ol.layer.Vector({
+  minZoom: 10,
+  source: new ol.source.Vector({
+    url: 'data/weather_stations_med.geojson',
+    format: new ol.format.GeoJSON(),
+    attributions: '© Ministerio para la Transición Ecológica y el Reto Demográfico',
+  }),
+  style: function (feature) {
+    return new ol.style.Style({
+      text: new ol.style.Text({
+        text: "ESTACIÓ METEO " + feature.get('NOMBRE'),
+        textBaseline: 'bottom',
+        offsetY: -5,
+        font: '9px Calibri,sans-serif',
+        overflow: true,
+        fill: new ol.style.Fill({
+          color: '#000',
+        }),
+        stroke: new ol.style.Stroke({
+          color: '#fff',
           width: 3,
         }),
       }),
@@ -311,12 +366,11 @@ const dischargePointsLabelLayer = new ol.layer.Vector({
 
 
 
-
-
 // National national parks
 // TODO STYLE
 const nationalParksLayer = new ol.layer.Vector({
   minZoom: 10,
+  maxZoom: 12,
   source: new ol.source.Vector({
     url: 'data/national_parks.geojson',
     format: new ol.format.GeoJSON(),
@@ -326,6 +380,7 @@ const nationalParksLayer = new ol.layer.Vector({
 // National national parks
 const nationalParksLabelsLayer = new ol.layer.Vector({
   minZoom: 10,
+  maxZoom: 12,
   source: new ol.source.Vector({
     url: 'data/national_parks.geojson',
     format: new ol.format.GeoJSON(),
@@ -355,7 +410,7 @@ const nationalParksLabelsLayer = new ol.layer.Vector({
 
 // River labels
 const riversLabelsLayer =  new ol.layer.Vector({
-  minZoom: 10,
+  minZoom: 13,
   source: new ol.source.Vector({
     url: 'data/rivers_westmed.geojson',
     format: new ol.format.GeoJSON(),

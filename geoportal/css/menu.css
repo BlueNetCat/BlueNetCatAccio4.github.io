@@ -1,0 +1,138 @@
+/*
+css for buttons
+*/
+.layers-button {
+  top: 80px;
+  left: .5em;
+  width: 50px;
+  height: 50px;
+}
+.ol-touch .layers-button {
+  top: 80px;
+}
+
+
+/*
+css for overlay menus on the sides
+From http://tympanus.net/codrops/
+*/
+
+
+.menu {
+  background: #47a3da;
+	position: fixed;
+  opacity: 80%;
+}
+
+.menu.container div {
+  min-height: 100px;
+  overflow: hidden;
+}
+
+.container > div {
+  color: #afdefa;
+	font-size: 1em;
+	padding: 20px;
+  display: inline-flex;
+	margin: 0;
+	background: #0d77b6;
+  width: -moz-min-content;
+	width: -webkit-min-content;
+	width: min-content;
+}
+
+/* Horizontal menu that slides from the top or bottom */
+.menu-horizontal {
+  width: 100%;
+	/*height: 150px;*/
+  min-height: 150px;
+	left: 0;
+	z-index: 1000;
+	overflow: hidden;
+}
+.menu-bottom {
+  bottom: -500px;
+}
+.menu-bottom.menu-open {
+  bottom: 0px;
+}
+
+/* Vertical menu that slides from the left or right */
+.menu-vertical {
+	width: 240px;
+	height: 100%;
+	top: 0;
+	z-index: 1000;
+}
+.menu-left {
+	left: -240px;
+}
+.menu-right {
+	right: -240px;
+}
+.menu-left.menu-open {
+	left: 0px;
+}
+.menu-right.menu-open {
+	right: 0px;
+}
+/* Push classes applied to the body */
+.menu-push {
+  overflow-x: hidden;
+	position: relative;
+	left: 0;
+}
+.menu-push-toright {
+	left: 240px;
+}
+.menu-push-toleft {
+	left: -240px;
+}
+
+
+/* Transitions */
+
+.menu, .menu-push {
+  -webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+
+
+
+/* Example media queries */
+
+@media screen and (max-width: 55.1875em){
+
+  .menu-horizontal {
+    font-size: 75%;
+		height: 110px;
+  }
+
+  .menu-bottom {
+		bottom: -110px;
+	}
+
+}
+
+
+@media screen and (max-height: 26.375em){
+
+	.menu-vertical {
+		font-size: 90%;
+		width: 190px;
+	}
+
+	.menu-left,
+	.menu-push-toleft {
+		left: -190px;
+	}
+
+	.menu-right {
+		right: -190px;
+	}
+
+	.menu-push-toright {
+		left: 190px;
+	}
+}
