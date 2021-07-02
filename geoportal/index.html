@@ -35,7 +35,6 @@
 
     <!-- Panels -->
     <nav class="menu menu-horizontal menu-bottom" id="menu-bottom">
-      Hello world
 		</nav>
     <nav class="menu menu-vertical menu-right" id="menu-right">
       My new menu
@@ -102,9 +101,10 @@
         let el = document.getElementById("menu-bottom");
         el.classList.remove("menu-open")
         map.forEachFeatureAtPixel(e.pixel, function (f, layer) {
-          console.log(f);
+          //console.log(f);
 
-          el.classList.contains("menu-open") ? 1 : el.classList.add("menu-open");
+          if (!el.classList.contains("menu-open"))
+            el.classList.add("menu-open");
 
           // Display information
           props = f.getProperties();
