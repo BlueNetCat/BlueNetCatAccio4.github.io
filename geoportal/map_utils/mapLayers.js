@@ -1,5 +1,9 @@
 
 
+// Data structure for the app
+const GUIMapLayers = {};
+
+
 // Basemap layer (EMODNET bathymetry)
 const bathymetryLayer = new ol.layer.Tile({
   //preload: 15,
@@ -9,6 +13,7 @@ const bathymetryLayer = new ol.layer.Tile({
           cacheSize: 500
         }),
 });
+GUIMapLayers["Bathymetry"] = {"ol-layers": [bathymetryLayer], "color": null};
 
 
 
@@ -45,7 +50,7 @@ const graticuleLayer = new ol.layer.Graticule({
     })
   }),
 });
-
+GUIMapLayers["Graticule"] = {"ol-layers": [graticuleLayer], "color": graticuleLayer.strokeStyle_.color_};
 
 
 
@@ -67,6 +72,8 @@ const shorelineLayer = new ol.layer.VectorTile({
     })
   }),
 });
+shorelineLayer.set('name', "Shoreline");
+GUIMapLayers["Shoreline"] = {"ol-layers": [shorelineLayer], "color": shorelineLayer.style_.stroke_.color_};
 
 
 
@@ -92,7 +99,8 @@ const riversLayer = new ol.layer.VectorTile({
     })
   },
 });
-
+riversLayer.set('name', "Rivers");
+GUIMapLayers["Rivers"] = {"ol-layers": [riversLayer], "color": 'rgba(60,150,200,1)'};
 
 
 
@@ -145,7 +153,9 @@ const webcamLabelLayer = new ol.layer.Vector({
   },
   declutter: true,
 });
-
+webcamLayer.set('name', "Webcams");
+webcamLabelLayer.set('name', "Webcams");
+GUIMapLayers["Webcams"] = {"ol-layers": [webcamLayer, webcamLabelLayer], "color": 'green'};
 
 
 
@@ -195,7 +205,9 @@ const buoysLabelLayer = new ol.layer.Vector({
   },
   declutter: true,
 });
-
+buoysLayer.set('name', "Buoys");
+buoysLabelLayer.set('name', "Buoys");
+GUIMapLayers["Buoys"] = {"ol-layers": [buoysLayer, buoysLabelLayer], "color": 'red'};
 
 
 
@@ -248,7 +260,9 @@ const radarsLabelLayer = new ol.layer.Vector({
   },
   declutter: true,
 });
-
+radarsLayer.set('name', "Radars");
+radarsLabelLayer.set('name', "Radars");
+GUIMapLayers["Radars"] = {"ol-layers": [radarsLayer, radarsLabelLayer], "color": 'blue'};
 
 
 
@@ -302,7 +316,9 @@ const dischargePointsLabelLayer = new ol.layer.Vector({
   },
   declutter: true,
 });
-
+dischargePointsLayer.set('name', "Discharge points");
+dischargePointsLabelLayer.set('name', "Discharge points");
+GUIMapLayers["Discharge points"] = {"ol-layers": [dischargePointsLayer, dischargePointsLabelLayer], "color": 'black'};
 
 
 
@@ -355,7 +371,9 @@ const weatherStationsLabelLayer = new ol.layer.Vector({
   },
   declutter: true,
 });
-
+weatherStationsLayer.set('name', "Weather stations");
+weatherStationsLabelLayer.set('name', "Weather stations");
+GUIMapLayers["Weather stations"] = {"ol-layers": [weatherStationsLayer, weatherStationsLabelLayer], "color": 'rgb(255, 50, 25)'};
 
 
 
@@ -367,7 +385,6 @@ const weatherStationsLabelLayer = new ol.layer.Vector({
 
 
 // National national parks
-// TODO STYLE
 const nationalParksLayer = new ol.layer.Vector({
   minZoom: 10,
   maxZoom: 12,
@@ -376,6 +393,14 @@ const nationalParksLayer = new ol.layer.Vector({
     format: new ol.format.GeoJSON(),
     attributions: '© MAPAMED',
   }),
+  style: new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: "rgba(0, 255, 0, 0.5)"
+    }),
+    fill: new ol.style.Fill({
+      color: "rgba(0, 255, 0, 0.2)",
+    })
+  })
 });
 // National national parks
 const nationalParksLabelsLayer = new ol.layer.Vector({
@@ -404,6 +429,9 @@ const nationalParksLabelsLayer = new ol.layer.Vector({
   },
   declutter: true
 });
+nationalParksLabelsLayer.set('name', "National parks");
+nationalParksLayer.set('name', "National parks");
+GUIMapLayers["National parks"] = {"ol-layers": [nationalParksLayer, nationalParksLabelsLayer], "color": nationalParksLayer.style_.stroke_.color_};
 
 
 

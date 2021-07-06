@@ -11,20 +11,40 @@ css for buttons
   top: 80px;
 }
 
+.layer {
+  background: gray;
+}
+
+.layer.layervisible {
+  background: #b8e3ff;
+}
 
 /*
 css for overlay menus on the sides
 From http://tympanus.net/codrops/
 */
 
+/* Bootstrap modifications */
+.menu .col {
+  border: solid;
+  border-width: thin;
+  padding: 0.8em;
+  border-color: #47a3da;
+}
+
+.menu-vertical .container {
+  height: -webkit-fill-available;
+}
+
+
 
 .menu {
-  background: #47a3da;
+  background: #b8e3ff; /*#47a3da;*/
 	position: fixed;
   opacity: 80%;
 }
 
-.menu.container div {
+/*.menu.container div {
   min-height: 100px;
   overflow: hidden;
 }
@@ -40,7 +60,7 @@ From http://tympanus.net/codrops/
 	width: -webkit-min-content;
 	width: min-content;
 }
-
+*/
 /* Horizontal menu that slides from the top or bottom */
 .menu-horizontal {
   width: 100%;
@@ -57,12 +77,14 @@ From http://tympanus.net/codrops/
 .menu-bottom.menu-open {
   bottom: 0px;
   opacity: 80%;
+  height: fit-content;
 }
 
 /* Vertical menu that slides from the left or right */
 .menu-vertical {
 	width: 240px;
-	height: 100%;
+	height: auto;
+  max-height: 100%;
 	top: 0;
 	z-index: 1000;
 }
@@ -71,12 +93,14 @@ From http://tympanus.net/codrops/
 }
 .menu-right {
 	right: -240px;
+  opacity: 0%;
 }
 .menu-left.menu-open {
 	left: 0px;
 }
 .menu-right.menu-open {
 	right: 0px;
+  opacity: 80%;
 }
 /* Push classes applied to the body */
 .menu-push {
@@ -118,10 +142,10 @@ From http://tympanus.net/codrops/
 }
 
 
-@media screen and (max-height: 26.375em){
+@media screen and (max-height: 40.375em){
 
 	.menu-vertical {
-		font-size: 90%;
+		font-size: 75%;
 		width: 190px;
 	}
 
