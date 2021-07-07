@@ -1,5 +1,7 @@
 The geojsons are limited to the Catalan Sea and the Western Mediterranean. The information coming from third parties has been often modified and reduced in this repository. If you want full datasets, you can find the source in the header or ask the BlueNetCat organization (email in the header).
 
+A [geoportal](https://bluenetcataccio4.github.io/geoportal/index.html) integrating some of the data presented here is currently in development.
+
 This site should provide information about how to download/access the data.
 
 ## Measurements
