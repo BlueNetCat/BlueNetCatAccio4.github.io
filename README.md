@@ -3,13 +3,13 @@ Website for development and demonstrations of web apps for the BlueNetCat. The g
 
 <img align="left" width="90" height="90" src="img/network.png">
 
-## Network app
-Visualize all the partners of the BlueNetCat here: [network app](https://bluenetcataccio4.github.io/network/)
+## [Network app](https://bluenetcataccio4.github.io/network/)
+Visualize all the partners of the BlueNetCat here: [network repository](https://github.com/BlueNetCatAccio4/BlueNetCatAccio4.github.io/tree/main/network)
 
-## Geoportal
+## [Geoportal](https://bluenetcataccio4.github.io/geoportal/index.html)
 Collection of GeoJSONs that gather different oceanographic items of the Catalan coast and sea. [Geoportal repository](https://github.com/BlueNetCatAccio4/BlueNetCatAccio4.github.io/tree/main/geoportal/)
 
-## VISAP
+## [VISAP](https://bluenetcataccio4.github.io/VISAP/)
 VISAP (Servei d'Assessorament Pesquer). Application to visualize the fishing effort in the Catalan Sea. [VISAP repository](https://github.com/BlueNetCatAccio4/BlueNetCatAccio4.github.io/tree/main/VISAP)
 
 ## OBSEA
