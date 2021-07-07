@@ -25,8 +25,10 @@ const createLayersHTML = () => {
 
   Object.keys(GUIMapLayers).forEach(key => {
     //GUIMapLayers[key];
-    str += '<div class="row d-flex"><button class="col layer layervisible">' + key + "</button></div>";
-    //str += '<div class="row d-flex"><div class="col">' + key + "</div></div>";
+    str += '<div class="row d-flex"><button class="col layer '+
+      (GUIMapLayers[key]["ol-layers"][0].getVisible() ? 'layervisible' : '') + // Assign class if layer is visible
+      '">' + key + "</button></div>";
+
   })
 
   str += '<div>'; // container

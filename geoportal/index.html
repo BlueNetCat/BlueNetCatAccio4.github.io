@@ -56,6 +56,7 @@
       document.getElementById("layersButton").onclick = (e) => {
         e.preventDefault();
         e.stopPropagation();
+        // TODO: there is no need to create layer's menu everytime, unless layers are dynamic (adding, removing)
         createLayersHTML();
       }
 
@@ -67,6 +68,7 @@
           graticuleLayer,
           riversLayer,
           shorelineLayer,
+          eez12nmLayer,
 
           buoysLayer,
           buoysLabelLayer,
@@ -108,8 +110,8 @@
           //console.log(f);
 
           // Continue if the layer is not interesting
-          let layerName = f.get("layer") || layer.get("name");
-          if (layerName == "shoreline" || layerName == "rivers" )
+          let layerName = layer.get("name");
+          if (layerName == "Shoreline" || layerName == "Rivers" || layerName === undefined)
             return;
 
 

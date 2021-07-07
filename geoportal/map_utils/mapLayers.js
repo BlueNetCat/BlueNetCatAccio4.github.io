@@ -9,7 +9,7 @@ const bathymetryLayer = new ol.layer.Tile({
   //preload: 15,
   source: new ol.source.XYZ ({ // https://openlayers.org/en/latest/examples/xyz.html
           url: 'https://tiles.emodnet-bathymetry.eu/2020/baselayer/web_mercator/{z}/{x}/{y}.png', // https://tiles.emodnet-bathymetry.eu/
-          attributions: "© EMODnet Bathymetry Consortium (Basemap)",
+          attributions: "© EMODnet Bathymetry Consortium",
           cacheSize: 500
         }),
 });
@@ -58,8 +58,7 @@ GUIMapLayers["Graticule"] = {"ol-layers": [graticuleLayer], "color": graticuleLa
 const shorelineLayer = new ol.layer.VectorTile({
   maxZoom: 22,
   source: new ol.source.VectorTile({
-    attributions:
-      '© EEA 2 ',
+    attributions: '© European Environment Agency',
     format: new ol.format.MVT(),
     url: 'data/shoreline-tiles/{z}/{x}/{y}.pbf',
     maxZoom: 10, // Defined in MVT folders
@@ -77,13 +76,35 @@ GUIMapLayers["Shoreline"] = {"ol-layers": [shorelineLayer], "color": shorelineLa
 
 
 
+
+// Exclusive economical zone 12 nautical miles layer
+const eez12nmLayer = new ol.layer.VectorTile({
+  maxZoom: 22,
+  source: new ol.source.VectorTile({
+    attributions: '© Flanders Marine Institute',
+    format: new ol.format.MVT(),
+    url: 'data/eez_12nm/{z}/{x}/{y}.pbf',
+    maxZoom: 9, // Defined in MVT folders
+    zDirection: -1
+  }),
+  style: new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: 'rgba(240,150,150,0.6)',
+      width: 1
+    })
+  }),
+});
+eez12nmLayer.set('name', "EEZ 12 nautical miles");
+GUIMapLayers["EEZ 12 nautical miles"] = {"ol-layers": [eez12nmLayer], "color": eez12nmLayer.style_.stroke_.color_};
+
+
+
 // Rivers MVT layer
 //https://gis.stackexchange.com/questions/210188/unzipping-osm2vectortiles-after-extracing-with-mbutil
 const riversLayer = new ol.layer.VectorTile({
   maxZoom: 22,
   source: new ol.source.VectorTile({
-    attributions:
-      '© EEA ',
+    attributions: '© FAO',
     format: new ol.format.MVT(),
     url: 'data/rivers_westmed/{z}/{x}/{y}.pbf',
     maxZoom: 5,
@@ -115,7 +136,7 @@ const webcamLayer = new ol.layer.Vector({
   source: new ol.source.Vector({
     url: 'data/webcams.json',
     format: new ol.format.GeoJSON(),
-    attributions: '© wEBCAMS ',
+    attributions: '© BlueNetCat',
   }),
   style: function (feature, resolution) {
     var zoom = map.getView().getZoomForResolution(resolution); // ALERT, THIS DEPENDS ON THE map VARIABLE
@@ -133,7 +154,7 @@ const webcamLabelLayer = new ol.layer.Vector({
   source: new ol.source.Vector({
     url: 'data/webcams.json',
     format: new ol.format.GeoJSON(),
-    attributions: '© aa ',
+    attributions: '© BlueNetCat',
   }),
   style: function (feature, resolution) {
     return new ol.style.Style({
@@ -167,7 +188,7 @@ const buoysLayer = new ol.layer.Vector({
   source: new ol.source.Vector({
     url: 'data/buoys.geojson',
     format: new ol.format.GeoJSON(),
-    attributions: '© Bla ',
+    attributions: '© BlueNetCat',
   }),
   style: function (feature, resolution) {
     var zoom = map.getView().getZoomForResolution(resolution); // ALERT, THIS DEPENDS ON THE map VARIABLE
@@ -185,7 +206,7 @@ const buoysLabelLayer = new ol.layer.Vector({
   source: new ol.source.Vector({
     url: 'data/buoys.geojson',
     format: new ol.format.GeoJSON(),
-    attributions: '© BUOy ',
+    attributions: '© BlueNetCat',
   }),
   style: function (feature) {
     return new ol.style.Style({
@@ -220,7 +241,7 @@ const radarsLayer = new ol.layer.Vector({
   source: new ol.source.Vector({
     url: 'data/radars.geojson',
     format: new ol.format.GeoJSON(),
-    attributions: '© Bla ',
+    attributions: '© BlueNetCat',
   }),
   /*style: function (feature, resolution) {
     var zoom = map.getView().getZoomForResolution(resolution); // ALERT, THIS DEPENDS ON THE map VARIABLE
@@ -240,7 +261,7 @@ const radarsLabelLayer = new ol.layer.Vector({
   source: new ol.source.Vector({
     url: 'data/radars.geojson',
     format: new ol.format.GeoJSON(),
-    attributions: '© BUOy ',
+    attributions: '© BlueNetCat',
   }),
   style: function (feature) {
     return new ol.style.Style({
@@ -275,7 +296,7 @@ const dischargePointsLayer = new ol.layer.Vector({
   source: new ol.source.Vector({
     url: 'data/discharge_urban_treatment_plants.geojson',
     format: new ol.format.GeoJSON(),
-    attributions: '© Ministerio para la Transición Ecológica y el Reto Demográfico',
+    attributions: '© MITECO',
   }),
   style: function (feature, resolution) {
     var zoom = map.getView().getZoomForResolution(resolution); // ALERT, THIS DEPENDS ON THE map VARIABLE
@@ -294,7 +315,7 @@ const dischargePointsLabelLayer = new ol.layer.Vector({
   source: new ol.source.Vector({
     url: 'data/discharge_urban_treatment_plants.geojson',
     format: new ol.format.GeoJSON(),
-    attributions: '© Ministerio para la Transición Ecológica y el Reto Demográfico',
+    attributions: '© MITECO',
   }),
   style: function (feature) {
     return new ol.style.Style({
@@ -330,7 +351,7 @@ const weatherStationsLayer = new ol.layer.Vector({
   source: new ol.source.Vector({
     url: 'data/weather_stations_med.geojson',
     format: new ol.format.GeoJSON(),
-    attributions: '© Ministerio para la Transición Ecológica y el Reto Demográfico',
+    attributions: '© MITECO',
   }),
   style: function (feature, resolution) {
     var zoom = map.getView().getZoomForResolution(resolution); // ALERT, THIS DEPENDS ON THE map VARIABLE
@@ -349,7 +370,7 @@ const weatherStationsLabelLayer = new ol.layer.Vector({
   source: new ol.source.Vector({
     url: 'data/weather_stations_med.geojson',
     format: new ol.format.GeoJSON(),
-    attributions: '© Ministerio para la Transición Ecológica y el Reto Demográfico',
+    attributions: '© MITECO',
   }),
   style: function (feature) {
     return new ol.style.Style({
@@ -442,7 +463,7 @@ const riversLabelsLayer =  new ol.layer.Vector({
   source: new ol.source.Vector({
     url: 'data/rivers_westmed.geojson',
     format: new ol.format.GeoJSON(),
-    attributions: '© Test ',
+    attributions: '© FAO ',
   }),
   style: function (feature) {
     return new ol.style.Style({
