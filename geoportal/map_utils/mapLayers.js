@@ -134,7 +134,7 @@ GUIMapLayers["Rivers"] = {"ol-layers": [riversLayer], "color": 'rgba(60,150,200,
 // Webcam layer
 const webcamLayer = new ol.layer.Vector({
   source: new ol.source.Vector({
-    url: 'data/webcams.json',
+    url: 'data/webcams.geojson',
     format: new ol.format.GeoJSON(),
     attributions: '© BlueNetCat',
   }),
@@ -152,7 +152,7 @@ const webcamLayer = new ol.layer.Vector({
 // Webcam label layer
 const webcamLabelLayer = new ol.layer.Vector({
   source: new ol.source.Vector({
-    url: 'data/webcams.json',
+    url: 'data/webcams.geojson',
     format: new ol.format.GeoJSON(),
     attributions: '© BlueNetCat',
   }),
@@ -398,6 +398,59 @@ GUIMapLayers["Weather stations"] = {"ol-layers": [weatherStationsLayer, weatherS
 
 
 
+// Tide Gauges layer
+const tideGaugesLayer = new ol.layer.Vector({
+  minZoom: 5,
+  source: new ol.source.Vector({
+    url: 'data/tide_gauges.geojson',
+    format: new ol.format.GeoJSON(),
+    attributions: '© BlueNetCat',
+  }),
+  style: function (feature, resolution) {
+    var zoom = map.getView().getZoomForResolution(resolution); // ALERT, THIS DEPENDS ON THE map VARIABLE
+    return new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: Math.min(zoom/5,5),
+        fill: new ol.style.Fill({color: 'rgba(25, 50, 255, 0.1)'}),
+        stroke: new ol.style.Stroke({color: 'rgba(25, 50, 255, 0.9)', width: 1}),
+      }),
+    });
+  },
+});
+// Weather Stations label layer
+const tideGaugesLabelLayer = new ol.layer.Vector({
+  minZoom: 8,
+  source: new ol.source.Vector({
+    url: 'data/tide_gauges.geojson',
+    format: new ol.format.GeoJSON(),
+    attributions: '© BlueNetCat',
+  }),
+  style: function (feature) {
+    return new ol.style.Style({
+      text: new ol.style.Text({
+        text: feature.get('name'),
+        textBaseline: 'bottom',
+        offsetY: -5,
+        font: '9px Calibri,sans-serif',
+        overflow: true,
+        fill: new ol.style.Fill({
+          color: '#000',
+        }),
+        stroke: new ol.style.Stroke({
+          color: '#fff',
+          width: 3,
+        }),
+      }),
+    });
+  },
+  declutter: true,
+});
+tideGaugesLayer.set('name', "Tide gauges");
+tideGaugesLabelLayer.set('name', "Tide gauges");
+GUIMapLayers["Tide gauges"] = {"ol-layers": [tideGaugesLayer, tideGaugesLabelLayer], "color": 'rgb(25, 50, 255)'};
+
+
+
 
 
 
@@ -453,6 +506,68 @@ const nationalParksLabelsLayer = new ol.layer.Vector({
 nationalParksLabelsLayer.set('name', "National parks");
 nationalParksLayer.set('name', "National parks");
 GUIMapLayers["National parks"] = {"ol-layers": [nationalParksLayer, nationalParksLabelsLayer], "color": nationalParksLayer.style_.stroke_.color_};
+
+
+
+
+
+
+
+// BlueNetCat members layer
+const bluenetcatMembersLayer = new ol.layer.Vector({
+  source: new ol.source.Vector({
+    url: 'data/BlueNetCatMembers.geojson',
+    format: new ol.format.GeoJSON(),
+    attributions: '© BlueNetCat',
+  }),
+  style: function (feature, resolution) {
+    var zoom = map.getView().getZoomForResolution(resolution); // ALERT, THIS DEPENDS ON THE map VARIABLE
+    return new ol.style.Style({
+      image: new ol.style.Icon({
+        crossOrigin: 'anonymous',
+        src: '../network/logos/BlueNetCat.png',
+        scale: Math.min(zoom/70, '0.3'),
+        opacity: 0.9
+        /*radius: Math.min(zoom,10),
+        fill: new ol.style.Fill({color: 'rgba(0, 255, 0, 0.1)'}),
+        stroke: new ol.style.Stroke({color: 'green', width: 1}),*/
+      }),
+    });
+  },
+});
+// BlueNetCat members label layer
+const bluenetcatMembersLabelLayer = new ol.layer.Vector({
+  source: new ol.source.Vector({
+    url: 'data/BlueNetCatMembers.geojson',
+    format: new ol.format.GeoJSON(),
+    attributions: '© BlueNetCat',
+  }),
+  style: function (feature, resolution) {
+    return new ol.style.Style({
+      text: new ol.style.Text({
+        text: feature.get('orga') + (feature.get('orga') !== feature.get('centre') ? (", " + feature.get('centre')) : ""),
+        font: '12px Calibri,sans-serif',
+        overflow: true,
+        offsetY: 15,
+        fill: new ol.style.Fill({
+          color: '#000',
+        }),
+        stroke: new ol.style.Stroke({
+          color: '#fff',
+          width: 3,
+        }),
+      }),
+    });
+  },
+  declutter: true,
+});
+bluenetcatMembersLayer.set('name', "BlueNetCat Members");
+bluenetcatMembersLabelLayer.set('name', "BlueNetCat Members");
+GUIMapLayers["BlueNetCat Members"] = {"ol-layers": [bluenetcatMembersLayer, bluenetcatMembersLabelLayer], "color": 'green'};
+
+
+
+
 
 
 

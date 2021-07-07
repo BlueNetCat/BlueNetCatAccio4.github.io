@@ -31,8 +31,10 @@ const createLayersHTML = () => {
 
   })
 
-  str += '<div>'; // container
+  str += '</div>'; // container
+
   el.innerHTML = str;
+
 
   // Button events
   // Iterate buttons
