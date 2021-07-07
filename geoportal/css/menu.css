@@ -19,6 +19,11 @@ css for buttons
   background: #b8e3ff;
 }
 
+a:link { text-decoration: none; }
+a:visited { text-decoration: none; }
+a:hover { text-decoration: none; }
+a:active { text-decoration: none; }
+
 /*
 css for overlay menus on the sides
 From http://tympanus.net/codrops/
@@ -33,7 +38,7 @@ From http://tympanus.net/codrops/
 }
 
 .menu-vertical .container {
-  height: -webkit-fill-available;
+  max-height: calc(100vh);
 }
 
 

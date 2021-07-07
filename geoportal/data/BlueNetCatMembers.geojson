@@ -1,0 +1,146 @@
+{
+  "type": "FeatureCollection",
+  "name": "Members of the BlueNetCat",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          2.196074,
+          41.38517
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "orga": "CSIC",
+        "centre": "ICM"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          2.114949,
+          41.387638
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "orga": "CSIC",
+        "centre": "IDAEA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          2.800706,
+          41.684213
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "orga": "CSIC",
+        "centre": "CEAB"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          1.168187,
+          41.170143
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "orga": "IRTA",
+        "centre": "IRTA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          2.104765,
+          41.50207
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "orga": "UAB",
+        "centre": "UAB"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          2.119866,
+          41.385352
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "orga": "UB",
+        "centre": "UB"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          2.830873,
+          41.96446
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "orga": "UdG",
+        "centre": "UdG"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          2.112499,
+          41.388765
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "orga": "UPC",
+        "centre": "UPC"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          1.730136,
+          41.221409
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "orga": "UPC",
+        "centre": "OBSEA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "coordinates": [
+          1.119802,
+          41.14483
+        ],
+        "type": "Point"
+      },
+      "properties": {
+        "orga": "URV",
+        "centre": "URV"
+      }
+    }
+  ]
+}

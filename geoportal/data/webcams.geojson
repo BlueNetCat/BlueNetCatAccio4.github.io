@@ -329,7 +329,7 @@
     {
       "type": "Feature",
       "properties": {
-        "name": "Calella Webcam",
+        "name": "Calella de Palafrugell Webcam",
         "source": {
           "href": "https://www.finquesfrigola.com/webcam.php",
           "type": "text/html",
@@ -340,8 +340,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          2.647674,
-          41.60848
+          3.18,
+          41.88
         ]
       }
     },
