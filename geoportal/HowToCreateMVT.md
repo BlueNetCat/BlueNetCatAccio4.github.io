@@ -19,6 +19,10 @@ conda create -n mygdal gdal
 source activate mygdal
 
 ogr2ogr -f GeoJSON in.geojson -t_srs EPSG:4326 your_data.shp
+
+You can also limit the file
+ogr2ogr -f GeoJSON in.geojson -t_srs EPSG:4326 -clipdst -40 10 50 55 your_data.shp
+
 ```
 ### 1. Create a .mbtiles file with tippecanoe
 ```
