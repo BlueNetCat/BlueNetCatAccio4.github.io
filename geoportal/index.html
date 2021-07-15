@@ -17,11 +17,13 @@
 
     <!-- Map Layers -->
     <script src="map_utils/mapLayers.js"></script>
+    <!-- Particla animations -->
+    <script src="map_utils/animation.js"></script>
     <!-- HTML templates -->
     <script src="html_utils/html_templates.js"></script>
 
     <style>
-      .map {
+      .map, .canvas {
         width: 100%;
         height: 100%;
         position: absolute;
@@ -36,6 +38,7 @@
 
     <!-- Open layers map -->
     <div id="map" class="map"></div>
+    <canvas id="animationCanvas" class ="canvas" style="background: none; pointer-events: none;"></div>
 
 
     <!-- Buttons -->
@@ -68,7 +71,7 @@
 
       var map = new ol.Map({
         layers: [
-          seaVelocityLayer,
+
           // Baselayer
           bathymetryLayer,
           graticuleLayer,
@@ -101,6 +104,12 @@
           bluenetcatMembersLabelLayer,
 
           riversLabelsLayer,
+
+          // Sea Velocity
+          seaVelocityLayer,
+          // Animation
+          seaVelocityEastLayer,
+          seaVelocityNorthLayer,
 
          ],
         target: 'map',
@@ -140,16 +149,32 @@
       });
 
       // Sea Velocity
+      let tooltipSeaVelocityValue = [];
       map.on('pointermove', function(evt) {
-        map.forEachLayerAtPixel(evt.pixel, function(layer, pixel) {
-            //var height = -10000 + ((pixel[0] * 256 * 256 + pixel[1] * 256 + pixel[2]) * 0.1);
-            var height = (pixel[0] * 256 + pixel[1] + pixel[2] / 256) - 32768;
-            console.log(layer.get("name"), pixel);
+
+        var value = (getSeaVelAtPixel(evt.pixel, tooltipSeaVelocityValue));
+        console.log(value);
+        /*map.forEachLayerAtPixel(evt.pixel, function(layer, pixel) {
+
+            // Calculate sea velocity
+            if (layer.getClassName() === 'seaVelocityEast')
+              seaVelVec2[0] = (seaVelocityColorRange[1]-seaVelocityColorRange[0]) * pixel[0]/255 + seaVelocityColorRange[0]; // Normalize;
+            else if (layer.getClassName() === 'seaVelocityNorth')
+              seaVelVec2[1] = (seaVelocityColorRange[1]-seaVelocityColorRange[0]) * pixel[0]/255 + seaVelocityColorRange[0]; // Normalize;
+            else if (layer.getClassName() === 'seaVelocity'){
+              let seaVelMag = (seaVelocityColorRange[1]-seaVelocityColorRange[0]) * pixel[0]/255 + seaVelocityColorRange[0]; // Normalize;
+              let seaVelMagFromEastNorth = Math.sqrt(seaVelVec2[0]*seaVelVec2[0] + seaVelVec2[1]*seaVelVec2[1]);
+              console.log(seaVelMag + ", " + seaVelMagFromEastNorth);
+            }
+
+            //console.log(layer.getClassName(), pixel);
             //info.innerHTML = '<p>' + height.toFixed(1) + 'm</p>'
         },
         {
-            layerFilter: function(candidate) { return (candidate === seaVelocityLayer); }
-        });
+            layerFilter: function(candidate) {
+              return (candidate === seaVelocityLayer || candidate === seaVelocityEastLayer || candidate === seaVelocityNorthLayer );
+            }
+        });*/
       });
 
 
