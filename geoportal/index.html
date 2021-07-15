@@ -38,7 +38,7 @@
 
     <!-- Open layers map -->
     <div id="map" class="map"></div>
-    <canvas id="animationCanvas" class ="canvas" style="background: none; pointer-events: none;"></div>
+    <canvas id="animationCanvas" class ="canvas" style="background: none; pointer-events: none;"></canvas>
 
 
     <!-- Buttons -->
@@ -153,7 +153,7 @@
       map.on('pointermove', function(evt) {
 
         var value = (getSeaVelAtPixel(evt.pixel, tooltipSeaVelocityValue));
-        
+
       });
 
       start();

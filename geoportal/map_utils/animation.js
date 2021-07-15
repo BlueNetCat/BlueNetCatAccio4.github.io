@@ -10,11 +10,11 @@ let canvasParticles;
 let ctx;
 // Particle animation
 let numParticles = 10000;
-let numVerticesPath = 10;
+let numVerticesPath = 20;
 let vertices = new Float32Array(numParticles*numVerticesPath*2);
 let lifeParticle = new Float32Array(numParticles);
 let velocityVertices = new Float32Array(numParticles*numVerticesPath);
-let speedFactor = 0.1;
+let speedFactor = 0.5;
 
 // Data
 let imgDataEast;
@@ -43,12 +43,12 @@ seaVelocityNorthLayer.getSource().on('tileloadend', function () {
 });
 // When layer starts loading because of map change
 seaVelocityEastLayer.getSource().on('tileloadstart', function () {
-  imgDataEast = undefined;
+  //imgDataEast = undefined;
   loading++;
 });
 seaVelocityNorthLayer.getSource().on('tileloadstart', function () {
   loading++;
-  imgDataNorth = undefined;
+  //imgDataNorth = undefined;
 });
 // Get the data from layers once loading has finished
 const getDataFromLayers = () => {
@@ -206,6 +206,7 @@ const update = () => {
   // If data is loading
   if (imgDataEast === undefined || imgDataNorth === undefined)
     return;
+  //
 
   // Clear rect
   //ctx.clearRect(0,0, canvasParticles.width, canvasParticles.height);
@@ -213,7 +214,7 @@ const update = () => {
 
   // Trail effect
   // https://codepen.io/Tyriar/pen/BfizE
-  ctx.fillStyle = 'rgba(255, 255, 255, .05)';
+  ctx.fillStyle = 'rgba(255, 255, 255, .9)';
   ctx.globalCompositeOperation = "destination-in";
   ctx.fillRect(0,0, canvasParticles.width, canvasParticles.height);
   ctx.globalCompositeOperation = "source-over";
@@ -247,8 +248,15 @@ const update = () => {
       prevPosX[i] = xPos;
       prevPosY[i] = yPos;
     }
+    // Prevent wrong prevPos due to late event callbacks
+    if (Math.abs(prevPosX[i] - xPos) > 20 || Math.abs(prevPosY[i] - yPos) > 20){
+      prevPosX[i] = xPos;
+      prevPosY[i] = yPos;
+    }
+
 
     ctx.strokeStyle = 'rgba(0, 0, 0, 1)';
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(prevPosX[i], prevPosY[i])
     ctx.lineTo(xPos, yPos);
