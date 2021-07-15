@@ -153,31 +153,10 @@
       map.on('pointermove', function(evt) {
 
         var value = (getSeaVelAtPixel(evt.pixel, tooltipSeaVelocityValue));
-        console.log(value);
-        /*map.forEachLayerAtPixel(evt.pixel, function(layer, pixel) {
-
-            // Calculate sea velocity
-            if (layer.getClassName() === 'seaVelocityEast')
-              seaVelVec2[0] = (seaVelocityColorRange[1]-seaVelocityColorRange[0]) * pixel[0]/255 + seaVelocityColorRange[0]; // Normalize;
-            else if (layer.getClassName() === 'seaVelocityNorth')
-              seaVelVec2[1] = (seaVelocityColorRange[1]-seaVelocityColorRange[0]) * pixel[0]/255 + seaVelocityColorRange[0]; // Normalize;
-            else if (layer.getClassName() === 'seaVelocity'){
-              let seaVelMag = (seaVelocityColorRange[1]-seaVelocityColorRange[0]) * pixel[0]/255 + seaVelocityColorRange[0]; // Normalize;
-              let seaVelMagFromEastNorth = Math.sqrt(seaVelVec2[0]*seaVelVec2[0] + seaVelVec2[1]*seaVelVec2[1]);
-              console.log(seaVelMag + ", " + seaVelMagFromEastNorth);
-            }
-
-            //console.log(layer.getClassName(), pixel);
-            //info.innerHTML = '<p>' + height.toFixed(1) + 'm</p>'
-        },
-        {
-            layerFilter: function(candidate) {
-              return (candidate === seaVelocityLayer || candidate === seaVelocityEastLayer || candidate === seaVelocityNorthLayer );
-            }
-        });*/
+        
       });
 
-
+      start();
 
 
     </script>
