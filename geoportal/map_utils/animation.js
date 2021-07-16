@@ -206,7 +206,11 @@ const update = () => {
   // If data is loading
   if (imgDataEast === undefined || imgDataNorth === undefined)
     return;
-  //
+  // If data layer is not visible
+  if (!seaVelocityEastLayer.getVisible()){
+    ctx.clearRect(0,0, canvasParticles.width, canvasParticles.height);
+    return;
+  }
 
   // Clear rect
   //ctx.clearRect(0,0, canvasParticles.width, canvasParticles.height);
