@@ -28,61 +28,40 @@
     <script>
 
 
-      var map = new ol.Map({
-        layers: [
-          new ol.layer.Tile({
-            //preload: 15,
-            source: new ol.source.XYZ ({ // https://openlayers.org/en/latest/examples/xyz.html
-                    url: 'https://tiles.emodnet-bathymetry.eu/2020/baselayer/web_mercator/{z}/{x}/{y}.png', // https://tiles.emodnet-bathymetry.eu/
-                    attributions: "© EMODnet Bathymetry Consortium (Basemap)",
-                  }),
-          }),
-          //https://gis.stackexchange.com/questions/210188/unzipping-osm2vectortiles-after-extracing-with-mbutil
-          new ol.layer.VectorTile({
-            //declutter: true,
-            maxZoom: 22,
-            source: new ol.source.VectorTile({
-              attributions:
-                '© Test ',
-              format: new ol.format.MVT(),
-              url: '../data/shoreline-tiles/{z}/{x}/{y}.pbf',
-              maxZoom: 9,
-              zDirection: -1
-            }),
-            style: new ol.style.Style({
-              stroke: new ol.style.Stroke({
-                color: 'rgba(0,0,0,1)',
-                width: 1
-              })
-            }),
-          }),
-          new ol.layer.VectorTile({
-            minZoom: 6,
-            maxZoom: 30,
-            source: new ol.source.VectorTile({
-              attributions:
-                '© Test ',
-              format: new ol.format.MVT(),
-              url: '../data/rivers_westmed/{z}/{x}/{y}.pbf',
-              maxZoom: 5,
-              zDirection: -1
-            }),
-            style: new ol.style.Style({
-              stroke: new ol.style.Stroke({
-                color: 'rgba(135, 176, 255,0.7)',
-                width: 0.8
-              })
-            }),
-          }),
+    var elevation = new ol.layer.Tile({
+      source: new ol.source.TileWMS ({
+        url: 'https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-d',
+        params: {'LAYERS': 'uo', 'COLORSCALERANGE':[-1, 1], 'STYLES': 'boxfill/greyscale'},
+        crossOrigin: 'anonymous',
+      }),
+ });
 
-         ],
-        target: 'map',
-        view: new ol.View({
-          center: [0, 0],
-          zoom: 2,
-          maxZoom: 22,
-        }),
-      });
+
+ var raster = new ol.layer.Tile({
+     source: new ol.source.OSM()
+ });
+
+
+ var map = new ol.Map({
+     layers: [elevation, raster],
+     target: 'map',
+     view: new ol.View({
+         center: ol.proj.fromLonLat([3, 42]),
+         maxZoom: 19,
+         zoom: 8
+     })
+ });
+
+ map.on('pointermove', function(evt) {
+     map.forEachLayerAtPixel(evt.pixel, function(layer, pixel) {
+         //var height = -10000 + ((pixel[0] * 256 * 256 + pixel[1] * 256 + pixel[2]) * 0.1);
+
+         var height = (pixel[0] * 256 + pixel[1] + pixel[2] / 256) - 32768;
+         console.log(evt.pixel, pixel);
+     }, {
+         layerFilter: function(candidate) { return (candidate === elevation); }
+     });
+ });
 
 
 

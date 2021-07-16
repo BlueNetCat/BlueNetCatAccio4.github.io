@@ -17,11 +17,13 @@
 
     <!-- Map Layers -->
     <script src="map_utils/mapLayers.js"></script>
+    <!-- Particla animations -->
+    <script src="map_utils/animation.js"></script>
     <!-- HTML templates -->
     <script src="html_utils/html_templates.js"></script>
 
     <style>
-      .map {
+      .map, .canvas {
         width: 100%;
         height: 100%;
         position: absolute;
@@ -36,6 +38,7 @@
 
     <!-- Open layers map -->
     <div id="map" class="map"></div>
+    <canvas id="animationCanvas" class ="canvas" style="background: none; pointer-events: none;"></canvas>
 
 
     <!-- Buttons -->
@@ -49,11 +52,17 @@
     <nav class="menu menu-vertical menu-right" id="menu-right">
 		</nav>
 
+    <!-- Info html -->
+    <div id="toprightInfo" style="position: absolute; top: 1.5%; right: 5%; opacity: 90%">
+
+    </div>
+
     <!-- Repository link -->
-    <div class="btn btn-light btn-sm  btn-link" style="position: absolute; bottom: 1.5%; left: 1%; opacity: 75%">
+    <div class="btn btn-light btn-sm  btn-link p-0" style="position: absolute; bottom: 1.5%; left: 1%; opacity: 75%">
       <a class="btn btn-sm" style="color: #000" href="https://github.com/BlueNetCatAccio4/BlueNetCatAccio4.github.io/tree/main/geoportal/" target='_blank' rel='noopener noreferrer'>
         Repositori
-      </a></div>
+      </a>
+    </div>
 
     <script>
 
@@ -68,6 +77,7 @@
 
       var map = new ol.Map({
         layers: [
+
           // Baselayer
           bathymetryLayer,
           graticuleLayer,
@@ -99,7 +109,14 @@
           bluenetcatMembersLayer,
           bluenetcatMembersLabelLayer,
 
-          riversLabelsLayer
+          riversLabelsLayer,
+
+          // Sea Velocity
+          seaVelocityLayer,
+          // Animation
+          seaVelocityEastLayer,
+          seaVelocityNorthLayer,
+
          ],
         target: 'map',
         view: new ol.View({
@@ -137,7 +154,29 @@
         });
       });
 
+      // Sea Velocity
+      let tooltipSeaVelocityValue = [];
+      map.on('pointermove', function(evt) {
 
+        // Sea velocity
+        if (seaVelocityLayer.getVisible()) {
+          var value = (getSeaVelAtPixel(evt.pixel, tooltipSeaVelocityValue));
+          if (value !== undefined){
+            if (value[0] !== undefined){
+              let seaVelMag = Math.sqrt(value[0]*value[0] + value[1]*value[1]);
+              document.getElementById("toprightInfo").innerText = "Sea Velocity: " + seaVelMag.toFixed(2) + " m/s";
+            } else{
+              document.getElementById("toprightInfo").innerText = "";
+            }
+          } else{
+            document.getElementById("toprightInfo").innerText = "";
+          }
+        } else if (document.getElementById("toprightInfo").innerText.search("Sea Velocity") != -1){
+          document.getElementById("toprightInfo").innerText = "";
+        }
+      });
+
+      start();
 
 
     </script>
