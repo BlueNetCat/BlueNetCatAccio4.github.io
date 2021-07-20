@@ -20,7 +20,8 @@ class ParticleSystem {
     // When source is not visible
     this.source.eastLayer.on('change:visible', (e) => {
       this.source.isReady = myParticles.source.getSourceIsReady();
-      this.updateSource();
+      if (this.source.isReady)
+        this.updateSource();
       this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
     })
     // Create particles
@@ -40,9 +41,10 @@ class ParticleSystem {
       this.particles[i].repositionParticle();
   }
 
-
-
-
+  // Clear canvas
+  clearCanvas(){
+    this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
+  }
 
   draw(dt) {
     // Trail effect
@@ -55,12 +57,12 @@ class ParticleSystem {
     this.ctx.fillStyle = 'rgba(0, 0, 0, 1)';
 
     // Line style
-    ctx.strokeStyle = 'rgba(0, 0, 0, 1)';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
+    this.ctx.strokeStyle = 'rgba(0, 0, 0, 1)';
+    this.ctx.lineWidth = 1.5;
+    this.ctx.beginPath();
     for (let i = 0; i < this.numParticles; i++)
       this.particles[i].draw(dt);
-    ctx.stroke();
+    this.ctx.stroke();
   }
 
 }
@@ -241,7 +243,7 @@ class Source {
     pixel[1] = Math.round(pixel[1]);
 
     // Check if data exists
-    if (!this.imgDataEast || !this.imgDataNorth)
+    if (!this.isReady)
       return value;
 
     // Get pixel value
