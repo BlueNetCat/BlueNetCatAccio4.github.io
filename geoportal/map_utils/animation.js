@@ -1,6 +1,9 @@
 
 
 
+
+
+
 // VARIABLES
 // Reusable arrays for optimization
 let seaVelVec2 = [0,0];
@@ -31,14 +34,16 @@ seaVelocityEastLayer.getSource().on('tileloadend', function () {
   loaded++;
   // Only update when all tiles are loaded
   if (loading == loaded){
-    getDataFromLayers();
+    //getDataFromLayers();
+    myParticles.updateSource();
   }
 });
 seaVelocityNorthLayer.getSource().on('tileloadend', function () {
   loaded++;
   // Only update when all tiles are loaded
   if (loading == loaded){
-    getDataFromLayers();
+    //getDataFromLayers();
+    myParticles.updateSource();
   }
 });
 // When layer starts loading because of map change
@@ -144,7 +149,7 @@ const generatePoint = (pixelVec2, seaVelVec2, callStackNum) => {
   // If pixel does not contain data
   if (seaVelVec2[0] === undefined && callStackNum < 20){
     callStackNum = callStackNum || 1;
-    generatePoint(pixelVec2, seaVelVec2, callStackNum); // Recursive function
+    generatePoint(pixelVec2, seaVelVec2, callStackNum +1); // Recursive function
   }
 }
 
@@ -171,11 +176,14 @@ const onMapChange = () => {
 
 
 // START
+let mySource;
+let myParticles;
 const start = () => {
   canvasParticles = document.getElementById("animationCanvas");
   ctx = canvasParticles.getContext("2d");
 
-  prevTime = performance.now();
+  mySource = new Source(seaVelocityEastLayer, seaVelocityNorthLayer);
+  myParticles = new ParticleSystem(canvasParticles, mySource);
 
   // Update particles and canvas size
   onMapChange();
@@ -183,15 +191,21 @@ const start = () => {
   // Define map events
   // Update canvas and positions
   map.on('moveend', () => {
-    getDataFromLayers();
+    //getDataFromLayers();
     onMapChange();
+    myParticles.updateSource();
+    //update();
   });
   // Clear canvas
   map.on('movestart', () => {
     ctx.clearRect(0,0, canvasParticles.width, canvasParticles.height);
-    imgDataEast = undefined;
+    myParticles.source.isReady = false;
+    //imgDataEast = undefined;
   });
 
+
+
+  prevTime = performance.now();
 }
 
 
@@ -199,9 +213,23 @@ const start = () => {
 let prevPosX = [];
 let prevPosY = [];
 const update = () => {
-  // Time differential
   let timeNow = performance.now();
   let dt = (timeNow - prevTime)/1000; // in seconds
+
+  // If data is loaded and layer is visible
+  if (myParticles.source.isReady)
+    myParticles.draw(dt);
+
+
+
+  prevTime = timeNow; // Update Timer
+  //window.requestAnimationFrame(update);
+  setTimeout(update, 40);
+  return;
+
+  // Time differential
+  //let timeNow = performance.now();
+  //let dt = (timeNow - prevTime)/1000; // in seconds
 
   // If data is loading
   if (imgDataEast === undefined || imgDataNorth === undefined)
@@ -297,10 +325,10 @@ const update = () => {
 
   // Update timer
   prevTime = timeNow;
-  window.requestAnimationFrame(update);
+  //window.requestAnimationFrame(update);
 }
 window.requestAnimationFrame(update);
-
+//update();
 
 
 /*
