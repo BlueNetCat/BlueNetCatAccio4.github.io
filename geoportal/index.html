@@ -17,8 +17,9 @@
 
     <!-- Map Layers -->
     <script src="map_utils/mapLayers.js"></script>
-    <!-- Particla animations -->
+    <!-- Particle animations -->
     <script src="map_utils/animation.js"></script>
+    <script src="map_utils/ParticleSystem.js"></script>
     <!-- HTML templates -->
     <script src="html_utils/html_templates.js"></script>
 
@@ -129,6 +130,10 @@
 
 
 
+      start();
+
+
+
 
       // Interaction
       map.on('singleclick', function (e) {
@@ -159,8 +164,9 @@
       map.on('pointermove', function(evt) {
 
         // Sea velocity
-        if (seaVelocityLayer.getVisible()) {
-          var value = (getSeaVelAtPixel(evt.pixel, tooltipSeaVelocityValue));
+        if (seaVelocityLayer.getVisible() && !(mySource === undefined)) {
+
+          var value = (mySource.getValueAtPixel(evt.pixel, tooltipSeaVelocityValue));
           if (value !== undefined){
             if (value[0] !== undefined){
               let seaVelMag = Math.sqrt(value[0]*value[0] + value[1]*value[1]);
@@ -176,7 +182,7 @@
         }
       });
 
-      start();
+
 
 
     </script>

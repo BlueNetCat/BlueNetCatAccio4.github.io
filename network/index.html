@@ -61,7 +61,7 @@ function runApp(htmlParent, graph){
 		  .attr("id", (d,e) => graph.names[e].replace(/[^a-zA-Z ]|\s/g, "")),
 		circle = node
 		  .append("circle")
-		  .attr("r", (d,e) => graph.circleSize[e]) 
+		  .attr("r", (d,e) => graph.circleSize[e])
 		  .classed("node", true)
 		  .classed("fixed", d => d.fx !== undefined),
 		logo = node
@@ -71,8 +71,8 @@ function runApp(htmlParent, graph){
 		  .attr("height", (d,e) => graph.circleSize[e]*1.8)
 		  .classed("logo", true);
 
-	
-	
+
+
 
 
   // Add the svg to the HTML
@@ -135,7 +135,7 @@ function runApp(htmlParent, graph){
 		rectFundingF
 		  .attr("x", (d,e) => d.x-graph.circleSize[e]*0.9)
 		  .attr("y", (d,e) => d.y-graph.circleSize[e]*0.9);
-		
+
   }
 
   // Add label to node
@@ -147,7 +147,7 @@ function runApp(htmlParent, graph){
 		var x = d.x;
 		var y = d.y;
 		// Text
-		var text = 
+		var text =
 		d3.select("svg")
 		.append("text")
 		.text(d => graph.names[idx]) // TODO, NOT POSSIBLE TO DO LINE BREAKS?
@@ -220,7 +220,7 @@ function runApp(htmlParent, graph){
 		// Selected
 		// Select
 		d3.select(this).select("circle").classed("fixed", true);
-		
+
 		d.fx = width*0.2; // TODO: smooth transitions whn clicking. Center and separate? Other strategies? links?
 		d.fy = height*0.1;
 
@@ -253,7 +253,7 @@ function prepareData (data){
 	var imgSources = [];
 	var circleSizes = [];
 	// Circle sizes
-	var smallR = 12; 
+	var smallR = 12;
 	var middleR = 25;
 	var bigR = 45;
 
@@ -263,7 +263,7 @@ function prepareData (data){
 		nodeNames[i] = data.features[i].properties.grup;
 		// Write size of circle for grup names
 		circleSizes[i] = smallR;
-		
+
 		// Find out how many centers are there
 		var center = data.features[i].properties.centro;
 		var centerIndex = 0;
@@ -288,7 +288,7 @@ function prepareData (data){
 				circleSizes[numGrups + centerIndex] = middleR*0.9;
 			// Write image source
 			imgSources[numGrups + centerIndex] = "logos/" + center + ".png";
-		} 
+		}
 		// Could optimize previous section by comparing with prevCenter (not real-time, not needed)
 
 
@@ -313,10 +313,8 @@ function prepareData (data){
 	imgSources.push("logos/FBG.png"); imgSources.push("logos/Generalitat.png"); imgSources.push("logos/EU.png");
 	var indexBlueNetCat = numGrups + centersList.length;
 	linksInfo.push({source: indexBlueNetCat + 1, target: indexBlueNetCat, dist: 1});
-	linksInfo.push({source: indexBlueNetCat + 2, target: indexBlueNetCat, dist: 1});
-	linksInfo.push({source: indexBlueNetCat + 3, target: indexBlueNetCat, dist: 1});
-	linksInfo.push({source: indexBlueNetCat + 1, target: indexBlueNetCat + 2, dist: 1});
-	linksInfo.push({source: indexBlueNetCat + 1, target: indexBlueNetCat + 3, dist: 1});
+	linksInfo.push({source: indexBlueNetCat + 1, target: indexBlueNetCat + 2, dist: 20});
+	linksInfo.push({source: indexBlueNetCat + 1, target: indexBlueNetCat + 3, dist: 20});
 	// Include CSIC
 	nodeNames.push("CSIC");
 	circleSizes.push(middleR);
@@ -326,7 +324,7 @@ function prepareData (data){
 	linksInfo.push({source: numGrups + 1, target: nodeNames.length-1, dist: 1}); // HARDCODED
 	linksInfo.push({source: numGrups + 2, target: nodeNames.length-1, dist: 1}); // HARDCODED
 
-	
+
 	var graph = {
 		nodes: Array.from({length:nodeNames.length}, () => ({})),
 		links: linksInfo,
