@@ -617,7 +617,12 @@ const seaVelocityLayer = new ol.layer.Tile({
     cacheSize: 500,
     zDirection: -1,
     crossOrigin: 'anonymous',
+<<<<<<< HEAD
     params: {'LAYERS': 'sea_water_velocity', 'COLORSCALERANGE':[-1.5, 1.5], 'STYLES': 'boxfill/occam', 'TRANSPARENT': true}, //'boxfill/occam' or 'boxfill/rainbow' or fancyvec/greyscale
+=======
+    maxZoom: 1,
+    params: {'LAYERS': 'sea_water_velocity', 'COLORSCALERANGE':[-1, 1], 'STYLES': 'boxfill/occam', 'TRANSPARENT': true}, //'boxfill/occam' or 'boxfill/rainbow' or fancyvec/greyscale
+>>>>>>> c26a0bf39808443542df5b981118e6f9adfd7550
     // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&TILED=true&COLORSCALERANGE=-0.5354787%2C0.92136043&ELEVATION=-1.0182366371154785&LAYERS=uo&STYLES=boxfill%2Frainbow&TIME=2021-06-22T12%3A00%3A00.000Z&URL=https%3A%2F%2Fnrt.cmems-du.eu%2Fthredds%2Fwms%2Fmed-cmcc-cur-an-fc-d&WIDTH=256&HEIGHT=256&CRS=EPSG%3A4326&BBOX=22.5%2C-11.25%2C33.75%2C0
     // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-qm?request=GetCapabilities&service=WMS
     // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-qm?request=GetMetadata&item=layerDetails&layerName=sea_water_velocity
@@ -635,7 +640,7 @@ addToGUIMapLayers([seaVelocityLayer], 'Sea Velocity');
 // Openlayers far-example: https://openlayers.org/en/latest/examples/getfeatureinfo-tile.html
 // Problem solver: https://stackoverflow.com/questions/61860054/map-foreachlayeratpixel-callback-function-has-an-empty-rgba-array
 // Here are the vectorial WMS of sea velocity. They are two layers, which should not be visible
-const seaVelocityColorRange = [-1,1];
+const seaVelocityColorRange = [-1.2,1.2];
 // Test here color range https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-qm?REQUEST=GetLegendGraphic&LAYER=sea_water_velocity&PALETTE=greyscale&COLORSCALERANGE=-0.5%2C0.5
 const seaVelocityEastLayer = new ol.layer.Tile({
   className: 'seaVelocityEast',

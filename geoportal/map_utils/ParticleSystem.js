@@ -19,7 +19,7 @@ class ParticleSystem {
     this.source = source;
     // When source is not visible
     this.source.eastLayer.on('change:visible', (e) => {
-      this.source.isReady = myParticles.source.getSourceIsReady();
+      this.source.isReady = myParticles.source.getSourceIsVisible();
       if (this.source.isReady)
         this.updateSource();
       this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
@@ -34,6 +34,7 @@ class ParticleSystem {
   // Functions
   // Update the data coming from the images of layers
   updateSource(){
+
     // Update data source
     this.source.updateSource();
     // Reposition particles
@@ -42,8 +43,10 @@ class ParticleSystem {
   }
 
   // Clear canvas
-  clearCanvas(){
+  clear(){
     this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
+    for (let i = 0; i < this.numParticles; i++)
+      this.particles[i].repositionParticle();
   }
 
   draw(dt) {
@@ -174,7 +177,7 @@ class Particle {
                 (1-interpCoeff) * this.vertices[nextVertPath*2 + 1];
 
     // Reset prevPos in first iteration or when values are too far away
-    if (this.life == 0 || Math.abs(this.prevPos[0] - this.currentPos[0]) > 10 || Math.abs(this.prevPos[1] - this.currentPos[1]) > 10){ // TODO
+    if (this.life == 0 || Math.abs(this.prevPos[0] - this.currentPos[0]) > this.stepInPixels*1.5 || Math.abs(this.prevPos[1] - this.currentPos[1]) > this.stepInPixels*1.5){ // TODO
       this.prevPos[0] = this.currentPos[0];
       this.prevPos[1] = this.currentPos[1];
     }
@@ -209,17 +212,40 @@ class Source {
   imgHeight;
   eastLayer;
   northLayer;
-  colorRange = [-1, 1];
   // Constructor
   constructor(eastLayer, northLayer){
     this.eastLayer = eastLayer;
     this.northLayer = northLayer;
     this.isReady = false;
+
+    this.colorRange = this.eastLayer.getSource().getParams().COLORSCALERANGE;
+
+    this.loading = 0;
+    this.loaded = 0;
   }
+
+  // When all tiles from layer are loaded, call a function
+  defineOnLoadCallback(callbackOnLoad){
+    // Layer events
+    this.eastLayer.getSource().on('tileloadend', () => {
+      this.loaded++;
+      // Only update when all tiles are loaded
+      if (this.loading == this.loaded){
+        callbackOnLoad();
+      }
+    });
+
+    // When layer starts loading because of map change
+    this.eastLayer.getSource().on('tileloadstart', () => {
+      this.loading++;
+    });
+  }
+
+
   // Functions
   // Update image source coming from WMS
   updateSource(){
-    if (!this.getSourceIsReady())
+    if (!this.getSourceIsVisible())
       return
     let tmpCnv = this.eastLayer.getRenderer().getImage();
     this.imgDataEast = tmpCnv.getContext("2d").getImageData(0,0,tmpCnv.width,tmpCnv.height);
@@ -231,7 +257,7 @@ class Source {
   }
 
   // Check if the source is available / ready
-  getSourceIsReady(){
+  getSourceIsVisible(){
     return this.eastLayer.getVisible();
   }
 

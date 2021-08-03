@@ -9,24 +9,8 @@ let mySource;
 let myParticles;
 
 // Application state
-let loading = 0;
-let loaded = 0;
 let prevTime = 0;
 
-
-// When layer has been loaded, update image
-seaVelocityEastLayer.getSource().on('tileloadend', function () {
-  loaded++;
-  // Only update when all tiles are loaded
-  if (loading == loaded){
-    myParticles.updateSource();
-  }
-});
-
-// When layer starts loading because of map change
-seaVelocityEastLayer.getSource().on('tileloadstart', function () {
-  loading++;
-});
 
 
 
@@ -43,6 +27,7 @@ const start = () => {
 
   mySource = new Source(seaVelocityEastLayer, seaVelocityNorthLayer);
   myParticles = new ParticleSystem(canvasParticles, mySource);
+  mySource.defineOnLoadCallback(myParticles.updateSource.bind(myParticles));
 
   // First timer
   prevTime = performance.now();
@@ -60,11 +45,13 @@ const start = () => {
   });
   // Clear canvas
   map.on('movestart', () => {
-    myParticles.clearCanvas();
+    myParticles.clear();
     myParticles.source.isReady = false;
     //imgDataEast = undefined;
   });
 
+
+  update();
 }
 
 
@@ -84,7 +71,6 @@ const update = () => {
   setTimeout(update, 40); // Frame rate in milliseconds
 
 }
-window.requestAnimationFrame(update);
 
 
 /*
