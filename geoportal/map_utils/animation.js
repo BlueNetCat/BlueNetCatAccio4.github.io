@@ -114,7 +114,29 @@ BBOX=
 %253A
 00.000Z
 
+https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-d
+?SERVICE=WMS&VERSION=1.3.0&
+REQUEST=GetMap&FORMAT=image%2Fpng&
+TRANSPARENT=true&LAYERS=sea_water_velocity&
+COLORSCALERANGE=-1%2C1
+&STYLES=boxfill%2Foccam&
+WIDTH=256&HEIGHT=256&
+CRS=CRS%3A
+84&
+BBOX=
+-1
+%2C
+36
+%2C
+9
+%2C
+44
+&TIME=2021-06-15T12
+%253A
+00
+%253A
+00.000Z
 
-
+&UPSAMPLING=BICUBIC
 
 */
