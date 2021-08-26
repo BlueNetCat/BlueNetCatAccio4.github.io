@@ -15,8 +15,18 @@
                 <div class="col btn btn-outline-light" :class="[date.active ? 'active border': '']" :id="date.index" @click.prevent="dateClicked" v-for="date in getDates">
 
                   <figure class="figure">
-                    <img v-bind:src="date.imgURL" class="figure-img img-fluid rounded" :alt="date.dateName">
-                    
+                    <!--img v-bind:src="date.imgURL" class="img-fluid rounded" :alt="date.dateName"-->
+                    <!-- https://github.com/john015/vue-load-image -->
+                    <vue-load-image>
+                      <template v-slot:image>
+                        <img :src="date.imgURL" class="img-fluid rounded" :alt="date.dateName">
+                      </template>
+                      <template v-slot:preloader>
+                        <img src="/geoportal/img/image-loader.gif" />
+                      </template>
+                    </vue-load-image>
+
+
                     <figcaption class="figure-caption border">{{date.dateName}}  <small class="text-end">({{date.diffHours}}h)</small></figcaption>
                   </figure>
 
@@ -34,13 +44,14 @@
 
 
 <script>
+import VueLoadImage from "VueLoadImage.vue";
 // https://www.youtube.com/watch?v=6noJ0dlG7jM&ab_channel=Academind
 // https://www.youtube.com/watch?v=FWQSuskE5UA&ab_channel=Academind
 export default {
   name: 'app',
   data () {
     return {
-      msg: "vue component test",
+      currentDate: new Date(),
       days: [ -2, -1, 0, +1, +2],
       selectedDate: [false, false, true, false, false],
       weekDays: ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
@@ -54,14 +65,18 @@ export default {
         this.selectedDate[index] = false;
       })
       this.selectedDate[event.currentTarget.id] = true;
+      foo();
     }
+  },
+  components: {
+    "vue-load-image": VueLoadImage
   },
   computed: {
     getDates: function () {
 
       let dates = [];
       this.days.forEach((day, index) => {
-        let dd = new Date();
+        let dd = this.currentDate;
         dd.setDate(dd.getDate() + day); // One day before/after
 
         let url = this.dataURL.replace("{MONTH}", dd.getMonth().toString().padStart(2,"0"));
@@ -83,8 +98,4 @@ export default {
 
 
 <style scoped>
-.figure-img {
-  border: 1px;
-  border-color: black;
-}
 </style>
