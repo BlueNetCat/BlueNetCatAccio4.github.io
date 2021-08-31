@@ -1,0 +1,128 @@
+<html>
+    <head>
+        <script src='./grib2.js'></script>
+
+    </head>
+    <body>
+        <script>
+
+
+
+// TODO: FINISH TYPE IN grib2.js
+
+let myBuffer = null;
+let gribFiles = [];
+
+//fetch('COSMODE_single_level_elements_PS_2018020500_000.grib2')
+//fetch('COSMODE_single_level_elements_ASWDIR_S_2018011803_006.grib2')
+fetch('gdas.t00z.pgrb2.1p00.f000.grib2')
+    .then(response => response.arrayBuffer())
+    .then(buffer => decodeGRIB2File(buffer))
+    .catch(error => console.log(error));
+
+
+const decodeGRIB2File = function(buffer){
+    myBuffer = buffer;
+
+    let gribByteIndex = 0;
+    let gribFileBuffers = [];
+
+    // Separate GRIB buffers
+    while (gribByteIndex < buffer.byteLength){
+        // Get Total GRIB length from buffer
+        let gribLength = new DataView(buffer.slice(gribByteIndex + 12, gribByteIndex + 16)).getInt32();
+        gribFileBuffers.push(buffer.slice(gribByteIndex, gribByteIndex + gribLength));
+        gribByteIndex += gribLength;
+    }
+
+    // Iterate over GRIB buffers
+    for (let i = 0; i < gribFileBuffers.length; i++){
+        gribFiles[i] = new GRIB2(gribFileBuffers[i]);
+        decodeGRIB2Buffer(gribFileBuffers[i], gribFiles[i]);
+    }
+}
+
+
+
+const decodeGRIB2Buffer = function(buffer, myGrib){
+
+    
+    // Section 0 - Indicator Section
+    let sectionHeader = buffer.slice(0,16);
+    parseSection(sectionHeader, myGrib.dataTemplate[0]);
+
+    // Separate section buffers
+    let sectionByteIndex = 16;
+    let sectionBuffers = [];
+
+    while (sectionByteIndex < buffer.byteLength){
+        // Get Total GRIB length from buffer
+        let sectionLength = new DataView(buffer.slice(sectionByteIndex, sectionByteIndex + 4)).getInt32();
+        sectionBuffers.push(buffer.slice(sectionByteIndex, sectionByteIndex + sectionLength));
+        sectionByteIndex += sectionLength;
+    }
+
+    // Parse section buffers
+    for (let i = 0; i < sectionBuffers.length - 1; i++){ // (length - 1) because of end section  has 4 bytes only (7777)
+        let sectionNumber = new DataView(sectionBuffers[i].slice(4, 5)).getInt8();
+        parseSection(sectionBuffers[i], myGrib.dataTemplate[sectionNumber]);
+    }
+   
+    console.log(myGrib.dataTemplate);
+}
+
+
+
+
+// Parse section
+const parseSection = function(buffer, section){
+
+    for (let i = 0; i < section.length; i++){
+        let prop = section[i];
+
+        // Variable content size
+        if (typeof(prop.size) === 'string'){ 
+            if (prop.size === 'end'){ // From start index to the end of the section
+                let sectionSize = section[0].content;
+                prop.size = sectionSize - (prop.startIndex - 1);
+            }
+        }
+
+        // Parse bytes
+        let byteContent = buffer.slice(prop.startIndex-1, prop.startIndex-1 + prop.size);
+        if (prop.type === 'String')
+            prop.content = arraybufferToString(byteContent)
+        else if (prop.type == 'int8')
+            prop.content = new DataView(byteContent).getInt8();
+        else if (prop.type == 'int16')
+            prop.content = new DataView(byteContent).getInt16();
+        else if (prop.type == 'int32')
+            prop.content = new DataView(byteContent).getInt32();
+        else if (byteContent.byteLength == 0)
+            prop.content = null;
+        else
+            prop.content = byteContent;
+
+        // Parse table content
+        if ("table" in prop){
+            prop.contentRef = GRIB2.tables[prop.table][prop.content];
+        }
+
+    }
+
+}
+
+
+
+
+// Transform string
+const arraybufferToString = function(buffer){
+    return String.fromCharCode.apply(null, new Uint8Array(buffer))
+}
+
+
+
+
+        </script>
+    </body>
+</html>

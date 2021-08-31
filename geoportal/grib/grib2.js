@@ -1,0 +1,1316 @@
+// All info taken from:
+// https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/
+
+class GRIB2 {
+
+    // Static tables
+    static tables = {        
+        // Discipline of Processed Data
+        "0.0" : { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table0-0.shtml
+            0 : 'Meteorological Products (see Table 4.1)',
+            1: 'Hydrological Products (see Table 4.1)',
+            2: 'Land Surface Products (see Table 4.1)',
+            3: 'Satellite Remote Sensing Products (formerly Space Products) (see Table 4.1)',
+            4: 'Space Weather Products (see Table 4.1)',
+            10: 'Oceanographic Products (see Table 4.1)',
+            255: 'Missing'
+        },
+        // GRIB Master Tables Version Number
+        "1.0": { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table1-0.shtml
+            0: 'Experimental',
+            1: 'Version Implemented on 7 November 2001',
+            2: 'Version Implemented on 4 November 2003',
+            // ...
+            24: 'Version Implemented on 06 November 2019',
+            255: 'Missing'
+        },
+        // GRIB Local Tables Version Number
+        '1.1': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table1-1.shtml
+            0: 'Local tables not used.  Only table entries and templates from the current master table are valid.',
+            //'1-254': 'Number of local table version used.',
+            255: 'Missing'
+        },
+        // Significance of Reference Time
+        '1.2': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table1-2.shtml
+            0: 'Analysis',
+            1: 'Start of Forecast',
+            2: 'Verifying Time of Forecast',
+            3: 'Observation Time',
+            //4-191: Reserved,
+            //192-254: Reserved for Local Use,
+            255: 'Missing'
+        },
+        // Production Status of Data
+        '1.3': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table1-3.shtml
+            0: 'Operational Products',
+            1: 'Operational Test Products',
+            2: 'Research Products',
+            3: 'Re-Analysis Products',
+            4: 'THORPEX Interactive Grand Global Ensemble (TIGGE)',
+            5: 'THORPEX Interactive Grand Global Ensemble (TIGGE) test',
+            6: 'S2S Operational Products',
+            7: 'S2S Test Products',
+            8: 'Uncertainties in ensembles of regional reanalysis project (UERRA)',
+            9: 'Uncertainties in ensembles of regional reanalysis project (UERRA) Test',
+            //10-191: Reserved
+            //192-254: Reserved for Local Use
+            255: 'Missing'
+        },
+        // Type of Data
+        '1.4': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table1-4.shtml
+            0: 'Analysis Products',
+            1: 'Forecast Products',
+            2: 'Analysis and Forecast Products',
+            3: 'Control Forecast Products',
+            4: 'Perturbed Forecast Products',
+            5: 'Control and Perturbed Forecast Products',
+            6: 'Processed Satellite Observations',
+            7: 'Processed Radar Observations',
+            8: 'Event Probability',
+            //9-191: Reserved
+            //192-254: Reserved for Local Use
+            192: 'Experimental Products',
+            255: 'Missing'
+        },
+        // Identification Template Number
+        '1.5': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table1-5.shtml
+            0: 'Calendar Definition',
+            1: 'Paleontological Offset',
+            2: 'Calendar Definition and Paleontological Offset',
+            //3-32767: Reserved
+            //32768-65534: Reserved for Local Use
+            65535: 'Missing'
+        },
+        // Type of Calendar
+        '1.6': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table1-6.shtml
+            0: 'Gregorian',
+            1: '360-day',
+            2: '365-day (see Note 1)',
+            3: 'Proleptic Gregorian (see Note 2)',
+            //4-191:	Reserved
+            //192-254:	Reserved for Local Use
+            255: 'Missing'
+        },
+        // Source of Grid Definition
+        '3.0': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-0.shtml
+            0: 'Specified in Code Table 3.1',
+            1: 'Predetermined Grid Definition - Defined by Originating Center',
+            //2-191: Reserved
+            //192-254 Reserved for Local Use
+            255: 'A grid definition does not apply to this product.'
+        },
+        // Grid Definition Template Number
+        '3.1': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-1.shtml
+            0: 'Latitude/Longitude (See Template 3.0)    Also called Equidistant Cylindrical or Plate Caree',
+            1: 'Rotated Latitude/Longitude (See Template 3.1)',
+            2: 'Stretched Latitude/Longitude (See Template 3.2)',
+            3: 'Rotated and Stretched Latitude/Longitude (See Template 3.3)',
+            4: 'Variable Resolution Latitude/longitude (See Template 3.4)',
+            5: 'Variable Resolution Rotated Latitude/longitude (See Template 3.5)',
+            //6-9: 'Reserved',
+            10: 'Mercator (See Template 3.10)',
+            11: 'Reserved',
+            12: 'Transverse Mercator (See Template 3.12)',
+            13: 'Mercator with modelling subdomains definition (See Template 3.13)',
+            //14-19: 'Reserved'
+            20: 'Polar Stereographic Projection (Can be North or South) (See Template 3.20)',
+            //21-22: 'Reserved'
+            23: 'Polar Stereographic with modelling subdomains definition (See Template 3.23)',
+            //24-29: 'Reserved'
+            30: 'Lambert Conformal (Can be Secant, Tangent, Conical, or Bipolar) (See Template 3.30)',
+            31: 'Albers Equal Area (See Template 3.31)',
+            32: 'Reserved',
+            33: 'Lambert conformal with modelling subdomains definition (See Template 3.33)',
+            //34-39: 'Reserved'
+            40: 'Gaussian Latitude/Longitude (See Template 3.40)',
+            41: 'Rotated Gaussian Latitude/Longitude (See Template 3.41)',
+            42: 'Stretched Gaussian Latitude/Longitude (See Template 3.42)',
+            43: 'Rotated and Stretched Gaussian Latitude/Longitude (See Template 3.43)',
+            //44-49: 'Reserved'
+            50: 'Spherical Harmonic Coefficients (See Template 3.50)',
+            51: 'Rotated Spherical Harmonic Coefficients (See Template 3.51)',
+            52: 'Stretched Spherical Harmonic Coefficients (See Template 3.52)',
+            53: 'Rotated and Stretched Spherical Harmonic Coefficients (See Template 3.53)',
+            //54-59: 'Reserved'
+            60: 'Cubed-Sphere Gnomonic (See Template 3.60) Validation',
+            61: 'Spectral Mercator with modelling subdomains definition (See Template 3.61)',
+            62: 'Spectral Polar Stereographic with modelling subdomains definition (See Template 3.62)',
+            63: 'Spectral Lambert conformal with modelling subdomains definition (See Template 3.63)',
+            //64-89: 'Reserved'
+            90: 'Space View Perspective or Orthographic (See Template 3.90)',
+            //91-99: 'Reserved'
+            100: 'Triangular Grid Based on an Icosahedron (See Template 3.100)',
+            101: 'General Unstructured Grid (see Template 3.101)',
+            //102-109: 'Reserved'
+            110: 'Equatorial Azimuthal Equidistant Projection (See Template 3.110)',
+            //111-119: 'Reserved'
+            120: 'Azimuth-Range Projection (See Template 3.120)',
+            //121-139: 'Reserved'
+            140: 'Lambert Azimuthal Equal Area Projection (See Template 3.140)',
+            //141-203: 'Reserved'
+            204: 'Curvilinear Orthogonal Grids (See Template 3.204)',
+            //205-999: 'Reserved'
+            1000: 'Cross Section Grid with Points Equally Spaced on the Horizontal (See Template 3.1000)',
+            //1001-1099: 'Reserved'
+            1100: 'Hovmoller Diagram with Points Equally Spaced on the Horizontal (See Template 3.1100)',
+            //1101-1199: 'Reserved'
+            1200: 'Time Section Grid (See Template 3.1200)',
+            //1201-32767: 'Reserved'
+            32768: 'Rotated Latitude/Longitude (Arakawa Staggered E-Grid) (See Template 3.32768)',
+            //32768-65534: 'Reserved for Local Use\n'
+            32769: 'Rotated Latitude/Longitude (Arakawa Non-E Staggered Grid) (See Template 3.32769)',
+            65535: 'Missing'
+        },
+        // Shape of the Reference System
+        '3.2': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-2.shtml
+            0: 'Earth assumed spherical with radius = 6,367,470.0 m',
+            1: 'Earth assumed spherical with radius specified (in m) by data producer',
+            2: 'Earth assumed oblate spheriod with size as determined by IAU in 1965 (major axis = 6,378,160.0 m, minor axis = 6,356,775.0 m, f = 1/297.0)',
+            3: 'Earth assumed oblate spheriod with major and minor axes specified (in km) by data producer',
+            4: 'Earth assumed oblate spheriod as defined in IAG-GRS80 model (major axis = 6,378,137.0 m, minor axis = 6,356,752.314 m, f = 1/298.257222101)',
+            5: 'Earth assumed represented by WGS84 (as used by ICAO since 1998) (Uses IAG-GRS80 as a basis)',
+            6: 'Earth assumed spherical with radius = 6,371,229.0 m',
+            7: 'Earth assumed oblate spheroid with major and minor axes specified (in m) by data producer',
+            8: 'Earth model assumed spherical with radius 6,371,200 m, but the horizontal datum of the resulting Latitude/Longitude field is the WGS84 reference frame',
+            9: 'Earth represented by the OSGB 1936 Datum, using the Airy_1830 Spheroid, the Greenwich meridian as 0 Longitude, the Newlyn datum as mean sea level, 0 height.',
+            //10-191: 'Reserved'
+            //192-254: 'Reserved for Local Use\n'
+            255: 'Missing'
+
+        },
+        // Resolution and Component Flags
+        '3.3': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-3.shtml
+            //1-2: Reserved
+            3: ['0: i direction increments not given','1: i direction increments given'],
+            4: ['0: j direction increments not given','1: j direction increments given'],
+            5: ['0: Resolved u and v components of vector quantities relative to easterly and northerly directions','1: Resolved u and v components of vector quantities relative to the defined grid in the direction of increasing x and y (or i and j) coordinates, respectively.'],
+            //6-8: Reserved - set of zero
+        },
+        // Scanning Mode
+        '3.4': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-4.shtml
+            1: ['0: Points in the first row or column scan in the +i (+x) direction','1: Points in the first row or column scan in the -i (-x) direction'],
+            2: ['0: Points in the first row or column scan in the -j (-y) direction','1: Points in the first row or column scan in the +j (+y) direction'],
+            3: ['0: Adjacent points in the i (x) direction are consecutive','1: Adjacent points in the j (y) direction are consecutive'],
+            4: ['0: All rows scan in the same direction','1: Adjacent rows scan in the opposite direction'],
+            5: ['0: Points within odd rows are not offset in i(x) direction','1: Points within odd rows are offset by Di/2 in i(x) direction'],
+            6: ['0: Points within even rows are not offset in i(x) direction', '1: Points within even rows are offset by Di/2 in i(x) direction'],
+            7: ['0: Points are not offset in j(y) direction', '1: Points are offset by Dj/2 in j(y) direction'],
+            8: ['0: Rows have Ni grid points and columns have Nj grid points', '1: Rows have Ni grid points if points are not offset in i direction. Rows have Ni-1 grid points if points are offset by Di/2 in i direction. Columns have Nj grid points if points are not offset in j direction. Columns have Nj-1 grid points if points are offset by Dj/2 in j direction']
+            // Notes:
+            //1.  i direction - West to east along a parallel or left to right along an x-axis.
+            //2.  j direction - South to north along a meridian, or bottom to top along a y-axis.
+            //3.  If bit number 4 is set, the first row scan is defined by previous flags.
+            //4.  La1 and Lo1 define the first row, which is an odd row.
+            //5.  Di and Dj are assumed to be positive, with the direction of i and j being given by bits 1 and 2.
+            //6.  Bits 5 through 8 may be used to generate staggered grids, such as Arakawa grids (see Attachment, Volume 1.2, Part A, Att. GRIB).
+            //7.  If any of bits 5, 6, 7 or 8 are set, Di and Dj are not optional.
+        },
+        // Projection Center
+        '3.5': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-5.shtml
+            1: ['0: North Pole is on the projection plane', '1: South Pole is on the projection plane'],
+            2: ['0: Only one projection center is used', '1: Projection is bi-polar and symmetric']
+            //3-8: Reserved
+        },
+        // Spectral Data Representation Type
+        '3.6': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-6.shtml
+            1: 'Legendre Functions',
+            2: 'Bi-Fourier representation'
+        },
+        // Spectral Data Representation Mode
+        '3.7': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-7.shtml
+            1: 'Mathematical formula. Check online: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-7.shtml'
+        },
+        // Grid Point Position
+        '3.8': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-8.shtml
+            0: 'Grid points at triangle vertices',
+            1: 'Grid points at centers of triangles',
+            2: 'Grid points at midpoints of triangle sides',
+            //3-191: 'Reserved',
+            //192-254: 'Reserved for Local Use',
+            255: 'Missing',
+        },
+        // Numbering Order of Diamonds
+        '3.9': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-9.shtml
+            1: ['0: Clockwise orientation', '1: Counter-clockwise orientation']
+        },
+        // Scanning Mode for One Diamond
+        '3.10': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-10.shtml
+            1: ['0: Points  scan in the +i direction, i.e. from pole to Equator','1: Points scan in the -i direction, i.e. from Equator to pole'],
+            2: ['0: Points scan in the +j direction, i.e. from west to east','1: Points scan in the -j direction, i.e. from east to west'],
+            3: ['0: Adjacent points in the i (x) direction are consecutive','1: Adjacent points in the j (y) direction are consecutive']
+        },
+        // Interpretation of List of Numbers at end of section 3
+        '3.11': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-11.shtml
+            0: 'There is no appended list',
+            1: 'Numbers define number of points corresponding to full coordinate circles (i.e. parallels).  Coordinate values on each circle are multiple of the circle mesh, and extreme coordinate values given in grid definition may not be reached in all rows.',
+            2: 'Numbers define number of points corresponding to coordinate lines delimited by extreme coordinate values given in grid definition which are present in each row.',
+            3: 'Numbers define the actual latitudes for each row in the grid. The list of numbers are integer values of the valid latitudes in microdegrees (scale by 106) or in unit equal to the ratio of the basic angle and the subdivisions number for each row, in the same order as specified in the \'scanning mode flag\' (bit no. 2) (see note 2)',
+            //4-254: 'Reserved',
+            255: 'Missing',
+            //Notes:
+            //(1) For entry 1, it should be noted that depending on values of extreme (first/last) coordinates, and regardless of bit-map, effective number of points per row may be less than the number of points on the current circle.
+            //(2) For value for the constant direction increment Di (or Dx) in the accompanying Grid Definition Template should be set to all ones (missing).
+        },
+        // Physical Meaning of Vertical Coordinate
+        '3.15': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-15.shtml
+            //0-19: 'Reserved',
+            20: 'Temperature',
+            //21-99: 'Reserved',
+            100: 'Pressure',
+            101: 'Pressure deviation from mean sea level',
+            102: 'Altitude above mean sea level',
+            103: 'Height above ground (see note 1)',
+            104: 'Sigma coordinate',
+            105: 'Hybrid coordinate',
+            106: 'Depth below land surface',
+            107: 'Potential temperature (theta)',
+            108: 'Pressure deviation from ground to level',
+            109: 'Potential vorticity',
+            110: 'Geometric height',
+            111: 'Eta coordinate (see note 2)',
+            112: 'Geopotential height',
+            113: 'Logarithmic hybrid coordinate',
+            //114-159: 'Reserved',
+            160: 'Depth below sea level',
+            //161-191: 'Reserved',
+            //192-254: 'Reserved for Local Use',
+            255: 'Missing',
+        },
+        // Type of Horizontal Line
+        '3.20': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-20.shtml
+            0: 'Rhumb',
+            1: 'Great Circle',
+            //2-191: Reserved
+            //192-254: Reserved For Local Use
+            255: 'Missing'
+        },
+        // Vertical Dimension Coordinate Values Definition
+        '3.21': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-21.shtml
+            0: 'Explicit coordinate value set',
+            1: 'Linear Cooordinates\nf(1) = C1\nf(n) = f(n-1) + C2\n',
+            //2-10: Reserved
+            11: 'Geometric Coordinates\nf(1) = C1\nf(n) = C2 x f(n-1)\n',
+            //12-191: Reserved
+            // 192-254: Reserved for Local Use
+            255: 'Missing'
+        },
+        // TODO
+        // Product Definition Template Number
+        '4.0': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-0.shtml
+            0: 'Analysis or forecast at a horizontal level or in a horizontal layer at a point in time.  (see Template 4.0)',
+            1: 'Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer at a point in time.  (see Template 4.1)',
+            2: 'Derived forecasts based on all ensemble members at a horizontal level or in a horizontal layer at a point in time.  (see Template 4.2)',
+            3: 'Derived forecasts based on a cluster of ensemble members over a rectangular area at a horizontal level or in a horizontal layer at a point in time.  (see Template 4.3)',
+            4: 'Derived forecasts based on a cluster of ensemble members over a circular area at a horizontal level or in a horizontal layer at a point in time.  (see Template 4.4)',
+            5: 'Probability forecasts at a horizontal level or in a horizontal layer at a point in time.  (see Template 4.5)',
+            6: 'Percentile forecasts at a horizontal level or in a horizontal layer at a point in time.  (see Template 4.6)',
+            7: 'Analysis or forecast error at a horizontal level or in a horizontal layer at a point in time.  (see Template 4.7)',
+            8: 'Average, accumulation, extreme values or other statistically processed values at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval.  (see Template 4.8)',
+            9: 'Probability forecasts at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval.  (see Template 4.9)',
+            10: 'Percentile forecasts at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval.  (see Template 4.10)',
+            11: 'Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer, in a continuous or non-continuous time interval.  (see Template 4.11)',
+            12: 'Derived forecasts based on all ensemble members at a horizontal level or in a horizontal layer, in a continuous or non-continuous time interval.  (see Template 4.12)',
+            13: 'Derived forecasts based on a cluster of ensemble members over a rectangular area at a horizontal level or in a horizontal layer, in a continuous or non-continuous time interval.  (see Template 4.13)',
+            14: 'Derived forecasts based on a cluster of ensemble members over a circular area at a horizontal level or in a horizontal layer, in a continuous or non-continuous time interval.  (see Template 4.14)',
+            15: 'Average, accumulation, extreme values or other statistically-processed values over a spatial area at a horizontal level or in a horizontal layer at a point in time.  (see Template 4.15)',
+            //16-19: 'Reserved',
+            20: 'Radar product  (see Template 4.20)',
+            //21-29: 'Reserved',
+            30: 'Satellite product  (see Template 4.30)NOTE: This template is deprecated. Template 4.31 should be used instead.',
+            31: 'Satellite product  (see Template 4.31)',
+            32: 'Analysis or forecast at a horizontal level or in a horizontal layer at a point in time for simulate (synthetic) satellite data (see Template 4.32)',
+            33: 'Individual Ensemble Forecast, control and perturbed, at a horizontal level or in a horizontal layer at a point in time for simulated (synthetic) satellite data (see Template 4.33)',
+            34: 'Individual Ensemble Forecast, control and perturbed, at a horizontal level or in a horizontal layer, in a continuous or non-continuous interval for simulated (synthetic) satellite data(see Template 4.34)',
+            35: 'Satellite product with or without associated quality values (see Template 4.35)',
+            //36-39: 'Reserved',
+            40: 'Analysis or forecast at a horizontal level or in a horizontal layer at a point in time for atmospheric chemical constituents.  (see Template 4.40)',
+            41: 'Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer at a point in time for atmospheric chemical constituents.  (see Template 4.41)',
+            42: 'Average, accumulation, and/or extreme values or other statistically processed values at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval for atmospheric chemical constituents.  (see Template 4.42)',
+            43: 'Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer, in a continuous or non-continuous time interval for atmospheric chemical constituents.  (see Template 4.43)',
+            44: 'Analysis or forecast at a horizontal level or in a horizontal layer at a point in time for aerosol.  (see Template 4.44)',
+            45: 'Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer, in a continuous or non-continuous time interval for aerosol.  (see Template 4.45)',
+            46: 'Average, accumulation, and/or extreme values or other statistically processed values at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval for aerosol.  (see Template 4.46)',
+            47: 'Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer, in a continuous or non-continuous time interval for aerosol.  (see Template 4.47)',
+            48: 'Analysis or forecast at a horizontal level or in a horizontal layer at a point in time for aerosol.  (see Template 4.48)',
+            49: 'Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer at a point in time for optical properties of aerosol. (see Template 4.49)',
+            50: 'Reserved',
+            51: 'Categorical forecast at a horizontal level or in a horizontal layer at a point in time.  (see Template 4.51)',
+            52: 'Reserved',
+            53: 'Partitioned parameters at a horizontal level or horizontal layer at a point in time.  (see Template 4.53)',
+            54: 'Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer at a point in time for partitioned parameters.   (see Template 4.54)',
+            55: 'Spatio-temporal changing tiles at a horizontal level or horizontal layer at a point in time (see Template 4.55)',
+            56: 'Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer at a point in time for spatio-temporal changing tile parameters.   (see Template 4.56)',
+            57: 'Analysis or forecast at a horizontal level or in a horizontal layer at a point in time for atmospheric chemical constituents based on a distribution function (see Template 4.57)',
+            58: 'Individual Ensemble Forecast, Control and Perturbed, at a horizontal level or in a horizontal layer at a point in time interval for Atmospheric Chemical Constituents based on a distribution function (see Template 4.58)',
+            59: 'Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer at a point in time for spatio-temporal changing tile parameters (corrected version of template 4.56 - See Template 4.59)',
+            60: 'Individual Ensemble Reforecast, control and perturbed, at a horizontal level or in a horizontal layer at a point in time. (see Template 4.60)',
+            61: 'Individual Ensemble Reforecast, control and perturbed, at a horizontal level or in a horizontal layer, in a continuous or non-continuous time interval (see Template 4.61)',
+            62: 'Average, Accumulation and/or Extreme values or other Statistically-processed values at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval for spatio-temporal changing tiles at a horizontal level or horizontal layer at a point in time (see Template 4.62)',
+            63: 'Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval for spatio-temporal changing tiles (see Template 4.63)',
+            //64-66: 'Reserved',
+            67: 'Average, accumulation and/or extreme values or other statistically processed values at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval for atmospheric chemical constituents based on a distribution function (see Template 4.67)',
+            68: 'Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval for atmospheric chemical constituents based on a distribution function. (see Template 4.68)',
+            69: 'Reserved',
+            70: 'Post-processing analysis or forecast at a horizontal level or in a horizontal layer at a point in time. (see Template 4.70)',
+            71: 'Post-processing individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer at a point in time. (see Template 4.71)',
+            72: 'Post-processing average, accumulation, extreme values or other statistically processed values at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval. (see Template 4.72)',
+            73: 'Post-processing individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer, in a continuous or non-continuous time interval. (see Template 4.73)',
+            //74-90: 'Reserved',
+            91: 'Categorical forecast at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval.  (see Template 4.91)',
+            //92-253: 'Reserved',
+            254: 'CCITT IA5 character string  (see Template 4.254)',
+            //255-999: 'Reserved',
+            1000: 'Cross-section of analysis and forecast at a point in time.  (see Template 4.1000)',
+            1001: 'Cross-section of averaged or otherwise statistically processed analysis or forecast over a range of time.  (see Template 4.1001)',
+            1002: 'Cross-section of analysis and forecast, averaged or otherwise statistically-processed over latitude or longitude.  (see Template 4.1002)',
+            //1003-1099: 'Reserved',
+            1100: 'Hovmoller-type grid with no averaging or other statistical processing  (see Template 4.1100)',
+            1101: 'Hovmoller-type grid with averaging or other statistical processing  (see Template 4.1101)',
+            //1102-32767: 'Reserved',
+            //32768-65534: 'Reserved for Local Use',
+            65535: 'Missing',
+        },
+        // TODO
+        // Parameter Category by Product Discipline
+        '4.1': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml
+            0: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            1: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            2: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            3: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            4: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            5: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            6: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            7: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            8: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            9: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            10: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            11: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            12: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            13: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            14: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            15: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            16: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            17: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            18: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            19: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            20: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-1.shtml',
+            255: 'Missing'
+            // Note: The disciplines are given in Section 0, Octet 7 of the GRIB2 message and are defined in Table 0.0.
+        },
+        // TODO
+        // Parameter Number by Product Discipline and Parameter Category
+        '4.2': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml
+            0: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            1: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            2: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            3: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            4: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            5: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            6: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            7: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            8: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            9: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            10: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            11: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            12: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            13: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            14: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            15: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            16: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            17: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            18: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            19: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            20: 'Depends of category (Octet 7 of Section 0). Check in: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-2.shtml',
+            255: 'Missing'
+        },
+        // Type of Generating Process
+        '4.3': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-3.shtml
+            0: 'Analysis',
+            1: 'Initialization', 
+            2: 'Forecast', 
+            3: 'Bias Corrected Forecast', 
+            4: 'Ensemble Forecast', 
+            5: 'Probability Forecast', 
+            6: 'Forecast Error', 
+            7: 'Analysis Error', 
+            8: 'Observation',
+            9: 'Climatological',
+            10: 'Probability-Weighted Forecast',
+            11: 'Bias-Corrected Ensemble Forecast',
+            12: 'Post-processed Analysis (See Note)',
+            13: 'Post-processed Forecast (See Note)',
+            14: 'Nowcast',
+            15: 'Hindcast',
+            16: 'Physical Retrieval',
+            17: 'Regression Analysis',
+            18: 'Difference Between Two Forecasts',
+            //19-191: 'Reserved',
+            192: 'Forecast Confidence Indicator',
+            //192-254: 'Reserved for Local Use',
+            193: 'Probability-matched Mean',
+            194: 'Neighborhood Probability',
+            195: 'Bias-Corrected and Downscaled Ensemble Forecast',
+            196: 'Perturbed Analysis for Ensemble Initialization',
+            197: 'Ensemble Agreement Scale Probability',
+            198: 'Post-Processed Deterministic-Expert-Weighted Forecast',
+            199: 'Ensemble Forecast Based on Counting',
+            200: 'Local Probability-matched Mean',
+            255: 'Missing',
+            // Notes:
+            // 1.  Code figures 12 and 13 are intended in cases where code figures 0 and 2 may not be sufficient to indicate that significant post-processing has taken place on an intial analysis or forecast output.
+        },
+        // Indicator of Unit of Time Range
+        '4.4': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-4.shtml
+            0: 'Minute',
+            1: 'Hour',
+            2: 'Day',
+            3: 'Month',
+            4: 'Year',
+            5: 'Decade (10 Years)',
+            6: 'Normal (30 Years)',
+            7: 'Century (100 Years)',
+            8: 'Reserved',
+            9: 'Reserved',
+            10: '3 Hours',
+            11: '6 Hours',
+            12: '12 Hours',
+            13: 'Second',
+            //14-191: 'Reserved',
+            //192-254: 'Reserved for Local Use',
+            255: 'Missing',
+        },
+        // Fixed Surface Types and Units
+        '4.5': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-5.shtml
+            0: 'Reserved',
+            1: 'Ground or Water Surface',
+            2: 'Cloud Base Level',
+            3: 'Level of Cloud Tops',
+            4: 'Level of 0o C Isotherm',
+            5: 'Level of Adiabatic Condensation Lifted from the Surface',
+            6: 'Maximum Wind Level',
+            7: 'Tropopause',
+            8: 'Nominal Top of the Atmosphere',
+            9: 'Sea Bottom',
+            10: 'Entire Atmosphere',
+            11: 'Cumulonimbus Base (CB)',
+            12: 'Cumulonimbus Top (CT)',
+            13: 'Lowest level where vertically integrated cloud cover exceeds the specified percentage(cloud base for a given percentage cloud cover)',
+            14: 'Level of free convection (LFC)',
+            15: 'Convection condensation level (CCL)',
+            16: 'Level of neutral buoyancy or equilibrium (LNB)',
+            //17-19: 'Reserved',
+            20: 'Isothermal Level',
+            21: 'Lowest level where mass density exceeds the specified value(base for a given threshold of mass density)',
+            22: 'Highest level where mass density exceeds the specifiedvalue (top for a given threshold of mass density)',
+            23: 'Lowest level where air concentration exceeds the specifiedvalue (base for a given threshold of air concentration',
+            24: 'Highest level where air concentration exceeds the specifiedvalue (top for a given threshold of air concentration)',
+            25: 'Highest level where radar reflectivity exceeds the specifiedvalue (echo top for a given threshold of reflectivity)',
+            //26-99: 'Reserved',
+            100: 'Isobaric Surface',
+            101: 'Mean Sea Level',
+            102: 'Specific Altitude Above Mean Sea Level',
+            103: 'Specified Height Level Above Ground',
+            104: 'Sigma Level',
+            105: 'Hybrid Level',
+            106: 'Depth Below Land Surface',
+            107: 'Isentropic (theta) Level',
+            108: 'Level at Specified Pressure Difference from Ground to Level',
+            109: 'Potential Vorticity Surface',
+            110: 'Reserved',
+            111: 'Eta Level',
+            112: 'Reserved',
+            113: 'Logarithmic Hybrid Level',
+            114: 'Snow Level',
+            115: 'Sigma height level (see Note 4)',
+            116: 'Reserved',
+            117: 'Mixed Layer Depth',
+            118: 'Hybrid Height Level',
+            119: 'Hybrid Pressure Level',
+            //120-149: 'Reserved',
+            150: 'Generalized Vertical Height Coordinate (see Note 4)',
+            151: 'Soil level (See Note 5)',
+            //152-159: 'Reserved',
+            160: 'Depth Below Sea Level',
+            161: 'Depth Below Water Surface',
+            162: 'Lake or River Bottom',
+            163: 'Bottom Of Sediment Layer',
+            164: 'Bottom Of Thermally Active Sediment Layer',
+            165: 'Bottom Of Sediment Layer Penetrated By Thermal Wave',
+            166: 'Mixing Layer',
+            167: 'Bottom of Root Zone',
+            168: 'Ocean Model Level',
+            169: 'Ocean level defined by water density (sigma-theta)difference from near-surface to level (see Note 7)',
+            170: 'Ocean level defined by water potential temperaturedifference from near-surface to level (see Note 7)',
+            //171-173: 'Reserved',
+            174: 'Top Surface of Ice on Sea, Lake or River',
+            175: 'Top Surface of Ice, under Snow, on Sea, Lake or River',
+            176: 'Bottom Surface (underside) Ice on Sea, Lake or River',
+            177: 'Deep Soil (of indefinite depth)',
+            178: 'Reserved',
+            179: 'Top Surface of Glacier Ice and Inland Ice',
+            180: 'Deep Inland or Glacier Ice (of indefinite depth)',
+            181: 'Grid Tile Land Fraction as a Model Surface',
+            182: 'Grid Tile Water Fraction as a Model Surface',
+            183: 'Grid Tile Ice Fraction on Sea, Lake or River as a Model Surface',
+            184: 'Grid Tile Glacier Ice and Inland Ice Fraction as a Model Surface',
+            //185-191: 'Reserved',
+            //192-254: 'Reserved for Local Use',
+            200: 'Entire atmosphere (considered as a single layer)',
+            201: 'Entire ocean (considered as a single layer)',
+            204: 'Highest tropospheric freezing level',
+            206: 'Grid scale cloud bottom level',
+            207: 'Grid scale cloud top level',
+            209: 'Boundary layer cloud bottom level',
+            210: 'Boundary layer cloud top level',
+            211: 'Boundary layer cloud layer',
+            212: 'Low cloud bottom level',
+            213: 'Low cloud top level',
+            214: 'Low cloud layer',
+            215: 'Cloud ceiling',
+            216: 'Effective Layer Top Level',
+            217: 'Effective Layer Bottom Level',
+            218: 'Effective Layer',
+            220: 'Planetary Boundary Layer',
+            221: 'Layer Between Two Hybrid Levels',
+            222: 'Middle cloud bottom level',
+            223: 'Middle cloud top level',
+            224: 'Middle cloud layer',
+            232: 'High cloud bottom level',
+            233: 'High cloud top level',
+            234: 'High cloud layer',
+            235: 'Ocean Isotherm Level (1/10 ° C)',
+            236: 'Layer between two depths below ocean surface',
+            237: 'Bottom of Ocean Mixed Layer (m)',
+            238: 'Bottom of Ocean Isothermal Layer (m)',
+            239: 'Layer Ocean Surface and 26C Ocean Isothermal Level',
+            240: 'Ocean Mixed Layer',
+            241: 'Ordered Sequence of Data',
+            242: 'Convective cloud bottom level',
+            243: 'Convective cloud top level',
+            244: 'Convective cloud layer',
+            245: 'Lowest level of the wet bulb zero',
+            246: 'Maximum equivalent potential temperature level',
+            247: 'Equilibrium level',
+            248: 'Shallow convective cloud bottom level',
+            249: 'Shallow convective cloud top level',
+            251: 'Deep convective cloud bottom level',
+            252: 'Deep convective cloud top level',
+            253: 'Lowest bottom level of supercooled liquid water layer',
+            254: 'Highest top level of supercooled liquid water layer',
+            255: 'Missing',
+            // Notes: 
+            // (1).  The Eta vertical coordinate system involves normalizing the pressure at some point on a specific level by the mean sea level pressure at that point. 
+            // (2).  Hybrid height level (Code figure 118) can be defined as: z(k)=A(k)+B(k)* orog (k=1,..., NLevels; orog=orography; z(k)=height in meters at level(k) 
+            // (3).  Hybrid pressure level, for which code figure 119 shall be used insteaf of 105, can be defined as: p(k)=A(k) + B(k) * sp (k=1,...,NLevels, sp=surface pressure; p(k)=pressure at level (k) 
+            // (4). Sigma height level is the vertical model level of the height-based terrain-following coordinate (Gal-Chen and Somerville, 1975). The value of the level = (height of the level – height of the terrain) / (height of the top level – height of the terrain), which is ≥ 0 and ≤ 1. 
+            // (5).  The definition of a generalized vertical height coordinate implies the absence of coordinate values in section 4 but the presence of an external 3D-GRIB message that specifies the height of every model grid point in meters (see Notes for section 4), i.e., this GRIB message will contain the field with discipline = 0, category = 3, parameterm = 6 (Geometric height). 
+            // (6).  The soil level represents a model level for which the depth is not constant across the model domain. The depth in metres of the level is provided by another GRIB message with the parameter 'Soil Depth' with discipline 2, category 3 and parameter number 27. 
+            // (7).  The level is defined by a water property difference from the near-surface to the level. The near-surface is typically chosen at 10 m depth. The physical quantity used to compute the difference can be water density (δΘ) when using level type 169 or water potential temperature (Θ) when using level type 170.
+        },
+        // Type of Ensemble Forecast
+        '4.6': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-6.shtml
+            0: 'Unperturbed High-Resolution Control Forecast',
+            1: 'Unperturbed Low-Resolution Control Forecast',
+            2: 'Negatively Perturbed Forecast',
+            3: 'Positively Perturbed Forecast',
+            4: 'Multi-Model Forecast',
+            //5-191: 'Reserved',
+            192: 'Perturbed Ensemble Member',
+            //192-254: 'Reserved for Local Use',
+            255: 'Missing',
+        },
+        // Derived Forecast
+        '4.7': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-7.shtml
+            0: 'Unweighted Mean of All Members',
+            1: 'Weighted Mean of All Members',
+            2: 'Standard Deviation with respect to Cluster Mean',
+            3: 'Standard Deviation with respect to Cluster Mean, Normalized',
+            4: 'Spread of All Members',
+            5: 'Large Anomaly Index of All Members (see Note 1)',
+            6: 'Unweighted Mean of the Cluster Members',
+            7: 'Interquartile Range (Range between the 25th and 75th quantile)',
+            //7-191: 'Reserved',
+            8: 'Minimum Of All Ensemble Members (see Note 2)',
+            9: 'Maximum Of All Ensemble Members (see Note 2)',
+            192: 'Unweighted Mode of All Members',
+            //192-254: 'Reserved for Local Use',
+            193: 'Percentile value (10%) of All Members',
+            194: 'Percentile value (50%) of All Members',
+            195: 'Percentile value (90%) of All Members',
+            196: 'Statistically decided weights for each ensemble member',
+            197: 'Climate Percentile (percentile values from climate distribution)',
+            198: 'Deviation of Ensemble Mean from Daily Climatology',
+            199: 'Extreme Forecast Index',
+            200: 'Equally Weighted Mean',
+            201: 'Percentile value (5%) of All Members',
+            202: 'Percentile value (25%) of All Members',
+            203: 'Percentile value (75%) of All Members',
+            204: 'Percentile value (95%) of All Members',
+            255: 'Missing',
+            // Notes: 
+            // 1.  Large anomaly index is defined as {(number of members whose anomaly is higher than 0.5*SD) - (number of members whose anomaly is lower than -0.5*SD)}/(number of members) at each grid point.  SD is the observed climatological standard deviation. 
+            // 2.  It should be noted that the reference for 'minimum of all ensemble members' and 'maximum of all ensemble members' is the set of ensemble members and not a time interval and should not be confused with the maximum and minimum described by Product Definition Template 4.8.
+        },
+        // TODO 4.8 to 4.244
+        // Data Representation Template Number
+        '5.0' : { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table5-0.shtml
+            0: 'Grid Point Data - Simple Packing (see Template 5.0)',
+            1: 'Matrix Value at Grid Point - Simple Packing (see Template 5.1)',
+            2: 'Grid Point Data - Complex Packing (see Template 5.2)',
+            3: 'Grid Point Data - Complex Packing and Spatial Differencing (see Template 5.3)',
+            4: 'Grid Point Data - IEEE Floating Point Data (see Template 5.4)',
+            //5-39: 'Reserved',
+            40: 'Grid Point Data - JPEG2000 Compression (see Template 5.40)',
+            41: 'Grid Point Data - PNG Compression (see Template 5.41)',
+            //42-49: 'Reserved',
+            50: 'Spectral Data - Simple Packing (see Template 5.50)',
+            51: 'Spectral Data - Complex Packing (see Template 5.51)',
+            //52-60: 'Reserved',
+            61: 'Grid Point Data - Simple Packing With Logarithm Pre-processing (see Template 5.61)',
+            //62-199: 'Reserved',
+            200: 'Run Length Packing With Level Values (see Template 5.200)',
+            //201-49151: '201-49151',
+            //49152-65534: 'Reserved for Local Use',
+            65535: 'Missing',
+        },
+        // Type of Original Field Values
+        '5.1' : { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table5-1.shtml
+            0: 'Floating Point',
+            1: 'Integer',
+            //2-191: 'Reserved',
+            //192-254: 'Reserved for Local Use',
+            255: 'Missing',
+        },
+        // Matrix Coordinate Value Function Definition
+        '5.2' : { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table5-2.shtml
+            0: 'Explicit Coordinate Values Set',
+            1: 'Linear Coordinates\nf(1) = C1\nf(n) = f(n-1) + C2\n',
+            //2-10: 'Reserved',
+            11: 'Geometric Coordinates\nf(1) = C1\nf(n) = C2 x f(n-1)\n',
+            //12-191: 'Reserved',
+            //192-254: 'Reserved for Local Use',
+            255: 'Missing',
+        },
+        // Matrix Coordinate Parameter
+        '5.3' : { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table5-3.shtml
+            0: 'Reserved',
+            1: 'Direction Degrees True',
+            2: 'Frequency (s^-1)',
+            3: 'Radial Number (2pi/lamda) (m^-1)',
+            //4-191: 'Reserved',
+            //192-254: 'Reserved for Local Use',
+            255: 'Missing',
+        },
+        // Group Splitting Method
+        '5.4' : { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table5-4.shtml
+            0: 'Row by Row Splitting',
+            1: 'General Group Splitting',
+            //2-191: 'Reserved',
+            //192-254: 'Reserved for Local Use',
+            255: 'Missing',
+        },
+        // Missing Value Management for Complex Packing
+        '5.5' : { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table5-5.shtml
+            0: 'No explicit missing values included within the data values',
+            1: 'Primary missing values included within the data values',
+            2: 'Primary and secondary missing values included within the data values',
+            //3-191: 'Reserved',
+            //192-254: 'Reserved for Local Use',
+            255: 'Missing',
+        },
+        // Order of Spatial Differencing
+        '5.6' : { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table5-6.shtml
+            0: 'Reserved',
+            1: 'First-Order Spatial Differencing',
+            2: 'Second-Order Spatial Differencing',
+            //3-191: 'Reserved',
+            //192-254: 'Reserved for Local Use',
+            255: 'Missing',
+        },
+        // Precision of Floating Point Numbers
+        '5.7' : { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table5-7.shtml
+            0: 'Reserved',
+            1: 'IEEE 32-bit (I=4 in Section 7)',
+            2: 'IEEE 64-bit (I=8 in Section 7)',
+            3: 'IEEE 128-bit (I=16 in Section 7)',
+            //4-254: 'Reserved',
+            255: 'Missing',
+        },
+        // Type of Compression
+        '5.40' : { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table5-40.shtml
+            0: 'Lossless',
+            1: 'Lossy',
+            //2-254: 'Reserved',
+            255: 'Missing',
+        },
+        // Bit Map Indicator
+        '6.0': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table6-0.shtml
+            0: 'A bit map applies to this product and is specified in this section.',
+            //1-253: 'A bit map pre-determined by the orginating/generating center applies to this product and is not specified in this section.',
+            254: 'A bit map previously defined in the same GRIB2 message applies to this product.',
+            255: 'A bit map does not apply to this product.',
+        },
+        // 
+        '7.0': { //
+            0: 'Grid Point Data - Simple Packing (see Template 7.0)',
+            1: 'Matrix Value at Grid Point - Simple Packing (see Template 7.1)',
+            2: 'Grid Point Data - Complex Packing (see Template 7.2)',
+            3: 'Grid Point Data - Complex Packing and Spatial Differencing (see Template 7.3)',
+            4: 'Grid Point Data - IEEE Floating Point Data (see Template 7.4)',
+            //5-39: 'Reserved',
+            40: 'Grid Point Data - JPEG2000 Compression (see Template 7.40)',
+            41: 'Grid Point Data - Portable Network Graphics (PNG) format (see Template 7.41)',
+            //42-49: 'Reserved',
+            50: 'Spectral Data - Simple Packing (see Template 7.50)',
+            51: 'Spectral Data - Complex Packing (see Template 7.51)',
+            //52-49151: 'Reserved',
+            //49152-65534: 'Reserved for Local Use',
+            65535: 'Missing',
+        }
+    }
+
+    static templates = {
+        // Section 5 - Data Representation
+        // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect5.shtml
+        // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table5-0.shtml
+        //
+        '5.0': { // 
+
+        },
+        //
+        '5.1': { // 
+
+        },
+        //
+        '5.2': { // 
+
+        },
+        //
+        '5.3': { // 
+
+        },
+        //
+        '5.4': { // 
+
+        },
+        //
+        '5.40': { // 
+
+        },
+        //
+        '5.41': { // 
+
+        },
+        //
+        '5.50': { // 
+
+        },
+        //
+        '5.51': { // 
+
+        },
+        //
+        '5.0': { // 
+
+        },
+        //
+        '5.0': { // 
+
+        },
+        
+
+    }
+
+
+    constructor(buffer){
+
+        this.buffer = buffer;
+
+        this.dataTemplate = {
+            // SECTION 0 - Indicator Section
+            0: [ 
+                {
+                    startIndex: 1,
+                    size: 4,
+                    content: '',
+                    type: 'String',
+                    info: 'GRIB (Coded according to the International Alphabet Number 5)'
+                },
+                {
+                    startIndex: 5,
+                    size: 2,
+                    content: null,
+                    type: null,
+                    info: 'Reserved'
+                    
+                },
+                {
+                    startIndex: 7,
+                    size: 1,
+                    content: 0, // Meteorological Products
+                    type: 'int8',
+                    table: '0.0',
+                    info: 'Discipline (From Table 0.0)' // 1 to 10; Discipline (From Table 0.0)
+                    // Table 0.0
+                    // 0 Meteorological Products, 1 Hydrological Products, 2 Land Surface Products, 
+                    // 3 Satellite Remote Sensing Products, 4 Space Weather Products, 5-9 Reserved, 
+                    // 10 Oceanographic Products, 11-191 Reserved, 192-254 Reserved for Local Use,
+                    // 255 Missing
+                },
+                {
+                    startIndex: 8,
+                    size: 1,
+                    content: 2,
+                    type: 'int8',
+                    info: 'Edition number - 2 for GRIB2'
+                },
+                {
+                    startIndex: 13, // Hack, should be 9: There are 8 bytes to define the length, but it seems that only the last 4 are used?
+                    size: 4, // Hack, should be 8
+                    content: null,
+                    type: 'int32',
+                    info: 'Total length of GRIB message in octects (All sections)'
+                }
+            ],
+        
+        
+            // SECTION 1 - Identification Section
+            // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect1.shtml
+            1: [
+                {
+                    startIndex: 1,
+                    size: 4,
+                    content: 21, // 21 or N if Reserved is used
+                    type: 'int32',
+                    info: 'Length of the section in octects (21 or N)'
+                },
+                {
+                    startIndex: 5,
+                    size: 1,
+                    content: 1,
+                    type: 'int8',
+                    info: 'Number of the section'
+                },
+                {
+                    startIndex: 6,
+                    size: 2,
+                    content: 0,
+                    type: 'int16',
+                    info: 'Identification of originating/generating center (See Table 0)'
+                },
+                {
+                    startIndex: 8,
+                    size: 2,
+                    content: 0,
+                    type: 'int16',
+                    info: 'Identification of originating/generating subcenter (See Table C)'
+                },
+                {
+                    startIndex: 10,
+                    size: 1,
+                    content: 2,
+                    type: 'int8',
+                    table: '1.0',
+                    info: 'GRIB master tables version number (currently 2) (See Table 1.0)'
+                },
+                {
+                    startIndex: 11,
+                    size: 1,
+                    content: 0, // 0 Local tables not used.
+                    type: 'int8',
+                    table: '1.1',
+                    info: 'Version number of GRIB local tables used to augment Master Tables (see Table 1.1)'
+                    
+                },
+                {
+                    startIndex: 12,
+                    size: 1,
+                    content: 2, // 2 Veryfing Time of Forecast
+                    type: 'int8',
+                    table: '1.2',
+                    info: 'Significance of reference time (See Table 1.2)'
+                    // Table 1.2
+                    // 0 Analysis, 1 Start of Forecast, 2 Veryfing Time of Forecast, 3 Observation Time, 3-191 Reserved,
+                    // 192-254 Reserved for Local Use, 255 Missing
+                },
+                {
+                    startIndex: 13,
+                    size: 2,
+                    content: 2021,
+                    type: 'int16',
+                    info: 'Year (4 digits)'
+                },
+                {
+                    startIndex: 15,
+                    size: 1,
+                    content: 8,
+                    type: 'int8',
+                    info: 'Month'
+                },
+                {
+                    startIndex: 16,
+                    size: 1,
+                    content: 30,
+                    type: 'int8',
+                    info: 'Day'
+                },
+                {
+                    startIndex: 17,
+                    size: 1,
+                    content: 12,
+                    type: 'int8',
+                    info: 'Hour'
+                },
+                {
+                    startIndex: 18,
+                    size: 1,
+                    content: 0,
+                    type: 'int8',
+                    info: 'Minute'
+                },
+                {
+                    startIndex: 19,
+                    size: 1,
+                    content: 0,
+                    type: 'int8',
+                    info: 'Second'
+                },
+                {
+                    startIndex: 20,
+                    size: 1,
+                    content: 0, // 0 Operational Products
+                    type: 'int8',
+                    table: '1.3',
+                    info: 'Production Status of Processed data in the GRIB message (See Table 1.3)'
+                },
+                {
+                    startIndex: 21,
+                    size: 1,
+                    content: 1, // 1 Forecast Produts
+                    type: 'int8',
+                    table: '1.4',
+                    info: 'Type of processed data in this GRIB message (See Table 1.4)'
+                },
+                {
+                    startIndex: 22,
+                    size: 'end',
+                    content: null,
+                    type: null,
+                    info: 'Reserved'
+                },
+            ],
+        
+        
+        
+            // SECTION 2 - Local Use Section
+            // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect2.shtml
+            2: [
+                {
+                    startIndex: 1,
+                    size: 4,
+                    content: null,
+                    type: 'int32',
+                    info: 'Length of the section in octets (N)'
+                },
+                {
+                    startIndex: 5,
+                    size: 1,
+                    content: 2,
+                    type: 'int8',
+                    info: 'Number of the section (2)'
+                },
+                {
+                    startIndex: 6,
+                    size: 'end',
+                    content: null,
+                    type: null,
+                    info: 'Local Use (6-N)'
+                }
+            ],
+        
+        
+        
+            // SECTION 3 - Grid Definition Section
+            // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect3.shtml
+            3: [
+                {
+                    startIndex: 1,
+                    size: 4,
+                    content: null,
+                    type: 'int32',
+                    info: 'Length of the section in octets (nn)'
+                },
+                {
+                    startIndex: 5,
+                    size: 1,
+                    content: 3,
+                    type: 'int8',
+                    info: 'Number of the section'
+                },
+                {
+                    startIndex: 6,
+                    size: 1,
+                    content: 1,
+                    type: 'int8',
+                    table: '3.0',
+                    info: 'Source of grid definition (See Table 3.0) (See note 1 below)'
+                    // Table 3.0
+                    // 0 Specified in Code Table 3.1, 1 Predetermined Grid Definition - Defined by Originating Center,
+                    // 2-191 Reserved, 191-254 Reserved for Local Use, 255 A grid definition does not apply to this product
+        
+                    // Note 1: If octet 6 is not zero, octets 15-xx (15-nn if octet 11 is zero) may not be supplied.
+                    // This should be documented with all bits set to 1 in the grid definition template number.
+                },
+                {
+                    startIndex: 7,
+                    size: 4,
+                    content: null,
+                    type: 'int32',
+                    info: 'Number of data points'
+                },
+                {
+                    startIndex: 11,
+                    size: 1,
+                    content: 0,
+                    type: 'int8',
+                    info: 'Number of octets for optional list of numbers defining number of points (See note 2 below)'
+                    // Note 2: An optional list of numbers defining number of points is used to document a quasi-regular grid, 
+                    // where the number of points may vary from one row to another.  In such a case, octet 11 is non zero and gives 
+                    // the number octets on which each number of points is encoded.  For all other cases, such as regular grids, 
+                    // octets 11 and 12 are zero and no list is appended to the grid definition template.
+                },
+                {
+                    startIndex: 12,
+                    size: 1,
+                    content: null,
+                    type: 'int8',
+                    table: '3.11',
+                    info: 'Interpetation of list of numbers defining number of points (See Table 3.11)'
+                },
+                {
+                    startIndex: 13,
+                    size: 2,
+                    content: null,
+                    type: 'int16',
+                    table: '3.1',
+                    info: 'Grid definition template number (= N) (See Table 3.1)'
+                },
+                {
+                    startIndex: 15,
+                    size: null, // 1-xx
+                    content: null,
+                    info: 'Grid definition template (See Template 3.N, where N is the grid definition template number given in octets 13-14)'
+                },
+                {
+                    startIndex: null, // xx+1
+                    size: 'valueIn11_to_end',
+                    content: null,
+                    info: 'Optional list of numbers defining number of points (See notes 2, 3, and 4 below)'
+                    // 2.  An optional list of numbers defining number of points is used to document a quasi-regular grid, 
+                    // where the number of points may vary from one row to another.  In such a case, octet 11 is non zero and 
+                    // gives the number octets on which each number of points is encoded.  For all other cases, such as regular grids, 
+                    // octets 11 and 12 are zero and no list is appended to the grid definition template.
+                    // 3.  If a list of numbers defining the number of points is preset, it is appended at the end of the grid definition 
+                    // template ( or directly after the grid definition number if the template is missing). When the grid definition template 
+                    // is present, the length is given according to bit 3 of the scanning mode flag octet (length is Nj or Ny for flag value 0).
+                    // List ordering is implied by data scanning.
+                    // 4.  Depending on the code value given in octet 12, the list of numbers either:
+                    //   - Corresponds to the coordinate lines as given in the grid definition, or
+                    //   - Corresponds to a full circle, or
+                    //   - Does not apply.
+        
+                }
+            ],
+        
+        
+        
+            // SECTION 4 - Product Definition Section
+            4: [
+                {
+                    startIndex: 1,
+                    size: 4,
+                    content: null,
+                    type: 'int32',
+                    info: 'Length of the section in octets (nn)'
+                },
+                {
+                    startIndex: 5,
+                    size: 1,
+                    content: 4,
+                    type: 'int8',
+                    info: 'Number of the section (4)'
+                },
+                {
+                    startIndex: 6,
+                    size: 2,
+                    content: null,
+                    type: 'int16',
+                    info: 'Number of coordinate values after template (See note 1 below)'
+                    // 1.  Coordinate values are intended to document the vertical discretization associated 
+                    // with model data on hybrid coordinate vertical levels.  A value of zero in octets 6-7 indicates 
+                    // that no such values are present.  Otherwise the number corresponds to the whole set of values.
+                },
+                {
+                    startIndex: 8,
+                    size: 2,
+                    content: null,
+                    table: '4.0',
+                    type: 'int16',
+                    info: 'Product definition template number (See Table 4.0)'
+                },
+                {
+                    startIndex: 10,
+                    size: null,
+                    content: null,
+                    info: 'Product definition template (See product template 4.X, where X is the number given in octets 8-9)'
+                },
+                {
+                    startIndex: null, // [xx+1]-nn
+                    size: null,
+                    content: null,
+                    info: 'Optional list of coordinate values (See notes 2 and 3 below)'
+                    // 2.  Hybrid systems employ a means of representing vertical coordinates in terms of a mathematical 
+                    // combination of pressure and sigma coordinates.  When used in conjunction with a surface pressure field and 
+                    // an appropriate mathematical expression, the vertical coordinate parameters may be used to interpret the 
+                    // hybrid vertical coordinate.
+                    // 3.  Hybrid coordinate values, if present, should be encoded in IEEE 32-bit floating point format. They are 
+                    // intended to be encoded as pairs.
+                }
+            ],
+        
+        
+        
+            // SECTION 5 - Data Representation Section
+            5: [
+                {
+                    startIndex: 1,
+                    size: 4,
+                    content: null,
+                    type: 'int32',
+                    info: 'Length of the section in octets (nn)'
+                },
+                {
+                    startIndex: 5,
+                    size: 1,
+                    content: 5,
+                    type: 'int8',
+                    info: 'Number of the section (5)'
+                },
+                {
+                    startIndex: 6,
+                    size: 4,
+                    content: null,
+                    type: 'int32',
+                    info: 'Number of data points where one or more values are specified in Section 7 when a bit map is present, total number of data points when a bit map is absent.'
+                },
+                {
+                    startIndex: 10,
+                    size: 2,
+                    content: 0, // 0 Grid Point Data - Simple Packing (see Template 5.0)
+                    table: '5.0',
+                    type: 'int16',
+                    info: 'Data representation template number (See Table 5.0)'
+                },
+                {
+                    startIndex: 12,
+                    size: null,
+                    content: null,
+                    info: 'Data representation template (See Template 5.X, where X is the number given in octets 10-11)'
+                    // For example, Template Grid Point Data:
+                    // 12-15	Reference value (R) (IEEE 32-bit floating-point value)
+                    // 16-17	Binary scale factor (E)
+                    // 18-19	Decimal scale factor (D)
+                    // 20	    Number of bits used for each packed value for simple packing, or for each group reference value for complex packing or spatial differencing
+                    // 21	    Type of original field values (see Code Table 5.1)
+                    // Negative values of E or D shall be represented according to Regulation 92.1.5.
+                },
+                
+            ],
+        
+        
+        
+            // section 6 - Bit Map Section
+            6: [
+                {
+                    startIndex: 1,
+                    size: 4,
+                    content: null,
+                    type: 'int32',
+                    info: 'Length of the section in octets (nn)'
+                },
+                {
+                    startIndex: 5,
+                    size: 1,
+                    content: 6,
+                    type: 'int8',
+                    info: 'Number of the section (6)' 
+                },
+                {
+                    startIndex: 6,
+                    size: 1,
+                    content: null,
+                    table: '6.0',
+                    type: 'int8',
+                    info: 'Bit-map indicator (See Table 6.0) (See note 1 below)'
+                    // 1.  If octet 6 is not zero, the length of this section is 6 and octets 7-nn are not present.
+        
+                    // 0        A bit map applies to this product and is specified in this section.
+                    // 1-253    A bit map pre-determined by the orginating/generating center applies to this product and is not specified in this section.
+                    // 254      A bit map previously defined in the same GRIB2 message applies to this product.
+                    // 255      A bit map does not apply to this product.
+                },
+                {
+                    startIndex: 7,
+                    size: null,
+                    content: null,
+                    info: 'Bit-map'
+                },
+                
+            ],
+        
+        
+        
+            // SECTION 7 - Data Selection
+            7: [
+                {
+                    startIndex: 1,
+                    size: 4,
+                    content: null,
+                    type: 'int32',
+                    info: 'Length of the section in octets (nn)',
+                },
+                {
+                    startIndex: 5,
+                    size: 1,
+                    content: 7,
+                    type: 'int8',
+                    info: 'Number of the section (7)',
+                },
+                {
+                    startIndex: 6,
+                    size: null,
+                    content: null, // Data
+                    info: 'Data in a format described by data Template 7.X, where X is the data representation template number given in octets 10-11 of Section 5.',
+                },
+            ]
+        
+        }
+
+
+        
+    }
+}
+
+/*
+var el = document.getElementsByTagName('tbody')[0]
+var empty = {};
+for (var i = 1; i< el.children.length; i++){
+    if (el.children[i].children.length != 0){
+        var key = el.children[i].children[0].innerText;
+        key = key.replace('\n', '');
+        var text = el.children[i].children[1].innerText.replace('\n', '');
+        empty[key] = text
+    }
+}
+empty
+*/
