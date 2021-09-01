@@ -180,10 +180,27 @@ class GRIB2 {
         },
         // Resolution and Component Flags
         '3.3': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-3.shtml
+            // It is an int8, with bit information
+            // 0000 0000
+            0: 'i and j direction increments not given. Resolved u and v components of vector quantities relative to easterly and northerly directions.',
+            // 0000 0100
+            4: 'i direction increments given. j direction increments not given. Resolved u and v components of vector quantities relative to easterly and northerly directions.',
+            // 0000 1000
+            8: 'i direction increments not given. j direction increments given. Resolved u and v components of vector quantities relative to easterly and northerly directions.',
+            // 0000 1100
+            12: 'i and j direction increments given. Resolved u and v components of vector quantities relative to easterly and northerly directions.',
+            // 0001 0000
+            16: 'i and j direction increments not given. Resolved u and v components of vector quantities relative to the defined grid in the direction of increasing x and y (or i and j) coordinates, respectively.',
+            // 0001 0100
+            20: 'i direction increments given. j direction increments not given. Resolved u and v components of vector quantities relative to the defined grid in the direction of increasing x and y (or i and j) coordinates, respectively.',
+            // 0001 1000
+            24: 'i direction increments not given. j direction increments given. Resolved u and v components of vector quantities relative to the defined grid in the direction of increasing x and y (or i and j) coordinates, respectively.',
+            // 0001 1100
+            24: 'i and j direction increments given. Resolved u and v components of vector quantities relative to the defined grid in the direction of increasing x and y (or i and j) coordinates, respectively.'
             //1-2: Reserved
-            3: ['0: i direction increments not given','1: i direction increments given'],
-            4: ['0: j direction increments not given','1: j direction increments given'],
-            5: ['0: Resolved u and v components of vector quantities relative to easterly and northerly directions','1: Resolved u and v components of vector quantities relative to the defined grid in the direction of increasing x and y (or i and j) coordinates, respectively.'],
+            //3: ['0: i direction increments not given','1: i direction increments given'],
+            //4: ['0: j direction increments not given','1: j direction increments given'],
+            //5: ['0: Resolved u and v components of vector quantities relative to easterly and northerly directions','1: Resolved u and v components of vector quantities relative to the defined grid in the direction of increasing x and y (or i and j) coordinates, respectively.'],
             //6-8: Reserved - set of zero
         },
         // Scanning Mode
@@ -770,53 +787,1797 @@ class GRIB2 {
     }
 
     static templates = {
+        // Section 3 - Grid Definition Template Number
+        // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect3.shtml
+        // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-1.shtml
+        // Latitude/Longitude (or equidistant cylindrical, or Plate Carree)
+        '3.0': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp3-0.shtml 
+            {
+                startIndex: 15,
+                size: 1,
+                content: null,
+                table: '3.2',
+                type: 'int8',
+                info: 'Shape of the Earth (See Code Table 3.2)'
+            },
+            {
+                startIndex: 16,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale Factor of radius of spherical Earth'
+            },
+            {
+                startIndex: 17,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scale value of radius of spherical Earth'
+            },
+            {
+                startIndex: 21,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale factor of major axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 22,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scaled value of major axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 26,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale factor of minor axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 27,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scaled value of minor axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 31,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Ni — number of points along a parallel'
+            },
+            {
+                startIndex: 35,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Nj — number of points along a meridian'
+            },
+            {
+                startIndex: 39,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Basic angle of the initial production domain (see Note 1)'
+            },
+            {
+                startIndex: 43,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Subdivisions of basic angle used to define extreme longitudes and latitudes, and direction increments (see Note 1)'
+            },
+            {
+                startIndex: 47,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'La1 — latitude of first grid point (see Note 1)'
+            },
+            {
+                startIndex: 51,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Lo1 — longitude of first grid point (see Note 1)'
+            },
+            {
+                startIndex: 55,
+                size: 1,
+                content: null,
+                table: '3.3',
+                type: 'int8',
+                info: 'Resolution and component flags (see Flag Table 3.3)'
+            },
+            {
+                startIndex: 56,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'La2 — latitude of last grid point (see Note 1)'
+            },
+            {
+                startIndex: 60,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Lo2 — longitude of last grid point (see Note 1)'
+            },
+            {
+                startIndex: 64,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Di — i direction increment (see Notes 1 and 5)'
+            },
+            {
+                startIndex: 68,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Dj — j direction increment (see Note 1 and 5)'
+            },
+            {
+                startIndex: 72,
+                size: 1,
+                content: null,
+                table: '3.4',
+                type: 'int8',
+                info: 'Scanning mode (flags — see Flag Table 3.4 and Note 6)'
+            },
+            {
+                startIndex: 73,
+                size: 'end', // from 73 to nn
+                content: null,
+                type: 'int8',
+                info: 'List of number of points along each meridian or parallel (These octets are only present for quasi-regular grids as described in notes 2 and 3)'
+            }
+            // Notes
+            // 1.  Basic angle of the initial production domain and subdivisions of this basic angle are provided to manage cases where the recommended unit of 10^-6 degrees is not applicable to describe the extreme longitudes and latitudes, and direction increments. For these last six descriptors, the unit is equal to the ratio of the basic angle and the subdivisions number. For ordinary cases, zero and missing values should be coded, equivalent to respective values of 1 and 10^6  (10^-6  degrees unit).
+            // 2.  For data on a quasi-regular grid, in which all the rows or columns do not necessarily have the same number of grid points either Ni (octets 31-34) of Nj (octets 35-38) and the corresponding Di (octets 64-67) or Dj (octets 68-71) shall be coded with all bits set to 1 (missing). The actual number of points along each parallel or meridian shall be coded in the octets immediately following the grid definition template (octets [xx+1]-nn), as described in the description of the grid definition section.
+            // 3.  A quasi-regular grid is only defined for appropriate grid scanning modes. Either rows or columns, but not both simultaneously, may have variable numbers of points or variable spacing. The first point in each row (column) shall be positioned at the meridian (parallel) indicted by octets 47-54. The grid points shall be evenly spaced in latitude (longitude).
+            // 4.  A scale value of radius of spherical Earth, or major axis of oblate spheroid Earth is delivered from applying appropriate scale factor to the value expressed in meters.
+            // 5.  It is recommended to use unsigned direction increments.
+            // 6.  In most cases, multiplying Ni (octets 31-34) by Nj (octets 35-38) yields the total number of points in the grid. However, this may not be true if bit 8 of the scanning mode flags (octet 72) is set to 1.
+        ],
+        // Rotate Latitude/Longitude (or equidistant cylindrical, or Plate Carree)
+        '3.1': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp3-1.shtml
+            {
+                startIndex: 15,
+                size: 1,
+                content: null,
+                table: '3.2',
+                type: 'int8',
+                info: 'Shape of the Earth (See Code Table 3.2)'
+            },
+            {
+                startIndex: 16,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale Factor of radius of spherical Earth'
+            },
+            {
+                startIndex: 17,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scale value of radius of spherical Earth'
+            },
+            {
+                startIndex: 21,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale factor of major axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 22,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scaled value of major axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 26,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale factor of minor axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 27,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scaled value of minor axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 31,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Ni — number of points along a parallel'
+            },
+            {
+                startIndex: 35,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Nj — number of points along a meridian'
+            },
+            {
+                startIndex: 39,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Basic angle of the initial production domain (see Note 1)'
+            },
+            {
+                startIndex: 43,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Subdivisions of basic angle used to define extreme longitudes and latitudes, and direction increments (see Note 1)'
+            },
+            {
+                startIndex: 47,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'La1 — latitude of first grid point (see Note 1)'
+            },
+            {
+                startIndex: 51,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Lo1 — longitude of first grid point (see Note 1)'
+            },
+            {
+                startIndex: 55,
+                size: 1,
+                content: null,
+                table: '3.3',
+                type: 'int8',
+                info: 'Resolution and component flags (see Flag Table 3.3)'
+            },
+            {
+                startIndex: 56,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'La2 — latitude of last grid point (see Note 1)'
+            },
+            {
+                startIndex: 60,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Lo2 — longitude of last grid point (see Note 1)'
+            },
+            {
+                startIndex: 64,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Di — i direction increment (see Notes 1 and 4)'
+            },
+            {
+                startIndex: 68,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Dj — j direction increment (see Note 1 and 4)'
+            },
+            {
+                startIndex: 72,
+                size: 1,
+                content: null,
+                table: '3.4',
+                type: 'int8',
+                info: 'Scanning mode (flags — see Flag Table 3.4 and Note 6)'
+            },
+            {
+                startIndex: 73,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Latitude of the southern pole of projection'
+            },
+            {
+                startIndex: 77,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Latitude of the southern pole of projection'
+            },
+            {
+                startIndex: 81,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Angle of rotation of projection'
+            },
+            {
+                startIndex: 85,
+                size: 'end', // from 85 to nn
+                content: null,
+                type: 'int32',
+                info: 'List of number of points along each meridian or parallel (These octets are only present for quasi-regular grids as described in note 3)'
+            },
+            // Notes
+            // 1.  Basic angle of the initial production domain and subdivisions of this basic angle are provided to manage cases where the recommended unit of 10^-6 degrees is not applicable to describe the extreme longitudes and latitudes, and direction increments. For these last six descriptors, the unit is equal to the ratio of the basic angle and the subdivisions number. For ordinary cases, zero and missing values should be coded, equivalent to respective values of 1 and 10^6  (10^-6  degrees unit).
+            // 2.  Three parameters define a general latitude/longitude coordinate system, formed by a general rotation of the sphere. One choice for these parameters is: (a) The geographic latitude in degrees of the southern pole of the coordinate system,06 for example. (b) The geographic longitude in degrees of the southern pole of the coordinate system,λp for example. (c) The angle of rotation in degrees about the new polar axis (measured clockwise when looking from the southern to the northern pole) of the coordinate system, assuming the new axis to have been obtained by first rotating the sphere through λp degrees about the geographic polar axis and then rotating through (90 + 0p) degrees so that the southern pole moved along the (previously rotated) Greenwich meridian.
+            // 3.  A quasi-regular grid is only defined for appropriate grid scanning modes. Either rows or columns, but not both simultaneously, may have variable numbers of points or variable spacing. The first point in each row (column) shall be positioned at the meridian (parallel) indicted by octets 47-54. The grid points shall be evenly spaced in latitude (longitude).
+            // 4.  It is recommended to use unsigned direction increments.
+        ],
+        // Stretched Latitude/Longitude (or equidistant cylindrical, or Plate Carree)
+        '3.2': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp3-2.shtml
+            {
+                startIndex: 15,
+                size: 1,
+                content: null,
+                table: '3.2',
+                type: 'int8',
+                info: 'Shape of the Earth (See Code Table 3.2)'
+            },
+            {
+                startIndex: 16,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale Factor of radius of spherical Earth'
+            },
+            {
+                startIndex: 17,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scale value of radius of spherical Earth'
+            },
+            {
+                startIndex: 21,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale factor of major axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 22,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scaled value of major axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 26,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale factor of minor axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 27,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scaled value of minor axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 31,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Ni — number of points along a parallel'
+            },
+            {
+                startIndex: 35,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Nj — number of points along a meridian'
+            },
+            {
+                startIndex: 39,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Basic angle of the initial production domain (see Note 1)'
+            },
+            {
+                startIndex: 43,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Subdivisions of basic angle used to define extreme longitudes and latitudes, and direction increments (see Note 1)'
+            },
+            {
+                startIndex: 47,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'La1 — latitude of first grid point (see Note 1)'
+            },
+            {
+                startIndex: 51,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Lo1 — longitude of first grid point (see Note 1)'
+            },
+            {
+                startIndex: 55,
+                size: 1,
+                content: null,
+                table: '3.3',
+                type: 'int8',
+                info: 'Resolution and component flags (see Flag Table 3.3)'
+            },
+            {
+                startIndex: 56,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'La2 — latitude of last grid point (see Note 1)'
+            },
+            {
+                startIndex: 60,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Lo2 — longitude of last grid point (see Note 1)'
+            },
+            {
+                startIndex: 64,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Di — i direction increment (see Notes 1 and 4)'
+            },
+            {
+                startIndex: 68,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Dj — j direction increment (see Note 1 and 4)'
+            },
+            {
+                startIndex: 72,
+                size: 1,
+                content: null,
+                table: '3.4',
+                type: 'int8',
+                info: 'Scanning mode (flags — see Flag Table 3.4)'
+            },
+            {
+                startIndex: 73,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Latitude of the southern pole of projection'
+            },
+            {
+                startIndex: 77,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Latitude of the southern pole of projection'
+            },
+            {
+                startIndex: 81,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Angle of rotation of projection'
+            },
+            {
+                startIndex: 85,
+                size: 'end', // from 85 to nn
+                content: null,
+                type: 'int32',
+                info: 'List of number of points along each meridian or parallel (These octets are only present for quasi-regular grids as described in note 3)'
+            },
+            // Notes
+            // 1.  Basic angle of the initial production domain and subdivisions of this basic angle are provided to manage cases where the recommended unit of 10^-6 degrees is not applicable to describe the extreme longitudes and latitudes, and direction increments. For these last six descriptors, the unit is equal to the ratio of the basic angle and the subdivisions number. For ordinary cases, zero and missing values should be coded, equivalent to respective values of 1 and 10^6  (10^-6  degrees unit).
+            // 2. The stretching is defined by three parameters: (a) The latitude in degrees (measured in the model coordinate system) of the "pole of stretching"; (b) The longitude in degrees (measured in the model coordinate system) of the "pole of stretching"; and (c) The stretching factor C in units of 10-6 represented as an integer. The stretching is defined by representing data uniformly in a coordinate system with longitudeq λ and latitude θ1, where: θ 1 = sin-1[(1- C2) + (1 + C2) sin θ] / [(1 + C2) + (1 - C2) sin θ ] and λ and θ are longitude and latitude in a coordinate system in which the "pole of stretching" is the northern pole. C = 1 gives uniform resolution, while C > 1 gives enhanced resolution around the pole of stretching.
+            // 3.  A quasi-regular grid is only defined for appropriate grid scanning modes. Either rows or columns, but not both simultaneously, may have variable numbers of points or variable spacing. The first point in each row (column) shall be positioned at the meridian (parallel) indicted by octets 47-54. The grid points shall be evenly spaced in latitude (longitude).
+            // 4.  It is recommended to use unsigned direction increments.
+        ],
+        // Stretched and Rotate Latitude/Longitude (or equidistant cylindrical, or Plate Carree)
+        '3.3': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp3-3.shtml
+            {
+                startIndex: 15,
+                size: 1,
+                content: null,
+                table: '3.2',
+                type: 'int8',
+                info: 'Shape of the Earth (See Code Table 3.2)'
+            },
+            {
+                startIndex: 16,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale Factor of radius of spherical Earth'
+            },
+            {
+                startIndex: 17,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scale value of radius of spherical Earth'
+            },
+            {
+                startIndex: 21,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale factor of major axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 22,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scaled value of major axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 26,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale factor of minor axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 27,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scaled value of minor axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 31,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Ni — number of points along a parallel'
+            },
+            {
+                startIndex: 35,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Nj — number of points along a meridian'
+            },
+            {
+                startIndex: 39,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Basic angle of the initial production domain (see Note 1)'
+            },
+            {
+                startIndex: 43,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Subdivisions of basic angle used to define extreme longitudes and latitudes, and direction increments (see Note 1)'
+            },
+            {
+                startIndex: 47,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'La1 — latitude of first grid point (see Note 1)'
+            },
+            {
+                startIndex: 51,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Lo1 — longitude of first grid point (see Note 1)'
+            },
+            {
+                startIndex: 55,
+                size: 1,
+                content: null,
+                table: '3.3',
+                type: 'int8',
+                info: 'Resolution and component flags (see Flag Table 3.3)'
+            },
+            {
+                startIndex: 56,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'La2 — latitude of last grid point (see Note 1)'
+            },
+            {
+                startIndex: 60,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Lo2 — longitude of last grid point (see Note 1)'
+            },
+            {
+                startIndex: 64,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Di — i direction increment (see Notes 1 and 4)'
+            },
+            {
+                startIndex: 68,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Dj — j direction increment (see Note 1 and 4)'
+            },
+            {
+                startIndex: 72,
+                size: 1,
+                content: null,
+                table: '3.4',
+                type: 'int8',
+                info: 'Scanning mode (flags — see Flag Table 3.4)'
+            },
+            {
+                startIndex: 73,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Latitude of the southern pole of projection'
+            },
+            {
+                startIndex: 77,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Latitude of the southern pole of projection'
+            },
+            {
+                startIndex: 81,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Angle of rotation of projection'
+            },
+            {
+                startIndex: 85,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Latitude of the pole of stretching'
+            },{
+                startIndex: 89,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Longitude of the pole stretching'
+            },{
+                startIndex: 93,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Stretching factor'
+            },
+            {
+                startIndex: 97,
+                size: 'end', // from 85 to nn
+                content: null,
+                type: 'int32',
+                info: 'List of number of points along each meridian or parallel (These octets are only present for quasi-regular grids as described in note 3)'
+            },
+            // Notes
+            // 1.  Basic angle of the initial production domain and subdivisions of this basic angle are provided to manage cases where the recommended unit of 10^-6 degrees is not applicable to describe the extreme longitudes and latitudes, and direction increments. For these last six descriptors, the unit is equal to the ratio of the basic angle and the subdivisions number. For ordinary cases, zero and missing values should be coded, equivalent to respective values of 1 and 10^6  (10^-6  degrees unit).
+            // 2. See Note (2) under grid definition template 3.1 ― rotated latitude/longitude (or equidistant cylindrical, or Plate Carree).
+            // 3.  See Note (2) under grid definition template 3.2 ― stretched latitude/longitude (or equidistant cylindrical, or Plate Carree).
+            // 4. A quasi-regular grid is only defined for appropriate grid scanning modes. Either rows or columns, but not both simultaneously, may have variable numbers of points or variable spacing. The first point in each row (column) shall be positioned at the meridian (parallel) indicted by octets 47-54. The grid points shall be evenly spaced in latitude (longitude).
+            // 5.  It is recommended to use unsigned direction increments.
+        ],
+        // Variable Resolution Latitude/Longitude
+        '3.4': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp3-4.shtml
+            {
+                startIndex: 15,
+                size: 1,
+                content: null,
+                table: '3.2',
+                type: 'int8',
+                info: 'Shape of the Earth (See Code Table 3.2)'
+            },
+            {
+                startIndex: 16,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale Factor of radius of spherical Earth'
+            },
+            {
+                startIndex: 17,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scale value of radius of spherical Earth'
+            },
+            {
+                startIndex: 21,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale factor of major axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 22,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scaled value of major axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 26,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale factor of minor axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 27,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scaled value of minor axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 31,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Ni — number of points along a parallel'
+            },
+            {
+                startIndex: 35,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Nj — number of points along a meridian'
+            },
+            {
+                startIndex: 39,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Basic angle of the initial production domain (see Note 1)'
+            },
+            {
+                startIndex: 43,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Subdivisions of basic angle used to define extreme longitudes and latitudes, and direction increments (see Note 1)'
+            },
+            {
+                startIndex: 47,
+                size: 1,
+                content: null,
+                table: '3.3',
+                type: 'int8',
+                info: 'Resolution and component flags (see Flag Table 3.3)'
+            },
+            {
+                startIndex: 48,
+                size: 1,
+                content: null,
+                table: '3.4',
+                type: 'int8',
+                info: 'Scanning mode (flags — see Flag Table 3.4)'
+            },
+            {
+                startIndex: 49,
+                size: 'calc', // from 49 to ii; ii=48+4Ni and jj=48+4Ni+4j.
+                sizeRef: {
+                    index: 31,
+                    calc: (ni) => ni*4
+                },
+                content: null,
+                type: 'int32',
+                info: 'List of Longitudes (see Notes 1 and 3)'
+            },
+            {
+                startIndex: 'nextAvailable',
+                size: 'end', // from ii+1 to jj;  jj=48+4Ni+4j --> 4j or 4Nj????
+                content: null,
+                type: 'int32',
+                info: 'List of Latitudes (see Notes 1 and 3)'
+            }
+            // Notes
+            // 1.  Basic angle of the initial production domain and subdivisions of this basic angle are provided to manage cases where the recommended unit of 10^-6 degrees is not applicable to describe the extreme longitudes and latitudes, and direction increments. For these last six descriptors, the unit is equal to the ratio of the basic angle and the subdivisions number. For ordinary cases, zero and missing values should be coded, equivalent to respective values of 1 and 10^6  (10^-6  degrees unit).
+            // 2. For resolution flag (bit 3-4 of Flag table 3.3) is not applicable.
+            // 3. The list of Ni longitudes and Nj latitudes shall be coded in the octets immediately following the Grid definition template in octets 49 to ii and octets ii+1 to jj respectively, where ii=48+4Ni and jj=48+4Ni+4j.
+            // 4. A scale value of radius of spherical Earth, or major or minor axis of oblate spheroid Earth is derived from applying appropriate scale factor to the value expressed in meters.
+        ],
+        // TODO: Templates
+        // Variable Resolution Rotate Latitude/Longitude
+        '3.5': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp3-5.shtml
+            {
+                startIndex: 15,
+                size: 1,
+                content: null,
+                table: '3.2',
+                type: 'int8',
+                info: 'Shape of the Earth (See Code Table 3.2)'
+            },
+            {
+                startIndex: 16,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale Factor of radius of spherical Earth'
+            },
+            {
+                startIndex: 17,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scale value of radius of spherical Earth'
+            },
+            {
+                startIndex: 21,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale factor of major axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 22,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scaled value of major axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 26,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale factor of minor axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 27,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scaled value of minor axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 31,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Ni — number of points along a parallel'
+            },
+            {
+                startIndex: 35,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Nj — number of points along a meridian'
+            },
+            {
+                startIndex: 39,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Basic angle of the initial production domain (see Note 1)'
+            },
+            {
+                startIndex: 43,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Subdivisions of basic angle used to define extreme longitudes and latitudes, and direction increments (see Note 1)'
+            },
+            {
+                startIndex: 47,
+                size: 1,
+                content: null,
+                table: '3.3',
+                type: 'int8',
+                info: 'Resolution and component flags (see Flag Table 3.3)'
+            },
+            {
+                startIndex: 48,
+                size: 1,
+                content: null,
+                table: '3.4',
+                type: 'int8',
+                info: 'Scanning mode (flags — see Flag Table 3.4)'
+            },
+            {
+                startIndex: 49,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Latitude of the southern pole of projection'
+            },
+            {
+                startIndex: 53,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Latitude of the southern pole of projection'
+            },
+            {
+                startIndex: 57,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Angle of rotation of projection'
+            },
+            {
+                startIndex: 61,
+                size: 'calc', // from 61 to ii; ii=60+4Ni and jj=60+4Ni+4j.
+                sizeRef: {
+                    index: 31,
+                    calc: (ni) => ni*4
+                },
+                content: null,
+                type: 'int32',
+                info: 'List of Longitudes (see Notes 1 and 3)'
+            },
+            {
+                startIndex: 'nextAvailable',
+                size: 'end', // from ii+1 to jj;  jj=48+4Ni+4j --> 4j or 4Nj???? TODO (also appears in 3.4)
+                content: null,
+                type: 'int32',
+                info: 'List of Latitudes (see Notes 1 and 3)'
+            }
+            // Notes
+            // 1.  Basic angle of the initial production domain and subdivisions of this basic angle are provided to manage cases where the recommended unit of 10^-6 degrees is not applicable to describe the extreme longitudes and latitudes, and direction increments. For these last six descriptors, the unit is equal to the ratio of the basic angle and the subdivisions number. For ordinary cases, zero and missing values should be coded, equivalent to respective values of 1 and 10^6  (10^-6  degrees unit).
+            // 2. Three parameters define a general Latitude/Longitude coordinate system, formed by a general rotation of the sphere. One choice for these parameters is: (a)   The geographic latitude in degrees of the Southern pole of the coordinate system, e.g Θp; (b)   The geographic longitude in degrees of the Southern pole of the coordinate system, e.g λp; (c)   The angle of rotation in degrees about the new polar axis (measured clockwise when looking from the Southern to the Northern pole) of the coordinate system, assuming the new axis to have been obtained by first rotating the sphere through λp degrees about the geographic polar aixs, and then rotating through (90 + Θp) degrees so that the Southern pole moved along the (previously rotated) Greenwich meridian.
+            // 3. For the list of Ni longitudes bounds and Nj latitudes bounds at the end of the section ii=60+4Ni and jj=60+4Ni+4Nj.
+            // 4. Regulations 92.1.6 applies.
+        ],
+        // Mercator
+        '3.10': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp3-10.shtml
+            {
+                startIndex: 15,
+                size: 1,
+                content: null,
+                table: '3.2',
+                type: 'int8',
+                info: 'Shape of the Earth (See Code Table 3.2)'
+            },
+            {
+                startIndex: 16,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale Factor of radius of spherical Earth'
+            },
+            {
+                startIndex: 17,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scale value of radius of spherical Earth'
+            },
+            {
+                startIndex: 21,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale factor of major axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 22,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scaled value of major axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 26,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale factor of minor axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 27,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scaled value of minor axis of oblate spheroid Earth'
+            },
+            {
+                startIndex: 31,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Ni — number of points along a parallel'
+            },
+            {
+                startIndex: 35,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Nj — number of points along a meridian'
+            },
+            {
+                startIndex: 39,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'La1 ― latitude of first grid point'
+            },
+            {
+                startIndex: 43,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Lo1 ― longitude of first grid point'
+            },
+            {
+                startIndex: 47,
+                size: 1,
+                content: null,
+                table: '3.3',
+                type: 'int8',
+                info: 'Resolution and component flags (see Flag Table 3.3)'
+            },
+            {
+                startIndex: 48,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'LaD — latitude(s) at which the Mercator projection intersects the Earth (Latitude(s) where Di and Dj are specified)  '
+            },
+            {
+                startIndex: 52,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'La2 ― latitude of last grid point'
+            },
+            {
+                startIndex: 56,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Lo2 — longitude of last grid point'
+            },
+            {
+                startIndex: 60,
+                size: 1,
+                content: null,
+                table: '3.4',
+                type: 'int8',
+                info: 'Scanning mode (flags — see Flag Table 3.4)'
+            },
+            {
+                startIndex: 61,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Orientation of the grid, angle between i direction on the map and the Equator (see Note1)'
+            },
+            {
+                startIndex: 65,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Dj — longitudinal direction grid length (see Note 2)'
+            },
+            {
+                startIndex: 69,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Dj ― latitudinal direction grid length  (see Note 2)'
+            },
+            {
+                startIndex: 73,
+                size: 'end', // from 73 to nn
+                content: null,
+                type: 'int32',
+                info: 'List of number of points along each meridian or parallel (These octets are only present for quasi-regular grids as described in notes 2 and 3 of GDT 3.1)'
+            },
+            // Notes: 
+            // 1.  Limited to the range of  0 to 90 degrees; if the angle of orientation of the grid is neither 0 nor 90 degrees, Di and Dj must be equal to each other.
+            // 2.  Grid lengths are in units of 10^-3  m, at the latitude specified by LaD.
+            // 3.  A scale value of radius of spherical Earth, or major or minor axis of oblate spheroid Earth is derived from applying appropriate scale factor to the value expressed in metres.
+        ],
+        // 
+        '3.12': [ // 
+
+        ],
+        // 
+        '3.13': [ // 
+
+        ],
+        // 
+        '3.20': [ // 
+
+        ],
+        // 
+        '3.23': [ // 
+
+        ],
+        // 
+        '3.30': [ // 
+
+        ],
+        // 
+        '3.31': [ // 
+
+        ],
+        //... and many more
+
+        // Section 4 - Product Definition Section
+        // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect4.shtml
+        // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-0.shtml
+        // TODO
+
         // Section 5 - Data Representation
         // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect5.shtml
         // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table5-0.shtml
-        //
-        '5.0': { // 
+        // Grid point data - simple packing
+        '5.0': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-0.shtml
+            {
+                startIndex: 12,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Reference value (R) (IEEE 32-bit floating-point value)'
+            },
+            {
+                startIndex: 16,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'Binary scale factor (E)'
+            },
+            {
+                startIndex: 18,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'Decimal scale factor (D)'
+            },
+            {
+                startIndex: 20,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Number of bits used for each packed value for simple packing, or for each group reference value for complex packing or spatial differencing'
+            },
+            {
+                startIndex: 21,
+                size: 1,
+                content: null,
+                table: '5.1',
+                type: 'int8',
+                info: 'Type of original field values (see Code Table 5.1)'
+            }
+        ],
+        // Matrix values at grid point - simple packing
+        // Preliminary note:  This template was not validated at the time of publication and should be used with caution.  Please report any use to WMO Secretariat (World Weather Watch - Basic Systems Department) to assist for validation.
+        '5.1': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-1.shtml
+            {
+                startIndex: 12,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Reference value (R) (IEEE 32-bit floating-point value)'
+            },
+            {
+                startIndex: 16,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'Binary scale factor (E)'
+            },
+            {
+                startIndex: 18,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'Decimal scale factor (D)'
+            },
+            {
+                startIndex: 20,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Number of bits used for each packed value for simple packing, or for each group reference value for complex packing or spatial differencing'
+            },
+            {
+                startIndex: 21,
+                size: 1,
+                content: null,
+                table: '5.1',
+                type: 'int8',
+                info: 'Type of original field values (see Code Table 5.1)'
+            },
+            {
+                startIndex: 22,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: '0, no matrix bit maps present; 1-matrix bit maps present'
+            },
+            {
+                startIndex: 23,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Number of data values encoded in Section 7'
+            },
+            {
+                startIndex: 27,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'NR ― first dimension (rows) of each matrix'
+            },
+            {
+                startIndex: 29,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'NC ― second dimension (columns) of each matrix'
+            },
+            {
+                startIndex: 31,
+                size: 1,
+                content: null,
+                table: '5.2',
+                type: 'int8',
+                info: 'First dimension coordinate value definition (see Code Table 5.2)'
+            },
+            {
+                startIndex: 32,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'NC1 ― number of coefficients or values used  to specify first dimension coordinate function'
+            },
+            {
+                startIndex: 33,
+                size: 1,
+                content: null,
+                table: '5.2',
+                type: 'int8',
+                info: 'Second dimension coordinate value definition (see Code Table 5.2)'
+            },
+            {
+                startIndex: 34,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'NC2 ― number of coefficients or values used to specify second dimension coordinate function'
+            },
+            {
+                startIndex: 35,
+                size: 1,
+                content: null,
+                table: '5.3',
+                type: 'int8',
+                info: 'First dimension physical significance (see Code Table 5.3)'
+            },
+            {
+                startIndex: 36,
+                size: 1,
+                content: null,
+                table: '5.3',
+                type: 'int8',
+                info: 'Second dimension physical significance (see Code Table 5.3)'
+            },
+            {
+                startIndex: 37,
+                size: 'calc',
+                sizeRef: {
+                    index: 32,
+                    calc: (nc1) => nc1*4
+                },
+                content: null,
+                type: 'int32',
+                info: 'Coefficients to define first dimension coordinate values in functional form, or the explicit coordinate values (IEEE 32-bit floating-point value)'
+            },
+            {
+                startIndex: 'nextAvailable',
+                size: 'end',
+                content: null,
+                type: 'int8',
+                info: 'Coefficients to define second dimension coordinate values in functional form, or the explicit coordinate values (IEEE 32-bit floating-point value)'
+            }
+            // Notes:
+            // (1)   This form of representation enables a matrix of values to be depicted at each grid point; the two dimensions of the matrix may represent coordinates expressed in terms of two elemental parameters (e.g. direction and frequency for wave spectra).  The numeric values of these coordinates,beyond that of simple subscripts, can be given in a functional form, or as a collection of explicit numbers. 
+            // (2)   Some simple coordinate functional forms are tabulated in Code table 5.2.  Where a more complex coordinate function applies, the coordinate values shall be explicitly denoted by the inclusion of the actual set of values rather than the coefficients.   This shall be indicated by a code figure 0 from Code table 5.2; the number of explicit values coded shall be equal to the appropriate dimension of the matrix for which values are presented and they shall follow octet 36 in place of coefficients. 
+            // (3)   Matrix bit maps will be present only if indicated by octet 22.  If present, there shall be one bit map for each grid point with data values, as defined by the primary bit map in Section 6, each of length (NRxNC) bits: a bit set to 1 will indicate a data element at the corresponding location within the matrix.  Bit maps shall be represented end-to-end, without regard for octet boundaries: the last bit map shall, if necessary, be followed by bits set to zero to fill any partially used octet. 
+            // (4)  Matrices restricted to scanning in the +i direction (left to right) and in the -j direction (top to bottom)
+        ],
+        // Grid point data - complex packing
+        '5.2': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-2.shtml
+            {
+                startIndex: 12,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Reference value (R) (IEEE 32-bit floating-point value)'
+            },
+            {
+                startIndex: 16,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'Binary scale factor (E)'
+            },
+            {
+                startIndex: 18,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'Decimal scale factor (D)'
+            },
+            {
+                startIndex: 20,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Number of bits used for each packed value for simple packing, or for each group reference value for complex packing or spatial differencing'
+            },
+            {
+                startIndex: 21,
+                size: 1,
+                content: null,
+                table: '5.1',
+                type: 'int8',
+                info: 'Type of original field values (see Code Table 5.1)'
+            },
+            {
+                startIndex: 22,
+                size: 1,
+                content: null,
+                table: '5.4',
+                type: 'int8',
+                info: 'Group splitting method used (see Code Table 5.4)'
+            },
+            {
+                startIndex: 23,
+                size: 1,
+                content: null,
+                table: '5.5',
+                type: 'int8',
+                info: 'Missing value management used (see Code Table 5.5)'
+            },
+            {
+                startIndex: 24,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Primary missing value substitute'
+            },
+            {
+                startIndex: 28,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Secondary missing value substitute'
+            },
+            {
+                startIndex: 32,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'NG ― number of groups of data values into which field is split'
+            },
+            {
+                startIndex: 36,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Reference for group widths (see Note 12)'
+            },
+            {
+                startIndex: 37,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Number of bits used for the group widths (after the reference value in octet 36 has been removed)'
+            },
+            {
+                startIndex: 38,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Reference for group lengths (see Note 13)'
+            },
+            {
+                startIndex: 42,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Length increment for the group lengths (see Note 14)'
+            },
+            {
+                startIndex: 43,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'True length of last group'
+            },
+            {
+                startIndex: 47,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Number of bits used for the scaled group lengths (after subtraction of the reference value given in octets 38-41 and division by the length increment given in octet 42)'
+            }
+            // Notes: 
+            //(1) Group lengths have no meaning for row by row packing, where groups are coordinate lines (so th grid description section and possibly the bit-map section are enough); for consistency, associated field width and reference should then be encoded as 0.
+            //(2) For row by row packing with a bit-map, there should always be as many groups as rows. In case of rows with only missing values, all associated descriptors should be coded as zero.
+            //(3) Management of widths into a reference and increments, together with management of lengths as scaled incremental values, are intended to save descriptor size (which is an issue as far as compression gains are concerned). 
+            //(4) Management of explicitly missing values is an alternate to bit-map use within Section 6; it is intended to reduce the whole GRIB message size. 
+            //(5) There may be two types of missing value(s), such as to make a distinction between static misses (for instance, due to a land/sea mask) and occasional misses. 
+            //(6) As an extra option, substitute value(s) for missing data may be specified. If not wished (or not applicable), all bits should be set to 1 for relevant substitute value(s). 
+            //(7) If substitute value(s) are specified, type of content should be consistent with appropriate group with original field values (floating-point ― and then IEEE 32-bit encoded-, or integer). 
+            //(8) If secondary missing values are used, such values are encoded within appropriate group with all bits set to 1 at packed data level. 
+            //(9) If secondary missing values are used, such values are encoded within appropriate group with all bits set to 1, except the last one set to 0, at packed data level. 
+            //(10) A group containing only missing values (of either type) will be encoded as a constant group (null width, no associate data) and the group reference will have all bits set to 1 for primary type, and all bits set to 1, except the last bit set to 0, for secondary type. 
+            //(11) If necessary, group widths and/or field width of group references may be enlarged to avoid ambiguities between missing value indicator(s) and true data. 
+            //(12) The group width is the number of bits used for every value in a group. 
+            //(13) The group length (L) is the number of values in a group. 
+            //(14) The essence of the complex packing method is to subdivide a field of values into NG groups, where the values in each group have similar sizes. In this procedure, it is necessary to retain enough information to recover the group lengths upon decoding. The NG group lengths for any given field can be described by Ln = ref + Kn x len_inc, n = 1,NG, where ref is given by octets 38 - 41 and len_inc by octet 42. The NG values of K (the scaled group lengths) are stored in the data section, each with the number of bits specified by octet 47. Since the last group is a special case which may not be able to be specified by this relationship, the length of the last group is stored in octets 43-46. 
+            //(15) See data template 7.2 and associated notes for complementary information.
+        ],
+        // Grid point data - complex packing and spatial differencing
+        '5.3': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-3.shtml
+            {
+                startIndex: 12,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Reference value (R) (IEEE 32-bit floating-point value)'
+            },
+            {
+                startIndex: 16,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'Binary scale factor (E)'
+            },
+            {
+                startIndex: 18,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'Decimal scale factor (D)'
+            },
+            {
+                startIndex: 20,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Number of bits used for each packed value for simple packing, or for each group reference value for complex packing or spatial differencing'
+            },
+            {
+                startIndex: 21,
+                size: 1,
+                content: null,
+                table: '5.1',
+                type: 'int8',
+                info: 'Type of original field values (see Code Table 5.1)'
+            },
+            {
+                startIndex: 22,
+                size: 1,
+                content: null,
+                table: '5.4',
+                type: 'int8',
+                info: 'Group splitting method used (see Code Table 5.4)'
+            },
+            {
+                startIndex: 23,
+                size: 1,
+                content: null,
+                table: '5.5',
+                type: 'int8',
+                info: 'Missing value management used (see Code Table 5.5)'
+            },
+            {
+                startIndex: 24,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Primary missing value substitute'
+            },
+            {
+                startIndex: 28,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Secondary missing value substitute'
+            },
+            {
+                startIndex: 32,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'NG ― number of groups of data values into which field is split'
+            },
+            {
+                startIndex: 36,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Reference for group widths (see Note 12)'
+            },
+            {
+                startIndex: 37,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Number of bits used for the group widths (after the reference value in octet 36 has been removed)'
+            },
+            {
+                startIndex: 38,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Reference for group lengths (see Note 13)'
+            },
+            {
+                startIndex: 42,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Length increment for the group lengths (see Note 14)'
+            },
+            {
+                startIndex: 43,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'True length of last group'
+            },
+            {
+                startIndex: 47,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Number of bits used for the scaled group lengths (after subtraction of the reference value given in octets 38-41 and division by the length increment given in octet 42)'
+            },
+            {
+                startIndex: 48,
+                size: 1,
+                content: null,
+                table: '5.6',
+                type: 'int8',
+                info: 'Order of spatial difference (see Code Table 5.6) '
+            },
+            {
+                startIndex: 49,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Number of octets required in the data section to specify extra descriptors needed for spatial differencing (octets 6-ww in data template 7.3)'
+            }
+            // Notes
+            // (1) Spatial differencing is a pre-processing before group splitting at encoding time. It is intended to reduce the size of sufficiently smooth fields, when combined with a splitting scheme as described in data representation template 5.2. At order 1, an initial field of values f is replaced by a new field of values g, where g1 = f1, g2 = f2, ..., gn = fn - fn-1. At order 2, the field of values g is itself replaced by a new field of values h, where h1 = f1, h2 = f2 , h3 = g3- g2, ..., hn = gn - gn - 1. To keep values positive, the overall minimum of the resulting field (either gmin or hmin) is removed. At decoding time, after bit string unpacking, the original scaled values are recovered by adding the overall minimum and summing up recursively. 
+            // (2) For differencing of order n, the first n values in the array that are not missing are set to zero in the packed array. These dummy values are not used in unpacking. 
+            // (3) See data template 7.3 and associated notes for complementary information.
+        ],
+        // Grid point data - IEEE Floating Point Data
+        '5.4': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-4.shtml
+            {
+                startIndex: 12,
+                size: 1,
+                content: null,
+                table: '5.7',
+                type: 'int8',
+                info: 'Precision (See code Table 5.7)'
+            },
+        ],
+        // Grid point data - JPEG 2000 Code Stream Format
+        '5.40': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-40.shtml
+            {
+                startIndex: 12,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Reference value (R) (IEEE 32-bit floating-point value)'
+            },
+            {
+                startIndex: 16,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'Binary scale factor (E)'
+            },
+            {
+                startIndex: 18,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'Decimal scale factor (D)'
+            },
+            {
+                startIndex: 20,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Number of bits required to hold the resulting scaled and referenced data values. (i.e. The depth of the grayscale image.) (see Note 2)'
+            },
+            {
+                startIndex: 21,
+                size: 1,
+                content: null,
+                table: '5.1',
+                type: 'int8',
+                info: 'Type of original field values (see Code Table 5.1)'
+            },
+            {
+                startIndex: 22,
+                size: 1,
+                content: null,
+                table: '5.40',
+                type: 'int8',
+                info: 'Type of Compression used. (see Code Table 5.40)'
+            },
+            {
+                startIndex: 22,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Target compression ratio, M:1 (with respect to the bit-depth specified in octet 20), when octet 22 indicates Lossy Compression. Otherwise, set to missing (see Note 3)'
+            }
+            // Notes
+            // (1) The intent of this template is to scale the grid point data to obtain desired precision, if appropriate, and then subtract out reference value from the scaled field as is done using Data Representation Template 5.0. After this, the resulting grid point field can be treated as a grayscale image and is then encoded into the JPEG 2000 code stream format. To unpack the data field, the JPEG 2000 code stream is decoded back into an image, and the original field is obtained from the image data as described in regulation 92.9.4, Note (4). 
+            // (2) The JPEG 2000 standared specifies that the bit-depth must be in the range of 1 to 38 bits. 
+            // (3) The compression ratio M:1 (e.g. 20:1) specifies that the encoded stream should be less than ((1/M) x depth x number of data points) bits, where depth is specified in octet 20 and number of data points is specified in octets 6-9 of the Data Representation Section. 
+            // (4) The order of the data points should remain as specified in the scanning mode flags (Flag Table 3.4) set in the appropriate Grid Definition Template, even though the JPEG 2000 standard specifies that an image is stored starting at the top left corner. Assuming that the encoding software is expecting the image data in raster order (left to right across rows for each row), users should set the image width to Ni (or Nx) and the height to Nj (or Ny) if bit 3 of the scanning mode flag equals 0 (adjacent points in i (x) order), when encoding the "image." If bit 3 of the scanning mode flags equals 1 (adjacent points in j (y) order), it may be advantageous to set the image width to Nj (or Ny) and the height to Ni (or Nx). 
+            // (5) This template should not be used when the data points are not available on a rectangular grid, such as occurs if some data points are bit-mapped out or if section 3 describes a quasi-regular grid. If it is necessary to use this template on such a grid, the data field can be treated as a one dimensional image where the height is set to 1 and the width is set to the total number of data points specified in octets 6-9. 
+            // (6) Negative values of E or D shall be represented according to Regulation 92.1.5.
+        ],
+        // Grid point data - Portable Network Graphics (PNG) Format
+        '5.41': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-41.shtml
+            {
+                startIndex: 12,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Reference value (R) (IEEE 32-bit floating-point value)'
+            },
+            {
+                startIndex: 16,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'Binary scale factor (E)'
+            },
+            {
+                startIndex: 18,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'Decimal scale factor (D)'
+            },
+            {
+                startIndex: 20,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Number of bits required to hold the resulting scaled and referenced data values. (i.e. The depth of the grayscale image.) (see Note 2)'
+            },
+            {
+                startIndex: 21,
+                size: 1,
+                content: null,
+                table: '5.1',
+                type: 'int8',
+                info: 'Type of original field values (see Code Table 5.1)'
+            }
+            // Notes
+            // (1) The intent of this template is to scale the grid point data to obtain desired precision, if appropriate, and then subtract out reference value from the scaled field as is done using Data Representation Template 5.0. After this, the resulting grid point field can be treated as an image and is then encoded into the PNG format. To unpack the data field, the PNG stream is decoded back into an image, and the original field is obtained from the image data as described in regulation 92.9.4, Note (4). 
+            // (2) PNG does not support all bit-depths in an image, so it is necessary to define which depths can be used and how they are to be treated. For grayscale images, PNG supports depths of 1, 2, 4, 8 or 16 bits. Red-Green-Blue (RGB) color images can have depths of 8 or 16 bits with an optional alpha sample. Valid values for octet 20 can be: 1, 2, 4, 8, or 16 - treat as a grayscale image 24 - treat as RGB color image (each component having 8 bit depth) 32 - treat as RGB w/alpha sample color image (each component having 8 bit depth) 
+            // (3) The order of the data points should remain as specified in the scanning mode flags (Flag Table 3.4) set in the appropriate Grid Definition Template, even though the PNG standard specifies that an image is stored starting at the top left corner and scans across each row from left to right starting with the top row. Users should set the image width to Ni (or Nx) and the height to Nj (or Ny) if bit 3 of the scanning mode flag equals 0 (adjacent points in i (x) order), when encoding the "image." If bit 3 of the scanning mode flags equals 1 (adjacent points in j (y) order), it may be advantageous to set the image width to Nj (or Ny) and the height to Ni (or Nx). 
+            // (4) This template should not be used when the data points are not available on a rectangular grid, such as occurs if some data points are bit-mapped out or if section 3 describes a quasi-regular grid. If it is necessary to use this template on such a grid, the data field can be treated as a one dimensional image where the height is set to 1 and the width is set to the total number of data points specified in octets 6-9. 
+            // (5) Negative values of E or D shall be represented according to Regulation 92.1.5.
+        ],
+        // Spectral data - simple packing
+        '5.50': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-50.shtml
 
-        },
-        //
-        '5.1': { // 
+        ],
+        // Spherical harmonics data - complex packing
+        '5.51': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-51.shtml
 
-        },
-        //
-        '5.2': { // 
-
-        },
-        //
-        '5.3': { // 
-
-        },
-        //
-        '5.4': { // 
-
-        },
-        //
-        '5.40': { // 
-
-        },
-        //
-        '5.41': { // 
-
-        },
-        //
-        '5.50': { // 
-
-        },
-        //
-        '5.51': { // 
-
-        },
-        //
-        '5.0': { // 
-
-        },
-        //
-        '5.0': { // 
-
-        },
+        ],
+        // Grid point data - Simple packing with logarithm pre-processing
+        '5.61': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-61.shtml
+            {
+                startIndex: 12,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Reference value (R) (IEEE 32-bit floating-point value)'
+            },
+            {
+                startIndex: 16,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'Binary scale factor (E)'
+            },
+            {
+                startIndex: 18,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'Decimal scale factor (D)'
+            },
+            {
+                startIndex: 20,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Number of bits used for each packed value'
+            },
+            {
+                startIndex: 21,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Pre-processing parameter (B) (IEEE 32-bit floating-point value)'
+            }
+            // Notes
+            // (1) The template is approriately designed for data sets with all non-negative values and a wide variability range (more then 5 orders of magnitude). It must not be used for data sets with negative values or smaller variability range. 
+            // (2) A logarithm pre-processing algorithm is used to fit the variability range into one or two order of magnitudes before using the simple packing algorithm. It requires a parameter (B) to assure that all values passed to the logarithm function are positive. Thus scaled values are Z=ln (Y+B), where Y are the original values, ln is the natural logarithm (or Napierian) function and B is chosen so that Y+B>0.
+            // (3) Best pratice follows for choosing the B pre-processing parameter. (a) If the data set minimum value is positive, B can be safely put to zero. (b) If the data set minimum is zero, all values must be scaled to become greater than zero and B can be equal to the minimum positive value in the data set.
+            // (4) Data shall be packed using Data template 7.
+        ],
+        // Grid point data - Run Length Packing With Level Values packing
+        '5.200': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-200.shtml
+            {
+                startIndex: 12,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Number of used for each packed value in the run length packing with level value'
+            },
+            {
+                startIndex: 13,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'MV - Maximum value within the levels that used in the packing'
+            },
+            {
+                startIndex: 15,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'MVL - Maximum value of level (Predefined)'
+            },
+            {
+                startIndex: 17,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Decimal scale factor of representative value of each level'
+            },
+            {
+                startIndex: 18,
+                size: null, // from 18 to (19+2(lv-1))
+                content: null,
+                type: 'int32',
+                info: 'List of MVL scale representative values of each level from lv=1 to MVL'
+            }
+        ],
         
 
     }
@@ -825,6 +2586,8 @@ class GRIB2 {
     constructor(buffer){
 
         this.buffer = buffer;
+
+        this.sectionBuffers = [];
 
         this.dataTemplate = {
             // SECTION 0 - Indicator Section
@@ -1099,11 +2862,16 @@ class GRIB2 {
                     startIndex: 15,
                     size: null, // 1-xx
                     content: null,
+                    templateRef: {
+                        section: 3,
+                        index: 13,
+                        info: 'Template 3.N, where N is the grid definition template number given in octets 13-14'
+                    },
                     info: 'Grid definition template (See Template 3.N, where N is the grid definition template number given in octets 13-14)'
                 },
                 {
                     startIndex: null, // xx+1
-                    size: 'valueIn11_to_end',
+                    size: 'end',
                     content: null,
                     info: 'Optional list of numbers defining number of points (See notes 2, 3, and 4 below)'
                     // 2.  An optional list of numbers defining number of points is used to document a quasi-regular grid, 
@@ -1125,6 +2893,7 @@ class GRIB2 {
         
         
             // SECTION 4 - Product Definition Section
+            // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect4.shtml
             4: [
                 {
                     startIndex: 1,
@@ -1162,11 +2931,16 @@ class GRIB2 {
                     startIndex: 10,
                     size: null,
                     content: null,
+                    templateRef: {
+                        section: 4,
+                        index: 8,
+                        info: 'Template 4.X, where X is the number given in octets 8-9)'
+                    },
                     info: 'Product definition template (See product template 4.X, where X is the number given in octets 8-9)'
                 },
                 {
-                    startIndex: null, // [xx+1]-nn
-                    size: null,
+                    startIndex: 'nextAvailable', // [xx+1]-nn 
+                    size: 'end',
                     content: null,
                     info: 'Optional list of coordinate values (See notes 2 and 3 below)'
                     // 2.  Hybrid systems employ a means of representing vertical coordinates in terms of a mathematical 
@@ -1215,6 +2989,11 @@ class GRIB2 {
                     startIndex: 12,
                     size: null,
                     content: null,
+                    templateRef: {
+                        section: 5,
+                        index: 10,
+                        info: 'Template 5.X, where X is the number given in octets 10-11)'
+                    },
                     info: 'Data representation template (See Template 5.X, where X is the number given in octets 10-11)'
                     // For example, Template Grid Point Data:
                     // 12-15	Reference value (R) (IEEE 32-bit floating-point value)
@@ -1261,7 +3040,7 @@ class GRIB2 {
                 },
                 {
                     startIndex: 7,
-                    size: null,
+                    size: 'end',
                     content: null,
                     info: 'Bit-map'
                 },
@@ -1288,7 +3067,7 @@ class GRIB2 {
                 },
                 {
                     startIndex: 6,
-                    size: null,
+                    size: 'end',
                     content: null, // Data
                     info: 'Data in a format described by data Template 7.X, where X is the data representation template number given in octets 10-11 of Section 5.',
                 },

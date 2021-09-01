@@ -8,7 +8,6 @@
 
 
 
-// TODO: FINISH TYPE IN grib2.js
 
 let myBuffer = null;
 let gribFiles = [];
@@ -53,7 +52,7 @@ const decodeGRIB2Buffer = function(buffer, myGrib){
 
     // Separate section buffers
     let sectionByteIndex = 16;
-    let sectionBuffers = [];
+    let sectionBuffers = myGrib.sectionBuffers;
 
     while (sectionByteIndex < buffer.byteLength){
         // Get Total GRIB length from buffer
@@ -63,12 +62,13 @@ const decodeGRIB2Buffer = function(buffer, myGrib){
     }
 
     // Parse section buffers
-    for (let i = 0; i < sectionBuffers.length - 1; i++){ // (length - 1) because of end section  has 4 bytes only (7777)
+    for (let i = 0; i < sectionBuffers.length - 1; i++){ // (length - 1) because of end section has 4 bytes only (7777)
         let sectionNumber = new DataView(sectionBuffers[i].slice(4, 5)).getInt8();
-        parseSection(sectionBuffers[i], myGrib.dataTemplate[sectionNumber]);
+        myGrib.dataTemplate[sectionNumber] = parseSection(sectionBuffers[i], myGrib.dataTemplate[sectionNumber]);
     }
    
     console.log(myGrib.dataTemplate);
+    console.log(myGrib.sectionBuffers);
 }
 
 
@@ -80,17 +80,56 @@ const parseSection = function(buffer, section){
     for (let i = 0; i < section.length; i++){
         let prop = section[i];
 
+
+        // Variable section content
+        // Part of the section might depends on an external template
+        if ("templateRef" in prop) {
+            // Get template info
+            let templateId;
+            // Find section item with such startIndex (templateRef is defined at the end of the section)
+            for (let j = 0; j < i; j++)
+                if (section[j].startIndex == prop.templateRef.index)
+                    templateId = prop.templateRef.section + '.' + section[j].content;
+            // Assign template to section
+            section = section.slice(0, i); // Remove from here to end of section // TODO SECTION 3 DO NOT REMOVE, ONLY APPEND
+            section = section.concat(JSON.parse(JSON.stringify(GRIB2.templates[templateId]))); // Copy template
+            // Assign new prop
+            prop = section[i];
+            console.log("Using template: " + templateId);
+        }
+
+
+        // Variable startIndex
+        if (typeof(prop.startIndex) === 'string'){
+            if (prop.startIndex === 'nextAvailable'){
+                prop.startIndex = section[i-1].startIndex + section[i-1].size;
+            }
+        }
+        
         // Variable content size
         if (typeof(prop.size) === 'string'){ 
             if (prop.size === 'end'){ // From start index to the end of the section
                 let sectionSize = section[0].content;
                 prop.size = sectionSize - (prop.startIndex - 1);
+            } 
+            else if (prop.size === 'calc'){ // TODO TEST
+                // Get value from section
+                let value;
+                // Find section item with such startIndex (templateRef is defined at the end of the section)
+                for (let j = 0; j < i; j++)
+                    if (section[j].startIndex == prop.sizeRef.index)
+                        prop.size = prop.sizeRef.calc(value);
+                
             }
         }
 
+        
+
         // Parse bytes
         let byteContent = buffer.slice(prop.startIndex-1, prop.startIndex-1 + prop.size);
-        if (prop.type === 'String')
+        if (byteContent.byteLength == 0)
+            prop.content = null;
+        else if (prop.type === 'String')
             prop.content = arraybufferToString(byteContent)
         else if (prop.type == 'int8')
             prop.content = new DataView(byteContent).getInt8();
@@ -98,8 +137,6 @@ const parseSection = function(buffer, section){
             prop.content = new DataView(byteContent).getInt16();
         else if (prop.type == 'int32')
             prop.content = new DataView(byteContent).getInt32();
-        else if (byteContent.byteLength == 0)
-            prop.content = null;
         else
             prop.content = byteContent;
 
@@ -110,6 +147,7 @@ const parseSection = function(buffer, section){
 
     }
 
+    return section;
 }
 
 
