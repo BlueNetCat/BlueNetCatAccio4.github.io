@@ -92,7 +92,13 @@ const parseSection = function(buffer, section){
                     templateId = prop.templateRef.section + '.' + section[j].content;
             // Assign template to section
             section = section.slice(0, i); // Remove from here to end of section // TODO SECTION 3 DO NOT REMOVE, ONLY APPEND
-            section = section.concat(JSON.parse(JSON.stringify(GRIB2.templates[templateId]))); // Copy template
+            try{
+                section = section.concat(JSON.parse(JSON.stringify(GRIB2.templates[templateId]))); // Copy template
+            }
+            catch(error){
+                console.log(templateId + " is not defined.")
+                console.log(error);
+            }
             // Assign new prop
             prop = section[i];
             console.log("Using template: " + templateId);

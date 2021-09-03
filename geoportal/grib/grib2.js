@@ -1921,6 +1921,192 @@ class GRIB2 {
         // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect4.shtml
         // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-0.shtml
         // TODO
+        // Analysis or forecast at a horizontal level or in a horizontal layer at a point in time
+        '4.0': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp4-0.shtml
+            {
+                startIndex: 10,
+                size: 1,
+                content: null,
+                codeTableRef: '4.1', // TODO: code tables and parse codeTableRef (for all this section)
+                type: 'int8',
+                info: 'Parameter category (see Code table 4.1)'
+            },
+            {
+                startIndex: 11,
+                size: 1,
+                content: null,
+                codeTableRef: '4.1', 
+                type: 'int8',
+                info: 'Parameter number (see Code table 4.2)'
+            },
+            {
+                startIndex: 12,
+                size: 1,
+                content: null,
+                codeTableRef: '4.3', 
+                type: 'int8',
+                info: 'Type of generating process (see Code table 4.3)'
+            },
+            {
+                startIndex: 13,
+                size: 1,
+                content: null,
+                codeTableRef: '4.1', 
+                type: 'int8',
+                info: 'Background generating process identifier (defined by originating centre)'
+            },
+            {
+                startIndex: 14,
+                size: 1,
+                content: null,
+                codeTableRef: 'ON388 Table A',
+                type: 'int8',
+                info: 'Analysis or forecast generating process identified (see Code ON388 Table A)'
+            },
+            {
+                startIndex: 15,
+                size: 2,
+                content: null,
+                type: 'int16',
+                info: 'Hours of observational data cutoff after reference time (see Note)'
+            },
+            {
+                startIndex: 17,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Minutes of observational data cutoff after reference time (see Note)'
+            },
+            {
+                startIndex: 18,
+                size: 1,
+                content: null,
+                codeTableRef: '4.4', 
+                type: 'int8',
+                info: 'Indicator of unit of time range (see Code table 4.4)'
+            },
+            {
+                startIndex: 19,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Forecast time in units defined by octet 18'
+            },
+            {
+                startIndex: 23,
+                size: 1,
+                content: null,
+                codeTableRef: '4.5', 
+                type: 'int8',
+                info: 'Type of first fixed surface (see Code table 4.5)'
+            },
+            {
+                startIndex: 24,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale factor of first fixed surface'
+            },
+            {
+                startIndex: 25,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scaled value of first fixed surface'
+            },
+            {
+                startIndex: 29,
+                size: 1,
+                content: null,
+                codeTableRef: '4.5',
+                type: 'int8',
+                info: 'Type of second fixed surfaced (see Code table 4.5)'
+            },
+            {
+                startIndex: 30,
+                size: 1,
+                content: null,
+                type: 'int8',
+                info: 'Scale factor of second fixed surface'
+            },
+            {
+                startIndex: 31,
+                size: 4,
+                content: null,
+                type: 'int32',
+                info: 'Scaled value of second fixed surfaces'
+            }
+        ],
+        // 
+        '4.1': [ // 
+
+        ],
+        // 
+        '4.2': [ // 
+
+        ],
+        // 
+        '4.3': [ // 
+
+        ],
+        // 
+        '4.4': [ // 
+
+        ],
+        // 
+        '4.5': [ // 
+
+        ],
+        // 
+        '4.6': [ // 
+
+        ],
+
+        // 
+        '4.7': [ // 
+
+        ],
+        // 
+        '4.8': [ // 
+
+        ],
+        // 
+        '4.9': [ // 
+
+        ],
+        // 
+        '4.10': [ // 
+
+        ],
+        // 
+        '4.11': [ // 
+
+        ],
+        // 
+        '4.12': [ // 
+
+        ],
+        // 
+        '4.13': [ // 
+
+        ],
+        // 
+        '4.14': [ // 
+
+        ],
+        // 
+        '4.15': [ // 
+
+        ],
+        // 
+        '4.20': [ // 
+
+        ],
+        // 
+        '4.30': [ // 
+
+        ],
+        // ... and many more TODO
 
         // Section 5 - Data Representation
         // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect5.shtml
