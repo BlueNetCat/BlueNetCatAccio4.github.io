@@ -12,9 +12,9 @@
 let myBuffer = null;
 let gribFiles = [];
 
-//fetch('COSMODE_single_level_elements_PS_2018020500_000.grib2')
+fetch('COSMODE_single_level_elements_PS_2018020500_000.grib2')
 //fetch('COSMODE_single_level_elements_ASWDIR_S_2018011803_006.grib2')
-fetch('gdas.t00z.pgrb2.1p00.f000.grib2')
+//fetch('gdas.t00z.pgrb2.1p00.f000.grib2')
     .then(response => response.arrayBuffer())
     .then(buffer => decodeGRIB2File(buffer))
     .catch(error => console.log(error));
@@ -48,7 +48,7 @@ const decodeGRIB2Buffer = function(buffer, myGrib){
     
     // Section 0 - Indicator Section
     let sectionHeader = buffer.slice(0,16);
-    parseSection(sectionHeader, myGrib.dataTemplate[0]);
+    decodeSection(sectionHeader, myGrib.dataTemplate[0]);
 
     // Separate section buffers
     let sectionByteIndex = 16;
@@ -61,21 +61,140 @@ const decodeGRIB2Buffer = function(buffer, myGrib){
         sectionByteIndex += sectionLength;
     }
 
-    // Parse section buffers
+    // Decode section buffers
     for (let i = 0; i < sectionBuffers.length - 1; i++){ // (length - 1) because of end section has 4 bytes only (7777)
         let sectionNumber = new DataView(sectionBuffers[i].slice(4, 5)).getInt8();
-        myGrib.dataTemplate[sectionNumber] = parseSection(sectionBuffers[i], myGrib.dataTemplate[sectionNumber]);
+        myGrib.dataTemplate[sectionNumber] = decodeSection(sectionBuffers[i], myGrib.dataTemplate[sectionNumber]);
     }
    
     console.log(myGrib.dataTemplate);
-    console.log(myGrib.sectionBuffers);
+
+    let data = parseData(myGrib.dataTemplate);
+    console.log(data);
+
+}
+
+
+
+// Parse data
+const parseData = function(decodedGrib){
+    
+    let data = {};
+
+    let grid = {};
+
+    grid.numPoints = getContentByInfo(decodedGrib[3],'Number of data points');
+
+    grid.numLatPoints = getContentByInfo(decodedGrib[3],'Ni — number of points along a parallel');
+    grid.numLongPoints = getContentByInfo(decodedGrib[3],'Nj — number of points along a meridian');
+    
+    grid.latStart = getContentByInfo(decodedGrib[3],'La1 — latitude of first grid point (see Note 1)') / 1e6;
+    grid.lonStart = getContentByInfo(decodedGrib[3],'Lo1 — longitude of first grid point (see Note 1)') / 1e6;
+
+    grid.latEnd = getContentByInfo(decodedGrib[3],'La2 — latitude of last grid point (see Note 1)') / 1e6;
+    grid.lonEnd = getContentByInfo(decodedGrib[3],'Lo2 — longitude of last grid point (see Note 1)') / 1e6;
+
+    grid.incI = getContentByInfo(decodedGrib[3],'Di — i direction increment (see Notes 1 and 5)') / 1e6;
+    grid.incJ = getContentByInfo(decodedGrib[3],'Dj — j direction increment (see Note 1 and 5)') / 1e6;
+
+    data.grid = grid;
+    console.log(grid);
+
+
+    // Data compression scheme (Template 5.x)
+    let item = decodedGrib[5].find(item => 'template' in item);
+    let template = item !== undefined ? item.template : 'none';
+
+    let compression = {};
+    compression.refValue = getContentByInfo(decodedGrib[5], 'Reference value (R) (IEEE 32-bit floating-point value)');
+    compression.binaryScaleFactor = getContentByInfo(decodedGrib[5], 'Binary scale factor (E)');
+    compression.decimalScaleFactor = getContentByInfo(decodedGrib[5], 'Decimal scale factor (D)');
+    compression.bitsPerValue = getContentByInfo(decodedGrib[5], 'Number of bits used for each packed value for simple packing, or for each group reference value for complex packing or spatial differencing');
+
+    compression.decompress = (rawValue => {
+        const c1 = Math.pow(2, compression.binaryScaleFactor)
+        const c2 = Math.pow(10, compression.decimalScaleFactor)
+        return (compression.refValue + rawValue * c1) / c2;
+    });
+
+    data.compression = compression;
+
+
+    
+    let rawData = decodedGrib[7][2].content;
+    let values = [];
+    let bitIndex = 0;
+    // Grid point data - simple packing
+    // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-0.shtml
+    if (template === '5.0'){
+        // Should be the same number
+        console.log("Bit length/bits per point : " + (rawData.byteLength*8/compression.bitsPerValue) + ", Num points: " + grid.numPoints);
+
+        const bitsPerValue = compression.bitsPerValue;
+        const rawUint8 = new Uint8Array(rawData);
+        // When bits per value are not 8, 16 or 32.
+        for (let i = 0; i < grid.numPoints; i++){
+            // Number of bytes in the raw array that contain the bit information
+            let numBytes = Math.ceil((bitIndex % 8 + bitsPerValue) / 8);
+            
+            let value = 0; // Variable for bit operations (int32 because of javascript limitations)
+            let mostSignificantBit = bitsPerValue; // Most significant bit that the byte contains
+            for (let j = 0; j < numBytes; j++){ // Iterate the bytes
+                let tmp = rawUint8[Math.floor(bitIndex/8)]; // Get the int8 value
+                let shiftAmount = mostSignificantBit - (8 - bitIndex % 8); // Get the bit shifting operation
+                // Shift bits to the left (adds zeros on the right)
+                if (shiftAmount > 0){ 
+                    tmp = tmp << shiftAmount;
+                    bitIndex += (8 - bitIndex % 8); // Increase bitIndex
+                    mostSignificantBit = shiftAmount;
+                }
+                // Shifts bits to the right (adds zeros on the left)
+                // Ending byte (all remaining bits are in this byte)
+                else { 
+                    tmp = tmp >> -shiftAmount;
+                    bitIndex += mostSignificantBit;
+                }
+
+                value = value | tmp; // Binary addition
+            }
+
+            values[i] = compression.decompress(value);
+        }
+
+    }
+
+    data.values = values;
+    
+
+    for (var i = 0; i< 10; i++){
+        let byteContent = decodedGrib[7][2].content.slice(i*2, i*2 + 2);
+        console.log(compression.decompress(new DataView(byteContent).getUint16()));
+    }
+
+    return data;
 }
 
 
 
 
-// Parse section
-const parseSection = function(buffer, section){
+// Get content by infoValue
+const getContentByInfo = function(myArray, infoValue){
+    for (let i = 0; i < myArray.length; i++){
+        if (myArray[i].info === infoValue)
+            return myArray[i].content;
+    }
+}
+
+
+
+
+
+
+
+
+
+// Decode section
+const decodeSection = function(buffer, section){
 
     for (let i = 0; i < section.length; i++){
         let prop = section[i];
@@ -99,6 +218,8 @@ const parseSection = function(buffer, section){
                 console.log(templateId + " is not defined.")
                 console.log(error);
             }
+            // Store template id
+            section[i].template = templateId;
             // Assign new prop
             prop = section[i];
             console.log("Using template: " + templateId);
@@ -131,22 +252,36 @@ const parseSection = function(buffer, section){
 
         
 
-        // Parse bytes
+        // Decode bytes
         let byteContent = buffer.slice(prop.startIndex-1, prop.startIndex-1 + prop.size);
         if (byteContent.byteLength == 0)
             prop.content = null;
         else if (prop.type === 'String')
-            prop.content = arraybufferToString(byteContent)
+            prop.content = String.fromCharCode.apply(null, new Uint8Array(byteContent));
+        else if (prop.type == 'uint8')
+            prop.content = new DataView(byteContent).getUint8();
+        else if (prop.type == 'uint16')
+            prop.content = new DataView(byteContent).getUint16();
+        else if (prop.type == 'uint32')
+            prop.content = new DataView(byteContent).getUint32();
+        else if (prop.type == 'uint64')
+            prop.content = Number(new DataView(byteContent).getBigUint64());
+
         else if (prop.type == 'int8')
             prop.content = new DataView(byteContent).getInt8();
         else if (prop.type == 'int16')
             prop.content = new DataView(byteContent).getInt16();
         else if (prop.type == 'int32')
             prop.content = new DataView(byteContent).getInt32();
+        else if (prop.type == 'int64')
+            prop.content = Number(new DataView(byteContent).getBigInt64());
+
+        else if (prop.type == 'float32')
+            prop.content = new DataView(byteContent).getFloat32();
         else
             prop.content = byteContent;
 
-        // Parse table content
+        // Decode table content
         if ("table" in prop){
             prop.contentRef = GRIB2.tables[prop.table][prop.content];
         }
@@ -157,12 +292,6 @@ const parseSection = function(buffer, section){
 }
 
 
-
-
-// Transform string
-const arraybufferToString = function(buffer){
-    return String.fromCharCode.apply(null, new Uint8Array(buffer))
-}
 
 
 

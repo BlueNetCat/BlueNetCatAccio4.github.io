@@ -1,6 +1,12 @@
 // All info taken from:
 // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/
 
+// C implementation
+// https://github.com/weathersource/wgrib2
+
+// European info
+// https://apps.ecmwf.int/codes/grib/format/grib2/templates/5/2
+
 class GRIB2 {
 
     // Static tables
@@ -797,91 +803,91 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.2',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Shape of the Earth (See Code Table 3.2)'
             },
             {
                 startIndex: 16,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale Factor of radius of spherical Earth'
             },
             {
                 startIndex: 17,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scale value of radius of spherical Earth'
             },
             {
                 startIndex: 21,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale factor of major axis of oblate spheroid Earth'
             },
             {
                 startIndex: 22,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scaled value of major axis of oblate spheroid Earth'
             },
             {
                 startIndex: 26,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale factor of minor axis of oblate spheroid Earth'
             },
             {
                 startIndex: 27,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scaled value of minor axis of oblate spheroid Earth'
             },
             {
                 startIndex: 31,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Ni — number of points along a parallel'
             },
             {
                 startIndex: 35,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Nj — number of points along a meridian'
             },
             {
                 startIndex: 39,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Basic angle of the initial production domain (see Note 1)'
             },
             {
                 startIndex: 43,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Subdivisions of basic angle used to define extreme longitudes and latitudes, and direction increments (see Note 1)'
             },
             {
                 startIndex: 47,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'La1 — latitude of first grid point (see Note 1)'
             },
             {
                 startIndex: 51,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Lo1 — longitude of first grid point (see Note 1)'
             },
             {
@@ -889,35 +895,35 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.3',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Resolution and component flags (see Flag Table 3.3)'
             },
             {
                 startIndex: 56,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'La2 — latitude of last grid point (see Note 1)'
             },
             {
                 startIndex: 60,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Lo2 — longitude of last grid point (see Note 1)'
             },
             {
                 startIndex: 64,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Di — i direction increment (see Notes 1 and 5)'
             },
             {
                 startIndex: 68,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Dj — j direction increment (see Note 1 and 5)'
             },
             {
@@ -925,14 +931,14 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.4',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scanning mode (flags — see Flag Table 3.4 and Note 6)'
             },
             {
                 startIndex: 73,
                 size: 'end', // from 73 to nn
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'List of number of points along each meridian or parallel (These octets are only present for quasi-regular grids as described in notes 2 and 3)'
             }
             // Notes
@@ -950,91 +956,91 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.2',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Shape of the Earth (See Code Table 3.2)'
             },
             {
                 startIndex: 16,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale Factor of radius of spherical Earth'
             },
             {
                 startIndex: 17,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scale value of radius of spherical Earth'
             },
             {
                 startIndex: 21,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale factor of major axis of oblate spheroid Earth'
             },
             {
                 startIndex: 22,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scaled value of major axis of oblate spheroid Earth'
             },
             {
                 startIndex: 26,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale factor of minor axis of oblate spheroid Earth'
             },
             {
                 startIndex: 27,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scaled value of minor axis of oblate spheroid Earth'
             },
             {
                 startIndex: 31,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Ni — number of points along a parallel'
             },
             {
                 startIndex: 35,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Nj — number of points along a meridian'
             },
             {
                 startIndex: 39,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Basic angle of the initial production domain (see Note 1)'
             },
             {
                 startIndex: 43,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Subdivisions of basic angle used to define extreme longitudes and latitudes, and direction increments (see Note 1)'
             },
             {
                 startIndex: 47,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'La1 — latitude of first grid point (see Note 1)'
             },
             {
                 startIndex: 51,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Lo1 — longitude of first grid point (see Note 1)'
             },
             {
@@ -1042,35 +1048,35 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.3',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Resolution and component flags (see Flag Table 3.3)'
             },
             {
                 startIndex: 56,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'La2 — latitude of last grid point (see Note 1)'
             },
             {
                 startIndex: 60,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Lo2 — longitude of last grid point (see Note 1)'
             },
             {
                 startIndex: 64,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Di — i direction increment (see Notes 1 and 4)'
             },
             {
                 startIndex: 68,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Dj — j direction increment (see Note 1 and 4)'
             },
             {
@@ -1078,35 +1084,35 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.4',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scanning mode (flags — see Flag Table 3.4 and Note 6)'
             },
             {
                 startIndex: 73,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Latitude of the southern pole of projection'
             },
             {
                 startIndex: 77,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Latitude of the southern pole of projection'
             },
             {
                 startIndex: 81,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Angle of rotation of projection'
             },
             {
                 startIndex: 85,
                 size: 'end', // from 85 to nn
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'List of number of points along each meridian or parallel (These octets are only present for quasi-regular grids as described in note 3)'
             },
             // Notes
@@ -1122,91 +1128,91 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.2',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Shape of the Earth (See Code Table 3.2)'
             },
             {
                 startIndex: 16,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale Factor of radius of spherical Earth'
             },
             {
                 startIndex: 17,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scale value of radius of spherical Earth'
             },
             {
                 startIndex: 21,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale factor of major axis of oblate spheroid Earth'
             },
             {
                 startIndex: 22,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scaled value of major axis of oblate spheroid Earth'
             },
             {
                 startIndex: 26,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale factor of minor axis of oblate spheroid Earth'
             },
             {
                 startIndex: 27,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scaled value of minor axis of oblate spheroid Earth'
             },
             {
                 startIndex: 31,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Ni — number of points along a parallel'
             },
             {
                 startIndex: 35,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Nj — number of points along a meridian'
             },
             {
                 startIndex: 39,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Basic angle of the initial production domain (see Note 1)'
             },
             {
                 startIndex: 43,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Subdivisions of basic angle used to define extreme longitudes and latitudes, and direction increments (see Note 1)'
             },
             {
                 startIndex: 47,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'La1 — latitude of first grid point (see Note 1)'
             },
             {
                 startIndex: 51,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Lo1 — longitude of first grid point (see Note 1)'
             },
             {
@@ -1214,35 +1220,35 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.3',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Resolution and component flags (see Flag Table 3.3)'
             },
             {
                 startIndex: 56,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'La2 — latitude of last grid point (see Note 1)'
             },
             {
                 startIndex: 60,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Lo2 — longitude of last grid point (see Note 1)'
             },
             {
                 startIndex: 64,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Di — i direction increment (see Notes 1 and 4)'
             },
             {
                 startIndex: 68,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Dj — j direction increment (see Note 1 and 4)'
             },
             {
@@ -1250,35 +1256,35 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.4',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scanning mode (flags — see Flag Table 3.4)'
             },
             {
                 startIndex: 73,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Latitude of the southern pole of projection'
             },
             {
                 startIndex: 77,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Latitude of the southern pole of projection'
             },
             {
                 startIndex: 81,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Angle of rotation of projection'
             },
             {
                 startIndex: 85,
                 size: 'end', // from 85 to nn
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'List of number of points along each meridian or parallel (These octets are only present for quasi-regular grids as described in note 3)'
             },
             // Notes
@@ -1294,91 +1300,91 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.2',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Shape of the Earth (See Code Table 3.2)'
             },
             {
                 startIndex: 16,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale Factor of radius of spherical Earth'
             },
             {
                 startIndex: 17,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scale value of radius of spherical Earth'
             },
             {
                 startIndex: 21,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale factor of major axis of oblate spheroid Earth'
             },
             {
                 startIndex: 22,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scaled value of major axis of oblate spheroid Earth'
             },
             {
                 startIndex: 26,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale factor of minor axis of oblate spheroid Earth'
             },
             {
                 startIndex: 27,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scaled value of minor axis of oblate spheroid Earth'
             },
             {
                 startIndex: 31,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Ni — number of points along a parallel'
             },
             {
                 startIndex: 35,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Nj — number of points along a meridian'
             },
             {
                 startIndex: 39,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Basic angle of the initial production domain (see Note 1)'
             },
             {
                 startIndex: 43,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Subdivisions of basic angle used to define extreme longitudes and latitudes, and direction increments (see Note 1)'
             },
             {
                 startIndex: 47,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'La1 — latitude of first grid point (see Note 1)'
             },
             {
                 startIndex: 51,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Lo1 — longitude of first grid point (see Note 1)'
             },
             {
@@ -1386,35 +1392,35 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.3',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Resolution and component flags (see Flag Table 3.3)'
             },
             {
                 startIndex: 56,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'La2 — latitude of last grid point (see Note 1)'
             },
             {
                 startIndex: 60,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Lo2 — longitude of last grid point (see Note 1)'
             },
             {
                 startIndex: 64,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Di — i direction increment (see Notes 1 and 4)'
             },
             {
                 startIndex: 68,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Dj — j direction increment (see Note 1 and 4)'
             },
             {
@@ -1422,54 +1428,54 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.4',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scanning mode (flags — see Flag Table 3.4)'
             },
             {
                 startIndex: 73,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Latitude of the southern pole of projection'
             },
             {
                 startIndex: 77,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Latitude of the southern pole of projection'
             },
             {
                 startIndex: 81,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Angle of rotation of projection'
             },
             {
                 startIndex: 85,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Latitude of the pole of stretching'
             },{
                 startIndex: 89,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Longitude of the pole stretching'
             },{
                 startIndex: 93,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Stretching factor'
             },
             {
                 startIndex: 97,
                 size: 'end', // from 85 to nn
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'List of number of points along each meridian or parallel (These octets are only present for quasi-regular grids as described in note 3)'
             },
             // Notes
@@ -1486,77 +1492,77 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.2',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Shape of the Earth (See Code Table 3.2)'
             },
             {
                 startIndex: 16,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale Factor of radius of spherical Earth'
             },
             {
                 startIndex: 17,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scale value of radius of spherical Earth'
             },
             {
                 startIndex: 21,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale factor of major axis of oblate spheroid Earth'
             },
             {
                 startIndex: 22,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scaled value of major axis of oblate spheroid Earth'
             },
             {
                 startIndex: 26,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale factor of minor axis of oblate spheroid Earth'
             },
             {
                 startIndex: 27,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scaled value of minor axis of oblate spheroid Earth'
             },
             {
                 startIndex: 31,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Ni — number of points along a parallel'
             },
             {
                 startIndex: 35,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Nj — number of points along a meridian'
             },
             {
                 startIndex: 39,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Basic angle of the initial production domain (see Note 1)'
             },
             {
                 startIndex: 43,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Subdivisions of basic angle used to define extreme longitudes and latitudes, and direction increments (see Note 1)'
             },
             {
@@ -1564,7 +1570,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.3',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Resolution and component flags (see Flag Table 3.3)'
             },
             {
@@ -1572,7 +1578,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.4',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scanning mode (flags — see Flag Table 3.4)'
             },
             {
@@ -1583,14 +1589,14 @@ class GRIB2 {
                     calc: (ni) => ni*4
                 },
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'List of Longitudes (see Notes 1 and 3)'
             },
             {
                 startIndex: 'nextAvailable',
                 size: 'end', // from ii+1 to jj;  jj=48+4Ni+4j --> 4j or 4Nj????
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'List of Latitudes (see Notes 1 and 3)'
             }
             // Notes
@@ -1607,77 +1613,77 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.2',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Shape of the Earth (See Code Table 3.2)'
             },
             {
                 startIndex: 16,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale Factor of radius of spherical Earth'
             },
             {
                 startIndex: 17,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scale value of radius of spherical Earth'
             },
             {
                 startIndex: 21,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale factor of major axis of oblate spheroid Earth'
             },
             {
                 startIndex: 22,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scaled value of major axis of oblate spheroid Earth'
             },
             {
                 startIndex: 26,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale factor of minor axis of oblate spheroid Earth'
             },
             {
                 startIndex: 27,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scaled value of minor axis of oblate spheroid Earth'
             },
             {
                 startIndex: 31,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Ni — number of points along a parallel'
             },
             {
                 startIndex: 35,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Nj — number of points along a meridian'
             },
             {
                 startIndex: 39,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Basic angle of the initial production domain (see Note 1)'
             },
             {
                 startIndex: 43,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Subdivisions of basic angle used to define extreme longitudes and latitudes, and direction increments (see Note 1)'
             },
             {
@@ -1685,7 +1691,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.3',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Resolution and component flags (see Flag Table 3.3)'
             },
             {
@@ -1693,28 +1699,28 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.4',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scanning mode (flags — see Flag Table 3.4)'
             },
             {
                 startIndex: 49,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Latitude of the southern pole of projection'
             },
             {
                 startIndex: 53,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Latitude of the southern pole of projection'
             },
             {
                 startIndex: 57,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Angle of rotation of projection'
             },
             {
@@ -1725,14 +1731,14 @@ class GRIB2 {
                     calc: (ni) => ni*4
                 },
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'List of Longitudes (see Notes 1 and 3)'
             },
             {
                 startIndex: 'nextAvailable',
                 size: 'end', // from ii+1 to jj;  jj=48+4Ni+4j --> 4j or 4Nj???? TODO (also appears in 3.4)
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'List of Latitudes (see Notes 1 and 3)'
             }
             // Notes
@@ -1748,77 +1754,77 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.2',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Shape of the Earth (See Code Table 3.2)'
             },
             {
                 startIndex: 16,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale Factor of radius of spherical Earth'
             },
             {
                 startIndex: 17,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scale value of radius of spherical Earth'
             },
             {
                 startIndex: 21,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale factor of major axis of oblate spheroid Earth'
             },
             {
                 startIndex: 22,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scaled value of major axis of oblate spheroid Earth'
             },
             {
                 startIndex: 26,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale factor of minor axis of oblate spheroid Earth'
             },
             {
                 startIndex: 27,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scaled value of minor axis of oblate spheroid Earth'
             },
             {
                 startIndex: 31,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Ni — number of points along a parallel'
             },
             {
                 startIndex: 35,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Nj — number of points along a meridian'
             },
             {
                 startIndex: 39,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'La1 ― latitude of first grid point'
             },
             {
                 startIndex: 43,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Lo1 ― longitude of first grid point'
             },
             {
@@ -1826,28 +1832,28 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.3',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Resolution and component flags (see Flag Table 3.3)'
             },
             {
                 startIndex: 48,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'LaD — latitude(s) at which the Mercator projection intersects the Earth (Latitude(s) where Di and Dj are specified)  '
             },
             {
                 startIndex: 52,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'La2 ― latitude of last grid point'
             },
             {
                 startIndex: 56,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Lo2 — longitude of last grid point'
             },
             {
@@ -1855,35 +1861,35 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '3.4',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scanning mode (flags — see Flag Table 3.4)'
             },
             {
                 startIndex: 61,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Orientation of the grid, angle between i direction on the map and the Equator (see Note1)'
             },
             {
                 startIndex: 65,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Dj — longitudinal direction grid length (see Note 2)'
             },
             {
                 startIndex: 69,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Dj ― latitudinal direction grid length  (see Note 2)'
             },
             {
                 startIndex: 73,
                 size: 'end', // from 73 to nn
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'List of number of points along each meridian or parallel (These octets are only present for quasi-regular grids as described in notes 2 and 3 of GDT 3.1)'
             },
             // Notes: 
@@ -1928,7 +1934,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 codeTableRef: '4.1', // TODO: code tables and parse codeTableRef (for all this section)
-                type: 'int8',
+                type: 'uint8',
                 info: 'Parameter category (see Code table 4.1)'
             },
             {
@@ -1936,7 +1942,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 codeTableRef: '4.1', 
-                type: 'int8',
+                type: 'uint8',
                 info: 'Parameter number (see Code table 4.2)'
             },
             {
@@ -1944,7 +1950,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 codeTableRef: '4.3', 
-                type: 'int8',
+                type: 'uint8',
                 info: 'Type of generating process (see Code table 4.3)'
             },
             {
@@ -1952,7 +1958,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 codeTableRef: '4.1', 
-                type: 'int8',
+                type: 'uint8',
                 info: 'Background generating process identifier (defined by originating centre)'
             },
             {
@@ -1960,21 +1966,21 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 codeTableRef: 'ON388 Table A',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Analysis or forecast generating process identified (see Code ON388 Table A)'
             },
             {
                 startIndex: 15,
                 size: 2,
                 content: null,
-                type: 'int16',
+                type: 'uint16',
                 info: 'Hours of observational data cutoff after reference time (see Note)'
             },
             {
                 startIndex: 17,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Minutes of observational data cutoff after reference time (see Note)'
             },
             {
@@ -1982,14 +1988,14 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 codeTableRef: '4.4', 
-                type: 'int8',
+                type: 'uint8',
                 info: 'Indicator of unit of time range (see Code table 4.4)'
             },
             {
                 startIndex: 19,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Forecast time in units defined by octet 18'
             },
             {
@@ -1997,21 +2003,21 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 codeTableRef: '4.5', 
-                type: 'int8',
+                type: 'uint8',
                 info: 'Type of first fixed surface (see Code table 4.5)'
             },
             {
                 startIndex: 24,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale factor of first fixed surface'
             },
             {
                 startIndex: 25,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scaled value of first fixed surface'
             },
             {
@@ -2019,21 +2025,21 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 codeTableRef: '4.5',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Type of second fixed surfaced (see Code table 4.5)'
             },
             {
                 startIndex: 30,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Scale factor of second fixed surface'
             },
             {
                 startIndex: 31,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Scaled value of second fixed surfaces'
             }
         ],
@@ -2117,7 +2123,7 @@ class GRIB2 {
                 startIndex: 12,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'float32',
                 info: 'Reference value (R) (IEEE 32-bit floating-point value)'
             },
             {
@@ -2138,7 +2144,7 @@ class GRIB2 {
                 startIndex: 20,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Number of bits used for each packed value for simple packing, or for each group reference value for complex packing or spatial differencing'
             },
             {
@@ -2146,7 +2152,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.1',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Type of original field values (see Code Table 5.1)'
             }
         ],
@@ -2157,7 +2163,7 @@ class GRIB2 {
                 startIndex: 12,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'float32',
                 info: 'Reference value (R) (IEEE 32-bit floating-point value)'
             },
             {
@@ -2178,7 +2184,7 @@ class GRIB2 {
                 startIndex: 20,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Number of bits used for each packed value for simple packing, or for each group reference value for complex packing or spatial differencing'
             },
             {
@@ -2186,35 +2192,35 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.1',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Type of original field values (see Code Table 5.1)'
             },
             {
                 startIndex: 22,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: '0, no matrix bit maps present; 1-matrix bit maps present'
             },
             {
                 startIndex: 23,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Number of data values encoded in Section 7'
             },
             {
                 startIndex: 27,
                 size: 2,
                 content: null,
-                type: 'int16',
+                type: 'uint16',
                 info: 'NR ― first dimension (rows) of each matrix'
             },
             {
                 startIndex: 29,
                 size: 2,
                 content: null,
-                type: 'int16',
+                type: 'uint16',
                 info: 'NC ― second dimension (columns) of each matrix'
             },
             {
@@ -2222,14 +2228,14 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.2',
-                type: 'int8',
+                type: 'uint8',
                 info: 'First dimension coordinate value definition (see Code Table 5.2)'
             },
             {
                 startIndex: 32,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'NC1 ― number of coefficients or values used  to specify first dimension coordinate function'
             },
             {
@@ -2237,14 +2243,14 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.2',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Second dimension coordinate value definition (see Code Table 5.2)'
             },
             {
                 startIndex: 34,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'NC2 ― number of coefficients or values used to specify second dimension coordinate function'
             },
             {
@@ -2252,7 +2258,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.3',
-                type: 'int8',
+                type: 'uint8',
                 info: 'First dimension physical significance (see Code Table 5.3)'
             },
             {
@@ -2260,7 +2266,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.3',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Second dimension physical significance (see Code Table 5.3)'
             },
             {
@@ -2271,14 +2277,14 @@ class GRIB2 {
                     calc: (nc1) => nc1*4
                 },
                 content: null,
-                type: 'int32',
+                type: 'float32',
                 info: 'Coefficients to define first dimension coordinate values in functional form, or the explicit coordinate values (IEEE 32-bit floating-point value)'
             },
             {
                 startIndex: 'nextAvailable',
                 size: 'end',
                 content: null,
-                type: 'int8',
+                type: 'float32',
                 info: 'Coefficients to define second dimension coordinate values in functional form, or the explicit coordinate values (IEEE 32-bit floating-point value)'
             }
             // Notes:
@@ -2293,7 +2299,7 @@ class GRIB2 {
                 startIndex: 12,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'float32',
                 info: 'Reference value (R) (IEEE 32-bit floating-point value)'
             },
             {
@@ -2314,7 +2320,7 @@ class GRIB2 {
                 startIndex: 20,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Number of bits used for each packed value for simple packing, or for each group reference value for complex packing or spatial differencing'
             },
             {
@@ -2322,7 +2328,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.1',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Type of original field values (see Code Table 5.1)'
             },
             {
@@ -2330,7 +2336,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.4',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Group splitting method used (see Code Table 5.4)'
             },
             {
@@ -2338,70 +2344,70 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.5',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Missing value management used (see Code Table 5.5)'
             },
             {
                 startIndex: 24,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Primary missing value substitute'
             },
             {
                 startIndex: 28,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Secondary missing value substitute'
             },
             {
                 startIndex: 32,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'NG ― number of groups of data values into which field is split'
             },
             {
                 startIndex: 36,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Reference for group widths (see Note 12)'
             },
             {
                 startIndex: 37,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Number of bits used for the group widths (after the reference value in octet 36 has been removed)'
             },
             {
                 startIndex: 38,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Reference for group lengths (see Note 13)'
             },
             {
                 startIndex: 42,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Length increment for the group lengths (see Note 14)'
             },
             {
                 startIndex: 43,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'True length of last group'
             },
             {
                 startIndex: 47,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Number of bits used for the scaled group lengths (after subtraction of the reference value given in octets 38-41 and division by the length increment given in octet 42)'
             }
             // Notes: 
@@ -2427,7 +2433,7 @@ class GRIB2 {
                 startIndex: 12,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'float32',
                 info: 'Reference value (R) (IEEE 32-bit floating-point value)'
             },
             {
@@ -2448,7 +2454,7 @@ class GRIB2 {
                 startIndex: 20,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Number of bits used for each packed value for simple packing, or for each group reference value for complex packing or spatial differencing'
             },
             {
@@ -2456,7 +2462,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.1',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Type of original field values (see Code Table 5.1)'
             },
             {
@@ -2464,7 +2470,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.4',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Group splitting method used (see Code Table 5.4)'
             },
             {
@@ -2472,70 +2478,70 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.5',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Missing value management used (see Code Table 5.5)'
             },
             {
                 startIndex: 24,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Primary missing value substitute'
             },
             {
                 startIndex: 28,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Secondary missing value substitute'
             },
             {
                 startIndex: 32,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'NG ― number of groups of data values into which field is split'
             },
             {
                 startIndex: 36,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Reference for group widths (see Note 12)'
             },
             {
                 startIndex: 37,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Number of bits used for the group widths (after the reference value in octet 36 has been removed)'
             },
             {
                 startIndex: 38,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'Reference for group lengths (see Note 13)'
             },
             {
                 startIndex: 42,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Length increment for the group lengths (see Note 14)'
             },
             {
                 startIndex: 43,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'True length of last group'
             },
             {
                 startIndex: 47,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Number of bits used for the scaled group lengths (after subtraction of the reference value given in octets 38-41 and division by the length increment given in octet 42)'
             },
             {
@@ -2543,14 +2549,14 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.6',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Order of spatial difference (see Code Table 5.6) '
             },
             {
                 startIndex: 49,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Number of octets required in the data section to specify extra descriptors needed for spatial differencing (octets 6-ww in data template 7.3)'
             }
             // Notes
@@ -2565,7 +2571,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.7',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Precision (See code Table 5.7)'
             },
         ],
@@ -2575,7 +2581,7 @@ class GRIB2 {
                 startIndex: 12,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'float32',
                 info: 'Reference value (R) (IEEE 32-bit floating-point value)'
             },
             {
@@ -2596,7 +2602,7 @@ class GRIB2 {
                 startIndex: 20,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Number of bits required to hold the resulting scaled and referenced data values. (i.e. The depth of the grayscale image.) (see Note 2)'
             },
             {
@@ -2604,7 +2610,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.1',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Type of original field values (see Code Table 5.1)'
             },
             {
@@ -2612,14 +2618,14 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.40',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Type of Compression used. (see Code Table 5.40)'
             },
             {
                 startIndex: 22,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Target compression ratio, M:1 (with respect to the bit-depth specified in octet 20), when octet 22 indicates Lossy Compression. Otherwise, set to missing (see Note 3)'
             }
             // Notes
@@ -2636,7 +2642,7 @@ class GRIB2 {
                 startIndex: 12,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'float32',
                 info: 'Reference value (R) (IEEE 32-bit floating-point value)'
             },
             {
@@ -2657,7 +2663,7 @@ class GRIB2 {
                 startIndex: 20,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Number of bits required to hold the resulting scaled and referenced data values. (i.e. The depth of the grayscale image.) (see Note 2)'
             },
             {
@@ -2665,7 +2671,7 @@ class GRIB2 {
                 size: 1,
                 content: null,
                 table: '5.1',
-                type: 'int8',
+                type: 'uint8',
                 info: 'Type of original field values (see Code Table 5.1)'
             }
             // Notes
@@ -2689,7 +2695,7 @@ class GRIB2 {
                 startIndex: 12,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'float32',
                 info: 'Reference value (R) (IEEE 32-bit floating-point value)'
             },
             {
@@ -2710,14 +2716,14 @@ class GRIB2 {
                 startIndex: 20,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Number of bits used for each packed value'
             },
             {
                 startIndex: 21,
                 size: 4,
                 content: null,
-                type: 'int32',
+                type: 'float32',
                 info: 'Pre-processing parameter (B) (IEEE 32-bit floating-point value)'
             }
             // Notes
@@ -2732,35 +2738,35 @@ class GRIB2 {
                 startIndex: 12,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Number of used for each packed value in the run length packing with level value'
             },
             {
                 startIndex: 13,
                 size: 2,
                 content: null,
-                type: 'int16',
+                type: 'uint16',
                 info: 'MV - Maximum value within the levels that used in the packing'
             },
             {
                 startIndex: 15,
                 size: 2,
                 content: null,
-                type: 'int16',
+                type: 'uint16',
                 info: 'MVL - Maximum value of level (Predefined)'
             },
             {
                 startIndex: 17,
                 size: 1,
                 content: null,
-                type: 'int8',
+                type: 'uint8',
                 info: 'Decimal scale factor of representative value of each level'
             },
             {
                 startIndex: 18,
                 size: null, // from 18 to (19+2(lv-1))
                 content: null,
-                type: 'int32',
+                type: 'uint32',
                 info: 'List of MVL scale representative values of each level from lv=1 to MVL'
             }
         ],
@@ -2797,7 +2803,7 @@ class GRIB2 {
                     startIndex: 7,
                     size: 1,
                     content: 0, // Meteorological Products
-                    type: 'int8',
+                    type: 'uint8',
                     table: '0.0',
                     info: 'Discipline (From Table 0.0)' // 1 to 10; Discipline (From Table 0.0)
                     // Table 0.0
@@ -2810,14 +2816,14 @@ class GRIB2 {
                     startIndex: 8,
                     size: 1,
                     content: 2,
-                    type: 'int8',
+                    type: 'uint8',
                     info: 'Edition number - 2 for GRIB2'
                 },
                 {
-                    startIndex: 13, // Hack, should be 9: There are 8 bytes to define the length, but it seems that only the last 4 are used?
-                    size: 4, // Hack, should be 8
+                    startIndex: 9,
+                    size: 8, 
                     content: null,
-                    type: 'int32',
+                    type: 'uint64',
                     info: 'Total length of GRIB message in octects (All sections)'
                 }
             ],
@@ -2830,35 +2836,35 @@ class GRIB2 {
                     startIndex: 1,
                     size: 4,
                     content: 21, // 21 or N if Reserved is used
-                    type: 'int32',
+                    type: 'uint32',
                     info: 'Length of the section in octects (21 or N)'
                 },
                 {
                     startIndex: 5,
                     size: 1,
                     content: 1,
-                    type: 'int8',
+                    type: 'uint8',
                     info: 'Number of the section'
                 },
                 {
                     startIndex: 6,
                     size: 2,
                     content: 0,
-                    type: 'int16',
+                    type: 'uint16',
                     info: 'Identification of originating/generating center (See Table 0)'
                 },
                 {
                     startIndex: 8,
                     size: 2,
                     content: 0,
-                    type: 'int16',
+                    type: 'uint16',
                     info: 'Identification of originating/generating subcenter (See Table C)'
                 },
                 {
                     startIndex: 10,
                     size: 1,
                     content: 2,
-                    type: 'int8',
+                    type: 'uint8',
                     table: '1.0',
                     info: 'GRIB master tables version number (currently 2) (See Table 1.0)'
                 },
@@ -2866,7 +2872,7 @@ class GRIB2 {
                     startIndex: 11,
                     size: 1,
                     content: 0, // 0 Local tables not used.
-                    type: 'int8',
+                    type: 'uint8',
                     table: '1.1',
                     info: 'Version number of GRIB local tables used to augment Master Tables (see Table 1.1)'
                     
@@ -2875,7 +2881,7 @@ class GRIB2 {
                     startIndex: 12,
                     size: 1,
                     content: 2, // 2 Veryfing Time of Forecast
-                    type: 'int8',
+                    type: 'uint8',
                     table: '1.2',
                     info: 'Significance of reference time (See Table 1.2)'
                     // Table 1.2
@@ -2886,49 +2892,49 @@ class GRIB2 {
                     startIndex: 13,
                     size: 2,
                     content: 2021,
-                    type: 'int16',
+                    type: 'uint16',
                     info: 'Year (4 digits)'
                 },
                 {
                     startIndex: 15,
                     size: 1,
                     content: 8,
-                    type: 'int8',
+                    type: 'uint8',
                     info: 'Month'
                 },
                 {
                     startIndex: 16,
                     size: 1,
                     content: 30,
-                    type: 'int8',
+                    type: 'uint8',
                     info: 'Day'
                 },
                 {
                     startIndex: 17,
                     size: 1,
                     content: 12,
-                    type: 'int8',
+                    type: 'uint8',
                     info: 'Hour'
                 },
                 {
                     startIndex: 18,
                     size: 1,
                     content: 0,
-                    type: 'int8',
+                    type: 'uint8',
                     info: 'Minute'
                 },
                 {
                     startIndex: 19,
                     size: 1,
                     content: 0,
-                    type: 'int8',
+                    type: 'uint8',
                     info: 'Second'
                 },
                 {
                     startIndex: 20,
                     size: 1,
                     content: 0, // 0 Operational Products
-                    type: 'int8',
+                    type: 'uint8',
                     table: '1.3',
                     info: 'Production Status of Processed data in the GRIB message (See Table 1.3)'
                 },
@@ -2936,7 +2942,7 @@ class GRIB2 {
                     startIndex: 21,
                     size: 1,
                     content: 1, // 1 Forecast Produts
-                    type: 'int8',
+                    type: 'uint8',
                     table: '1.4',
                     info: 'Type of processed data in this GRIB message (See Table 1.4)'
                 },
@@ -2958,14 +2964,14 @@ class GRIB2 {
                     startIndex: 1,
                     size: 4,
                     content: null,
-                    type: 'int32',
+                    type: 'uint32',
                     info: 'Length of the section in octets (N)'
                 },
                 {
                     startIndex: 5,
                     size: 1,
                     content: 2,
-                    type: 'int8',
+                    type: 'uint8',
                     info: 'Number of the section (2)'
                 },
                 {
@@ -2986,21 +2992,21 @@ class GRIB2 {
                     startIndex: 1,
                     size: 4,
                     content: null,
-                    type: 'int32',
+                    type: 'uint32',
                     info: 'Length of the section in octets (nn)'
                 },
                 {
                     startIndex: 5,
                     size: 1,
                     content: 3,
-                    type: 'int8',
+                    type: 'uint8',
                     info: 'Number of the section'
                 },
                 {
                     startIndex: 6,
                     size: 1,
                     content: 1,
-                    type: 'int8',
+                    type: 'uint8',
                     table: '3.0',
                     info: 'Source of grid definition (See Table 3.0) (See note 1 below)'
                     // Table 3.0
@@ -3014,14 +3020,14 @@ class GRIB2 {
                     startIndex: 7,
                     size: 4,
                     content: null,
-                    type: 'int32',
+                    type: 'uint32',
                     info: 'Number of data points'
                 },
                 {
                     startIndex: 11,
                     size: 1,
                     content: 0,
-                    type: 'int8',
+                    type: 'uint8',
                     info: 'Number of octets for optional list of numbers defining number of points (See note 2 below)'
                     // Note 2: An optional list of numbers defining number of points is used to document a quasi-regular grid, 
                     // where the number of points may vary from one row to another.  In such a case, octet 11 is non zero and gives 
@@ -3032,7 +3038,7 @@ class GRIB2 {
                     startIndex: 12,
                     size: 1,
                     content: null,
-                    type: 'int8',
+                    type: 'uint8',
                     table: '3.11',
                     info: 'Interpetation of list of numbers defining number of points (See Table 3.11)'
                 },
@@ -3040,7 +3046,7 @@ class GRIB2 {
                     startIndex: 13,
                     size: 2,
                     content: null,
-                    type: 'int16',
+                    type: 'uint16',
                     table: '3.1',
                     info: 'Grid definition template number (= N) (See Table 3.1)'
                 },
@@ -3085,21 +3091,21 @@ class GRIB2 {
                     startIndex: 1,
                     size: 4,
                     content: null,
-                    type: 'int32',
+                    type: 'uint32',
                     info: 'Length of the section in octets (nn)'
                 },
                 {
                     startIndex: 5,
                     size: 1,
                     content: 4,
-                    type: 'int8',
+                    type: 'uint8',
                     info: 'Number of the section (4)'
                 },
                 {
                     startIndex: 6,
                     size: 2,
                     content: null,
-                    type: 'int16',
+                    type: 'uint16',
                     info: 'Number of coordinate values after template (See note 1 below)'
                     // 1.  Coordinate values are intended to document the vertical discretization associated 
                     // with model data on hybrid coordinate vertical levels.  A value of zero in octets 6-7 indicates 
@@ -3110,7 +3116,7 @@ class GRIB2 {
                     size: 2,
                     content: null,
                     table: '4.0',
-                    type: 'int16',
+                    type: 'uint16',
                     info: 'Product definition template number (See Table 4.0)'
                 },
                 {
@@ -3141,26 +3147,27 @@ class GRIB2 {
         
         
             // SECTION 5 - Data Representation Section
+            // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect5.shtml
             5: [
                 {
                     startIndex: 1,
                     size: 4,
                     content: null,
-                    type: 'int32',
+                    type: 'uint32',
                     info: 'Length of the section in octets (nn)'
                 },
                 {
                     startIndex: 5,
                     size: 1,
                     content: 5,
-                    type: 'int8',
+                    type: 'uint8',
                     info: 'Number of the section (5)'
                 },
                 {
                     startIndex: 6,
                     size: 4,
                     content: null,
-                    type: 'int32',
+                    type: 'uint32',
                     info: 'Number of data points where one or more values are specified in Section 7 when a bit map is present, total number of data points when a bit map is absent.'
                 },
                 {
@@ -3168,7 +3175,7 @@ class GRIB2 {
                     size: 2,
                     content: 0, // 0 Grid Point Data - Simple Packing (see Template 5.0)
                     table: '5.0',
-                    type: 'int16',
+                    type: 'uint16',
                     info: 'Data representation template number (See Table 5.0)'
                 },
                 {
@@ -3194,20 +3201,21 @@ class GRIB2 {
         
         
         
-            // section 6 - Bit Map Section
+            // SECTION 6 - Bit Map Section
+            // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect5.shtml
             6: [
                 {
                     startIndex: 1,
                     size: 4,
                     content: null,
-                    type: 'int32',
+                    type: 'uint32',
                     info: 'Length of the section in octets (nn)'
                 },
                 {
                     startIndex: 5,
                     size: 1,
                     content: 6,
-                    type: 'int8',
+                    type: 'uint8',
                     info: 'Number of the section (6)' 
                 },
                 {
@@ -3215,7 +3223,7 @@ class GRIB2 {
                     size: 1,
                     content: null,
                     table: '6.0',
-                    type: 'int8',
+                    type: 'uint8',
                     info: 'Bit-map indicator (See Table 6.0) (See note 1 below)'
                     // 1.  If octet 6 is not zero, the length of this section is 6 and octets 7-nn are not present.
         
@@ -3241,14 +3249,14 @@ class GRIB2 {
                     startIndex: 1,
                     size: 4,
                     content: null,
-                    type: 'int32',
+                    type: 'uint32',
                     info: 'Length of the section in octets (nn)',
                 },
                 {
                     startIndex: 5,
                     size: 1,
                     content: 7,
-                    type: 'int8',
+                    type: 'uint8',
                     info: 'Number of the section (7)',
                 },
                 {
