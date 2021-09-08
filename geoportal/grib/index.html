@@ -12,9 +12,9 @@
 let myBuffer = null;
 let gribFiles = [];
 
-fetch('COSMODE_single_level_elements_PS_2018020500_000.grib2')
+//fetch('COSMODE_single_level_elements_PS_2018020500_000.grib2')
 //fetch('COSMODE_single_level_elements_ASWDIR_S_2018011803_006.grib2')
-//fetch('gdas.t00z.pgrb2.1p00.f000.grib2')
+fetch('gdas.t00z.pgrb2.1p00.f000.grib2')
     .then(response => response.arrayBuffer())
     .then(buffer => decodeGRIB2File(buffer))
     .catch(error => console.log(error));
@@ -123,48 +123,135 @@ const parseData = function(decodedGrib){
     
     let rawData = decodedGrib[7][2].content;
     let values = [];
-    let bitIndex = 0;
+    
     // Grid point data - simple packing
     // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-0.shtml
-    if (template === '5.0'){
+    if (template == '5.0'){
         // Should be the same number
         console.log("Bit length/bits per point : " + (rawData.byteLength*8/compression.bitsPerValue) + ", Num points: " + grid.numPoints);
-
-        const bitsPerValue = compression.bitsPerValue;
-        const rawUint8 = new Uint8Array(rawData);
-        // When bits per value are not 8, 16 or 32.
-        for (let i = 0; i < grid.numPoints; i++){
-            // Number of bytes in the raw array that contain the bit information
-            let numBytes = Math.ceil((bitIndex % 8 + bitsPerValue) / 8);
+        // Read bits
+        values = readValuesFromBuffer(rawData, compression.bitsPerValue, grid.numPoints);
+        // Decompress
+        for (let i = 0; i < values.length; i++)
+            values[i] = compression.decompress(values[i]);
+        
             
-            let value = 0; // Variable for bit operations (int32 because of javascript limitations)
-            let mostSignificantBit = bitsPerValue; // Most significant bit that the byte contains
-            for (let j = 0; j < numBytes; j++){ // Iterate the bytes
-                let tmp = rawUint8[Math.floor(bitIndex/8)]; // Get the int8 value
-                let shiftAmount = mostSignificantBit - (8 - bitIndex % 8); // Get the bit shifting operation
-                // Shift bits to the left (adds zeros on the right)
-                if (shiftAmount > 0){ 
-                    tmp = tmp << shiftAmount;
-                    bitIndex += (8 - bitIndex % 8); // Increase bitIndex
-                    mostSignificantBit = shiftAmount;
-                }
-                // Shifts bits to the right (adds zeros on the left)
-                // Ending byte (all remaining bits are in this byte)
-                else { 
-                    tmp = tmp >> -shiftAmount;
-                    bitIndex += mostSignificantBit;
-                }
+    } 
+    // Grid point data - complex packing
+    // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-2.shtml
+    else if (template == '5.2'){ // TODO: TEST
+        let NG = getContentByInfo(decodedGrib[5], 'NG ― number of groups of data values into which field is split');
 
-                value = value | tmp; // Binary addition
+        let xxIndex = Math.ceil(NG*compression.bitsPerValue/8);
+        // Group reference values (X1)
+        let X1 = readValuesFromBuffer(rawData.slice(0, xxIndex), compression.bitsPerValue, NG);
+
+        let yyIndex = xxIndex*2;
+        // Group widths (The group width is the number of bits used for every value in a group.)
+        let bitsPerValueGroupWidth = getContentByInfo(decodedGrib[5], 'Number of bits used for the group widths (after the reference value in octet 36 has been removed');
+        let groupWidths = readValuesFromBuffer(rawData.slice(xxIndex, yyIndex), bitsPerValueGroupWidth, NG);
+
+        let zzIndex = yyIndex + xxIndex;
+        // Scaled group lengths
+        let bitsPerValueScaledGL = getContentByInfo(decodedGrib[5], 'Number of bits used for the scaled group lengths (after subtraction of the reference value given in octets 38-41 and division by the length increment given in octet 42)');
+        let scaledGroupLengths = readValuesFromBuffer(rawData.slice(yyIndex, zzIndex), bitsPerValueScaledGL, NG);
+
+        // Group lengths (The group length (L) is the number of values in a group.)
+        let groupLengths = [];
+        let refGroupLength = getContentByInfo(decodedGrib[5], 'Reference for group lengths (see Note 13)');
+        let lengthInc = getContentByInfo(decodedGrib[5], 'Length increment for the group lengths (see Note 14)');
+        for (let i = 0; i < NG; i++)
+            groupLengths[i] = refGroupLength + scaledGroupLengths[i]*lengthInc;
+        
+        // Packed values (X2)
+        let lastBitIndex = 0;
+        let lastByteIndex = zzIndex;
+        for (let i = 0; i < NG; i++){
+            let numValuesPerGroup = groupLengths[i]; // Values per group
+            let bitsPerValuePerGroup = groupWidths[i]; // Bits per value in group
+            let numBytes = Math.ceil( ((numValuesPerGroup * bitsPerValuePerGroup) + lastBitIndex) / 8); // Total num bits + previous shift amount
+            let X2PerGroup = readValuesFromBuffer(rawData.slice(lastByteIndex, lastByteIndex + numBytes), bitsPerValuePerGroup, numValuesPerGroup, lastBitIndex); // Because X2 are consecutive, we keep lastBitIndex
+            lastBitIndex = ((numValuesPerGroup * bitsPerValuePerGroup) + lastBitIndex) % 8; // LastBitIndex goes from 0 to 7, as every iteration we send the specific bytes to read.
+
+            // Unpack values
+            // Add ref value (X1) to packed values (X2)
+            for (let j = 0; j < numValuesPerGroup; j++){
+                let rawValue = X2PerGroup[j] + X1[i];
+                values.push(compress.decompress(rawValue));
+            }
+        }
+        
+    }
+    // Grid point data - complex packing and spatial differencing
+    // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-3.shtml
+    // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp7-3.shtml
+    // https://apps.ecmwf.int/codes/grib/format/grib2/regulations/
+    else if (template == '5.3'){
+        // Spatial differencing order
+        let diffOrder = getContentByInfo(decodedGrib[5], 'Order of spatial difference (see Code Table 5.6)'); // WARNING --> IF CODE TABLE IS USED, THIS IS A STRING. OTHERWISE 1= 1ST ORDER, 2= SECOND ORDER
+        // Field width (Number of bytes for the first values)
+        let fieldWidth = getContentByInfo(decodedGrib[5], 'Number of octets required in the data section to specify extra descriptors needed for spatial differencing (octets 6-ww in data template 7.3)');
+        // Num values
+        let numValues = diffOrder + 1;
+        
+        // First value(s) of original (undifferenced) scale values, followed by the overall minimum of the differences.
+        let wwIndex = fieldWidth * numValues;
+        let byteContent = rawData.slice(0, wwIndex);
+        let firstValues;
+        if ( fieldWidth == 1) // Int8
+            firstValues = new Int8Array(byteContent);
+        else if (fieldWidth == 2) // Int16
+            firstValues = new Int16Array(byteContent);
+        else if (fieldWidth == 4) // Int16
+            firstValues = new Float32Array(byteContent)
+        else
+            console.error("Field width is not reasonable (func parseData, template 5.3)");
+
+        // Unpack Complex Packing
+        let unpackedObj = unpackComplexPacking(decodedGrib, rawData, compression, wwIndex);
+
+        // Decoding (f - original, g - first derivative, h - second derivative)
+        let f = [];
+        let g = [];
+        let h = [];
+        // Overall minimum
+        overallMin = firstValues[firstValues.length-1];
+        // First values
+        f.push(firstValues[0]);
+        
+        // Second order
+        if (diffOrder == 2){
+            f.push(firstValues[1]);
+
+            h[0] = f[0];
+            h[1] = f[1];
+
+            // H values
+            for (let i = 0; i < unpackedObj.NG; i++){
+                let numValuesPerGroup = unpackedObj.groupLengths[i]; // Values per group
+                for (let j = 0; j < numValuesPerGroup; j++){
+                    let rawValue = unpackedObj.X2[i][j] + unpackedObj.X1[i];
+                    h.push(rawValue);
+                }
             }
 
-            values[i] = compression.decompress(value);
+            g[0] = f[0];
+            g[1] = f[1] - f[0];
+            g[2] = h[2] + g[1];
+            g[3] = h[3] + g[2];
+            // ...
+            f[2] = g[2] + f[1];
         }
+        
+        
 
+        
+
+
+        var a  = 0;
     }
-
-    data.values = values;
     
+    data.values = values;
 
     for (var i = 0; i< 10; i++){
         let byteContent = decodedGrib[7][2].content.slice(i*2, i*2 + 2);
@@ -176,12 +263,116 @@ const parseData = function(decodedGrib){
 
 
 
+// TODO: SOMETHING WRONG! CHECK SIZE OF X2, IT SHOULD BE THE SAME AS NUMBER OF GRID POINTS-2
+// Unpack values (templates 5.2 and 5.3)
+const unpackComplexPacking = function(decodedGrib, rawData, compression, inPrevIndex){
+
+    let prevIndex = inPrevIndex || 0;
+
+    let NG = getContentByInfo(decodedGrib[5], 'NG ― number of groups of data values into which field is split');
+
+    let xxIndex = Math.ceil(NG*compression.bitsPerValue/8) + prevIndex;
+    // Group reference values (X1)
+    let X1 = readValuesFromBuffer(rawData.slice(prevIndex, xxIndex), compression.bitsPerValue, NG);
+
+    let yyIndex = xxIndex*2;
+    // Group widths (The group width is the number of bits used for every value in a group.)
+    let bitsPerValueGroupWidth = getContentByInfo(decodedGrib[5], 'Number of bits used for the group widths (after the reference value in octet 36 has been removed');
+    let groupWidths = readValuesFromBuffer(rawData.slice(xxIndex, yyIndex), bitsPerValueGroupWidth, NG);
+
+    let zzIndex = yyIndex + xxIndex;
+    // Scaled group lengths
+    let bitsPerValueScaledGL = getContentByInfo(decodedGrib[5], 'Number of bits used for the scaled group lengths (after subtraction of the reference value given in octets 38-41 and division by the length increment given in octet 42)');
+    let scaledGroupLengths = readValuesFromBuffer(rawData.slice(yyIndex, zzIndex), bitsPerValueScaledGL, NG);
+
+    // Group lengths (The group length (L) is the number of values in a group.)
+    let groupLengths = [];
+    let refGroupLength = getContentByInfo(decodedGrib[5], 'Reference for group lengths (see Note 13)');
+    let lengthInc = getContentByInfo(decodedGrib[5], 'Length increment for the group lengths (see Note 14)');
+    for (let i = 0; i < NG; i++)
+        groupLengths[i] = refGroupLength + scaledGroupLengths[i]*lengthInc;
+    
+    // Packed values (X2)
+    let lastBitIndex = 0;
+    let lastByteIndex = zzIndex;
+    let X2 = [];
+    for (let i = 0; i < NG; i++){
+        let numValuesPerGroup = groupLengths[i]; // Values per group
+        let bitsPerValuePerGroup = groupWidths[i]; // Bits per value in group
+        let numBytes = Math.ceil( ((numValuesPerGroup * bitsPerValuePerGroup) + lastBitIndex) / 8); // Total num bits + previous shift amount
+        X2[i] = readValuesFromBuffer(rawData.slice(lastByteIndex, lastByteIndex + numBytes), bitsPerValuePerGroup, numValuesPerGroup, lastBitIndex); // Because X2 are consecutive, we keep lastBitIndex
+        lastBitIndex = ((numValuesPerGroup * bitsPerValuePerGroup) + lastBitIndex) % 8; // LastBitIndex goes from 0 to 7, as every iteration we send the specific bytes to read.
+
+        // Unpack values
+        // Add ref value (X1) to packed values (X2)
+        /*for (let j = 0; j < numValuesPerGroup; j++){
+            let rawValue = X2[i][j] + X1[i];
+            values.push(compress.decompress(rawValue));
+        }*/
+    }
+
+    return {
+        NG: NG,
+        X1: X1,
+        X2: X2,
+        groupLengths: groupLengths,
+    }
+}
+
+
+
+
+
+
+
+
+
+
+// Read values coded into bits on a buffer
+const readValuesFromBuffer = function(arraybuffer, bitsPerValue, numValues, inBitIndex){
+    let values = [];
+    let bitIndex = inBitIndex || 0;
+    const rawUint8 = new Uint8Array(arraybuffer);
+    // When bits per value are not 8, 16 or 32.
+    for (let i = 0; i < numValues; i++){
+        // Number of bytes (octets) in the raw array that contain the bit information
+        let numBytes = Math.ceil((bitIndex % 8 + bitsPerValue) / 8);
+        
+        let value = 0; // Variable for bit operations (int32 because of javascript limitations)
+        let mostSignificantBit = bitsPerValue; // Most significant bit that the byte contains
+        for (let j = 0; j < numBytes; j++){ // Iterate the bytes
+            let tmp = rawUint8[Math.floor(bitIndex/8)]; // Get the int8 value
+            let shiftAmount = mostSignificantBit - (8 - bitIndex % 8); // Get the bit shifting operation
+            // Shift bits to the left (adds zeros on the right)
+            if (shiftAmount > 0){ 
+                tmp = tmp << shiftAmount;
+                bitIndex += (8 - bitIndex % 8); // Increase bitIndex
+                mostSignificantBit = shiftAmount;
+            }
+            // Shifts bits to the right (adds zeros on the left)
+            // Ending byte (all remaining bits are in this byte)
+            else { 
+                tmp = tmp >> -shiftAmount;
+                bitIndex += mostSignificantBit;
+            }
+
+            value = value | tmp; // Binary addition
+        }
+
+        values[i] = value;
+    }
+    return values;
+}
+
+
+
+
 
 // Get content by infoValue
-const getContentByInfo = function(myArray, infoValue){
-    for (let i = 0; i < myArray.length; i++){
-        if (myArray[i].info === infoValue)
-            return myArray[i].content;
+const getContentByInfo = function(sectionArray, infoValue){
+    for (let i = 0; i < sectionArray.length; i++){
+        if (sectionArray[i].info === infoValue)
+            return sectionArray[i].content;
     }
 }
 

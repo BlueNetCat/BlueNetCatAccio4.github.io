@@ -6,6 +6,11 @@
 
 // European info
 // https://apps.ecmwf.int/codes/grib/format/grib2/templates/5/2
+// Regulations
+// https://apps.ecmwf.int/codes/grib/format/grib2/regulations/
+
+// WMO Information Systems
+// https://community.wmo.int/activity-areas/wis
 
 class GRIB2 {
 
@@ -2550,7 +2555,7 @@ class GRIB2 {
                 content: null,
                 table: '5.6',
                 type: 'uint8',
-                info: 'Order of spatial difference (see Code Table 5.6) '
+                info: 'Order of spatial difference (see Code Table 5.6)'
             },
             {
                 startIndex: 49,
