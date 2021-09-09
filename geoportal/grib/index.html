@@ -78,7 +78,8 @@ const decodeGRIB2Buffer = function(buffer, myGrib){
 
 // Parse data
 const parseData = function(decodedGrib){
-    
+
+
     let data = {};
 
     let grid = {};
@@ -194,56 +195,76 @@ const parseData = function(decodedGrib){
         let diffOrder = getContentByInfo(decodedGrib[5], 'Order of spatial difference (see Code Table 5.6)'); // WARNING --> IF CODE TABLE IS USED, THIS IS A STRING. OTHERWISE 1= 1ST ORDER, 2= SECOND ORDER
         // Field width (Number of bytes for the first values)
         let fieldWidth = getContentByInfo(decodedGrib[5], 'Number of octets required in the data section to specify extra descriptors needed for spatial differencing (octets 6-ww in data template 7.3)');
-        // Num values
-        let numValues = diffOrder + 1;
+
         
         // First value(s) of original (undifferenced) scale values, followed by the overall minimum of the differences.
-        let wwIndex = fieldWidth * numValues;
-        let byteContent = rawData.slice(0, wwIndex);
-        let firstValues;
+        let numType;
         if ( fieldWidth == 1) // Int8
-            firstValues = new Int8Array(byteContent);
+            numType = 'int8';
         else if (fieldWidth == 2) // Int16
-            firstValues = new Int16Array(byteContent);
-        else if (fieldWidth == 4) // Int16
-            firstValues = new Float32Array(byteContent)
+            numType = 'int16';
+        else if (fieldWidth == 4) // Int32
+            numType = 'int32';
         else
             console.error("Field width is not reasonable (func parseData, template 5.3)");
 
+        // For second order
+        let f1 = decodeByte(rawData.slice(0, fieldWidth), numType);
+        let f2 = decodeByte(rawData.slice(fieldWidth, fieldWidth*2), numType); // Not used if difference order is 1
+        let overallMin = decodeByte(rawData.slice(fieldWidth*diffOrder, fieldWidth * (diffOrder+1)), numType);
+
+
         // Unpack Complex Packing
-        let unpackedObj = unpackComplexPacking(decodedGrib, rawData, compression, wwIndex);
+        let wwIndex = fieldWidth * (diffOrder + 1);
+        let upX1X2 = unpackComplexPacking(decodedGrib, rawData, compression, wwIndex);
 
         // Decoding (f - original, g - first derivative, h - second derivative)
         let f = [];
         let g = [];
         let h = [];
-        // Overall minimum
-        overallMin = firstValues[firstValues.length-1];
+
         // First values
-        f.push(firstValues[0]);
+        f.push(f1);
         
         // Second order
         if (diffOrder == 2){
-            f.push(firstValues[1]);
+            f.push(f2);
 
             h[0] = f[0];
             h[1] = f[1];
 
             // H values
-            for (let i = 0; i < unpackedObj.NG; i++){
-                let numValuesPerGroup = unpackedObj.groupLengths[i]; // Values per group
+            for (let i = 0; i < upX1X2.NG; i++){
+                let numValuesPerGroup = upX1X2.groupLengths[i]; // Values per group
                 for (let j = 0; j < numValuesPerGroup; j++){
-                    let rawValue = unpackedObj.X2[i][j] + unpackedObj.X1[i];
+                    let rawValue = upX1X2.X2[i][j] + upX1X2.X1[i];
+                    if (isNaN(rawValue))
+                        console.error("rawValue is NaN"); // numValuesPerGroup is 1, but X2 is empty?
                     h.push(rawValue);
                 }
             }
 
+            if (grid.numPoints != h.length)
+                console.error("Length of raw datapoints (H) is not equal to grid points : grid.numPoints: " + grid.numPoints + ", h.length: " + h.length);
+            // G values
             g[0] = f[0];
-            g[1] = f[1] - f[0];
-            g[2] = h[2] + g[1];
-            g[3] = h[3] + g[2];
-            // ...
-            f[2] = g[2] + f[1];
+            g[1] = f[1];// - f[0];
+            //g[2] = h[2] + g[1];
+            //g[3] = h[3] + g[2];
+            for (let i = 2; i < grid.numPoints; i++){
+                g[i] = h[i] + g[i-1];
+            }
+            
+            // F values
+            //f[2] = g[2] + f[1];
+            //f[3] = g[3] + f[2];
+            for (let i = 2; i < grid.numPoints; i++){
+                f[i] = g[i] + f[i-1];
+            }
+
+            for (let i = 0; i < grid.numPoints; i++){
+                values[i] = compression.decompress(h[i]);
+            }
         }
         
         
@@ -305,7 +326,7 @@ const unpackComplexPacking = function(decodedGrib, rawData, compression, inPrevI
         totalNumBits += groupLengths[i] * groupWidths[i];
         totalNumPoints += groupLengths[i];
     }
-    console.log("Total number of bytes: " + totalNumBits/8 + ", Total number of points: " + totalNumPoints);
+    console.log("Total number of required bytes: " + totalNumBits/8 + ", Available bytes: " + rawData.byteLength + ", Total number of points: " + totalNumPoints);
     
     // Packed values (X2)
     let lastBitIndex = 0;
@@ -314,6 +335,9 @@ const unpackComplexPacking = function(decodedGrib, rawData, compression, inPrevI
     for (let i = 0; i < NG; i++){
         let numValuesPerGroup = groupLengths[i]; // Values per group
         let bitsPerValuePerGroup = groupWidths[i]; // Bits per value in group
+        if (bitsPerValuePerGroup == 0)
+            console.error("An empty group in X2, with no bits is defined? " + i)
+
         let numBytes = Math.ceil( ((numValuesPerGroup * bitsPerValuePerGroup) + lastBitIndex) / 8); // Total num bits + previous shift amount
         X2[i] = readValuesFromBuffer(rawData.slice(lastByteIndex, lastByteIndex + numBytes), bitsPerValuePerGroup, numValuesPerGroup, lastBitIndex); // Because X2 are consecutive, we keep lastBitIndex
         lastBitIndex = ((numValuesPerGroup * bitsPerValuePerGroup) + lastBitIndex) % 8; // LastBitIndex goes from 0 to 7, as every iteration we send the specific bytes to read.
@@ -348,13 +372,29 @@ const readValuesFromBuffer = function(arraybuffer, bitsPerValue, numValues, inBi
     let values = [];
     let bitIndex = inBitIndex || 0;
     const rawUint8 = new Uint8Array(arraybuffer);
+    // https://hacks.mozilla.org/2017/01/typedarray-or-dataview-understanding-byte-order/
+    // The order of the bytes for a value that uses more than one byte, depends on the way binary data is enconded (its endianess)
+    // Big endian or network endian: it is often used in network transmissions (sometimes referred to as the “network endianness”)
+    // Small endian: most systems today happen to work with it on the CPU- and memory levels, and that’s great for performance.
+
+    // DataView uses big endian or network endianess: is a safe way to deal with binary data that you receive from or send to other systems.
+    // TypedArrays (i.e. new Uint8Array) uses small endian in this computer: are great for creating binary data, for instance to pass on to Canvas2D ImageData or WebGL.
+    // grib2 is in big endian? https://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/
+    
+    // Example
+    //var a = new Uint16Array(arraybuffer.slice(0,2)); // small endian
+    //var b = new DataView(arraybuffer).getUint16(); // big endian
+    //var c = bits2num(bytes2bits(new Uint8Array(arraybuffer.slice(0,2))));
+    //console.log("Small endian uint16: " + a + ", Big endian uint16: " + b + ", Using strings: " + c); 
+
 
     // If you are out of bounds
     if ((bitsPerValue*numValues + bitIndex)/8 > rawUint8.length)
         console.error("Num required bytes: " + (bitsPerValue*numValues + bitIndex)/8 + ", Num available bytes: " + rawUint8.length);
 
+    // This method does not work properly (or at least differently from when using bit strings)
     // When bits per value are not 8, 16 or 32.
-    for (let i = 0; i < numValues; i++){
+    /*for (let i = 0; i < numValues; i++){
         // Number of bytes (octets) in the raw array that contain the bit information
         let numBytes = Math.ceil((bitIndex % 8 + bitsPerValue) / 8);
         
@@ -364,7 +404,11 @@ const readValuesFromBuffer = function(arraybuffer, bitsPerValue, numValues, inBi
             let tmp = rawUint8[Math.floor(bitIndex/8)]; // Get the int8 value
             let shiftAmount = mostSignificantBit - (8 - bitIndex % 8); // Get the bit shifting operation
             // Shift bits to the left (adds zeros on the right)
-            if (shiftAmount > 0){ 
+            if (shiftAmount > 0){
+                // Clean most significant bits
+                tmp = tmp << (32 - shiftAmount); 
+                tmp = tmp >>> (32 - shiftAmount)
+                // Shift
                 tmp = tmp << shiftAmount;
                 bitIndex += (8 - bitIndex % 8); // Increase bitIndex
                 mostSignificantBit = shiftAmount;
@@ -376,7 +420,7 @@ const readValuesFromBuffer = function(arraybuffer, bitsPerValue, numValues, inBi
                     tmp = tmp << (32 - bitsPerValue) + shiftAmount; 
                     tmp = tmp >>> (32 - bitsPerValue) + shiftAmount; // Unsigned integer
                 }
-                tmp = tmp >> -shiftAmount;
+                tmp = tmp >>> -shiftAmount; // Unsigned integer
                 bitIndex += mostSignificantBit;
             }
 
@@ -384,8 +428,19 @@ const readValuesFromBuffer = function(arraybuffer, bitsPerValue, numValues, inBi
         }
 
         values[i] = value;
-    }
-    return values;
+    }*/
+
+    // Test with string values
+    var values2ndmethod = [];
+    var bitsString = bytes2bits(rawUint8);
+    bitsString = bitsString.slice(bitIndex);
+    for (var i = 0; i < numValues * bitsPerValue; i += bitsPerValue)
+        values2ndmethod.push(bits2num(bitsString.substr(i, bitsPerValue)));
+
+    //for (var i = 0; i < numValues; i++)
+    //    console.log(values[i] - values2ndmethod[i])
+    
+    return values2ndmethod;
 }
 
 
@@ -469,7 +524,8 @@ const decodeSection = function(buffer, section){
 
         // Decode bytes
         let byteContent = buffer.slice(prop.startIndex-1, prop.startIndex-1 + prop.size);
-        if (byteContent.byteLength == 0)
+        prop.content = decodeByte(byteContent, prop.type)
+        /*if (byteContent.byteLength == 0)
             prop.content = null;
         else if (prop.type === 'String')
             prop.content = String.fromCharCode.apply(null, new Uint8Array(byteContent));
@@ -494,7 +550,7 @@ const decodeSection = function(buffer, section){
         else if (prop.type == 'float32')
             prop.content = new DataView(byteContent).getFloat32();
         else
-            prop.content = byteContent;
+            prop.content = byteContent;*/
 
         // Decode table content
         if ("table" in prop){
@@ -507,6 +563,62 @@ const decodeSection = function(buffer, section){
 }
 
 
+
+
+
+
+function decodeByte(byteContent, type){
+    if (byteContent.byteLength == 0)
+        content = null;
+    else if (type === 'String')
+        content = String.fromCharCode.apply(null, new Uint8Array(byteContent));
+    else if (type == 'uint8')
+        content = new DataView(byteContent).getUint8();
+    else if (type == 'uint16')
+        content = new DataView(byteContent).getUint16();
+    else if (type == 'uint32')
+        content = new DataView(byteContent).getUint32();
+    else if (type == 'uint64')
+        content = Number(new DataView(byteContent).getBigUint64());
+
+    else if (type == 'int8')
+        content = new DataView(byteContent).getInt8();
+    else if (type == 'int16')
+        content = new DataView(byteContent).getInt16();
+    else if (type == 'int32')
+        content = new DataView(byteContent).getInt32();
+    else if (type == 'int64')
+        content = Number(new DataView(byteContent).getBigInt64());
+
+    else if (type == 'float32')
+        content = new DataView(byteContent).getFloat32();
+    else
+        content = byteContent;
+
+    return content;
+}
+
+
+
+// Utility functions
+// bytes are in uint8 form
+function bytes2bits(bytes)
+{
+    let bits = "";
+    for (let i = 0; i < bytes.length; i++){
+        let byte = bytes[i];
+        for(let j = 128; j >= 1; j /= 2)
+            bits += byte & j ? '1':'0';
+    }
+    return bits;
+}
+// Returns unsigned int
+function bits2num(bits){
+    let value = 0;
+    for (let i = 0; i < bits.length; i++)
+        value += parseInt(bits[bits.length - (i+1)]) ? Math.pow(2, i) : 0;
+    return value;
+}
 
 
 
