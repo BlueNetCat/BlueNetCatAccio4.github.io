@@ -617,8 +617,8 @@ const seaVelocityLayer = new ol.layer.Tile({
     cacheSize: 500,
     zDirection: -1,
     crossOrigin: 'anonymous',
-    maxZoom: 1,
-    params: {'LAYERS': 'sea_water_velocity', 'COLORSCALERANGE':[-1, 1], 'STYLES': 'boxfill/occam', 'TRANSPARENT': true}, //'boxfill/occam' or 'boxfill/rainbow' or fancyvec/greyscale
+    params: {'LAYERS': 'sea_water_velocity', 'COLORSCALERANGE':[-1.5, 1.5], 'STYLES': 'boxfill/occam', 'TRANSPARENT': true}, //'boxfill/occam' or 'boxfill/rainbow' or fancyvec/greyscale
+
     // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&TILED=true&COLORSCALERANGE=-0.5354787%2C0.92136043&ELEVATION=-1.0182366371154785&LAYERS=uo&STYLES=boxfill%2Frainbow&TIME=2021-06-22T12%3A00%3A00.000Z&URL=https%3A%2F%2Fnrt.cmems-du.eu%2Fthredds%2Fwms%2Fmed-cmcc-cur-an-fc-d&WIDTH=256&HEIGHT=256&CRS=EPSG%3A4326&BBOX=22.5%2C-11.25%2C33.75%2C0
     // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-qm?request=GetCapabilities&service=WMS
     // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-qm?request=GetMetadata&item=layerDetails&layerName=sea_water_velocity
@@ -671,3 +671,28 @@ const seaVelocityNorthLayer = new ol.layer.Tile({
   opacity: 0.1,
 });
 addToGUIMapLayers([seaVelocityNorthLayer, seaVelocityEastLayer], 'Sea Velocity Animation');
+
+
+
+// Surface temperature
+// https://view-cmems.mercator-ocean.fr/MEDSEA_ANALYSISFORECAST_PHY_006_013
+// https://nrt.cmems-du.eu/thredds/wms/med-cmcc-tem-an-fc-d?request=GetCapabilities&service=WMS
+const surfaceTemperatureLayer = new ol.layer.Tile({
+  className: 'surfaceTemperature',
+  source: new ol.source.TileWMS ({
+    url: 'https://nrt.cmems-du.eu/thredds/wms/med-cmcc-tem-an-fc-d',
+    attributions: '© CMEMS ',
+    cacheSize: 500,
+    zDirection: -1,
+    crossOrigin: 'anonymous',
+    params: {'LAYERS': 'thetao', 'STYLES': 'boxfill/occam', 'TRANSPARENT': true}, //'boxfill/occam' or 'boxfill/rainbow' or fancyvec/greyscale
+    // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&TILED=true&COLORSCALERANGE=-0.5354787%2C0.92136043&ELEVATION=-1.0182366371154785&LAYERS=uo&STYLES=boxfill%2Frainbow&TIME=2021-06-22T12%3A00%3A00.000Z&URL=https%3A%2F%2Fnrt.cmems-du.eu%2Fthredds%2Fwms%2Fmed-cmcc-cur-an-fc-d&WIDTH=256&HEIGHT=256&CRS=EPSG%3A4326&BBOX=22.5%2C-11.25%2C33.75%2C0
+    // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-qm?request=GetCapabilities&service=WMS
+    // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-qm?request=GetMetadata&item=layerDetails&layerName=sea_water_velocity
+    // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-qm?REQUEST=GetLegendGraphic&LAYER=sea_water_velocity&PALETTE=rainbow&COLORSCALERANGE=-0.5354787%2C0.92136043
+  }),
+  zIndex: -1,
+  opacity: 0.9,
+});
+
+addToGUIMapLayers([surfaceTemperatureLayer], 'Surface Temperature');
