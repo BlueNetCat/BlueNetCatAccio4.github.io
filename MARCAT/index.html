@@ -1,200 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MARCAT</title>
+<html>
+   <head>
+      <title>VueJs Introduction</title>
+      <!-- Vue -->
+      <script src="https://unpkg.com/vue@next"></script>
+      <!-- Client parser of .vue files -->
+      <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js"></script>
 
-    <!-- Bootstrap 5.0 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+      <!-- Bootstrap 5.0 CSS -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <!-- Openlayers library -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css">
-    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+      <!-- HTML menus -->
+      <!--link rel="stylesheet" href="../css/menu.css"-->
 
-    <!-- HTML menus -->
-    <link rel="stylesheet" href="../geoportal/css/menu.css">
-
-    <!-- Map Layers -->
-    <script src="../geoportal/map_utils/mapLayers.js"></script>
-    <!-- Particle animations -->
-    <script src="../geoportal/map_utils/animation.js"></script>
-    <script src="../geoportal/map_utils/ParticleSystem.js"></script>
-    <!-- HTML templates -->
-    <script src="../geoportal/html_utils/html_templates.js"></script>
-
-    <!-- Fontawesome icons-->
-    <script src="https://kit.fontawesome.com/a0ab677d4d.js" crossorigin="anonymous"></script>
-
-    <style>
-      .map, .canvas {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        background: #f8f4f0;
-      }
-      body { margin: 0; padding: 0; }
-    </style>
-  </head>
-  <body>
-    <!-- Bootstrap 5.0 and Popper https://getbootstrap.com/docs/5.0/getting-started/introduction/ -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-    <!-- Open layers map -->
-    <div id="map" class="map"></div>
-    <canvas id="animationCanvas" class ="canvas" style="background: none; pointer-events: none;"></canvas>
+   </head>
+   <body>
+     <!-- Bootstrap 5.0 and Popper https://getbootstrap.com/docs/5.0/getting-started/introduction/ -->
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 
-    <!-- Buttons -->
-    <button class="ol-control ol-unselectable layers-button" id="layersButton">
-      <img  src="../geoportal/img/ol_icon.png" style="max-height: 80%"></img>
-    </button>
-
-    <!-- Panels -->
-    <nav class="menu menu-horizontal menu-bottom" id="menu-bottom">
-		</nav>
-    <nav class="menu menu-vertical menu-right" id="menu-right">
-		</nav>
-
-    <!-- Info html -->
-    <div id="toprightInfo" style="position: absolute; top: 1.5%; right: 5%; opacity: 90%">
-
-    </div>
-
-    <!-- Repository link -->
-    <div class="btn btn-light btn-sm  btn-link p-0" style="position: absolute; bottom: 1.5%; left: 1%; opacity: 75%">
-      <a class="btn btn-sm" style="color: #000" href="https://github.com/BlueNetCatAccio4/BlueNetCatAccio4.github.io/tree/main/geoportal/" target='_blank' rel='noopener noreferrer'>
-        Repositori
-      </a>
-    </div>
-
-    <script>
-      // TODO
-      // https://medium.com/js-dojo/getting-started-with-vuejs-for-web-and-native-285dc64f0f0d
-
-      // Button events
-      document.getElementById("layersButton").onclick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        // TODO: there is no need to create layer's menu everytime, unless layers are dynamic (adding, removing)
-        createLayersHTML();
-      }
+      <div id = "vue-app" style = "text-align:center;">
+         <!--h1>{{ message }}</h1-->
+         <time-bar></time-bar>
+      </div>
 
 
-      var map = new ol.Map({
-        layers: [
+      <script type = "text/javascript">
 
-          // Baselayer
-          
-          graticuleLayer,
-          riversLayer,
-          eez12nmLayer,
-          shorelineLayer,
-
-          // Sea Velocity
-          seaVelocityLayer,
-          // Animation
-          seaVelocityEastLayer,
-          seaVelocityNorthLayer,
-          // Sea Temperature
-          surfaceTemperatureLayer,
-
-         ],
-        target: 'map',
-        view: new ol.View({
-          center: ol.proj.fromLonLat([3,41.5]),
-          zoom: 6,
-          maxZoom: 22,
-          extent: ol.proj.fromLonLat([-28,20]).concat(ol.proj.fromLonLat([40, 50]))
-        }),
-      });
+        const foo = () => console.log("hello world");
 
 
-      const otherLayers = [
-        bathymetryLayer,
-        buoysLayer,
-        buoysLabelLayer,
-
-        webcamLayer,
-        webcamLabelLayer,
-
-        nationalParksLayer,
-        nationalParksLabelsLayer,
-
-        radarsLayer,
-        radarsLabelLayer,
-
-        dischargePointsLayer,
-        dischargePointsLabelLayer,
-
-        weatherStationsLayer,
-        weatherStationsLabelLayer,
-
-        tideGaugesLayer,
-        tideGaugesLabelLayer,
-
-        bluenetcatMembersLayer,
-        bluenetcatMembersLabelLayer,
-
-        riversLabelsLayer,
-      ];
-
-
-      start();
-
-
-
-
-      // Interaction
-      map.on('singleclick', function (e) {
-        let el = document.getElementById("menu-bottom");
-        el.classList.remove("menu-open")
-        map.forEachFeatureAtPixel(e.pixel, function (f, layer) {
-          //console.log(f);
-
-          // Continue if the layer is not interesting
-          let layerName = layer.get("name");
-          if (layerName == "Shoreline" || layerName == "Rivers" || layerName === undefined)
-            return;
-
-
-          // Open pop-up
-          if (!el.classList.contains("menu-open"))
-            el.classList.add("menu-open");
-
-          // Display information
-          props = f.getProperties();
-          delete props.geometry;
-          createFeatureInnerHTML(props, el, layerName);
-        });
-      });
-
-      // Sea Velocity
-      let tooltipSeaVelocityValue = [];
-      map.on('pointermove', function(evt) {
-
-        // Sea velocity
-        if (seaVelocityLayer.getVisible() && !(mySource === undefined)) {
-
-          var value = (mySource.getValueAtPixel(evt.pixel, tooltipSeaVelocityValue));
-          if (value !== undefined){
-            if (value[0] !== undefined){
-              let seaVelMag = Math.sqrt(value[0]*value[0] + value[1]*value[1]);
-              document.getElementById("toprightInfo").innerText = "Sea Velocity: " + seaVelMag.toFixed(2) + " m/s";
-            } else{
-              document.getElementById("toprightInfo").innerText = "";
+        // https://github.com/FranckFreiburger/vue3-sfc-loader
+        const options = {
+          moduleCache: {
+            vue: Vue
+          },
+          async getFile(url) {
+            const res = await fetch(url);
+            if ( !res.ok )
+              throw Object.assign(new Error(res.statusText + ' ' + url), { res });
+            return {
+              getContentData: asBinary => asBinary ? res.arrayBuffer() : res.text(),
             }
-          } else{
-            document.getElementById("toprightInfo").innerText = "";
-          }
-        } else if (document.getElementById("toprightInfo").innerText.search("Sea Velocity") != -1){
-          document.getElementById("toprightInfo").innerText = "";
+          },
+          addStyle(textContent) {
+            const style = Object.assign(document.createElement('style'), { textContent });
+            const ref = document.head.getElementsByTagName('style')[0] || null;
+            document.head.insertBefore(style, ref);
+          },
         }
-      });
+
+        const { loadModule } = window['vue3-sfc-loader'];
+
+        const app = Vue.createApp({
+          components: {
+            'my-component': Vue.defineAsyncComponent( () => loadModule('./Timebar.vue', options) )
+          },
+          template: '<my-component></my-component>'
+        });
+
+        app.mount('#vue-app');
 
 
 
+      </script>
 
-    </script>
-  </body>
+
+   </body>
 </html>
