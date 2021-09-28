@@ -27,7 +27,7 @@
                          <img :src="fig.url" class="img-fluid rounded" :alt="fig.caption">
                       </template>
                       <template v-slot:preloader>
-                        <img style="max-height: 16em" src="/geoportal/img/image-loader.gif" />
+                        <img style="max-height: 16em" class="img-fluid rounded" src="/geoportal/img/image-loader.gif" />
                       </template>
                     </vue-load-image>
 
@@ -36,29 +36,13 @@
 
                 </div>
 
-                <!--div class="col btn btn-outline-light" :class="[date.active ? 'active border': '']" :key="date.index" :id="date.index" @click.prevent="dateClicked" v-for="date in getDates">
 
-                  <figure class="figure">
-                    
-                    <vue-load-image>
-                      <template v-slot:image>
-                        <img :src="date.imgURL" class="img-fluid rounded" :alt="date.dateName">
-                      </template>
-                      <template v-slot:preloader>
-                        <img style="max-height: 16em" src="/geoportal/img/image-loader.gif" />
-                      </template>
-                    </vue-load-image>
-
-
-                    <figcaption class="figure-caption border">{{date.dateName}}  <small class="text-end">({{date.diffHours}}h)</small></figcaption>
-                  </figure>
-
-                </div-->
               </div>
 
+
               <div class="row align-items-center flex-nowrap">
-                <div class="col btn-group" :key="timeScale.id" :id="timeScale.id" @click.prevent="timeScaleClicked" v-for="timeScale in timeScales">
-                  <button type="button" class="btn btn-outline-dark" :class="[timeScale.active ? 'active border': '']">{{timeScale.name}}</button>
+                <div class="col btn-group" :key="timeScale.id" :id="timeScale.id" @click.prevent="timeScaleClicked" v-for="timeScale in getAvailableTimeScales">
+                  <button v-if="timeScale.available" type="button" class="btn btn-outline-dark" :class="[timeScale.active ? 'active border': '']">{{timeScale.name}}</button>
                 </div>
               </div>
 
@@ -77,6 +61,7 @@
 
 <script>
 import VueLoadImage from "VueLoadImage.vue";
+
 // https://www.youtube.com/watch?v=6noJ0dlG7jM&ab_channel=Academind
 // https://www.youtube.com/watch?v=FWQSuskE5UA&ab_channel=Academind
 export default {
@@ -93,13 +78,14 @@ export default {
       // https://view-cmems.mercator-ocean.fr/MEDSEA_ANALYSISFORECAST_PHY_006_013
       // https://view-cmems.mercator-ocean.fr/MEDSEA_ANALYSISFORECAST_WAV_006_017
       // LEGEND
-      // TODO: ADD LEGEND
+      // TODO: ADD LEGEND. style is then transfered to legend.
       // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-qm?REQUEST=GetLegendGraphic&LAYER=sea_water_velocity&PALETTE=rainbow&COLORSCALERANGE=-0.5354787%2C0.92136043
       dataTypes: {
         "current": {
           name: 'current',
           url: 'med-cmcc-cur-an-fc',
           layerName: 'sea_water_velocity',
+          timeScales: ['h', 'h3', 'h6', 'h12', 'd', 'd3', 'm'],
           range: [-1,1],
           active: true
         },
@@ -107,6 +93,7 @@ export default {
           name: 'sea-temperature',
           url: 'med-cmcc-tem-an-fc',
           layerName: 'thetao',
+          timeScales: ['h', 'h3', 'h6', 'h12', 'd', 'd3', 'm'],
           range: [10, 30],
           active: false
         },
@@ -114,6 +101,7 @@ export default {
           name: 'salinity',
           url: 'med-cmcc-sal-an-fc',
           layerName: 'so',
+          timeScales: ['h', 'h3', 'h6', 'h12', 'd', 'd3', 'm'],
           range: [32, 41],
           active: false
         },
@@ -121,8 +109,18 @@ export default {
           name: 'wave significant height',
           url: 'med-hcmr-wav-an-fc',
           layerName: 'VHM0',
+          timeScales: ['h', 'h3', 'h6', 'h12'],
           range: [0, 4],
           active: false,
+        },
+        "chlorophyll": {
+          name: 'chlorophyll',
+          urlData: 'med-ogs-pft-an-fc',
+          layerName: 'chl',
+          timeScales: ['h', 'h3', 'h6', 'h12', 'd', 'd3'],
+          range: [0.01, 1],
+          active: false,// TODO BASE URL IS DIFFERENT
+          // https://nrt.cmems-du.eu/thredds/wms/med-ogs-pft-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&TILED=true&COLORSCALERANGE=0.028321734%2C2.3005204&ELEVATION=-1.0182366371154785&LAYERS=chl&STYLES=boxfill%2Frainbow&TIME=2021-10-06T12%3A00%3A00.000Z&URL=https%3A%2F%2Fnrt.cmems-du.eu%2Fthredds%2Fwms%2Fmed-ogs-pft-an-fc-d&WIDTH=256&HEIGHT=256&CRS=EPSG%3A4326&BBOX=28.125%2C16.875%2C33.75%2C22.5
         }
       },
       // 15min, hourly, daily, monthly means
@@ -182,7 +180,8 @@ export default {
           url: 'm',
           interval: [-5, -4, -3, -2, -1],
           active: false
-        }},
+        }
+      },
       figureInfo: {},
       dataURL: "https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS=sea_water_velocity&COLORSCALERANGE=-1%2C1&STYLES=boxfill%2Foccam&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX=-1%2C36%2C9%2C44&TIME=2021-{MONTH}-{DAY}T12%253A00%253A00.000Z",
       baseURL: "https://nrt.cmems-du.eu/thredds/wms/{URLdataTypes}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS={LAYERNAME}&COLORSCALERANGE={MINRANGE}%2C{MAXRANGE}&STYLES=boxfill%2Foccam&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX=-1%2C36%2C9%2C44&TIME=2021-{MONTH}-{DAY}T{HOURS}%253A{MINUTES}%253A00.000Z"
@@ -230,6 +229,17 @@ export default {
       // Data type
       let activedataType; // = this.dataTypes.find(el => return el.active == true)
       Object.keys(this.dataTypes).forEach(key => { if (this.dataTypes[key].active) activedataType = this.dataTypes[key] }); // Returns active data type
+      // Show/Hide available time scales
+      Object.keys(this.timeScales).forEach(key => this.timeScales[key].available = activedataType.timeScales.includes(key)); // Show/hide time scales in GUI
+
+
+      // TODO HERE: define this.timeScales.available
+      // HTML --> v-if: tScale.available
+      // TO0DO: WIND and Other sources:
+      // https://data.noaa.gov/dataset/?_tags_limit=0&sort=score+desc%2C+metadata_modified+desc&q=wind+forecast+hourly&res_format=WMS
+      // https://nowcoast.noaa.gov/help/#!section=wms-layer-ids
+      // https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_BGC_006_014/INFORMATION
+      // GENREAL TODO: INIT!
       // Time scale
       let activeTimeScale;
       Object.keys(this.timeScales).forEach(key => { if (this.timeScales[key].active) activeTimeScale = this.timeScales[key] }); // Returns active data type
@@ -259,7 +269,7 @@ export default {
           case 'h':
             dd.setHours(dd.getHours() + activeTimeScale.interval[i]);
             // Depends on data service. Again, check GetCapabilities?
-            if (activedataType.name == "wave significant height") // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-mld-an-fc-hts?request=GetCapabilities&service=WMS
+            if (activedataType.name == "wave significant height" || activedataType.name == "chlorophyll") // https://nrt.cmems-du.eu/thredds/wms/med-hcmr-wav-an-fc-h?request=GetCapabilities&service=WMS
               dd.setMinutes(0)
             else
               dd.setMinutes(30); // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-mld-an-fc-hts?request=GetCapabilities&service=WMS
@@ -275,10 +285,10 @@ export default {
             break;
           case 'm':
             dd.setMonth(dd.getMonth() + activeTimeScale.interval[i])
-            // TODO: time intervals can be extracted from get capabilities
+            // TODO: time intervals can be extracted from get capabilities?
             // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-tem-an-fc-m?request=GetCapabilities&service=WMS
             dd.setDate(16); // or 15. check here: https://view.marine.copernicus.eu/ViewService/?record_id=66fb61fa-c911-4f7e-aec1-959627bbf2b3
-            dd.setHours(12);
+            dd.setHours(12); // or 00?
             dd.setMinutes(0);
             caption = this.monthNames[dd.getMonth()] + ' ' + dd.getUTCFullYear();
             subcaption = 'Monthly average';
@@ -364,34 +374,33 @@ export default {
       }
 
       return figureInfo;
-    }
+    },
+
+    
 
 
   },
   components: {
     "vue-load-image": VueLoadImage
   },
-  computed: {
-    
-    getDates: function () {
-
-      let dates = [];
-      this.days.forEach((day, index) => {
-        let dd = this.currentDate;
-        dd.setDate(dd.getDate() + day); // One day before/after
-
-        let url = this.dataURL.replace("{MONTH}", dd.getMonth().toString().padStart(2,"0"));
-        url = url.replace("{DAY}", dd.getDate().toString().padStart(2,"0"));
-        url = url.replace("%20", "");
-        dates[index] = {
-          dateName: this.weekDays[dd.getDay()] + " " + dd.getDate(),
-          imgURL: url,
-          diffHours: day*24,
-          index: index,
-          active: this.selectedDate[index]
+  computed: {   
+    // Returns available time scales for a data type
+    getAvailableTimeScales: function () {
+      let avTimeScales = Object.keys(this.timeScales)
+        .filter(key => this.timeScales[key].available)
+        .reduce((availableTimeScalesObj, key) => {availableTimeScalesObj[key] = this.timeScales[key]; return availableTimeScalesObj}, {});
+      // One available time scale should be active
+      let keys = Object.keys(avTimeScales);
+      for (let i = 0; i < keys.length; i++){ // The last will be active
+        if (avTimeScales[keys[i]].active)
+          break;
+        else if (i == keys.length-1){
+          avTimeScales[keys[i]].active = true;
+          this.selectButtonInGroup(this.timeScales, keys[i]); // Update timeScales
+          this.updateWMSURL(); // Update URLs
         }
-      });
-      return dates;
+      }
+      return avTimeScales;
     }
   }
 }
