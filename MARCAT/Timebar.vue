@@ -11,17 +11,25 @@
         <div id="collapseOne" class="accordion-collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
           <div class="accordion-body">
             <div class="container">
-              <div class="row align-items-center flex-nowrap">
-                <div class="col btn-group" :key="data.name" :id="data.name" @click.prevent="dataClicked" v-for="data in dataTypes">
-                  <button type="button" class="btn btn-outline-dark" :class="[data.active ? 'active border': '']">{{data.name}}</button>
+
+
+              <!-- Feature selection -->
+              <div class="row p-1 align-items-center flex-nowrap">
+                <div class="col text-center">
+                  <div class="btn-group" :key="data.name" :id="data.name" @click.prevent="dataClicked" v-for="data in dataTypes">
+                    <button type="button" class="btn btn-outline-dark" :class="[data.active ? 'active border': '']">{{data.name}}</button>
+                  </div>
                 </div>
               </div>
 
-              <div class="row align-items-end flex-nowrap">
+
+
+              <!-- Data figures -->
+              <div class="row p-1 align-items-end flex-nowrap">
                 <!-- https://github.com/john015/vue-load-image -->
-                <div class="col btn btn-outline-light" :class="[fig.active ? 'active border': '']" :key="fig.id" :id="fig.id" @click.prevent="dateClicked" v-for="fig in figureInfo">
+                <div class="col btn btn-outline-light" :class="[fig.active ? 'active border border-dark': '']" :key="fig.id" :id="fig.id" @click.prevent="figureClicked" v-for="fig in figureInfo">
                   
-                  <figure class="figure">
+                  <figure class="figure m-0">
                     <vue-load-image>
                       <template v-slot:image>
                          <img :src="fig.url" class="img-fluid rounded" :alt="fig.caption">
@@ -39,14 +47,34 @@
 
               </div>
 
-
-              <div class="row align-items-center flex-nowrap">
-                <div class="col btn-group" :key="timeScale.id" :id="timeScale.id" @click.prevent="timeScaleClicked" v-for="timeScale in getAvailableTimeScales">
-                  <button v-if="timeScale.available" type="button" class="btn btn-outline-dark" :class="[timeScale.active ? 'active border': '']">{{timeScale.name}}</button>
+              <!-- Time scale selection -->
+              <div class="row p-1 align-items-center flex-nowrap">
+                <div class="col text-center">
+                  <div class="btn-group" role="group" :key="timeScale.id" :id="timeScale.id" @click.prevent="timeScaleClicked" v-for="timeScale in getAvailableTimeScales">
+                    <button v-if="timeScale.available" type="button" class="btn btn-outline-dark" :class="[timeScale.active ? 'active border': '']">{{timeScale.name}}</button>
+                  </div>
                 </div>
               </div>
 
 
+              <!-- Source selection -->
+              <div class="row p-2 align-items-center flex-nowrap">
+                <div class="col text-center">
+                  <div class="btn-group" role="group" aria-label="Source selection" :key="source.id" :id="source.id" @click.prevent="sourceClicked" v-for="source in sources">
+                    <button type="button" class="btn btn-sm btn-outline-dark" :class="[source.active ? 'active border': '']">{{source.id}}</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Attribution -->
+              <div class="row">
+                <div class="col text-center">
+                  <div :key="source.id" v-for="source in sources">
+                    <small v-if="source.active">Attribution: {{source.attribution}}<small>
+                  </div>
+                </div>
+              </div>
+              
 
             </div>
 
@@ -66,6 +94,9 @@ import VueLoadImage from "VueLoadImage.vue";
 // https://www.youtube.com/watch?v=FWQSuskE5UA&ab_channel=Academind
 export default {
   name: 'app',
+  created (){
+    this.updateWMSURL();
+  },
   data () {
     return {
       currentDate: new Date(),
@@ -73,6 +104,37 @@ export default {
       selectedDate: [false, false, true, false, false],
       weekDays: ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      sources: {
+        'CMEMS-MED': {
+          id: 'CMEMS-MED',
+          attribution: "Mediterranean Sea Physics and Biogeochemistry Analysis and Forecast. Credits: E.U. Copernicus Marine Service Information",
+          productURL: "https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_PHY_006_013/INFORMATION",
+          productURL2: "https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_BGC_006_014/INFORMATION",
+          domainURL: "https://nrt.cmems-du.eu/thredds/wms",
+          active: true
+        },
+        'SOCIB-WMOP': {
+          id: 'SOCIB-WMOP',
+          attribution: "Western Mediterranean Operational Forecasting System. Credits: ICTS SOCIB",
+          productURL: "https://thredds.socib.es/thredds/catalog/operational_models/oceanographical/hydrodynamics/model_run_aggregation/wmop/catalog.html?dataset=operational_models/oceanographical/hydrodynamics/model_run_aggregation/wmop/wmop_best.ncd",
+          domainURL: "https://thredds.socib.es/thredds/wms/operational_models/oceanographical/hydrodynamics/model_run_aggregation/wmop/wmop_best.ncd",
+          catalog: "https://thredds.socib.es/thredds/catalog.html",
+          otherURL: "https://thredds.socib.es/lw4nc2/index-menu.html",
+          active: false
+        },
+        'SOCIB-SAPO': { // There are several forecasts: ib (illes balears), mallorca, menorca, 
+          id: 'SOCIB-SAPO',
+          attribution: "Wave Forecast. Credits: ICTS SOCIB",
+          productURL: "https://thredds.socib.es/thredds/catalog/operational_models/oceanographical/wave/model_run_aggregation/sapo_ib/catalog.html?dataset=operational_models/oceanographical/wave/model_run_aggregation/sapo_ib/sapo_ib_best.ncd",
+          domainURL: "https://thredds.socib.es/thredds/wms/operational_models/oceanographical/wave/model_run_aggregation/sapo_ib/sapo_ib_best.ncd",
+          catalog: "https://thredds.socib.es/thredds/catalog.html",
+          otherURL: "https://thredds.socib.es/lw4nc2/index-menu.html",
+          active: false
+        } // TODO HERE....  
+      },
+      //https://thredds.socib.es/thredds/wms/operational_models/oceanographical/wave/model_run_aggregation/sapo_ib/sapo_ib_best.ncd
+      // https://thredds.socib.es/lw4nc2/index-menu.html
+      // https://thredds.socib.es/thredds/wms/operational_models/oceanographical/hydrodynamics/wmop_surface/2021/09/roms_wmop_surface_20210922.nc?service=WMS&version=1.3.0&request=GetCapabilities
       // https://resources.marine.copernicus.eu/products
       // https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_PHY_006_013/INFORMATION
       // https://view-cmems.mercator-ocean.fr/MEDSEA_ANALYSISFORECAST_PHY_006_013
@@ -81,46 +143,47 @@ export default {
       // TODO: ADD LEGEND. style is then transfered to legend.
       // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-qm?REQUEST=GetLegendGraphic&LAYER=sea_water_velocity&PALETTE=rainbow&COLORSCALERANGE=-0.5354787%2C0.92136043
       dataTypes: {
-        "current": {
-          name: 'current',
+        "Sea surface velocity": {
+          name: 'Sea surface velocity',
           url: 'med-cmcc-cur-an-fc',
           layerName: 'sea_water_velocity',
           timeScales: ['h', 'h3', 'h6', 'h12', 'd', 'd3', 'm'],
           range: [-1,1],
           active: true
         },
-        "sea-temperature": {
-          name: 'sea-temperature',
+        "Sea temperature": {
+          name: 'Sea temperature',
           url: 'med-cmcc-tem-an-fc',
           layerName: 'thetao',
           timeScales: ['h', 'h3', 'h6', 'h12', 'd', 'd3', 'm'],
           range: [10, 30],
           active: false
         },
-        "salinity": {
-          name: 'salinity',
+        "Salinity": {
+          name: 'Salinity',
           url: 'med-cmcc-sal-an-fc',
           layerName: 'so',
           timeScales: ['h', 'h3', 'h6', 'h12', 'd', 'd3', 'm'],
           range: [32, 41],
           active: false
         },
-        "wave significant height": {
-          name: 'wave significant height',
+        "Wave significant height": {
+          name: 'Wave significant height',
           url: 'med-hcmr-wav-an-fc',
           layerName: 'VHM0',
           timeScales: ['h', 'h3', 'h6', 'h12'],
           range: [0, 4],
           active: false,
         },
-        "chlorophyll": {
-          name: 'chlorophyll',
-          urlData: 'med-ogs-pft-an-fc',
+        "Chlorophyll": {
+          name: 'Chlorophyll',
+          url: 'med-ogs-pft-an-fc',
           layerName: 'chl',
-          timeScales: ['h', 'h3', 'h6', 'h12', 'd', 'd3'],
+          timeScales: ['d', 'd3'],
           range: [0.01, 1],
           active: false,// TODO BASE URL IS DIFFERENT
-          // https://nrt.cmems-du.eu/thredds/wms/med-ogs-pft-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&TILED=true&COLORSCALERANGE=0.028321734%2C2.3005204&ELEVATION=-1.0182366371154785&LAYERS=chl&STYLES=boxfill%2Frainbow&TIME=2021-10-06T12%3A00%3A00.000Z&URL=https%3A%2F%2Fnrt.cmems-du.eu%2Fthredds%2Fwms%2Fmed-ogs-pft-an-fc-d&WIDTH=256&HEIGHT=256&CRS=EPSG%3A4326&BBOX=28.125%2C16.875%2C33.75%2C22.5
+          // https://nrt.cmems-du.eu/thredds/wms/med-ogs-pft-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&TILED=true&COLORSCALERANGE=0.028321734%2C2.3005204&ELEVATION=-1.0182366371154785&LAYERS=chl&STYLES=boxfill%2Frainbow&TIME=2021-10-06T12%3A00%3A00.000Z&WIDTH=256&HEIGHT=256&CRS=EPSG%3A4326&BBOX=28.125%2C16.875%2C33.75%2C22.5
+          // https://thredds.socib.es/thredds/wms/operational_models/oceanographical/hydrodynamics/wmop_surface/2021/09/roms_wmop_surface_20210922.nc?service=WMS&version=1.3.0&request=GetCapabilities
         }
       },
       // 15min, hourly, daily, monthly means
@@ -184,17 +247,24 @@ export default {
       },
       figureInfo: {},
       dataURL: "https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS=sea_water_velocity&COLORSCALERANGE=-1%2C1&STYLES=boxfill%2Foccam&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX=-1%2C36%2C9%2C44&TIME=2021-{MONTH}-{DAY}T12%253A00%253A00.000Z",
-      baseURL: "https://nrt.cmems-du.eu/thredds/wms/{URLdataTypes}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS={LAYERNAME}&COLORSCALERANGE={MINRANGE}%2C{MAXRANGE}&STYLES=boxfill%2Foccam&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX=-1%2C36%2C9%2C44&TIME=2021-{MONTH}-{DAY}T{HOURS}%253A{MINUTES}%253A00.000Z"
-    }
+      //baseURL: "https://nrt.cmems-du.eu/thredds/wms/{URLdataTypes}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS={LAYERNAME}&COLORSCALERANGE={MINRANGE}%2C{MAXRANGE}&STYLES=boxfill%2Foccam&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX=-1%2C36%2C9%2C44&TIME=2021-{MONTH}-{DAY}T{HOURS}%253A{MINUTES}%253A00.000Z"
+                //https://nrt.cmems-du.eu/thredds/wms/med-ogs-pft-an-fc-m?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&TILED=true&COLORSCALERANGE=0.024503695%2C0.66972876&ELEVATION=-1.0182366371154785&LAYERS=chl&STYLES=boxfill%2Frainbow&TIME=2021-08-01T00%3A00%3A00.000Z&URL=https%3A%2F%2Fnrt.cmems-du.eu%2Fthredds%2Fwms%2Fmed-ogs-pft-an-fc-m&WIDTH=256&HEIGHT=256&CRS=EPSG%3A4326&BBOX=39.375%2C25.3125%2C42.1875%2C28.125
+      baseURL: "{DOMAIN}/{URLdataTypes}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS={LAYERNAME}&COLORSCALERANGE={MINRANGE}%2C{MAXRANGE}&STYLES=boxfill%2Foccam&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX=-1%2C36%2C9%2C44&TIME=2021-{MONTH}-{DAY}T{HOURS}%253A{MINUTES}%253A00.000Z"
+      
+   }
   },
   methods: {
-    dateClicked: function (event) {
+    // Figure clicked (TODO: emit)
+    figureClicked: function (event) {
       // Deselect date in GUI
       this.selectedDate.forEach((e, index) => {
         this.selectedDate[index] = false;
       })
       // Highlight selected date
       this.selectedDate[event.currentTarget.id] = true;
+      console.log(this.selectedDate);
+      this.updateWMSURL();
+
       foo();
     },
 
@@ -213,6 +283,15 @@ export default {
       // Change time scale
       this.updateWMSURL();
     },
+
+    // Source
+    sourceClicked: function(event) {
+      // Select active time scale
+      this.selectButtonInGroup(this.sources, event.currentTarget.id)
+      // Change time scale
+      this.updateWMSURL();
+    },
+
     // Select/deselect options
     selectButtonInGroup: function(array, selKey){
       Object.keys(array).forEach(key => array[key].active = false);
@@ -224,8 +303,14 @@ export default {
 
     // Generate WMS url
     updateWMSURL: function(){
-      
+
       let tmpURLData = this.baseURL;
+
+      // Get data source
+      let activeSource = this.sources[Object.keys(this.sources).find(key => this.sources[key].active)];
+      // Replace domain
+      tmpURLData = tmpURLData.replace('{DOMAIN}', activeSource.domainURL);
+      
       // Data type
       let activedataType; // = this.dataTypes.find(el => return el.active == true)
       Object.keys(this.dataTypes).forEach(key => { if (this.dataTypes[key].active) activedataType = this.dataTypes[key] }); // Returns active data type
@@ -239,7 +324,7 @@ export default {
       // https://data.noaa.gov/dataset/?_tags_limit=0&sort=score+desc%2C+metadata_modified+desc&q=wind+forecast+hourly&res_format=WMS
       // https://nowcoast.noaa.gov/help/#!section=wms-layer-ids
       // https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_BGC_006_014/INFORMATION
-      // GENREAL TODO: INIT!
+
       // Time scale
       let activeTimeScale;
       Object.keys(this.timeScales).forEach(key => { if (this.timeScales[key].active) activeTimeScale = this.timeScales[key] }); // Returns active data type
@@ -269,7 +354,7 @@ export default {
           case 'h':
             dd.setHours(dd.getHours() + activeTimeScale.interval[i]);
             // Depends on data service. Again, check GetCapabilities?
-            if (activedataType.name == "wave significant height" || activedataType.name == "chlorophyll") // https://nrt.cmems-du.eu/thredds/wms/med-hcmr-wav-an-fc-h?request=GetCapabilities&service=WMS
+            if (activedataType.name == "Wave significant height" || activedataType.name == "Chlorophyll") // https://nrt.cmems-du.eu/thredds/wms/med-hcmr-wav-an-fc-h?request=GetCapabilities&service=WMS
               dd.setMinutes(0)
             else
               dd.setMinutes(30); // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-mld-an-fc-hts?request=GetCapabilities&service=WMS
@@ -306,7 +391,7 @@ export default {
           'caption': caption,
           'subcaption': subcaption,
           'url': tmpURL,
-          'active': activeTimeScale.interval[i] == 0 ? true : false,
+          'active': this.selectedDate[i]//activeTimeScale.interval[i] == 0 ? true : false,
         }
       }
 
@@ -369,7 +454,7 @@ export default {
           'caption': caption,
           'subcaption': subcaption,
           'url': tmpURL,
-          'active': activeTimeScale.interval[i] == 0 ? true : false,
+          'active': this.selectedDate[i]//activeTimeScale.interval[i] == 0 ? true : false,
         }
       }
 
@@ -383,7 +468,7 @@ export default {
   components: {
     "vue-load-image": VueLoadImage
   },
-  computed: {   
+  computed: {
     // Returns available time scales for a data type
     getAvailableTimeScales: function () {
       let avTimeScales = Object.keys(this.timeScales)
@@ -391,17 +476,18 @@ export default {
         .reduce((availableTimeScalesObj, key) => {availableTimeScalesObj[key] = this.timeScales[key]; return availableTimeScalesObj}, {});
       // One available time scale should be active
       let keys = Object.keys(avTimeScales);
-      for (let i = 0; i < keys.length; i++){ // The last will be active
+      for (let i = 0; i < keys.length; i++){
         if (avTimeScales[keys[i]].active)
           break;
         else if (i == keys.length-1){
-          avTimeScales[keys[i]].active = true;
+          avTimeScales[keys[0]].active = true; // First time scale is active
           this.selectButtonInGroup(this.timeScales, keys[i]); // Update timeScales
           this.updateWMSURL(); // Update URLs
         }
       }
       return avTimeScales;
-    }
+    },
+    
   }
 }
 </script>
