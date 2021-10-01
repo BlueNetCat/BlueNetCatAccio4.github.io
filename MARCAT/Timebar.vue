@@ -1,15 +1,16 @@
 <template>
   <div id="app">
-
-    <div class="accordion" id="accordionExample">
+    <div class="accordion position-absolute bottom-0 start-0 end-0" id="accordionExample">
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingOne">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-
+            hello
           </button>
         </h2>
-        <div id="collapseOne" class="accordion-collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
           <div class="accordion-body">
+
+
             <div class="container">
 
 
@@ -32,10 +33,10 @@
                   <figure class="figure m-0">
                     <vue-load-image>
                       <template v-slot:image>
-                         <img :src="fig.url" class="img-fluid rounded" :alt="fig.caption">
+                         <img :src="fig.url" class="figure-img img-fluid rounded" :alt="fig.caption">
                       </template>
                       <template v-slot:preloader>
-                        <img style="max-height: 16em" class="img-fluid rounded" src="/geoportal/img/image-loader.gif" />
+                        <img style="max-height: 16em" class="figure-img img-fluid rounded" src="/geoportal/img/image-loader.gif" />
                       </template>
                     </vue-load-image>
 
@@ -61,7 +62,7 @@
               <div class="row p-2 align-items-center flex-nowrap">
                 <div class="col text-center">
                   <div class="btn-group" role="group" aria-label="Source selection" :key="source.id" :id="source.id" @click.prevent="sourceClicked" v-for="source in sources">
-                    <button type="button" class="btn btn-sm btn-outline-dark" :class="[source.active ? 'active border': '']">{{source.id}}</button>
+                    <button type="button" class="btn btn-xs btn-outline-dark" :class="[source.active ? 'active border': '']">{{source.id}}</button>
                   </div>
                 </div>
               </div>
