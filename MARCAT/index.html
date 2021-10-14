@@ -1,0 +1,69 @@
+<html>
+   <head>
+      <title>MARCAT</title>
+      <!-- Vue -->
+      <script src="https://unpkg.com/vue@next"></script>
+      <!-- Client parser of .vue files -->
+      <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js"></script>
+
+      <!-- Bootstrap 5.0 CSS -->
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+      <!-- HTML menus -->
+      <!--link rel="stylesheet" href="../css/menu.css"-->
+
+   </head>
+   <body>
+     <!-- Bootstrap 5.0 and Popper https://getbootstrap.com/docs/5.0/getting-started/introduction/ -->
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+      <div id = "vue-app" style = "text-align:center;">
+         <!--h1>{{ message }}</h1-->
+         <time-bar></time-bar>
+      </div>
+
+
+      <script type = "text/javascript">
+
+        const foo = () => console.log("hello world");
+
+
+        // https://github.com/FranckFreiburger/vue3-sfc-loader
+        const options = {
+          moduleCache: {
+            vue: Vue
+          },
+          async getFile(url) {
+            const res = await fetch(url);
+            if ( !res.ok )
+              throw Object.assign(new Error(res.statusText + ' ' + url), { res });
+            return {
+              getContentData: asBinary => asBinary ? res.arrayBuffer() : res.text(),
+            }
+          },
+          addStyle(textContent) {
+            const style = Object.assign(document.createElement('style'), { textContent });
+            const ref = document.head.getElementsByTagName('style')[0] || null;
+            document.head.insertBefore(style, ref);
+          },
+        }
+
+        const { loadModule } = window['vue3-sfc-loader'];
+
+        const app = Vue.createApp({
+          components: {
+            'my-component': Vue.defineAsyncComponent( () => loadModule('./Timebar.vue', options) )
+          },
+          template: '<my-component></my-component>'
+        });
+
+        app.mount('#vue-app');
+
+
+
+      </script>
+
+
+   </body>
+</html>
