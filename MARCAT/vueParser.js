@@ -25,5 +25,5 @@ const options = {
       'ol-map': Vue.defineAsyncComponent( () => loadModule('./Map.vue', options) ),
       'forecast-bar': Vue.defineAsyncComponent( () => loadModule('./Timebar.vue', options) )
     },
-    template: '<ol-map></ol-map><forecast-bar></forecast-bar>'
+    template: '<ol-map ref="map"></ol-map><forecast-bar ref="forecastbar"></forecast-bar>'
   });

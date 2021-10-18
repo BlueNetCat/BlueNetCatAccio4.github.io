@@ -100,6 +100,11 @@ export default {
   created (){
     this.updateWMSURL();
   },
+  mounted (){
+    // Once mounted, update the WMS url of map
+    if (this.$root.$refs.map) // Reference defined in vueParser.js
+      this.$root.$refs.map.updateSourceWMS(this.getWMSURL());
+  },
   data () {
     return {
       currentDate: new Date(),
@@ -137,11 +142,14 @@ export default {
       },
       //https://thredds.socib.es/thredds/wms/operational_models/oceanographical/wave/model_run_aggregation/sapo_ib/sapo_ib_best.ncd
       // https://thredds.socib.es/lw4nc2/index-menu.html
-      // https://thredds.socib.es/thredds/wms/operational_models/oceanographical/hydrodynamics/wmop_surface/2021/09/roms_wmop_surface_20210922.nc?service=WMS&version=1.3.0&request=GetCapabilities
+      // https://thredds.socib.es/thredds/wms/operational_models/oceanographical/hydrodynamics/model_run_aggregation/wmop/wmop_best.ncd?TRANSPARENT=true&FORMAT=image%2Fpng&LAYERS=salt&PROJECTION=EPSG%3A4326&ABOVEMAXCOLOR=extend&BELOWMINCOLOR=extend&STYLES=boxfill%2Frainbow&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&TIME=2021-10-18T15%3A00%3A00.000Z&SRS=EPSG%3A4326&COLORSCALERANGE=26.073683%2C38.58198&BBOX=5.625,33.75,11.25,39.375&WIDTH=256&HEIGHT=256
+      // https://thredds.socib.es/thredds/wms/operational_models/oceanographical/hydrodynamics/model_run_aggregation/wmop/wmop_best.ncd?TRANSPARENT=true&FORMAT=image%2Fpng&LAYERS=temp&COLORSCALERANGE=0%2C30&PROJECTION=EPSG%3A4326&NUMCOLORBANDS=50&ABOVEMAXCOLOR=extend&BELOWMINCOLOR=extend&STYLES=boxfill%2Fsst_36&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG%3A4326&BBOX=-16.4736328125,30.161865234375,19.4736328125,50.838134765625&WIDTH=1636&HEIGHT=941
       // https://resources.marine.copernicus.eu/products
       // https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_PHY_006_013/INFORMATION
       // https://view-cmems.mercator-ocean.fr/MEDSEA_ANALYSISFORECAST_PHY_006_013
       // https://view-cmems.mercator-ocean.fr/MEDSEA_ANALYSISFORECAST_WAV_006_017
+
+      // ?service=WMS&version=1.3.0&request=GetCapabilities
       // LEGEND
       // TODO: ADD LEGEND. style is then transfered to legend.
       // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-qm?REQUEST=GetLegendGraphic&LAYER=sea_water_velocity&PALETTE=rainbow&COLORSCALERANGE=-0.5354787%2C0.92136043
@@ -160,7 +168,7 @@ export default {
           url: 'med-cmcc-tem-an-fc',
           layerName: 'thetao',
           timeScales: ['h', 'h3', 'h6', 'h12', 'd', 'd3', 'm'],
-          range: [10, 30],
+          range: [10, 32],
           style: "boxfill%2Foccam",
           active: false
         },
@@ -254,6 +262,7 @@ export default {
         }
       },
       figureInfo: {},
+      layerInfoWMS: {},
       dataURL: "https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS=sea_water_velocity&COLORSCALERANGE=-1%2C1&STYLES=boxfill%2Foccam&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX=-1%2C36%2C9%2C44&TIME=2021-{MONTH}-{DAY}T12%253A00%253A00.000Z",
       //baseURL: "https://nrt.cmems-du.eu/thredds/wms/{URLdataTypes}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS={LAYERNAME}&COLORSCALERANGE={MINRANGE}%2C{MAXRANGE}&STYLES=boxfill%2Foccam&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX=-1%2C36%2C9%2C44&TIME=2021-{MONTH}-{DAY}T{HOURS}%253A{MINUTES}%253A00.000Z"
                 //https://nrt.cmems-du.eu/thredds/wms/med-ogs-pft-an-fc-m?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&TILED=true&COLORSCALERANGE=0.024503695%2C0.66972876&ELEVATION=-1.0182366371154785&LAYERS=chl&STYLES=boxfill%2Frainbow&TIME=2021-08-01T00%3A00%3A00.000Z&URL=https%3A%2F%2Fnrt.cmems-du.eu%2Fthredds%2Fwms%2Fmed-ogs-pft-an-fc-m&WIDTH=256&HEIGHT=256&CRS=EPSG%3A4326&BBOX=39.375%2C25.3125%2C42.1875%2C28.125
@@ -262,7 +271,7 @@ export default {
    }
   },
   methods: {
-    // Figure clicked (TODO: emit)
+    // Figure clicked
     figureClicked: function (event) {
       // Deselect date in GUI
       this.selectedDate.forEach((e, index) => {
@@ -273,7 +282,9 @@ export default {
       console.log(this.selectedDate);
       this.updateWMSURL();
 
-      foo();
+      // Update WMS source in map component (emit?)
+      if (this.$root.$refs.map) // Reference defined in vueParser.js
+        this.$root.$refs.map.updateSourceWMS(this.getWMSURL());
     },
 
     // Data type (SST, salinity, current)
@@ -348,6 +359,8 @@ export default {
       // Time intervals
       for (let i = 0; i < activeTimeScale.interval.length; i++){
         let dd = new Date(this.currentDate);
+        dd.setMilliseconds(0);
+        dd.setSeconds(0);
         let tmpURL = tmpURLData;
         let caption = '';
         let subcaption = '';
@@ -402,16 +415,39 @@ export default {
           'url': tmpURL,
           'active': this.selectedDate[i]//activeTimeScale.interval[i] == 0 ? true : false,
         }
+
+        // Openlayers WMS source information
+        if (this.selectedDate[i]){ // Only for active source
+          // Fix hour difference (e.g. GMT+2) for ISOString function
+          dd.setHours(dd.getHours() - dd.getTimezoneOffset()/60);
+          // Layer source
+          this.layerInfoWMS = {
+            url: activeSource.domainURL + "/" + activedataType.url + '-' + activeTimeScale.url,
+            attributions: activeSource.attribution,
+            params: {
+              'LAYERS': activedataType.layerName,
+              'TIME': dd.toISOString(),
+              'COLORSCALERANGE': activedataType.range,
+              'STYLES': activedataType.style.replace('%2F', '/'),
+              'TRANSPARENT': true
+            },
+            cacheSize: 500,
+            zDirection: -1
+          }
+        }
+
       }
 
       return this.figureInfo;
-      // Change image url
-      this.dataURL = tmpURL;
-      console.log(tmpURL);
     },
 
+    // Return WMS info for OpenLayers layer
+    getWMSURL: function(){
+      return this.layerInfoWMS;
+    }
+
     // Get figure WMS URL from date intervals
-    getFigureInfo: function(activeTimeScale, baseURL){
+    /*getFigureInfo: function(activeTimeScale, baseURL){
       
       let figureInfo = {};
 
@@ -468,7 +504,7 @@ export default {
       }
 
       return figureInfo;
-    },
+    },*/
 
     
 
