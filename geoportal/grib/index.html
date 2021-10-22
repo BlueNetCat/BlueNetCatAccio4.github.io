@@ -103,39 +103,47 @@ const parseData = function(decodedGrib){
     if (grid.numPoints != grid.numLatPoints * grid.numLongPoints)
         console.warn("Section 3. Grid numPoints does not equal to numLatPoints * numLongPoints. numPoints = " + grid.numPoints + " , numLatPoints * numLongPoints = " + grid.numLatPoints * grid.numLongPoints);
 
+    // Check if the number of values 
+    let numValues = getContentByInfo(decodedGrib[5], "Number of data points where one or more values are specified in Section 7 when a bit map is present, total number of data points when a bit map is absent.");
+    if (numValues !== grid.numPoints)
+        console.warn("Num values in Section 7: " + numValues + ", Grid points in Section 5: " + grid.numPoints + ". Probably bitmap is present");
+
+    
     data.grid = grid;
     console.log(grid);
 
 
-    // Data compression scheme (Template 5.x)
+    // Template number
     let item = decodedGrib[5].find(item => 'template' in item);
     let template = item !== undefined ? item.template : 'none';
 
-    let compression = {};
-    compression.refValue = getContentByInfo(decodedGrib[5], 'Reference value (R) (IEEE 32-bit floating-point value)');
-    compression.binaryScaleFactor = getContentByInfo(decodedGrib[5], 'Binary scale factor (E)');
-    compression.decimalScaleFactor = getContentByInfo(decodedGrib[5], 'Decimal scale factor (D)');
-    compression.bitsPerValue = getContentByInfo(decodedGrib[5], 'Number of bits used for each packed value for simple packing, or for each group reference value for complex packing or spatial differencing');
+    // Data compression scheme (Templates 5.0, 5.1, 5.2, 5.3)
+    if (template == '5.0' || template == '5.1' || template == '5.2' || template == '5.3') {
+        let compression = {};
+        compression.refValue = getContentByInfo(decodedGrib[5], 'Reference value (R) (IEEE 32-bit floating-point value)');
+        compression.binaryScaleFactor = getContentByInfo(decodedGrib[5], 'Binary scale factor (E)');
+        compression.decimalScaleFactor = getContentByInfo(decodedGrib[5], 'Decimal scale factor (D)');
+        compression.bitsPerValue = getContentByInfo(decodedGrib[5], 'Number of bits used for each packed value for simple packing, or for each group reference value for complex packing or spatial differencing');
 
-    compression.decompress = (rawValue => {
-        const c1 = Math.pow(2, compression.binaryScaleFactor)
-        const c2 = Math.pow(10, compression.decimalScaleFactor)
-        return (compression.refValue + rawValue * c1) / c2;
-    });
-
-    data.compression = compression;
+        compression.decompress = (rawValue => {
+            const c1 = Math.pow(2, compression.binaryScaleFactor)
+            const c2 = Math.pow(10, compression.decimalScaleFactor)
+            return (compression.refValue + rawValue * c1) / c2;
+        });
+        data.compression = compression;
+    }
 
 
     
+
     let rawData = decodedGrib[7][2].content;
     let values = [];
-
- 
 
 
     // Grid point data - simple packing
     // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-0.shtml
     if (template == '5.0'){
+        let compression = data.compression;
         // Should be the same number
         console.log("Bit length/bits per point : " + (rawData.byteLength*8/compression.bitsPerValue) + ", Num points: " + grid.numPoints);
         // Read bits
@@ -149,6 +157,7 @@ const parseData = function(decodedGrib){
     // Grid point data - complex packing
     // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-2.shtml
     else if (template == '5.2'){ // TODO: TEST
+        let compression = data.compression;
         let NG = getContentByInfo(decodedGrib[5], 'NG ― number of groups of data values into which field is split');
 
         let xxIndex = Math.ceil(NG*compression.bitsPerValue/8);
@@ -196,6 +205,7 @@ const parseData = function(decodedGrib){
     // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp7-3.shtml
     // https://apps.ecmwf.int/codes/grib/format/grib2/regulations/
     else if (template == '5.3'){
+        let compression = data.compression;
         // Spatial differencing order
         let diffOrder = getContentByInfo(decodedGrib[5], 'Order of spatial difference (see Code Table 5.6)'); // WARNING --> IF CODE TABLE IS USED, THIS IS A STRING. OTHERWISE 1= 1ST ORDER, 2= SECOND ORDER
         // Field width (Number of bytes for the first values)
@@ -281,46 +291,75 @@ const parseData = function(decodedGrib){
     }
     // Grid point data - IEEE Floating Point Data
     // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-4.shtml
-    else if(template == '5.4') {
-        // Precision (Floating point type)
-        let dataType = decodedGrib[5][4].contentRef; // GRIB2.tables['5.7'][getContentByInfo(decodedGrib[5], 'Precision (See code Table 5.7)')] 
-
-        // Bitmap
-        let bitmapBuffer = decodedGrib[6][3].content; // A bit for each value, saying if missing or not
-        let bitmap = readValuesFromBuffer(bitmapBuffer, 1, grid.numPoints+2);
-        let count = 0;
-        for (let i = 0; i < bitmap.length; i++){
-            if (bitmap[i] == 1){
-                count++;
-            }
-        }   
+    else if(template == '5.4') { 
         
+        // Read precision (32, 64 or 128 Floating point type)
+        let dataType = decodedGrib[5][4].contentRef; // GRIB2.tables['5.7'][getContentByInfo(decodedGrib[5], 'Precision (See code Table 5.7)')]
+        let byteSize;
+        let type;
+        if (dataType.includes("32-bit")) {
+            type = 'float32';
+            byteSize = 4;
+        } else if (dataType.includes("64-bit")) {
+            type = 'float64';
+            byteSize = 8;
+        } else if (dataType.includes("128-bit")) {
+            type = 'float128';
+            byteSize = 16;
+        }
 
-        // Read bits
-        let numPoints = getContentByInfo(decodedGrib[5], "Number of data points where one or more values are specified in Section 7 when a bit map is present, total number of data points when a bit map is absent.");
-        if (numPoints !== grid.numPoints)
-            console.warn("Grid points in Section 7: " + numPoints + ", Grid points in Section 5: " + grid.numPoints);
-        
-        // TODO: THIS ONLY READS INTEGERS, NOT FLOAT
-        values = readValuesFromBuffer(rawData, 64, numPoints);//grid.numPoints);
-
-
-        console.log(decodedGrib[5]);
-
+        // Read values
+        values = [];
+        for (let i = 0; i < numValues; i++){
+            // Read each value according to Section 5
+            values[i] = decodeByte(rawData.slice(i* byteSize, i* byteSize + byteSize), type);
+        }
     }
 
 
 
-
-
-
-    
+    // TODO maybe this should be below Bitmap code
     data.values = values;
 
-    for (var i = 0; i< 10; i++){
+    // Bitmap
+    // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect6.shtml
+    // https://www.unidata.ucar.edu/blogs/developer/entry/grib_bitmaps_are_not_such
+    if (decodedGrib[6][2].content !== 255) {
+        console.warn("Bitmap is present: " + decodedGrib[6][2].contentRef)
+        // Bitmap
+        if (decodedGrib[6][2].content == 0){
+            // Read bitmap
+            let bitmapBuffer = decodedGrib[6][3].content; // A bit for each value, saying if missing or not
+            let bitmap = readValuesFromBuffer(bitmapBuffer, 1, grid.numPoints);
+            data.bitmap = bitmap;
+            // Assign values
+            // Gridded values
+            let griddedValues = [];
+            let vIndex = 0;
+            for (let i = 0; i < grid.numPoints; i++) {
+                // With bitmap
+                if (data.bitmap[i] == 0)
+                    griddedValues[i] = null; // Empty value
+                else {
+                    griddedValues[i] = data.values[vIndex];
+                    vIndex++;
+                }
+            }
+            // Reassign values
+            data.section7values = data.values;
+            data.values = griddedValues;
+        } else if (decodedGrib[6][2].content == 254) {
+            console.error("TODO: bitmap is defined in a previous dataset in the same grib file.");
+        }
+    }
+
+    console.log(data.values);
+
+
+    /*for (var i = 0; i< 10; i++){
         let byteContent = decodedGrib[7][2].content.slice(i*2, i*2 + 2);
         console.log(compression.decompress(new DataView(byteContent).getUint16()));
-    }
+    }*/
 
     return data;
 }
@@ -408,7 +447,7 @@ const unpackComplexPacking = function(decodedGrib, rawData, compression, inPrevI
 
 
 // Read values coded into bits on a buffer (uint)
-const readValuesFromBuffer = function(arraybuffer, bitsPerValue, numValues, inBitIndex){ // TODO TYPE (UINT INT FLOAT)
+const readValuesFromBuffer = function(arraybuffer, bitsPerValue, numValues, inBitIndex){
     let values = [];
     let bitIndex = inBitIndex || 0;
     const rawUint8 = new Uint8Array(arraybuffer);
@@ -423,7 +462,7 @@ const readValuesFromBuffer = function(arraybuffer, bitsPerValue, numValues, inBi
     
     // Example
     //var a = new Uint16Array(arraybuffer.slice(0,2)); // small endian
-    //var b = new DataView(arraybuffer).getUint16(); // big endian
+    //var b = new DataView(arraybuffer).getUint16(); // big endian (one can specify little endian too)
     //var c = bits2num(bytes2bits(new Uint8Array(arraybuffer.slice(0,2))));
     //console.log("Small endian uint16: " + a + ", Big endian uint16: " + b + ", Using strings: " + c); 
 
@@ -432,49 +471,12 @@ const readValuesFromBuffer = function(arraybuffer, bitsPerValue, numValues, inBi
     if ((bitsPerValue*numValues + bitIndex)/8 > rawUint8.length)
         console.error("Num required bytes: " + (bitsPerValue*numValues + bitIndex)/8 + ", Num available bytes: " + rawUint8.length);
 
-    // This method does not work properly (or at least differently from when using bit strings)
-    // When bits per value are not 8, 16 or 32.
-    /*for (let i = 0; i < numValues; i++){
-        // Number of bytes (octets) in the raw array that contain the bit information
-        let numBytes = Math.ceil((bitIndex % 8 + bitsPerValue) / 8);
-        
-        let value = 0; // Variable for bit operations (int32 because of javascript limitations)
-        let mostSignificantBit = bitsPerValue; // Most significant bit that the byte contains
-        for (let j = 0; j < numBytes; j++){ // Iterate the bytes
-            let tmp = rawUint8[Math.floor(bitIndex/8)]; // Get the int8 value
-            let shiftAmount = mostSignificantBit - (8 - bitIndex % 8); // Get the bit shifting operation
-            // Shift bits to the left (adds zeros on the right)
-            if (shiftAmount > 0){
-                // Clean most significant bits
-                tmp = tmp << (32 - shiftAmount); 
-                tmp = tmp >>> (32 - shiftAmount)
-                // Shift
-                tmp = tmp << shiftAmount;
-                bitIndex += (8 - bitIndex % 8); // Increase bitIndex
-                mostSignificantBit = shiftAmount;
-            }
-            // Shifts bits to the right (adds zeros on the left)
-            // Ending byte (all remaining bits are in this byte)
-            else { 
-                if (bitsPerValue < 8){ // There is a need to clean the most significant bits, as they don't belong to the value
-                    tmp = tmp << (32 - bitsPerValue) + shiftAmount; 
-                    tmp = tmp >>> (32 - bitsPerValue) + shiftAmount; // Unsigned integer
-                }
-                tmp = tmp >>> -shiftAmount; // Unsigned integer
-                bitIndex += mostSignificantBit;
-            }
-
-            value = value | tmp; // Binary addition
-        }
-
-        values[i] = value;
-    }*/
 
     // Test with string values
     var values2ndmethod = [];
     var bitsString = bytes2bits(rawUint8);
     bitsString = bitsString.slice(bitIndex);
-    for (var i = 0; i < numValues * bitsPerValue; i += bitsPerValue) // // TODO TYPE (UINT INT FLOAT)
+    for (var i = 0; i < numValues * bitsPerValue; i += bitsPerValue) //
         values2ndmethod.push(bits2num(bitsString.substr(i, bitsPerValue)));
     
 
@@ -609,6 +611,10 @@ function decodeByte(byteContent, type){
         content = new DataView(byteContent).getFloat32();
     else if (type == 'float64')
         content = new DataView(byteContent).getFloat64();
+    else if (type == 'float128'){
+        console.error("TODO: float128 parsing is not implemented")
+        content = new DataView(byteContent).getFloat64();
+    }
     else
         content = byteContent;
 
@@ -629,8 +635,8 @@ function bytes2bits(bytes)
     }
     return bits;
 }
-// Returns unsigned int // TODO TYPE (UINT INT FLOAT)
-function bits2num(bits, type){
+// Returns unsigned int
+function bits2num(bits){
     let value = 0;
     for (let i = 0; i < bits.length; i++)
         value += parseInt(bits[bits.length - (i+1)]) ? Math.pow(2, i) : 0;
