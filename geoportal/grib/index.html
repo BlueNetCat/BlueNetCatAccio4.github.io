@@ -14,7 +14,8 @@ let gribFiles = [];
 
 //fetch('COSMODE_single_level_elements_PS_2018020500_000.grib2')
 //fetch('COSMODE_single_level_elements_ASWDIR_S_2018011803_006.grib2')
-fetch('gdas.t00z.pgrb2.1p00.f000.grib2')
+//fetch('gdas.t00z.pgrb2.1p00.f000.grib2')
+fetch('winds.grb')
     .then(response => response.arrayBuffer())
     .then(buffer => decodeGRIB2File(buffer))
     .catch(error => console.log(error));
@@ -97,6 +98,10 @@ const parseData = function(decodedGrib){
 
     grid.incI = getContentByInfo(decodedGrib[3],'Di — i direction increment (see Notes 1 and 5)') / 1e6;
     grid.incJ = getContentByInfo(decodedGrib[3],'Dj — j direction increment (see Note 1 and 5)') / 1e6;
+
+    // Check if numPoints corresponds to numLatPoints * numLongPoints
+    if (grid.numPoints != grid.numLatPoints * grid.numLongPoints)
+        console.warn("Section 3. Grid numPoints does not equal to numLatPoints * numLongPoints. numPoints = " + grid.numPoints + " , numLatPoints * numLongPoints = " + grid.numLatPoints * grid.numLongPoints);
 
     data.grid = grid;
     console.log(grid);
@@ -274,6 +279,41 @@ const parseData = function(decodedGrib){
 
         var a  = 0;
     }
+    // Grid point data - IEEE Floating Point Data
+    // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-4.shtml
+    else if(template == '5.4') {
+        // Precision (Floating point type)
+        let dataType = decodedGrib[5][4].contentRef; // GRIB2.tables['5.7'][getContentByInfo(decodedGrib[5], 'Precision (See code Table 5.7)')] 
+
+        // Bitmap
+        let bitmapBuffer = decodedGrib[6][3].content; // A bit for each value, saying if missing or not
+        let bitmap = readValuesFromBuffer(bitmapBuffer, 1, grid.numPoints+2);
+        let count = 0;
+        for (let i = 0; i < bitmap.length; i++){
+            if (bitmap[i] == 1){
+                count++;
+            }
+        }   
+        
+
+        // Read bits
+        let numPoints = getContentByInfo(decodedGrib[5], "Number of data points where one or more values are specified in Section 7 when a bit map is present, total number of data points when a bit map is absent.");
+        if (numPoints !== grid.numPoints)
+            console.warn("Grid points in Section 7: " + numPoints + ", Grid points in Section 5: " + grid.numPoints);
+        
+        // TODO: THIS ONLY READS INTEGERS, NOT FLOAT
+        values = readValuesFromBuffer(rawData, 64, numPoints);//grid.numPoints);
+
+
+        console.log(decodedGrib[5]);
+
+    }
+
+
+
+
+
+
     
     data.values = values;
 
@@ -367,8 +407,8 @@ const unpackComplexPacking = function(decodedGrib, rawData, compression, inPrevI
 
 
 
-// Read values coded into bits on a buffer
-const readValuesFromBuffer = function(arraybuffer, bitsPerValue, numValues, inBitIndex){
+// Read values coded into bits on a buffer (uint)
+const readValuesFromBuffer = function(arraybuffer, bitsPerValue, numValues, inBitIndex){ // TODO TYPE (UINT INT FLOAT)
     let values = [];
     let bitIndex = inBitIndex || 0;
     const rawUint8 = new Uint8Array(arraybuffer);
@@ -434,8 +474,9 @@ const readValuesFromBuffer = function(arraybuffer, bitsPerValue, numValues, inBi
     var values2ndmethod = [];
     var bitsString = bytes2bits(rawUint8);
     bitsString = bitsString.slice(bitIndex);
-    for (var i = 0; i < numValues * bitsPerValue; i += bitsPerValue)
+    for (var i = 0; i < numValues * bitsPerValue; i += bitsPerValue) // // TODO TYPE (UINT INT FLOAT)
         values2ndmethod.push(bits2num(bitsString.substr(i, bitsPerValue)));
+    
 
     //for (var i = 0; i < numValues; i++)
     //    console.log(values[i] - values2ndmethod[i])
@@ -525,32 +566,6 @@ const decodeSection = function(buffer, section){
         // Decode bytes
         let byteContent = buffer.slice(prop.startIndex-1, prop.startIndex-1 + prop.size);
         prop.content = decodeByte(byteContent, prop.type)
-        /*if (byteContent.byteLength == 0)
-            prop.content = null;
-        else if (prop.type === 'String')
-            prop.content = String.fromCharCode.apply(null, new Uint8Array(byteContent));
-        else if (prop.type == 'uint8')
-            prop.content = new DataView(byteContent).getUint8();
-        else if (prop.type == 'uint16')
-            prop.content = new DataView(byteContent).getUint16();
-        else if (prop.type == 'uint32')
-            prop.content = new DataView(byteContent).getUint32();
-        else if (prop.type == 'uint64')
-            prop.content = Number(new DataView(byteContent).getBigUint64());
-
-        else if (prop.type == 'int8')
-            prop.content = new DataView(byteContent).getInt8();
-        else if (prop.type == 'int16')
-            prop.content = new DataView(byteContent).getInt16();
-        else if (prop.type == 'int32')
-            prop.content = new DataView(byteContent).getInt32();
-        else if (prop.type == 'int64')
-            prop.content = Number(new DataView(byteContent).getBigInt64());
-
-        else if (prop.type == 'float32')
-            prop.content = new DataView(byteContent).getFloat32();
-        else
-            prop.content = byteContent;*/
 
         // Decode table content
         if ("table" in prop){
@@ -592,6 +607,8 @@ function decodeByte(byteContent, type){
 
     else if (type == 'float32')
         content = new DataView(byteContent).getFloat32();
+    else if (type == 'float64')
+        content = new DataView(byteContent).getFloat64();
     else
         content = byteContent;
 
@@ -612,8 +629,8 @@ function bytes2bits(bytes)
     }
     return bits;
 }
-// Returns unsigned int
-function bits2num(bits){
+// Returns unsigned int // TODO TYPE (UINT INT FLOAT)
+function bits2num(bits, type){
     let value = 0;
     for (let i = 0; i < bits.length; i++)
         value += parseInt(bits[bits.length - (i+1)]) ? Math.pow(2, i) : 0;
