@@ -76,10 +76,11 @@ Sea water temperature, sea velocity, waves, chlorophyll, salinity, temperature..
 https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_BGC_006_014/INFORMATION
 https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_PHY_006_013/INFORMATION
 
-### [SOCIB] (https://thredds.socib.es/lw4nc2/index-menu.html)
+### [SOCIB](https://thredds.socib.es/lw4nc2/index-menu.html)
 Sea water temperature, waves...
 
 https://thredds.socib.es/thredds/catalog/operational_models/oceanographical/hydrodynamics/model_run_aggregation/wmop/catalog.html?dataset=operational_models/oceanographical/hydrodynamics/model_run_aggregation/wmop/wmop_best.ncd
+
 ### In progress...
 - Perfiladors ARGO (temps real): http://www.physocean.icm.csic.es/vado/argo/argo.geojson, http://www.physocean.icm.csic.es/vado/argo/R3901975.geojson. També es pot trobar info aquí: https://www.ocean-ops.org/board
 - Vaixells de la UTM: http://data.utm.csic.es/rtp/udp/ (XXXPOS)
