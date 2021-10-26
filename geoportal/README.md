@@ -63,6 +63,23 @@ The river data was taken from the Food and Agriculture Organization of the Unite
 ### [Shoreline](data/shoreline_spain.geojson)
 A highly detailed Spanish shoreline can be found in the Instituto Geográfico Nacional (http://www.ign.es/web/ign/portal/ide-area-nodo-ide-ign). Another option is the shoreline provided by NOAA: https://shoreline.noaa.gov/data/datasheets/pgs.html. It has high resolution but it lacks straight lines (the coast looks bumpy sometimes). The shoreline provided by the European Environment Agency (EEA) has lower quality, at least in Spain. Here is the link: https://www.eea.europa.eu/data-and-maps/data/eea-coastline-for-analysis-1/gis-data/europe-coastline-shapefile. Coastline is also provided by EMODNET bathymetry with high resolution (https://www.emodnet-bathymetry.eu/data-products/web-services-and-standards and https://ows.emodnet-bathymetry.eu/wms?request=GetCapabilities&service=WMS).
 
+## WMS Services
+### [EUMETSAT](https://navigator.eumetsat.int/)
+Precipitation, rainfall, dust, fog, natural color, snow, 
+e.g. https://eumetview.eumetsat.int/geoserv/wms?SERVICE=WMS&VERSION=1.3.0&FORMAT=image%2Fpng&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&STYLES=raster&CRS=EPSG%3A3857&LAYERS=msgiodc%3Amsgiodc_mpe&EXCEPTIONS=INIMAGE&REQUEST=GetMap&TIME=2021-10-13T12%3A0%3A00.000Z&BBOX=3757032.810961,6261721.353461,5009377.082211,7514065.624711
+
+Capabilities
+
+
+### [CMEMS](https://resources.marine.copernicus.eu/products)
+Sea water temperature, sea velocity, waves, chlorophyll, salinity, temperature...
+https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_BGC_006_014/INFORMATION
+https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_PHY_006_013/INFORMATION
+
+### [SOCIB] (https://thredds.socib.es/lw4nc2/index-menu.html)
+Sea water temperature, waves...
+
+https://thredds.socib.es/thredds/catalog/operational_models/oceanographical/hydrodynamics/model_run_aggregation/wmop/catalog.html?dataset=operational_models/oceanographical/hydrodynamics/model_run_aggregation/wmop/wmop_best.ncd
 ### In progress...
 - Perfiladors ARGO (temps real): http://www.physocean.icm.csic.es/vado/argo/argo.geojson, http://www.physocean.icm.csic.es/vado/argo/R3901975.geojson. També es pot trobar info aquí: https://www.ocean-ops.org/board
 - Vaixells de la UTM: http://data.utm.csic.es/rtp/udp/ (XXXPOS)
