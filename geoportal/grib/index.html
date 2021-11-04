@@ -39,7 +39,43 @@ const decodeGRIB2File = function(buffer){
     for (let i = 0; i < gribFileBuffers.length; i++){
         gribFiles[i] = new GRIB2(gribFileBuffers[i]);
         decodeGRIB2Buffer(gribFileBuffers[i], gribFiles[i]);
+        paintData(gribFiles[i].data);
     }
+}
+
+
+const paintData = function(data){
+    var canvas = document.createElement("canvas");
+    canvas.width = data.grid.numLongPoints;
+    canvas.height = data.grid.numLatPoints;
+
+    var ctx = canvas.getContext("2d");
+    var imgData = ctx.createImageData(canvas.width, canvas.height);
+
+    var max = data.values[0];
+    var min = data.values[0];
+    for (let i = 1; i< data.values.length; i++){
+        max = Math.max(max, data.values[i]);
+        min = Math.min(min, data.values[i]);
+    }
+
+    for (let i = 0; i < imgData.data.length; i += 4) {
+        let value = data.values[i/4];
+        let alpha = data.values[i/4] === null ? 0 : 255;
+        let normValue = (value - min) / (max - min);
+
+        imgData.data[i + 0] = normValue*255;
+        imgData.data[i + 1] = 0;
+        imgData.data[i + 2] = 0;
+        imgData.data[i + 3] = alpha;
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+
+    //let img = new Image();
+    //img.src = canvas.toDataURL("image/jpeg");
+
+    document.body.append(canvas);
 }
 
 
@@ -70,9 +106,8 @@ const decodeGRIB2Buffer = function(buffer, myGrib){
    
     console.log(myGrib.dataTemplate);
 
-    let data = parseData(myGrib.dataTemplate);
-    console.log(data);
-
+    myGrib.data = parseData(myGrib.dataTemplate);
+    
 }
 
 
@@ -571,7 +606,11 @@ const decodeSection = function(buffer, section){
 
         // Decode table content
         if ("table" in prop){
-            prop.contentRef = GRIB2.tables[prop.table][prop.content];
+            try{
+                prop.contentRef = GRIB2.tables[prop.table][prop.content];
+            } catch (error){
+                console.log(prop.table + " is not defined." + GRIB2.tables[prop.table]);
+            }
         }
 
     }
