@@ -1,90 +1,93 @@
 <template>
   <div id="app-forecast">
-    <div class="accordion position-absolute bottom-0 start-0 end-0 mh-50" id="accordionExample">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingOne">
-          <!--button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne"-->
-          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-            Forecast and Analysis of Mediterranean Sea
-          </button>
-        </h2>
-        <!--div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample"-->
-        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-          <div class="accordion-body">
+
+    <templat v-if="true"><!-- v-if="!mobile"-->
+      <div class="accordion position-absolute bottom-0 start-0 end-0 mh-50" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <!--button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne"-->
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Forecast and Analysis of Mediterranean Sea - {{currentDataInformation}}
+            </button>
+          </h2>
+          <!--div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample"-->
+          <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
 
 
-            <div class="container">
+              <div class="container">
 
 
-              <!-- Feature selection -->
-              <div class="row p-1 align-items-center flex-nowrap">
-                <div class="col text-center">
-                  <div class="btn-group" :key="data.name" :id="data.name" @click.prevent="dataClicked" v-for="data in dataTypes">
-                    <button type="button" class="btn btn-sm btn-outline-dark" :class="[data.active ? 'active border': '']">{{data.name}}</button>
+                <!-- Feature selection -->
+                <div class="row p-1 align-items-center flex-nowrap">
+                  <div class="col text-center">
+                    <div class="btn-group" :key="data.name" :id="data.name" @click.prevent="dataClicked" v-for="data in dataTypes">
+                      <button type="button" class="btn btn-sm btn-outline-dark" :class="[data.active ? 'active border': '']">{{data.name}}</button>
+                    </div>
                   </div>
                 </div>
-              </div>
 
 
 
-              <!-- Data figures -->
-              <div class="row p-1 align-items-end flex-nowrap">
-                <!-- https://github.com/john015/vue-load-image -->
-                <div class="col btn btn-outline-light fig-col" :class="[fig.active ? 'active border border-dark': '']" :key="fig.id" :id="fig.id" @click.prevent="figureClicked" v-for="fig in figureInfo">
-                  
-                  <figure class="figure m-0">
-                    <vue-load-image>
-                      <template v-slot:image>
-                         <img :src="fig.url" class="figure-img img-fluid rounded" :alt="fig.caption">
-                      </template>
-                      <template v-slot:preloader>
-                        <img class="figure-img img-fluid rounded" src="/geoportal/img/image-loader.gif" />
-                      </template>
-                    </vue-load-image>
+                <!-- Data figures -->
+                <div class="row p-1 align-items-end flex-nowrap">
+                  <!-- https://github.com/john015/vue-load-image -->
+                  <div class="col btn btn-outline-light fig-col" :class="[fig.active ? 'active border border-dark': '']" :key="fig.id" :id="fig.id" @click.prevent="figureClicked" v-for="fig in figureInfo">
+                    
+                    <figure class="figure m-0">
+                      <vue-load-image>
+                        <template v-slot:image>
+                          <img :src="fig.url" class="figure-img img-fluid rounded" :alt="fig.caption">
+                        </template>
+                        <template v-slot:preloader>
+                          <img class="figure-img img-fluid rounded" src="/geoportal/img/image-loader.gif" />
+                        </template>
+                      </vue-load-image>
 
-                    <figcaption class="figure-caption border">{{fig.caption}}  <small class="text-end">({{fig.subcaption}})</small></figcaption>
-                  </figure>
+                      <figcaption class="figure-caption border">{{fig.caption}}  <small class="text-end">({{fig.subcaption}})</small></figcaption>
+                    </figure>
+
+                  </div>
+
 
                 </div>
 
-
-              </div>
-
-              <!-- Time scale selection -->
-              <div class="row p-1 align-items-center flex-nowrap">
-                <div class="col text-center">
-                  <div class="btn-group" role="group" :key="timeScale.id" :id="timeScale.id" @click.prevent="timeScaleClicked" v-for="timeScale in getAvailableTimeScales">
-                    <button v-if="timeScale.available" type="button" class="btn btn-sm btn-outline-dark" :class="[timeScale.active ? 'active border': '']">{{timeScale.name}}</button>
+                <!-- Time scale selection -->
+                <div class="row p-1 align-items-center flex-nowrap">
+                  <div class="col text-center">
+                    <div class="btn-group" role="group" :key="timeScale.id" :id="timeScale.id" @click.prevent="timeScaleClicked" v-for="timeScale in getAvailableTimeScales">
+                      <button v-if="timeScale.available" type="button" class="btn btn-sm btn-outline-dark" :class="[timeScale.active ? 'active border': '']">{{timeScale.name}}</button>
+                    </div>
                   </div>
                 </div>
-              </div>
 
 
-              <!-- Source selection -->
-              <div class="row p-2 align-items-center flex-nowrap">
-                <div class="col text-center">
-                  <div class="btn-group" role="group" aria-label="Source selection" :key="source.id" :id="source.id" @click.prevent="sourceClicked" v-for="source in sources">
-                    <button type="button" class="btn btn-sm btn-outline-dark" :class="[source.active ? 'active border': '']">{{source.id}}</button>
+                <!-- Source selection -->
+                <div class="row p-2 align-items-center flex-nowrap">
+                  <div class="col text-center">
+                    <div class="btn-group" role="group" aria-label="Source selection" :key="source.id" :id="source.id" @click.prevent="sourceClicked" v-for="source in sources">
+                      <button type="button" class="btn btn-sm btn-outline-dark" :class="[source.active ? 'active border': '']">{{source.id}}</button>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <!-- Attribution -->
-              <div class="row">
-                <div class="col text-center">
-                  <div :key="source.id" v-for="source in sources">
-                    <small v-if="source.active">Attribution: {{source.attribution}}<small>
+                <!-- Attribution -->
+                <div class="row">
+                  <div class="col text-center">
+                    <div :key="source.id" v-for="source in sources">
+                      <small v-if="source.active">Attribution: {{source.attribution}}<small>
+                    </div>
                   </div>
                 </div>
+                
+
               </div>
-              
 
             </div>
-
           </div>
         </div>
       </div>
-    </div>
+    </template>
 
   </div>
 </template>
@@ -98,6 +101,8 @@ import VueLoadImage from "VueLoadImage.vue";
 export default {
   name: 'app-forecast',
   created (){
+    window.addEventListener('resize', this.checkScreenRatio);
+    this.checkScreenRatio();
     this.updateWMSURL();
   },
   mounted (){
@@ -107,6 +112,8 @@ export default {
   },
   data () {
     return {
+      currentDataInformation: "",
+      mobile: false,
       currentDate: new Date(),
       days: [ -2, -1, 0, +1, +2],
       selectedDate: [false, false, true, false, false],
@@ -271,6 +278,16 @@ export default {
    }
   },
   methods: {
+    // HTML
+    // Responsive html
+    checkScreenRatio: function(){
+      let ratio = window.innerHeight / window.innerWidth;
+      if (ratio < 1)
+        this.mobile = true;
+      else
+        this.mobile = false;
+    },
+
     // Figure clicked
     figureClicked: function (event) {
       // Deselect date in GUI
@@ -320,6 +337,8 @@ export default {
 
 
 
+
+    // Javascript functions
     // Generate WMS url
     updateWMSURL: function(){
 
@@ -331,10 +350,10 @@ export default {
       tmpURLData = tmpURLData.replace('{DOMAIN}', activeSource.domainURL);
       
       // Data type
-      let activedataType; // = this.dataTypes.find(el => return el.active == true)
-      Object.keys(this.dataTypes).forEach(key => { if (this.dataTypes[key].active) activedataType = this.dataTypes[key] }); // Returns active data type
+      let activeDataType; // = this.dataTypes.find(el => return el.active == true)
+      Object.keys(this.dataTypes).forEach(key => { if (this.dataTypes[key].active) activeDataType = this.dataTypes[key] }); // Returns active data type
       // Show/Hide available time scales
-      Object.keys(this.timeScales).forEach(key => this.timeScales[key].available = activedataType.timeScales.includes(key)); // Show/hide time scales in GUI
+      Object.keys(this.timeScales).forEach(key => this.timeScales[key].available = activeDataType.timeScales.includes(key)); // Show/hide time scales in GUI
 
 
       // TODO HERE: define this.timeScales.available
@@ -349,11 +368,11 @@ export default {
       Object.keys(this.timeScales).forEach(key => { if (this.timeScales[key].active) activeTimeScale = this.timeScales[key] }); // Returns active data type
 
 
-      tmpURLData = tmpURLData.replace('{URLdataTypes}', activedataType.url + '-' + activeTimeScale.url);
-      tmpURLData = tmpURLData.replace('{LAYERNAME}', activedataType.layerName);
-      tmpURLData = tmpURLData.replace('{MINRANGE}', activedataType.range[0]);
-      tmpURLData = tmpURLData.replace('{MAXRANGE}', activedataType.range[1]);
-      tmpURLData = tmpURLData.replace('{STYLE}', activedataType.style);
+      tmpURLData = tmpURLData.replace('{URLdataTypes}', activeDataType.url + '-' + activeTimeScale.url);
+      tmpURLData = tmpURLData.replace('{LAYERNAME}', activeDataType.layerName);
+      tmpURLData = tmpURLData.replace('{MINRANGE}', activeDataType.range[0]);
+      tmpURLData = tmpURLData.replace('{MAXRANGE}', activeDataType.range[1]);
+      tmpURLData = tmpURLData.replace('{STYLE}', activeDataType.style);
 
       
       // Time intervals
@@ -364,6 +383,7 @@ export default {
         let tmpURL = tmpURLData;
         let caption = '';
         let subcaption = '';
+        let dateSummary = '';
 
         switch (activeTimeScale.url){
           case 'qm':
@@ -372,16 +392,18 @@ export default {
             dd.setMinutes(dd.getMinutes() + activeTimeScale.interval[i]);
             caption = dd.getHours() + 'h:' + dd.getMinutes() + 'min';
             subcaption = activeTimeScale.interval[i] + 'min';
+            dateSummary = caption + " " + subcaption;
             break;
           case 'h':
             dd.setHours(dd.getHours() + activeTimeScale.interval[i]);
             // Depends on data service. Again, check GetCapabilities?
-            if (activedataType.name == "Wave significant height" || activedataType.name == "Chlorophyll") // https://nrt.cmems-du.eu/thredds/wms/med-hcmr-wav-an-fc-h?request=GetCapabilities&service=WMS
+            if (activeDataType.name == "Wave significant height" || activeDataType.name == "Chlorophyll") // https://nrt.cmems-du.eu/thredds/wms/med-hcmr-wav-an-fc-h?request=GetCapabilities&service=WMS
               dd.setMinutes(0)
             else
               dd.setMinutes(30); // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-mld-an-fc-hts?request=GetCapabilities&service=WMS
             caption =  this.weekDays[dd.getDay()] + " " + dd.getDate() + " at " + dd.getHours() + ':00';
             subcaption = activeTimeScale.interval[i] + 'h';
+            dateSummary = caption +  "h, hourly mean";
             break;
           case 'd':
             dd.setDate(dd.getDate() + activeTimeScale.interval[i]);
@@ -389,6 +411,7 @@ export default {
             dd.setMinutes(0);
             caption = this.weekDays[dd.getDay()] + " " + dd.getDate();
             subcaption = 24*activeTimeScale.interval[i] + 'h';
+            dateSummary = caption + " " + this.monthNames[dd.getMonth()] + ' ' + dd.getUTCFullYear() +", daily mean";
             break;
           case 'm':
             dd.setMonth(dd.getMonth() + activeTimeScale.interval[i])
@@ -399,6 +422,7 @@ export default {
             dd.setMinutes(0);
             caption = this.monthNames[dd.getMonth()] + ' ' + dd.getUTCFullYear();
             subcaption = 'Monthly average';
+            dateSummary = caption + " " + subcaption;
             break;
         }
         // URL
@@ -416,19 +440,25 @@ export default {
           'active': this.selectedDate[i]//activeTimeScale.interval[i] == 0 ? true : false,
         }
 
-        // Openlayers WMS source information
-        if (this.selectedDate[i]){ // Only for active source
+
+
+        // Active source information
+        if (this.selectedDate[i]){
+
+          this.currentDataInformation = activeDataType.name + ", " + dateSummary + " (" + activeSource.id + ")";
+
+          // Openlayers WMS source information
           // Fix hour difference (e.g. GMT+2) for ISOString function
           dd.setHours(dd.getHours() - dd.getTimezoneOffset()/60);
           // Layer source
           this.layerInfoWMS = {
-            url: activeSource.domainURL + "/" + activedataType.url + '-' + activeTimeScale.url,
+            url: activeSource.domainURL + "/" + activeDataType.url + '-' + activeTimeScale.url,
             attributions: activeSource.attribution,
             params: {
-              'LAYERS': activedataType.layerName,
+              'LAYERS': activeDataType.layerName,
               'TIME': dd.toISOString(),
-              'COLORSCALERANGE': activedataType.range,
-              'STYLES': activedataType.style.replace('%2F', '/'),
+              'COLORSCALERANGE': activeDataType.range,
+              'STYLES': activeDataType.style.replace('%2F', '/'),
               'TRANSPARENT': true
             },
             cacheSize: 500,
@@ -446,68 +476,7 @@ export default {
       return this.layerInfoWMS;
     }
 
-    // Get figure WMS URL from date intervals
-    /*getFigureInfo: function(activeTimeScale, baseURL){
-      
-      let figureInfo = {};
-
-      for (let i = 0; i < activeTimeScale.interval.length; i++){
-        let dd = new Date(this.currentDate);
-        let tmpURL = baseURL;
-        let caption = '';
-        let subcaption = '';
-
-        switch (activeTimeScale.url){
-          case 'qm':
-            // Set minimum time interval to 15 min
-            dd.setMinutes(Math.round(dd.getMinutes()/15)*15); // Rounds to closer 15min interval
-            dd.setMinutes(dd.getMinutes() + activeTimeScale.interval[i]);
-            caption = dd.getHours() + 'h:' + dd.getMinutes() + 'min';
-            subcaption = activeTimeScale.interval[i] + 'min';
-            break;
-          case 'h':
-            dd.setHours(dd.getHours() + activeTimeScale.interval[i]);
-            dd.setMinutes(0);
-            caption = dd.getHours() + 'h';
-            subcaption = activeTimeScale.interval[i] + 'h';
-            break;
-          case 'd':
-            dd.setDate(dd.getDate() + activeTimeScale.interval[i]);
-            dd.setHours(12);
-            dd.setMinutes(0);
-            caption = this.weekDays[dd.getDay()] + " " + dd.getDate();
-            subcaption = 24*activeTimeScale.interval[i] + 'h';
-            break;
-          case 'm':
-            dd.setMonth(dd.getMonth() + activeTimeScale.interval[i])
-            dd.setDate(16); // or 15. check here: https://view.marine.copernicus.eu/ViewService/?record_id=66fb61fa-c911-4f7e-aec1-959627bbf2b3
-            dd.setHours(0);
-            dd.setMinutes(0);
-            caption = this.monthNames[dd.getMonth()] + ' ' + dd.getUTCFullYear();
-            subcaption = 'Monthly average';
-            break;
-        }
-        // URL
-        tmpURL = tmpURL.replace("{MONTH}", dd.getMonth().toString().padStart(2,"0"));
-        tmpURL = tmpURL.replace("{DAY}", dd.getDate().toString().padStart(2,"0"));
-        tmpURL = tmpURL.replace("{HOURS}", dd.getHours().toString().padStart(2,"0"));
-        tmpURL = tmpURL.replace("{MINUTES}", dd.getMinutes().toString().padStart(2,"0"));
-
-        // Output
-        figureInfo[i] = {
-          'id': i,
-          'caption': caption,
-          'subcaption': subcaption,
-          'url': tmpURL,
-          'active': this.selectedDate[i]//activeTimeScale.interval[i] == 0 ? true : false,
-        }
-      }
-
-      return figureInfo;
-    },*/
-
     
-
 
   },
   components: {
@@ -552,6 +521,7 @@ export default {
 
 .fig-col.active {
   background-color: rgba(255, 255, 255, 0.6);
+  transform: 0.5s ease all;
 }
 
 .fig-col:not(active) {

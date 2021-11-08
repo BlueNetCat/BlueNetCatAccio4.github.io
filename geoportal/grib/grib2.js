@@ -679,7 +679,80 @@ class GRIB2 {
             // 1.  Large anomaly index is defined as {(number of members whose anomaly is higher than 0.5*SD) - (number of members whose anomaly is lower than -0.5*SD)}/(number of members) at each grid point.  SD is the observed climatological standard deviation. 
             // 2.  It should be noted that the reference for 'minimum of all ensemble members' and 'maximum of all ensemble members' is the set of ensemble members and not a time interval and should not be confused with the maximum and minimum described by Product Definition Template 4.8.
         },
-        // TODO 4.8 to 4.244
+        // Clustering Method
+        '4.8': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-8.shtml
+            0: 'Anomoly Correlation',
+            1: 'Root Mean Square',
+            //2-191: 'Reserved',
+            //192-254: 'Reserved for Local Use',
+            255: 'Missing'
+        },
+        // Probability Type
+        '4.9': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-9.shtml
+            0: 'Probability of event below lower limit',
+            1: 'Probability of event above upper limit',
+            2: 'Probability of event between upper and lower limits (the range includes lower limit but no the upper limit)',
+            3: 'Probability of event above lower limit',
+            4: 'Probability of event below upper limit',
+            5: 'Probability of event equal to lower limit',
+            6: 'Probability of event in above normal category (see Notes 1 and 2)',
+            7: 'Probability of event in near normal category (see Notes 1 and 2)',
+            8: 'Probability of event in below normal category (see Notes 1 and 2)',
+            //9-191: 'Reserved',
+            //192-254: 'Reserved for Local Use',
+            255: 'Missing'
+        },
+        // Type of Statistical Processing
+        '4.10': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table4-10.shtml
+            0: 'Average',
+            1: 'Accumulation (see Note 1)',
+            2: 'Maximum',
+            3: 'Minimum',
+            4: 'Difference (value at the end of the time range minus value at the beginning)',
+            5: 'Root Mean Square',
+            6: 'Standard Deviation',
+            7: 'Covariance (temporal variance) (see Note 2)',
+            8: 'Difference ( value at the beginning of the time range minus value at the end)',
+            9: 'Ratio (see Note 3)',
+            10: 'Standardized Anomaly',
+            11: 'Summation',
+            12: 'Confidence Index (see Note 4)     Validation',
+            13: 'Quality Indicator (see Note 5)       Validation',
+            //14-191: 'Reserved',
+            192: 'Climatological Mean Value: multiple year averages of quantities which are themselves means over some period of time (P2) less than a year. The reference time (R) indicates the date and time of the start of a period of time, given by R to R + P2, over which a mean is formed; N indicates the number of such period-means that are averaged together to form the climatological value, assuming that the N period-mean fields are separated by one year. The reference time indicates the start of the N-year climatology. N is given in octets 22-23 of the PDS.\nIf P1 = 0 then the data averaged in the basic interval P2 are assumed to be continuous, i.e., all available data are simply averaged together.\n\nIf P1 = 1 (the units of time - octet 18, code table 4 - are not relevant here) then the data averaged together in the basic interval P2 are valid only at the time (hour, minute) given in the reference time, for all the days included in the P2 period. The units of P2 are given by the contents of octet 18 and Table 4.',
+            //192-254: 'Reserved for Local Use',
+            193: 'Average of N forecasts (or initialized analyses); each product has forecast period of P1 (P1=0 for initialized analyses); products have reference times at intervals of P2, beginning at the given reference time.',
+            194: 'Average of N uninitialized analyses, starting at reference time, at intervals of P2.',
+            195: 'Average of forecast accumulations. P1 = start of accumulation period. P2 = end of accumulation period. Reference time is the start time of the first forecast, other forecasts at 24-hour intervals. Number in Ave = number of forecasts used.',
+            196: 'Average of successive forecast accumulations. P1 = start of accumulation period. P2 = end of accumulation period. Reference time is the start time of the first forecast, other forecasts at (P2 - P1) intervals. Number in Ave = number of forecasts used',
+            197: 'Average of forecast averages. P1 = start of averaging period. P2 = end of averaging period. Reference time is the start time of the first forecast, other forecasts at 24-hour intervals. Number in Ave = number of forecast used',
+            198: 'Average of successive forecast averages. P1 = start of averaging period. P2 = end of averaging period. Reference time is the start time of the first forecast, other forecasts at (P2 - P1) intervals. Number in Ave = number of forecasts used',
+            199: 'Climatological Average of N analyses, each a year apart, starting from initial time R and for the period from R+P1 to R+P2.',
+            200: 'Climatological Average of N forecasts, each a year apart, starting from initial time R and for the period from R+P1 to R+P2.',
+            201: 'Climatological Root Mean Square difference between N forecasts and their verifying analyses, each a year apart, starting with initial time R and for the period from R+P1 to R+P2.',
+            202: 'Climatological Standard Deviation of N forecasts from the mean of the same N forecasts, for forecasts one year apart. The first forecast starts wtih initial time R and is for the period from R+P1 to R+P2.',
+            203: 'Climatological Standard Deviation of N analyses from the mean of the same N analyses, for analyses one year apart. The first analyses is valid for  period R+P1 to R+P2.',
+            204: 'Average of forecast accumulations. P1 = start of accumulation period. P2 = end of accumulation period. Reference time is the start time of the first forecast, other forecasts at 6-hour intervals. Number in Ave = number of forecast used',
+            205: 'Average of forecast averages. P1 = start of averaging period. P2 = end of averaging period. Reference time is the start time of the first forecast, other forecasts at 6-hour intervals. Number in Ave = number of forecast used',
+            206: 'Average of forecast accumulations. P1 = start of accumulation period. P2 = end of accumulation period. Reference time is the start time of the first forecast, other forecasts at 12-hour intervals. Number in Ave = number of forecast used',
+            207: 'Average of forecast averages. P1 = start of averaging period. P2 = end of averaging period. Reference time is the start time of the first forecast, other forecasts at 12-hour intervals. Number in Ave = number of forecast used',
+            208: 'Variance',
+            209: 'Confficient',
+            255: 'Missing'
+        },
+        '4.11' : {
+            0: 'Reserved',
+            1: 'Successive times processed have same forecast time, start time of forecast is incremented.',
+            2: 'Successive times processed have same start time of forecast, forecast time is incremented.',
+            3: 'Successive times processed have start time of forecast incremented and forecast time decremented so that valid time remains constant.',
+            4: 'Successive times processed have start time of forecast decremented and forecast time incremented so that valid time remains constant.',
+            5: 'Floating subinterval of time between forecast time and end of overall time interval.(see Note 1)',
+            //6-191: 'Reserved',
+            //192-254: 'Reserved for Local Use',
+            255: 'Missing'
+        },
+        // TODO 4.11 to 4.244
+
         // Data Representation Template Number
         '5.0' : { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table5-0.shtml
             0: 'Grid Point Data - Simple Packing (see Template 5.0)',
@@ -794,6 +867,151 @@ class GRIB2 {
             //52-49151: 'Reserved',
             //49152-65534: 'Reserved for Local Use',
             65535: 'Missing',
+        },
+        // Generating Process or Model from Originating Center 7 (US-NWS, NCEP)
+        'ON388 Table A': { // https://www.nco.ncep.noaa.gov/pmb/docs/on388/tablea.html
+            //00-01: 'Reserved',
+            02: 'Ultra Violet Index Model',
+            03: 'NCEP/ARL Transport and Dispersion Model',
+            04: 'NCEP/ARL Smoke Model',
+            05: 'Satellite Derived Precipitation and temperatures, from IR (See PDS Octet 41 ... for specific satellite ID)',
+            06: 'NCEP/ARL Dust Model',
+            //07-09: 'Reserved',
+            10: 'Global Wind-Wave Forecast Model',
+            11: 'Global Multi-Grid Wave Model (Static Grids)',
+            12: 'Probabilistic Storm Surge (P-Surge)',
+            13: 'Hurricane Multi-Grid Wave Model',
+            14: 'Extra-tropical Storm Surge Atlantic Domain',
+            15: 'Nearshore Wave Prediction System (NWPS)',
+            16: 'Extra-Tropical Storm Surge (ETSS)',
+            17: 'Extra-tropical Storm Surge Pacific Domain',
+            18: 'Probabilistic Extra-Tropical Storm Surge (P-ETSS)',
+            19: 'Limited-area Fine Mesh (LFM) analysis',
+            20: 'Extra-tropical Storm Surge Micronesia Domain',
+            //21-24: 'Reserved',
+            25: 'Snow Cover Analysis',
+            //26-29: 'Reserved',
+            30: 'Forecaster generated field',
+            31: 'Value added post processed field',
+            //32-41: 'Reserved',
+            42: 'Global Optimum Interpolation Analysis (GOI) from GFS model',
+            43: 'Global Optimum Interpolation Analysis (GOI) from \'Final\' run ',
+            44: 'Sea Surface Temperature Analysis',
+            45: 'Coastal Ocean Circulation Model',
+            46: 'HYCOM - Global',
+            47: 'HYCOM - North Pacific basin',
+            48: 'HYCOM - North Atlantic basin',
+            49: 'Ozone Analysis from TIROS Observations ',
+            //50-51: 'Reserved',
+            52: 'Ozone Analysis from Nimbus 7 Observations ',
+            53: 'LFM-Fourth Order Forecast Model',
+            //54-63: 'Reserved',
+            64: 'Regional Optimum Interpolation Analysis (ROI)',
+            //65-67: 'Reserved',
+            68: '80 wave triangular, 18-layer Spectral model from GFS model',
+            69: '80 wave triangular, 18 layer Spectral model from \'Medium Range Forecast\' run',
+            70: 'Quasi-Lagrangian Hurricane Model (QLM)',
+            71: 'Hurricane Weather Research and Forecasting (HWRF) Model',
+            72: 'Hurricane Non-Hydrostatic Multiscale Model on the B Grid (HNMMB)',
+            73: 'Fog Forecast model - Ocean Prod. Center',
+            74: 'Gulf of Mexico Wind/Wave',
+            75: 'Gulf of Alaska Wind/Wave',
+            76: 'Bias corrected Medium Range Forecast',
+            77: '126 wave triangular, 28 layer Spectral model from GFS model',
+            78: '126 wave triangular, 28 layer Spectral model from \'Medium Range Forecast\' run',
+            79: 'Backup from the previous run',
+            80: '62 wave triangular, 28 layer Spectral model from \'Medium Range Forecast\' run',
+            81: 'Analysis from GFS (Global Forecast System)',
+            82: 'Analysis from GDAS (Global Data Assimilation System)',
+            83: 'High Resolution Rapid Refresh (HRRR)',
+            84: 'MESO NAM Model (currently 12 km)',
+            85: 'Real Time Ocean Forecast System (RTOFS)',
+            86: 'Early Hurricane Wind Speed Probability Model',
+            87: 'CAC Ensemble Forecasts from Spectral (ENSMB)',
+            88: 'NOAA Wave Watch III (NWW3) Ocean Wave Model',
+            89: 'Non-hydrostatic Meso Model (NMM) (Currently 8 km)',
+            90: '62 wave triangular, 28 layer spectral model extension of the \'Medium Range Forecast\' run',
+            91: '62 wave triangular, 28 layer spectral model extension of the GFS model',
+            92: '62 wave triangular, 28 layer spectral model run from the \'Medium Range Forecast\' final analysis',
+            93: '62 wave triangular, 28 layer spectral model run from the T62 GDAS analysis of the \'Medium Range Forecast\' run',
+            94: 'T170/L42 Global Spectral Model from MRF run',
+            95: 'T126/L42 Global Spectral Model from MRF run',
+            96: 'Global Forecast System ModelT1534 - Forecast hours 00-384\nT574 - Forecast hours 00-192\nT190 - Forecast hours 204-384\n',
+            97: 'Reserved',
+            98: 'Climate Forecast System Model -- Atmospheric model (GFS) coupled to a multi level ocean model .   Currently GFS spectral model at T62, 64 levels coupled to 40 level MOM3 ocean model.',
+            99: 'Miscellaneous Test ID',
+            100: 'Miscellaneous Test ID',
+            101: 'Conventional Observation Re-Analysis (CORE)',
+            //102-103: 'Reserved',
+            104: 'National Blend GRIB',
+            105: 'Rapid Refresh (RAP)',
+            106: 'Reserved',
+            107: 'Global Ensemble Forecast System (GEFS)',
+            108: 'LAMP',
+            109: 'RTMA (Real Time Mesoscale Analysis)',
+            110: 'NAM Model - 15km version',
+            111: 'NAM model, generic resolution (Used in SREF processing)',
+            112: 'WRF-NMM model, generic resolution (Used in various runs) NMM=Nondydrostatic Mesoscale Model (NCEP)',
+            113: 'Products from NCEP SREF processing',
+            114: 'NAEFS Products from joined NCEP, CMC global ensembles',
+            115: 'Downscaled GFS from NAM eXtension',
+            116: 'WRF-EM model, generic resolution (Used in various runs) EM - Eulerian Mass-core (NCAR - aka Advanced Research WRF)',
+            117: 'NEMS GFS Aerosol Component',
+            118: 'URMA (UnRestricted Mesoscale Analysis)',
+            119: 'WAM (Whole Atmosphere Model)',
+            120: 'Ice Concentration Analysis',
+            121: 'Western North Atlantic Regional Wave Model',
+            122: 'Alaska Waters Regional Wave Model',
+            123: 'North Atlantic Hurricane Wave Model',
+            124: 'Eastern North Pacific Regional Wave Model',
+            125: 'North Pacific Hurricane Wave Model',
+            126: 'Sea Ice Forecast Model',
+            127: 'Lake Ice Forecast Model',
+            128: 'Global Ocean Forecast Model',
+            129: 'Global Ocean Data Analysis System (GODAS)',
+            130: 'Merge of fields from the RUC, NAM, and Spectral Model ',
+            131: 'Great Lakes Wave Model',
+            132: 'High Resolution Ensemble Forecast (HREF)',
+            133: 'Great Lakes Short Range Wave Model',
+            134: 'Rapid Refresh Forecast System (RRFS)',
+            135: 'Hurricane Analysis and Forecast System (HAFS)',
+            //135-139: 'Reserved',
+            140: 'North American Regional Reanalysis (NARR)',
+            141: 'Land Data Assimilation and Forecast System',
+            //142-149: 'Reserved',
+            150: 'NWS River Forecast System (NWSRFS)',
+            151: 'NWS Flash Flood Guidance System (NWSFFGS)',
+            152: 'WSR-88D Stage II Precipitation Analysis',
+            153: 'WSR-88D Stage III Precipitation Analysis',
+            //154-179: 'Reserved',
+            180: 'Quantitative Precipitation Forecast generated by NCEP',
+            181: 'River Forecast Center Quantitative Precipitation Forecast mosaic generated by NCEP',
+            182: 'River Forecast Center Quantitative Precipitation estimate mosaic generated by NCEP',
+            183: 'NDFD product generated by NCEP/HPC',
+            184: 'Climatological Calibrated Precipitation Analysis - CCPA',
+            //185-189: 'Reserved',
+            190: 'National Convective Weather Diagnostic generated by NCEP/AWC',
+            191: 'Current Icing Potential automated product genterated by NCEP/AWC',
+            192: 'Analysis product from NCEP/AWC',
+            193: 'Forecast product from NCEP/AWC',
+            194: 'Reserved',
+            195: 'Climate Data Assimilation System 2 (CDAS2)',
+            196: 'Climate Data Assimilation System 2 (CDAS2) - used for regeneration runs',
+            197: 'Climate Data Assimilation System (CDAS)',
+            198: 'Climate Data Assimilation System (CDAS) - used for regeneration runs',
+            199: 'Climate Forecast System Reanalysis (CFSR) -- Atmospheric model (GFS) coupled to a multi level ocean, land and seaice model.   Currently GFS spectral model at T382, 64 levels coupled to 40 level MOM4 ocean model.',
+            200: 'CPC Manual Forecast Product',
+            201: 'CPC Automated Product',
+            //202-209: 'Reserved',
+            210: 'EPA Air Quality Forecast - Currently North East US domain',
+            211: 'EPA Air Quality Forecast - Currently Eastern US domain',
+            //212-214: 'Reserved',
+            215: 'SPC Manual Forecast Product',
+            //216-219: 'Reserved',
+            220: 'NCEP/OPC automated product',
+            //221-230: 'Reserved for WPC products',
+            //231-254: 'Reserved',
+            255: 'Missing'
         }
     }
 
@@ -1938,7 +2156,7 @@ class GRIB2 {
                 startIndex: 10,
                 size: 1,
                 content: null,
-                codeTableRef: '4.1', // TODO: code tables and parse codeTableRef (for all this section)
+                table: '4.1', // TODO: code tables and parse codeTableRef (for all this section)
                 type: 'uint8',
                 info: 'Parameter category (see Code table 4.1)'
             },
@@ -1946,7 +2164,7 @@ class GRIB2 {
                 startIndex: 11,
                 size: 1,
                 content: null,
-                codeTableRef: '4.1', 
+                table: '4.1', 
                 type: 'uint8',
                 info: 'Parameter number (see Code table 4.2)'
             },
@@ -1954,7 +2172,7 @@ class GRIB2 {
                 startIndex: 12,
                 size: 1,
                 content: null,
-                codeTableRef: '4.3', 
+                table: '4.3', 
                 type: 'uint8',
                 info: 'Type of generating process (see Code table 4.3)'
             },
@@ -1962,7 +2180,7 @@ class GRIB2 {
                 startIndex: 13,
                 size: 1,
                 content: null,
-                codeTableRef: '4.1', 
+                table: '4.1', 
                 type: 'uint8',
                 info: 'Background generating process identifier (defined by originating centre)'
             },
@@ -1970,7 +2188,7 @@ class GRIB2 {
                 startIndex: 14,
                 size: 1,
                 content: null,
-                codeTableRef: 'ON388 Table A',
+                table: 'ON388 Table A',
                 type: 'uint8',
                 info: 'Analysis or forecast generating process identified (see Code ON388 Table A)'
             },
@@ -1992,7 +2210,7 @@ class GRIB2 {
                 startIndex: 18,
                 size: 1,
                 content: null,
-                codeTableRef: '4.4', 
+                table: '4.4', 
                 type: 'uint8',
                 info: 'Indicator of unit of time range (see Code table 4.4)'
             },
@@ -2007,7 +2225,7 @@ class GRIB2 {
                 startIndex: 23,
                 size: 1,
                 content: null,
-                codeTableRef: '4.5', 
+                table: '4.5', 
                 type: 'uint8',
                 info: 'Type of first fixed surface (see Code table 4.5)'
             },
@@ -2029,7 +2247,7 @@ class GRIB2 {
                 startIndex: 29,
                 size: 1,
                 content: null,
-                codeTableRef: '4.5',
+                table: '4.5',
                 type: 'uint8',
                 info: 'Type of second fixed surfaced (see Code table 4.5)'
             },
@@ -2077,9 +2295,238 @@ class GRIB2 {
         '4.7': [ // 
 
         ],
-        // 
-        '4.8': [ // 
-
+        // Average, Accumulation and/or Extreme values or other Statistically- processed values at a horizontal level or in a horizontal layer in a continuous or non - continuous time interval
+        '4.8': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp4-8.shtml
+            {
+                info: 'Parameter category (see Code Table 4.1)',
+                startIndex: 10,
+                table: '4.1',
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Parameter number (see Code Table 4.2)',
+                startIndex: 11,
+                table: '4.2',
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Type of generating process (see Code Table 4.3)',
+                startIndex: 12,
+                table: '4.3',
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Background generating process identifier (defined by originating centre)',
+                startIndex: 13,
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Analysis or forecast generating process identified (see Code ON388 Table A)',
+                startIndex: 14,
+                table: 'ON388 Table A',
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Hours after reference time data cutoff (see Note 1)',
+                startIndex: 15,
+                size: 2,
+                type: 'uint16',
+                content: null
+            },
+            {
+                info: 'Minutes after reference time data cutoff',
+                startIndex: 17,
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Indicator of unit of time range (see Code Table 4.4)',
+                startIndex: 18,
+                table: '4.4',
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Forecast time in units defined by octet 18 (see Note 2)',
+                startIndex: 19,
+                size: 4,
+                type: 'uint32',
+                content: null
+            },
+            {
+                info: 'Type of first fixed surface (see Code Table 4.5)',
+                startIndex: 23,
+                table: '4.5',
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Scale factor of first fixed surface',
+                startIndex: 24,
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Scaled value of first fixed surface',
+                startIndex: 25,
+                size: 4,
+                type: 'uint32',
+                content: null
+            },
+            {
+                info: 'Type of second fixed surfaced (see Code Table 4.5)',
+                startIndex: 29,
+                table: '4.5',
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Scale factor of second fixed surface',
+                startIndex: 30,
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Scaled value of second fixed surfaces',
+                startIndex: 31,
+                size: 4,
+                type: 'uint32',
+                content: null
+            },
+            {
+                info: 'Year  ― Time of end of overall time interval',
+                startIndex: 35,
+                size: 2,
+                type: 'uint16',
+                content: null
+            },
+            {
+                info: 'Month  ― Time of end of overall time interval',
+                startIndex: 37,
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Day  ― Time of end of overall time interval',
+                startIndex: 38,
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Hour  ― Time of end of overall time interval',
+                startIndex: 39,
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Minute  ― Time of end of overall time interval',
+                startIndex: 40,
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Second  ― Time of end of overall time interval',
+                startIndex: 41,
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'n ― number of time ranges specifications describing the time intervals used to calculate the statistically-processed field',
+                startIndex: 42,
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Total number of data values missing in statistical process',
+                startIndex: 43,
+                size: 4,
+                type: 'uint32',
+                content: null
+            },
+            // 47 - 58 Specification of the outermost (or only) time range over which statistical processing is done
+            {
+                info: 'Statistical process used to calculate the processed field from the field at each time increment during the time range (see Code Table 4.10)',
+                startIndex: 47,
+                table: '4.10',
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Type of time increment between successive fields used in the statistical processing (see Code Table 4.11)',
+                startIndex: 48,
+                table: '4.11',
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Indicator of unit of time for time range over which statistical processing is done (see Code Table 4.4)',
+                startIndex: 49,
+                table: '4.4',
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Length of the time range over which statistical processing is done, in units defined by the previous octet',
+                startIndex: 50,
+                size: 4,
+                type: 'uint32',
+                content: null
+            },
+            {
+                info: 'Indicator of unit of time for the increment between the successive fields used (see Code Table 4.4)',
+                startIndex: 54,
+                table: '4.4',
+                size: 1,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Time increment between successive fields, in units defined by the previous octet (see Notes 3 and 4) ',
+                startIndex: 55,
+                size: 4,
+                type: 'uint32',
+                content: null
+            },
+            // 59 - nn These octets are included only if n>1, where nn = 46 + 12 x n
+            {
+                info: 'As octets 47 to 58, next innermost step of processing',
+                startIndex: 59,
+                size: 12,
+                type: 'uint8',
+                content: null
+            },
+            {
+                info: 'Additional time range specifications, included in accordance with the value of n. Contents as octets 47 to 58, repeated as necessary',
+                startIndex: 71,
+                size: 'end',
+                type: 'uint8',
+                content: null
+            }
         ],
         // 
         '4.9': [ // 
@@ -3291,4 +3738,39 @@ for (var i = 1; i< el.children.length; i++){
     }
 }
 empty
+
+var jsonArray = [];
+var keys = Object.keys(empty);
+keys.sort((a, b) => a.split("-")[0] - b.split("-")[0])
+for (var i = 0; i < keys.length; i++){
+    var json = {};
+    var index = keys[i];
+    json.info = empty[index];
+    json.startIndex = 1*index.split("-")[0];
+
+    // Table ref
+    if (json.info.includes("Table")){
+        var tableNum = json.info.split("Table ")[1].split(")")[0];
+        json.table = tableNum;
+    }
+
+    json.size = 1;
+    json.type = 'uint8';
+    // More than one number here
+    if (index.split("-").length > 1){
+        json.size = index.split("-")[1] - json.startIndex + 1;
+        if (json.size == 2)
+            json.type = 'uint16';
+        else if (json.size == 3)
+            console.log("size 3")
+        else if (json.size == 4)
+            json.type = 'uint32';
+    }
+    json.content = null;
+
+
+    jsonArray[i]= json;
+}
+console.log(JSON.stringify(jsonArray))
+
 */
