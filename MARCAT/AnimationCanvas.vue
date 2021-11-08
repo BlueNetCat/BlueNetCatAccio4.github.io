@@ -31,17 +31,23 @@ export default {
 
   },
   mounted () {
-
   },
   data () {
     return {
       prevTime: 0,
-      canvasEl: document.getElementById('animationCanvas'),
+      canvasEl: undefined,
       source: undefined, // new Source(seaVelocityEastLayer, seaVelocityNorthLayer)
       particles: undefined, // new ParticleSystem(this.$animationCanvas, this.source)
     }
   },
   methods: {
+    // Defines the new source to use
+    defineWMSSource: function(wmsURL, directionLayersName){
+      this.source = new SourceWMS(wmsURL, directionLayersName);
+      this.canvasEl = document.getElementById('animationCanvas');
+      this.particles = new ParticleSystem(this.canvasEl, this.source, this.$root.$refs.map.map); // Reference defined in vueParser.js
+    },
+    // Update the animation
     update: function(){
       // Update timer
       let timeNow = performance.now();
@@ -55,6 +61,7 @@ export default {
       // Loop
       setTimeout(this.update, 40); // Frame rate in milliseconds
     },
+    
 
   },
   components: {

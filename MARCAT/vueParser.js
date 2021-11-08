@@ -23,7 +23,10 @@ const options = {
   const app = Vue.createApp({
     components: {
       'ol-map': Vue.defineAsyncComponent( () => loadModule('./Map.vue', options) ),
+      'animation-canvas': Vue.defineAsyncComponent(() => loadModule('./AnimationCanvas.vue', options)),
       'forecast-bar': Vue.defineAsyncComponent( () => loadModule('./Timebar.vue', options) )
     },
-    template: '<ol-map ref="map"></ol-map><forecast-bar ref="forecastbar"></forecast-bar>'
+    template: `<ol-map ref="map"></ol-map>
+              <animation-canvas ref="animcanvas"></animation-canvas>
+              <forecast-bar ref="forecastbar"></forecast-bar>`
   });

@@ -1,7 +1,7 @@
 <template>
   <div id="app-forecast">
 
-    <templat v-if="true"><!-- v-if="!mobile"-->
+    <template v-if="true"><!-- v-if="!mobile"-->
       <div class="accordion position-absolute bottom-0 start-0 end-0 mh-50" id="accordionExample">
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingOne">
@@ -119,12 +119,14 @@ export default {
       selectedDate: [false, false, true, false, false],
       weekDays: ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      catseaBBOX: [-1,36,9,44],
       sources: {
         'CMEMS-MED': {
           id: 'CMEMS-MED',
           attribution: "Mediterranean Sea Physics and Biogeochemistry Analysis and Forecast. Credits: E.U. Copernicus Marine Service Information",
           productURL: "https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_PHY_006_013/INFORMATION",
           productURL2: "https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_BGC_006_014/INFORMATION",
+          productURL3: "https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_WAV_006_017/INFORMATION",
           domainURL: "https://nrt.cmems-du.eu/thredds/wms",
           active: true
         },
@@ -168,6 +170,7 @@ export default {
           timeScales: ['h', 'h3', 'h6', 'h12', 'd', 'd3', 'm'],
           range: [-1,1],
           style: "boxfill%2Foccam",//"vector%2Foccam",
+          directionLayersName: ['uo','vo'], // East, North
           active: true
         },
         "Sea temperature": {
@@ -191,10 +194,11 @@ export default {
         "Wave significant height": {
           name: 'Wave significant height',
           url: 'med-hcmr-wav-an-fc',
-          layerName: 'VHM0',
+          layerName: 'VHM0', // 'VMDR' for direction in degrees
           timeScales: ['h', 'h3', 'h6', 'h12'],
-          range: [0, 4],
+          range: [0, 6],
           style: "boxfill%2Foccam",
+          directionLayersName: ['VMDR'], // Angle
           active: false,
         },
         "Chlorophyll": {
@@ -270,10 +274,10 @@ export default {
       },
       figureInfo: {},
       layerInfoWMS: {},
-      dataURL: "https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS=sea_water_velocity&COLORSCALERANGE=-1%2C1&STYLES=boxfill%2Foccam&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX=-1%2C36%2C9%2C44&TIME=2021-{MONTH}-{DAY}T12%253A00%253A00.000Z",
+      //dataURL: "https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS=sea_water_velocity&COLORSCALERANGE=-1%2C1&STYLES=boxfill%2Foccam&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX=-1%2C36%2C9%2C44&TIME=2021-{MONTH}-{DAY}T12%253A00%253A00.000Z",
       //baseURL: "https://nrt.cmems-du.eu/thredds/wms/{URLdataTypes}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS={LAYERNAME}&COLORSCALERANGE={MINRANGE}%2C{MAXRANGE}&STYLES=boxfill%2Foccam&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX=-1%2C36%2C9%2C44&TIME=2021-{MONTH}-{DAY}T{HOURS}%253A{MINUTES}%253A00.000Z"
                 //https://nrt.cmems-du.eu/thredds/wms/med-ogs-pft-an-fc-m?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&TILED=true&COLORSCALERANGE=0.024503695%2C0.66972876&ELEVATION=-1.0182366371154785&LAYERS=chl&STYLES=boxfill%2Frainbow&TIME=2021-08-01T00%3A00%3A00.000Z&URL=https%3A%2F%2Fnrt.cmems-du.eu%2Fthredds%2Fwms%2Fmed-ogs-pft-an-fc-m&WIDTH=256&HEIGHT=256&CRS=EPSG%3A4326&BBOX=39.375%2C25.3125%2C42.1875%2C28.125
-      baseURL: "{DOMAIN}/{URLdataTypes}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS={LAYERNAME}&COLORSCALERANGE={MINRANGE}%2C{MAXRANGE}&STYLES={STYLE}&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX=-1%2C36%2C9%2C44&TIME=2021-{MONTH}-{DAY}T{HOURS}%253A{MINUTES}%253A00.000Z"
+      baseURL: "{DOMAIN}/{URLdataTypes}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS={LAYERNAME}&COLORSCALERANGE={MINRANGE}%2C{MAXRANGE}&ABOVEMAXCOLOR=extend&BELOWMINCOLOR=extend&STYLES={STYLE}&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX={BBOX}&TIME=2021-{MONTH}-{DAY}T{HOURS}%253A{MINUTES}%253A00.000Z"
       
    }
   },
@@ -431,6 +435,9 @@ export default {
         tmpURL = tmpURL.replace("{HOURS}", dd.getHours().toString().padStart(2,"0"));
         tmpURL = tmpURL.replace("{MINUTES}", dd.getMinutes().toString().padStart(2,"0"));
 
+        // BBOX
+        tmpURL = tmpURL.replace("{BBOX}", JSON.stringify(this.catseaBBOX).replace('[', '').replace(']', ''));
+
         // Output
         this.figureInfo[i] = {
           'id': i,
@@ -462,7 +469,10 @@ export default {
               'TRANSPARENT': true
             },
             cacheSize: 500,
-            zDirection: -1
+            zDirection: -1,
+            // Information for animation
+            exampleWMSURL: tmpURL,
+            directionLayersName: activeDataType.directionLayersName,
           }
         }
 
