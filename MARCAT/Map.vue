@@ -22,12 +22,12 @@ export default {
     
   },
   mounted () {
-    this.initMap();
+    this.$initMap();
   },
   data () {
     return {
-      map: undefined,
-      wmsURLexample: undefined,
+      $map: undefined,
+      $wmsURLexample: undefined,
       layers: {
         bathymetry: new ol.layer.Tile({
             name: 'bathymetry',
@@ -118,9 +118,9 @@ export default {
   },
   methods: {
     // Figure clicked (TODO: emit)
-    initMap: function () {
+    $initMap: function () {
       // Initialize map
-      this.map = new ol.Map({
+      this.$map = new ol.Map({
         layers : [
           // Data layer
           this.layers.data,
@@ -149,20 +149,20 @@ export default {
 
 
     // Update WMS data source. This function is called from forecast-component
-    updateSourceWMS: function (infoWMS){
+    $updateSourceWMS: function (infoWMS){
       // Get information from forecast-component
-      this.getMapLayer('data').setSource(new ol.source.TileWMS(infoWMS));
+      this.$getMapLayer('data').setSource(new ol.source.TileWMS(infoWMS));
       // If animation exists, update
       if (this.$root.$refs.animcanvas) // Reference defined in vueParser.js
         if (infoWMS.directionLayersName) // Defined in Timebar.vue
-          this.$root.$refs.animcanvas.defineWMSSource(infoWMS.exampleWMSURL, infoWMS.directionLayersName);
+          this.$root.$refs.animcanvas.$defineWMSSource(infoWMS.exampleWMSURL, infoWMS.directionLayersName);
     },
 
 
     // Get layer function
-    getMapLayer: function(layerName){
+    $getMapLayer: function(layerName){
       let selLayer;
-      this.map.getLayers().forEach(layerItem => {
+      this.$map.getLayers().forEach(layerItem => {
         //console.log(layerItem.get('name'));
         if (layerItem.get('name') == layerName)
           selLayer = layerItem;

@@ -31,46 +31,54 @@ export default {
 
   },
   mounted () {
+
   },
   data () {
     return {
-      prevTime: 0,
-      canvasEl: undefined,
-      source: undefined, // new Source(seaVelocityEastLayer, seaVelocityNorthLayer)
-      particles: undefined, // new ParticleSystem(this.$animationCanvas, this.source)
+      $animEngine: undefined
     }
   },
   methods: {
-    // Defines the new source to use
-    defineWMSSource: function(wmsURL, directionLayersName){
-      this.source = new SourceWMS(wmsURL, directionLayersName);
-      this.canvasEl = document.getElementById('animationCanvas');
-      this.particles = new ParticleSystem(this.canvasEl, this.source, this.$root.$refs.map.map); // Reference defined in vueParser.js
-    },
-    // Update the animation
-    update: function(){
-      // Update timer
-      let timeNow = performance.now();
-      let dt = (timeNow - this.prevTime)/1000; // in seconds;
-      this.prevTime = timeNow; 
-
-
-      // If data is loaded and layer is visible
-      this.particles.draw(dt);
+    $start: function(wmsURL, directionLayersName){
+      this.$animEngine = new AnimationEngine(document.getElementById('animationCanvas'), this.$root.$refs.map.$map); // Reference defined in vueParser.js
+      this.$animEngine.setSource(wmsURL, directionLayersName);
       
-      // Loop
-      setTimeout(this.update, 40); // Frame rate in milliseconds
+      // Define map events for animation
+      // Update canvas and positions
+      let olMap = this.$root.$refs.map.$map;
+
+      olMap.on('moveend', () => {
+        this.$animEngine.onMapMoveEnd();
+        //this.$animEngine.isReady = true;
+      });
+      // Clear canvas
+      olMap.on('movestart', () => {
+        this.$animEngine.onMapMoveStart();
+        this.$animEngine.isReady = false;
+      });
     },
-    
+
+    // Defines the new source to use
+    $defineWMSSource: function(wmsURL, directionLayersName){ // Called from Map.vue
+      // If it is the first time, start
+      if (!this.$animEngine){
+        this.$start(wmsURL, directionLayersName);
+        return;
+      }
+      // Update WMS source
+      this.$animEngine.setSource(wmsURL, directionLayersName);
+    },
 
   },
   components: {
 
   },
   computed: {
-
+  
   }
 }
+
+
 </script>
 
 

@@ -108,7 +108,7 @@ export default {
   mounted (){
     // Once mounted, update the WMS url of map
     if (this.$root.$refs.map) // Reference defined in vueParser.js
-      this.$root.$refs.map.updateSourceWMS(this.getWMSURL());
+      this.$root.$refs.map.$updateSourceWMS(this.getWMSURL());
   },
   data () {
     return {
@@ -305,7 +305,7 @@ export default {
 
       // Update WMS source in map component (emit?)
       if (this.$root.$refs.map) // Reference defined in vueParser.js
-        this.$root.$refs.map.updateSourceWMS(this.getWMSURL());
+        this.$root.$refs.map.$updateSourceWMS(this.getWMSURL());
     },
 
     // Data type (SST, salinity, current)
