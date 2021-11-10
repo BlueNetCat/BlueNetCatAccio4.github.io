@@ -9,8 +9,8 @@ class AnimationEngine {
   // Variables
   prevTime = 0;
   canvasParticles = undefined;
-  source = undefined; // new Source(seaVelocityEastLayer, seaVelocityNorthLayer)
-  particles = undefined; // new ParticleSystem(this.$animationCanvas, this.source)
+  source = undefined;
+  particles = undefined;
 
   // Constructor
   constructor(inCanvas, inMap) {
@@ -19,6 +19,8 @@ class AnimationEngine {
     // Set height and width of the canvas
     this.canvasParticles.width = this.map.getViewport().offsetWidth;
     this.canvasParticles.height = this.map.getViewport().offsetHeight;
+    // Set up variable for when map is moving
+    this.mapIsMoving = false;
     // Start drawing loop (only once)
     this.update();
   }
@@ -49,7 +51,8 @@ class AnimationEngine {
     // If data is loaded and layer is visible
     if (this.source)
       if (this.source.isReady)
-        this.particles.draw(dt);
+        if (!this.mapIsMoving)
+          this.particles.draw(dt);
 
     // Loop
     var that = this;
@@ -64,18 +67,29 @@ class AnimationEngine {
     this.particles.repositionParticles();
   }
 
+  resizeCanvas(){
+    // Resize animation canvas
+    this.canvasParticles.width = this.map.getViewport().offsetWidth;
+    this.canvasParticles.height = this.map.getViewport().offsetHeight;
+    // Resize num of particles
+    this.particles.resizeNumParticles();
+  }
+
 
   // Callback when map size changes
   onMapMoveEnd(){
-    this.canvasParticles.width = this.map.getViewport().offsetWidth;
-    this.canvasParticles.height = this.map.getViewport().offsetHeight;
-    if (this.source)
-      if (this.source.isReady)
+    this.resizeCanvas();
+    this.mapIsMoving = false;
+    if (this.source) {
+      if (this.source.isReady){
         this.particles.repositionParticles();
+      }
+    }
   }
   onMapMoveStart() {
     if (this.particles)
       this.particles.clear();
+    this.mapIsMoving = true;
   }
   
 }
@@ -169,11 +183,11 @@ class SourceWMS {
           this.imgDataNorth = ctx.getImageData(0, 0, canvas.width, canvas.height); // Store image data
 
         this.loaded++;
-        console.log("here");
+
         // Both layers are loaded
         if (this.loaded == 2) {
           this.isReady = true;
-          document.body.append(canvas);
+          //document.body.append(canvas);
           // Callback
           if (this.callbackFunc)
             this.callbackFunc();
@@ -268,11 +282,16 @@ class SourceWMS {
   }
 }
 
+
+
+
+
 // Class that manages the particle system
 class ParticleSystem {
   // Variables
-  numParticles = 10000; // particleCount = Math.round(width * PARTICLE_MULTIPLIER); // According to earth.nullschool
+  fullScreenNumParticles = 10000;
   speedFactor = 0.7;
+  fullScreenPixels = 1920 * 1080;
 
   // Constructor
   constructor(canvas, source, olMap){
@@ -283,44 +302,37 @@ class ParticleSystem {
     this.source = source;
     // Map
     this.map = olMap;
-
-    // When source is not visible
-    /*this.source.eastLayer.on('change:visible', (e) => {
-      this.source.isReady = myParticles.source.getSourceIsVisible();
-      if (this.source.isReady)
-        this.repositionParticles();
-      this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
-    })*/
-
+    // Number of particles
+    this.resizeNumParticles();
     
     // Create particles
     this.particles = [];
     for (let i = 0; i < this.numParticles; i++)
       this.particles[i] = new Particle(this);
-
-    // Reposition particles
-    //this.repositionParticles();
-    //this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
 
   // Functions
-  // Update the data coming from the images of layers
+  // Set num particles according to the number of pixels
+  resizeNumParticles(){
+    let numPixels = this.canvas.width * this.canvas.height;
+    let numParticlesFactor = numPixels / this.fullScreenPixels;
+    // Define number of particles
+    this.numParticles = Math.min(Math.round(numParticlesFactor * this.fullScreenNumParticles), this.fullScreenNumParticles);
+  }
+  // Reposition particles
   repositionParticles(){
-    console.log("hi");
-    // Update data source
-    //this.source.repositionParticles();
-    // Reposition particles
     for (let i = 0; i < this.numParticles; i++)
       this.particles[i].repositionParticle();
   }
 
-  // Clear canvas
+  // Clear canvas and reset particles. Important when the map moves, because some undesired lines appear
   clear(){
     this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
   }
 
   draw(dt) {
+    
     // Trail effect
     // https://codepen.io/Tyriar/pen/BfizE
     this.ctx.fillStyle = 'rgba(255, 255, 255, .9)';
@@ -328,10 +340,10 @@ class ParticleSystem {
     this.ctx.fillRect(0,0, this.canvas.width, this.canvas.height);
     this.ctx.globalCompositeOperation = "source-over";
     // Trail color
-    this.ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
 
     // Line style
-    this.ctx.strokeStyle = 'rgba(0, 0, 0, 1)';
+    this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
     this.ctx.lineWidth = 1.5;
     this.ctx.beginPath();
     for (let i = 0; i < this.numParticles; i++)
@@ -356,7 +368,7 @@ class Particle {
   // Constructor
   constructor(particleSystem){
     this.particleSystem = particleSystem;
-    this.life = 0;
+    this.life = Math.random();
     this.vertices = new Float32Array(this.numVerticesPath*2); // XY values
     this.verticesValue = new Float32Array(this.numVerticesPath); // Wind/Current/Wave
     // Variable for optimization
@@ -371,19 +383,14 @@ class Particle {
   // Functions
   // Reposition particle
   repositionParticle(){
-    // Generate starting vertex
+    // Reset previous position for painting path
+    this.prevPos[0] = undefined;
+    this.prevPos[1] = undefined;
+    // Generate starting vertex with initial value
     this.generatePoint(this.pointVec2, this.valueVec2);
     // Assign initial position
     this.vertices[0] = this.pointVec2[0];
     this.vertices[1] = this.pointVec2[1];
-    // Assign initial value
-    if (this.valueVec2[0] !== undefined)
-      this.verticesValue[0] = Math.sqrt(this.valueVec2[0]*this.valueVec2[0] + this.valueVec2[1]*this.valueVec2[1]);
-    // Do not use this point
-    else {
-      this.verticesValue[0] = 0;
-    }
-
 
     // Create vertices path
     for (var i = 1; i < this.numVerticesPath; i++){
@@ -401,37 +408,40 @@ class Particle {
       let coord = this.particleSystem.map.getCoordinateFromPixel(this.pointVec2);
       coord = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
       // Get new value according to longitude and latitude
-      //console.log(coord);
       this.valueVec2 = this.particleSystem.source.getValueAtLongLat(coord[0], coord[1], this.valueVec2);
       // Assign values
       if (this.valueVec2[0] !== undefined)
         this.verticesValue[i] = Math.sqrt(this.valueVec2[0]*this.valueVec2[0] + this.valueVec2[1]*this.valueVec2[1]);
-
     }
+    
   }
 
 
   // Generate new point
   // Could be done more intelligent, like taking the extent of the layer from openlayers or the WMS service
   generatePoint(point, value, callStackNum){
+    callStackNum = callStackNum || 1;
     // Generate random X,Y number
     point[0] = Math.random() * this.particleSystem.canvas.width;
     point[1] = Math.random() * this.particleSystem.canvas.height;
     // Check if it has data
+    if (point[0] == undefined || isNaN(point[0]) || point[0] == null)
+      console.error(point);
     // Get value at pixel
     // Transform pixel to long lat
     let coord = this.particleSystem.map.getCoordinateFromPixel(point); // returns [long,lat]?
+    if (coord == null && callStackNum < 20){ // Library is not loaded yet?
+      this.generatePoint(point, value, callStackNum + 1);
+    }
     coord = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
     // Get value at long lat from source
     //value = this.particleSystem.source.getValueAtPixel(point, value);
-    //console.log(coord);
     value = this.particleSystem.source.getValueAtLongLat(coord[0], coord[1], value);
     
 
     // If pixel does not contain data, throw it again at least 20 times
     if (value[0] == undefined && callStackNum < 20){
-      callStackNum = callStackNum || 1;
-      generatePoint(point, value, callStackNum +1); // Recursive function
+      this.generatePoint(point, value, callStackNum + 1); // Recursive function
     }
   }
 
@@ -442,13 +452,12 @@ class Particle {
     // Update life
     this.life += 0.005 + this.particleSystem.speedFactor * 0.1 * this.verticesValue[Math.round(this.life * this.numVerticesPath)];
     // Reset life
-    if (this.life > 1) {
-      this.life = 0;
+    if (this.life > 1 || isNaN(this.life)) {
+      this.life = Math.random();
+      // Start of vertices path
+      this.prevPos[0] = undefined;
+      this.prevPos[1] = undefined;
     }
-    if (isNaN(this.life))
-      this.life = 0;
-
-
 
     // Get exact position
     let prevVertPath = Math.floor(this.life * (this.numVerticesPath-1)); // From 0 to numVerticesPath
@@ -461,22 +470,18 @@ class Particle {
     this.currentPos[1] = interpCoeff * this.vertices[prevVertPath*2 + 1]  +
                 (1-interpCoeff) * this.vertices[nextVertPath*2 + 1];
 
-    // Reset prevPos in first iteration or when values are too far away
-    if (this.life == 0 || Math.abs(this.prevPos[0] - this.currentPos[0]) > this.stepInPixels*1.5 || Math.abs(this.prevPos[1] - this.currentPos[1]) > this.stepInPixels*1.5){ // TODO
+    // When prevPos is not valid (map moved, source changed, etc)
+    if (this.prevPos[0] == undefined){
       this.prevPos[0] = this.currentPos[0];
       this.prevPos[1] = this.currentPos[1];
+      return;
     }
+      
 
     // Draw in canvas
     let ctx = this.particleSystem.ctx;
-    //ctx.strokeStyle = 'rgba(0, 0, 0, 1)';
-    //ctx.lineWidth = 1.5;
-    //ctx.beginPath();
     ctx.moveTo(this.prevPos[0], this.prevPos[1])
     ctx.lineTo(this.currentPos[0], this.currentPos[1]);
-    //ctx.moveTo(Math.random()*1000, Math.random()*1000)
-    //ctx.lineTo(Math.random()*1000, Math.random()*1000);
-    //ctx.stroke();
 
     // Assign prevPos
     this.prevPos[0] = this.currentPos[0];
