@@ -28,9 +28,9 @@ export default {
     }
   },
   methods: {
-    $start: function(wmsURL, directionLayersName){
+    $start: function(wmsURL, animation){
       this.$animEngine = new AnimationEngine(document.getElementById('animationCanvas'), this.$root.$refs.map.$map); // Reference defined in vueParser.js
-      this.$animEngine.setSource(wmsURL, directionLayersName);
+      this.$animEngine.setSource(wmsURL, animation);
       
       // Define map events for animation
       // Update canvas and positions
@@ -46,14 +46,14 @@ export default {
     },
 
     // Defines the new source to use
-    $defineWMSSource: function(wmsURL, directionLayersName){ // Called from Map.vue
+    $defineWMSSource: function(wmsURL, animation){ // Called from Map.vue
       // If it is the first time, start
       if (!this.$animEngine){
-        this.$start(wmsURL, directionLayersName);
+        this.$start(wmsURL, animation);
         return;
       }
       // Update WMS source
-      this.$animEngine.setSource(wmsURL, directionLayersName);
+      this.$animEngine.setSource(wmsURL, animation);
     },
 
   },

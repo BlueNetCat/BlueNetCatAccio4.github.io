@@ -24,7 +24,7 @@ const options = {
     components: {
       'ol-map': Vue.defineAsyncComponent( () => loadModule('./Map.vue', options) ),
       'animation-canvas': Vue.defineAsyncComponent(() => loadModule('./AnimationCanvas.vue', options)),
-      'forecast-bar': Vue.defineAsyncComponent( () => loadModule('./Timebar.vue', options) )
+      'forecast-bar': Vue.defineAsyncComponent( () => loadModule('./ForecastBar.vue', options) )
     },
     template: `<ol-map ref="map"></ol-map>
               <animation-canvas ref="animcanvas"></animation-canvas>

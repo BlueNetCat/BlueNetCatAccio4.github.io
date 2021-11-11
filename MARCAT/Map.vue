@@ -154,8 +154,8 @@ export default {
       this.$getMapLayer('data').setSource(new ol.source.TileWMS(infoWMS));
       // If animation exists, update
       if (this.$root.$refs.animcanvas) // Reference defined in vueParser.js
-        if (infoWMS.directionLayersName) // Defined in Timebar.vue
-          this.$root.$refs.animcanvas.$defineWMSSource(infoWMS.exampleWMSURL, infoWMS.directionLayersName);
+        if (infoWMS.animation) // Defined in Timebar.vue
+          this.$root.$refs.animcanvas.$defineWMSSource(infoWMS.exampleWMSURL, infoWMS.animation);
     },
 
 
