@@ -170,7 +170,11 @@ export default {
           timeScales: ['h', 'h3', 'h6', 'h12', 'd', 'd3', 'm'],
           range: [-1,1],
           style: "boxfill%2Foccam",//"vector%2Foccam",
-          directionLayersName: ['uo','vo'], // East, North
+          animation: {
+            layerNames: ['uo','vo'], // East, North
+            format: 'east_north',
+            type: 'velocity'
+          },
           active: true
         },
         "Sea temperature": {
@@ -198,7 +202,11 @@ export default {
           timeScales: ['h', 'h3', 'h6', 'h12'],
           range: [0, 6],
           style: "boxfill%2Foccam",
-          directionLayersName: ['VMDR'], // Angle
+          animation: {
+            layerNames: ['VHM0', 'VMDR'], // Intensity, Angle
+            format: 'value_angle',
+            type: 'wave'
+          },
           active: false,
         },
         "Chlorophyll": {
@@ -472,7 +480,7 @@ export default {
             zDirection: -1,
             // Information for animation
             exampleWMSURL: tmpURL,
-            directionLayersName: activeDataType.directionLayersName,
+            animation: activeDataType.animation,
           }
         }
 
