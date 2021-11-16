@@ -14,7 +14,7 @@ let gribFiles = [];
 
 //fetch('COSMODE_single_level_elements_PS_2018020500_000.grib2')
 //fetch('COSMODE_single_level_elements_ASWDIR_S_2018011803_006.grib2')
-fetch('gdas.t00z.pgrb2.0p25.f000.grib2') // temperature
+fetch('gdas.t00z.pgrb2.0p25.f000.grib2') // temperature in kelvins
 //fetch('gdas.t00z.pgrb2.1p00.f000.grib2') // winds
 //fetch('winds.grb')
     .then(response => response.arrayBuffer())
@@ -246,7 +246,8 @@ const parseData = function(decodedGrib){
         let diffOrder = getContentByInfo(decodedGrib[5], 'Order of spatial difference (see Code Table 5.6)'); // WARNING --> IF CODE TABLE IS USED, THIS IS A STRING. OTHERWISE 1= 1ST ORDER, 2= SECOND ORDER
         // Field width (Number of bytes for the first values)
         let fieldWidth = getContentByInfo(decodedGrib[5], 'Number of octets required in the data section to specify extra descriptors needed for spatial differencing (octets 6-ww in data template 7.3)');
-
+        // TODO FIELD IS THE TOTAL NUMBER OF OCTETS FOR EXTRA DESCRIPTORS. SO, IS IT ABOUT ONE VALUE, OR ALL?
+        // IS BITS PER VALUE USED THEN?
         
         // First value(s) of original (undifferenced) scale values, followed by the overall minimum of the differences.
         let numType;
@@ -257,75 +258,68 @@ const parseData = function(decodedGrib){
         else if (fieldWidth == 4) // Int32
             numType = 'int32';
         else
-            console.error("Field width is not reasonable (func parseData, template 5.3)");
+            console.error("Field width is not reasonable (in parseData, template 5.3)");
 
         // For second order
-        let f1 = decodeByte(rawData.slice(0, fieldWidth), numType);
-        let f2 = decodeByte(rawData.slice(fieldWidth, fieldWidth*2), numType); // Not used if difference order is 1
-        let overallMin = decodeByte(rawData.slice(fieldWidth*diffOrder, fieldWidth * (diffOrder+1)), numType);
-        
+        // (1) Referring to the notation in Note 1 of data representation template 5.3, at order 1, the values stored in octet 6 - ww are g1 and gmin.At order 2, the values stored are h1, h2 and hmin.
+        let h1 = decodeByte(rawData.slice(0, fieldWidth), numType);
+        let h2 = decodeByte(rawData.slice(fieldWidth, fieldWidth*2), numType); // Not used if difference order is 1
+        let overallMin = decodeByte(rawData.slice(fieldWidth*diffOrder, fieldWidth * (diffOrder+1)), numType); //hmin
+        // (4) Overall minimum will be negative in most cases. First bit should indicate the sign:0 if positive, 1 if negative.
+
         // Unpack Complex Packing
         let wwIndex = fieldWidth * (diffOrder + 1);
-        let upX1X2 = unpackComplexPacking(decodedGrib, rawData, compression, wwIndex);
+        let packedArray = unpackComplexPacking(decodedGrib, rawData, compression, wwIndex);
 
         // (1) At decoding time, after bit string unpacking, the original scaled values are recovered by adding the overall minimum and summing up recursively.
         // (2) For differencing of order n, the first n values in the array that are not missing are set to zero in the packed array. These dummy values are not used in unpacking.
 
         // Decoding (f - original, g - first derivative, h - second derivative)
+        // https://apps.ecmwf.int/codes/grib/format/grib2/templates/5/3
         let f = [];
         let g = [];
         let h = [];
 
-        // First values
-        f.push(f1);
+        
         
         // Second order
         if (diffOrder == 2){
-            f.push(f2);
-
-            h[0] = f[0];
-            h[1] = f[1];
+            // First values
+            f[0] = g[0] = h[0] = h1;
+            f[1] = h[1] = h2;
 
             // H values
-            for (let i = 0; i < upX1X2.NG; i++){
-                let numValuesPerGroup = upX1X2.groupLengths[i]; // Values per group
-                for (let j = 0; j < numValuesPerGroup; j++){
-                    let rawValue = upX1X2.X2[i][j] + upX1X2.X1[i];
-                    if (isNaN(rawValue))
-                        console.error("rawValue is NaN"); // numValuesPerGroup is 1, but X2 is empty?
-                    h.push(rawValue);
-                }
+            for (let i = 0; i < packedArray.length; i++){
+                h.push(packedArray[i]);// + overallMin);
             }
-
-            if (grid.numPoints != h.length)
-                console.error("Length of raw datapoints (H) is not equal to grid points : grid.numPoints: " + grid.numPoints + ", h.length: " + h.length);
             // G values
-            g[0] = f[0];
-            g[1] = f[1];// - f[0];
-            //g[2] = h[2] + g[1];
-            //g[3] = h[3] + g[2];
-            for (let i = 2; i < grid.numPoints; i++){
-                g[i] = h[i] + g[i-1];
+            for (let i = 1; i< h.length-1; i++){
+                g[i] = h[i] - h[i-1];
             }
-            
             // F values
-            //f[2] = g[2] + f[1];
-            //f[3] = g[3] + f[2];
-            for (let i = 2; i < grid.numPoints; i++){
-                f[i] = g[i] + f[i-1];
+            for (let i = 2; i < g.length -1; i++){
+                f[i] = g[i] - g[i-1];
             }
+                
+
+            if (grid.numPoints != f.length)
+                console.error("Length of raw datapoints (H) is not equal to grid points : grid.numPoints: " + grid.numPoints + ", h.length: " + h.length);
+
 
             for (let i = 0; i < grid.numPoints; i++){
-                values[i] = compression.decompress(h[i]);
+                values[i] = compression.decompress(f[i]);
             }
         }
         
         
+        var a = 0;
+        values[0] = values[10];
+        values[1] = values[10];
+        values[2] = values[10];
+        values[3] = values[10];
+
 
         
-
-
-        var a  = 0;
     }
     // Grid point data - IEEE Floating Point Data
     // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-4.shtml
@@ -406,15 +400,15 @@ const parseData = function(decodedGrib){
 
 // TODO: SOMETHING WRONG! CHECK SIZE OF X2, IT SHOULD BE THE SAME AS NUMBER OF GRID POINTS-2
 // Unpack values (templates 5.2 and 5.3)
-const unpackComplexPacking = function(decodedGrib, rawData, compression, inPrevIndex){
+const unpackComplexPacking = function(decodedGrib, rawData, compression, inwwIndex){
 
-    let prevIndex = inPrevIndex || 0;
+    let wwIndex = inwwIndex || 0;
 
     let NG = getContentByInfo(decodedGrib[5], 'NG ― number of groups of data values into which field is split');
 
-    let xxIndex = Math.ceil(NG*compression.bitsPerValue/8) + prevIndex;
+    let xxIndex = Math.ceil(NG*compression.bitsPerValue/8) + wwIndex;
     // Group reference values (X1)
-    let X1 = readValuesFromBuffer(rawData.slice(prevIndex, xxIndex), compression.bitsPerValue, NG);
+    let X1 = readValuesFromBuffer(rawData.slice(wwIndex, xxIndex), compression.bitsPerValue, NG);
 
     // Group widths ((12) The group width is the number of bits used for every value in a group.)
     let bitsPerValueGroupWidth = getContentByInfo(decodedGrib[5], 'Number of bits used for the group widths (after the reference value in octet 36 has been removed)');
@@ -441,6 +435,7 @@ const unpackComplexPacking = function(decodedGrib, rawData, compression, inPrevI
     for (let i = 0; i < NG; i++)
         groupLengths[i] = refGroupLength + scaledGroupLengths[i]*lengthInc;
     // True last group length (number of values in last group)
+    // (3) Scaled group lengths, if present, are encoded for each group. But the true last group length (unscaled) should be taken from Data Representation Template.
     let lengthLastGroup = getContentByInfo(decodedGrib[5], 'True length of last group');
     if (lengthLastGroup != groupLengths[groupLengths.length - 1]){ // Double check
         console.log("True length of last group is not the same as the last value in the gruop length array. " + lengthLastGroup + " vs " + groupLengths[groupLengths.length - 1]);
@@ -467,44 +462,53 @@ const unpackComplexPacking = function(decodedGrib, rawData, compression, inPrevI
     let lastBitIndex = 0;
     let lastByteIndex = zzIndex;
     let X2 = [];
+    let packedArray = [];
     for (let i = 0; i < NG; i++){
         let numValuesPerGroup = groupLengths[i]; // Values per group
         let bitsPerValuePerGroup = groupWidths[i]; // Bits per value in group
+        let numBytes = Math.ceil(((numValuesPerGroup * bitsPerValuePerGroup) + lastBitIndex) / 8); // Total num bits + previous shift amount
+
         // MISSING VALUE MANAGEMENT
         // getContentByInfo(decodedGrib[5], 'Missing value management used (see Code Table 5.5)');
         // (10) A group containing only missing values(of either type) will be encoded as a constant group(null width, no associate data)
         // and the group reference will have all bits set to 1 for primary type, and all bits set to 1, except the last bit set to 0, for
         // secondary type.
         // QUESTION: group reference does not have all bits set to 1. Does this have to do with missing value management?
+        // (4) For groups with a constant value, associated field width is 0, and no incremental data are physically present. https://apps.ecmwf.int/codes/grib/format/grib2/templates/7/2
         // (5) There may be two types of missing value(s), such as to make a distinction between static misses (for instance, due to a land / sea mask) and occasional misses.
         // (6) As an extra option, substitute value(s) for missing data may be specified. If not wished (or not applicable), all bits
         // should be set to 1 for relevant substitute value(s).
         if (bitsPerValuePerGroup == 0){
             //console.error("An empty group in X2, with no bits is defined? " + i)
             // Two options: use the subsitute values specified or set all bits to 1?
-            // How to know if it is primary or secondary?
-            // X2[i] = // Create array with numValuesPerGroup. How to fill it?
+            // How to know if it is primary or secondary? It should be specified in X1[i] (see note 10)
+            // Constant value (see note 4)
+            X2[i] = new Array(numValuesPerGroup).fill(X1[i]);
         }
-        //else
-
-        let numBytes = Math.ceil( ((numValuesPerGroup * bitsPerValuePerGroup) + lastBitIndex) / 8); // Total num bits + previous shift amount
-        X2[i] = readValuesFromBuffer(rawData.slice(lastByteIndex, lastByteIndex + numBytes), bitsPerValuePerGroup, numValuesPerGroup, lastBitIndex); // Because X2 are consecutive, we keep lastBitIndex
+        else{
+            // TODO: REMOVE FIRST TWO VALUES??? WHY?? WHERE?
+            // https://apps.ecmwf.int/codes/grib/format/grib2/templates/5/3
+            // For differencing of order n, the first n values in the array that are not missing are set to zero in the packed array. These dummy values are not used in unpacking.
+            X2[i] = readValuesFromBuffer(rawData.slice(lastByteIndex, lastByteIndex + numBytes), bitsPerValuePerGroup, numValuesPerGroup, lastBitIndex); // Because X2 are consecutive, we keep lastBitIndex
+        }
         lastBitIndex = ((numValuesPerGroup * bitsPerValuePerGroup) + lastBitIndex) % 8; // LastBitIndex goes from 0 to 7, as every iteration we send the specific bytes to read.
 
         // Unpack values
         // Add ref value (X1) to packed values (X2)
-        /*for (let j = 0; j < numValuesPerGroup; j++){
-            let rawValue = X2[i][j] + X1[i];
-            values.push(compress.decompress(rawValue));
-        }*/
+        for (let j = 0; j < numValuesPerGroup; j++){
+            packedArray.push(X2[i][j] + X1[i]);
+        }
     }
 
-    return {
-        NG: NG,
-        X1: X1,
-        X2: X2,
-        groupLengths: groupLengths,
+    let max = 0;
+    let min = 0;
+    for (let i = 0; i < packedArray.length; i++){
+        max = packedArray[i] > max ? packedArray[i] : max;
+        min = packedArray[i] < min ? packedArray[i] : min;
     }
+    console.log("Max: " + max + ", Min: " + min);
+
+    return packedArray;
 }
 
 
