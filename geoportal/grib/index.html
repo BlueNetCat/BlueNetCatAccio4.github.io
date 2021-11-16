@@ -14,8 +14,9 @@ let gribFiles = [];
 
 //fetch('COSMODE_single_level_elements_PS_2018020500_000.grib2')
 //fetch('COSMODE_single_level_elements_ASWDIR_S_2018011803_006.grib2')
-//fetch('gdas.t00z.pgrb2.1p00.f000.grib2')
-fetch('winds.grb')
+fetch('gdas.t00z.pgrb2.0p25.f000.grib2') // temperature
+//fetch('gdas.t00z.pgrb2.1p00.f000.grib2') // winds
+//fetch('winds.grb')
     .then(response => response.arrayBuffer())
     .then(buffer => decodeGRIB2File(buffer))
     .catch(error => console.log(error));
@@ -262,11 +263,13 @@ const parseData = function(decodedGrib){
         let f1 = decodeByte(rawData.slice(0, fieldWidth), numType);
         let f2 = decodeByte(rawData.slice(fieldWidth, fieldWidth*2), numType); // Not used if difference order is 1
         let overallMin = decodeByte(rawData.slice(fieldWidth*diffOrder, fieldWidth * (diffOrder+1)), numType);
-
-
+        
         // Unpack Complex Packing
         let wwIndex = fieldWidth * (diffOrder + 1);
         let upX1X2 = unpackComplexPacking(decodedGrib, rawData, compression, wwIndex);
+
+        // (1) At decoding time, after bit string unpacking, the original scaled values are recovered by adding the overall minimum and summing up recursively.
+        // (2) For differencing of order n, the first n values in the array that are not missing are set to zero in the packed array. These dummy values are not used in unpacking.
 
         // Decoding (f - original, g - first derivative, h - second derivative)
         let f = [];
@@ -413,10 +416,13 @@ const unpackComplexPacking = function(decodedGrib, rawData, compression, inPrevI
     // Group reference values (X1)
     let X1 = readValuesFromBuffer(rawData.slice(prevIndex, xxIndex), compression.bitsPerValue, NG);
 
-    // Group widths (The group width is the number of bits used for every value in a group.)
+    // Group widths ((12) The group width is the number of bits used for every value in a group.)
     let bitsPerValueGroupWidth = getContentByInfo(decodedGrib[5], 'Number of bits used for the group widths (after the reference value in octet 36 has been removed)');
+    let refGroupWidth = getContentByInfo(decodedGrib[5], 'Reference for group widths (see Note 12)');
     let yyIndex = Math.ceil(NG * bitsPerValueGroupWidth/8) + xxIndex;
     let groupWidths = readValuesFromBuffer(rawData.slice(xxIndex, yyIndex), bitsPerValueGroupWidth, NG);
+    for (let i = 0; i<NG; i++)
+        groupWidths[i] += refGroupWidth;
 
     
     // Scaled group lengths
@@ -425,12 +431,21 @@ const unpackComplexPacking = function(decodedGrib, rawData, compression, inPrevI
     let scaledGroupLengths = readValuesFromBuffer(rawData.slice(yyIndex, zzIndex), bitsPerValueScaledGL, NG);
 
     // Group lengths (The group length (L) is the number of values in a group.)
+    // (1) Group lengths have no meaning for row by row packing, where groups are coordinate lines(so th grid description
+    // section and possibly the bit - map section are enough); for consistency, associated field width and reference should then be
+    // encoded as 0.
+    console.log('Grup splitting method used: ' + getContentByInfo(decodedGrib[5], 'Group splitting method used (see Code Table 5.4)'));
     let groupLengths = [];
     let refGroupLength = getContentByInfo(decodedGrib[5], 'Reference for group lengths (see Note 13)');
     let lengthInc = getContentByInfo(decodedGrib[5], 'Length increment for the group lengths (see Note 14)');
     for (let i = 0; i < NG; i++)
         groupLengths[i] = refGroupLength + scaledGroupLengths[i]*lengthInc;
-
+    // True last group length (number of values in last group)
+    let lengthLastGroup = getContentByInfo(decodedGrib[5], 'True length of last group');
+    if (lengthLastGroup != groupLengths[groupLengths.length - 1]){ // Double check
+        console.log("True length of last group is not the same as the last value in the gruop length array. " + lengthLastGroup + " vs " + groupLengths[groupLengths.length - 1]);
+        groupLengths[groupLengths.length - 1] = lengthLastGroup;
+    }
     
     // Calculate total number of bytes
     let totalNumBytes = 0;
@@ -440,7 +455,13 @@ const unpackComplexPacking = function(decodedGrib, rawData, compression, inPrevI
         totalNumBits += groupLengths[i] * groupWidths[i];
         totalNumPoints += groupLengths[i];
     }
-    console.log("Total number of required bytes: " + totalNumBits/8 + ", Available bytes: " + rawData.byteLength + ", Total number of points: " + totalNumPoints);
+    let section3NumPoints = getContentByInfo(decodedGrib[3], 'Number of data points');
+    console.log("Total number of required bytes: " + totalNumBits/8 + ", Available bytes: " + rawData.byteLength);
+    console.log("Total number of points: " + totalNumPoints + ", Section 3 num of points: " + section3NumPoints);
+    
+    // Substitute values for missing data
+    let primarySubstitute = getContentByInfo(decodedGrib[5], 'Primary missing value substitute');
+    let secondarySubstitute = getContentByInfo(decodedGrib[5], 'Secondary missing value substitute');
     
     // Packed values (X2)
     let lastBitIndex = 0;
@@ -449,8 +470,22 @@ const unpackComplexPacking = function(decodedGrib, rawData, compression, inPrevI
     for (let i = 0; i < NG; i++){
         let numValuesPerGroup = groupLengths[i]; // Values per group
         let bitsPerValuePerGroup = groupWidths[i]; // Bits per value in group
-        if (bitsPerValuePerGroup == 0)
-            console.error("An empty group in X2, with no bits is defined? " + i)
+        // MISSING VALUE MANAGEMENT
+        // getContentByInfo(decodedGrib[5], 'Missing value management used (see Code Table 5.5)');
+        // (10) A group containing only missing values(of either type) will be encoded as a constant group(null width, no associate data)
+        // and the group reference will have all bits set to 1 for primary type, and all bits set to 1, except the last bit set to 0, for
+        // secondary type.
+        // QUESTION: group reference does not have all bits set to 1. Does this have to do with missing value management?
+        // (5) There may be two types of missing value(s), such as to make a distinction between static misses (for instance, due to a land / sea mask) and occasional misses.
+        // (6) As an extra option, substitute value(s) for missing data may be specified. If not wished (or not applicable), all bits
+        // should be set to 1 for relevant substitute value(s).
+        if (bitsPerValuePerGroup == 0){
+            //console.error("An empty group in X2, with no bits is defined? " + i)
+            // Two options: use the subsitute values specified or set all bits to 1?
+            // How to know if it is primary or secondary?
+            // X2[i] = // Create array with numValuesPerGroup. How to fill it?
+        }
+        //else
 
         let numBytes = Math.ceil( ((numValuesPerGroup * bitsPerValuePerGroup) + lastBitIndex) / 8); // Total num bits + previous shift amount
         X2[i] = readValuesFromBuffer(rawData.slice(lastByteIndex, lastByteIndex + numBytes), bitsPerValuePerGroup, numValuesPerGroup, lastBitIndex); // Because X2 are consecutive, we keep lastBitIndex
