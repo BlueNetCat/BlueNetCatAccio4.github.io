@@ -35,14 +35,15 @@
                   <div class="col btn btn-outline-light fig-col" :class="[fig.active ? 'active border border-dark': '']" :key="fig.id" :id="fig.id" @click.prevent="figureClicked" v-for="fig in figureInfo">
                     
                     <figure class="figure m-0">
-                      <vue-load-image>
+                      <img :id="fig.id" :src="fig.url" @error="onWMSImageNotFound($event)" class="figure-img img-fluid rounded" :alt="fig.caption">
+                      <!--vue-load-image>
                         <template v-slot:image>
-                          <img :src="fig.url" class="figure-img img-fluid rounded" :alt="fig.caption">
+                          <img :src="fig.url" @error="onWMSImageNotFound($event)" class="figure-img img-fluid rounded" :alt="fig.caption">
                         </template>
                         <template v-slot:preloader>
                           <img class="figure-img img-fluid rounded" src="/geoportal/img/image-loader.gif" />
                         </template>
-                      </vue-load-image>
+                      </vue-load-image-->
 
                       <figcaption class="figure-caption border">{{fig.caption}}  <small class="text-end">({{fig.subcaption}})</small></figcaption>
                     </figure>
@@ -285,7 +286,7 @@ export default {
       //dataURL: "https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS=sea_water_velocity&COLORSCALERANGE=-1%2C1&STYLES=boxfill%2Foccam&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX=-1%2C36%2C9%2C44&TIME=2021-{MONTH}-{DAY}T12%253A00%253A00.000Z",
       //baseURL: "https://nrt.cmems-du.eu/thredds/wms/{URLdataTypes}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS={LAYERNAME}&COLORSCALERANGE={MINRANGE}%2C{MAXRANGE}&STYLES=boxfill%2Foccam&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX=-1%2C36%2C9%2C44&TIME=2021-{MONTH}-{DAY}T{HOURS}%253A{MINUTES}%253A00.000Z"
                 //https://nrt.cmems-du.eu/thredds/wms/med-ogs-pft-an-fc-m?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&TILED=true&COLORSCALERANGE=0.024503695%2C0.66972876&ELEVATION=-1.0182366371154785&LAYERS=chl&STYLES=boxfill%2Frainbow&TIME=2021-08-01T00%3A00%3A00.000Z&URL=https%3A%2F%2Fnrt.cmems-du.eu%2Fthredds%2Fwms%2Fmed-ogs-pft-an-fc-m&WIDTH=256&HEIGHT=256&CRS=EPSG%3A4326&BBOX=39.375%2C25.3125%2C42.1875%2C28.125
-      baseURL: "{DOMAIN}/{URLdataTypes}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS={LAYERNAME}&COLORSCALERANGE={MINRANGE}%2C{MAXRANGE}&ABOVEMAXCOLOR=extend&BELOWMINCOLOR=extend&STYLES={STYLE}&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX={BBOX}&TIME=2021-{MONTH}-{DAY}T{HOURS}%253A{MINUTES}%253A00.000Z"
+      baseURL: "{DOMAIN}/{URLdataTypes}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS={LAYERNAME}&COLORSCALERANGE={MINRANGE}%2C{MAXRANGE}&ABOVEMAXCOLOR=extend&BELOWMINCOLOR=extend&STYLES={STYLE}&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX={BBOX}&TIME=2021-{MONTH}-{DAY}T{HOURS}:{MINUTES}:00.000Z"
       
    }
   },
@@ -350,7 +351,7 @@ export default {
 
 
 
-    // Javascript functions
+  
     // Generate WMS url
     updateWMSURL: function(){
 
@@ -446,6 +447,16 @@ export default {
         // BBOX
         tmpURL = tmpURL.replace("{BBOX}", JSON.stringify(this.catseaBBOX).replace('[', '').replace(']', ''));
 
+        // TODO: FIXING MONTHLY AVERAGE URL SHOULD BE DONE HERE. NOW IT IS DONE AT THE imgEl.onerror EVENT.
+        // Test the image WMS URL
+        // This is useful for monthyl average, because it can be on the 16th at 12h, 16th at 00h, 15th at 12h, 15th at 00h...
+        /*fetch(tmpURL)
+        .then((res) => {
+          if(res.status == 400){
+          }
+        })
+        .catch(console.error)*/
+
         // Output
         this.figureInfo[i] = {
           'id': i,
@@ -454,8 +465,6 @@ export default {
           'url': tmpURL,
           'active': this.selectedDate[i]//activeTimeScale.interval[i] == 0 ? true : false,
         }
-
-
 
         // Active source information
         if (this.selectedDate[i]){
@@ -479,7 +488,7 @@ export default {
             cacheSize: 500,
             zDirection: -1,
             // Information for animation
-            exampleWMSURL: tmpURL,
+            exampleWMSURL: tmpURL, // TODO: remove without consequences?
             animation: activeDataType.animation,
           }
         }
@@ -487,6 +496,52 @@ export default {
       }
 
       return this.figureInfo;
+    },
+
+
+    // Image not found (usually monthly mean)
+    onWMSImageNotFound: function(event){
+      let imgEl = event.currentTarget;
+      let url = imgEl.src;
+      console.log(url);
+      let time = this.getWMSParameter(url, 'TIME');
+      let date = new Date(time);
+      // Go back in time 12h
+      date.setHours(date.getHours() - 12); // Default date is 16th at 12h. Other possible dates are in the past (16th at 00h, 15th at 12h...)
+      // Replace img source. If it fails, it is recursive
+      imgEl.src = this.setWMSParameter(url, 'TIME', date.toISOString());
+      // Update consequent information
+      let figIndex = imgEl.id;
+      this.figureInfo[figIndex].url = imgEl.src;
+      if (this.selectedDate[figIndex]){
+        // Fix hour difference (e.g. GMT+2) for ISOString function
+        date.setHours(date.getHours() - date.getTimezoneOffset()/60);
+        this.layerInfoWMS.params['TIME'] = date.toISOString();
+      }
+    },
+    // Set WMS parameter
+    setWMSParameter: function(wmsURL, paramName, paramContent) {
+      // If parameter does not exist
+      if (wmsURL.indexOf(paramName + "=") == -1) {
+        console.log("Parameter ", paramName, " does not exist in WMS URL");
+        return wmsURL + '&' + paramName + '=' + paramContent;
+      }
+      let currentContent = this.getWMSParameter(wmsURL, paramName);
+      return wmsURL.replace(currentContent, paramContent);
+    },
+    // Get WMS parameter
+    getWMSParameter: function(wmsURL, paramName) {
+      // If parameter does not exist
+      if (wmsURL.indexOf(paramName + "=") == -1) {
+        console.log("Parameter ", paramName, " does not exist in WMS URL");
+        return '';
+      }
+      let tmpSTR = wmsURL.substr(wmsURL.indexOf(paramName + "="));
+      // If time is not the last parameter
+      if (tmpSTR.indexOf('&') != -1)
+        return tmpSTR.substring(paramName.length + 1, tmpSTR.indexOf('&'));
+      else
+        return tmpSTR.substring(paramName.length + 1, tmpSTR.length);
     },
 
     // Return WMS info for OpenLayers layer

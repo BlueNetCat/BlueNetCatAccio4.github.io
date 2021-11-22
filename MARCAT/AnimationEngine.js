@@ -171,7 +171,7 @@ class SourceWMS {
     canvas.height = this.latExtension / this.canvasLongLatStep;
 
     let ctx = canvas.getContext('2d');
-    document.body.append(canvas);
+    //document.body.append(canvas);
 
     // WMS data layers
     if (animation.layerNames.length == 2){
