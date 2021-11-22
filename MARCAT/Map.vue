@@ -150,6 +150,21 @@ export default {
 
     // Update WMS data source. This function is called from forecast-component
     $updateSourceWMS: function (infoWMS){
+      // Create tile grid for faster rendering for low resolution WMS
+      let extent = ol.proj.get('EPSG:3857').getExtent();
+      let tileSize = 512;
+      let maxResolution = ol.extent.getWidth(extent) / tileSize;
+      let resolutions = new Array(5);
+      for (let i = 0; i < resolutions.length; i++){
+        resolutions[i] = maxResolution / Math.pow(2,i);
+      }
+      // Assign to openlayers WMS tile source
+      infoWMS.tileGrid = new ol.tilegrid.TileGrid({
+        extent: extent,
+        resolutions: resolutions,
+        tileSize: tileSize
+      });
+
       // Get information from forecast-component
       this.$getMapLayer('data').setSource(new ol.source.TileWMS(infoWMS));
       // If animation exists, update
