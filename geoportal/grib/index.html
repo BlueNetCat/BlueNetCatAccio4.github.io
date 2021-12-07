@@ -13,8 +13,8 @@ let myBuffer = null;
 let gribFiles = [];
 
 //fetch('COSMODE_single_level_elements_PS_2018020500_000.grib2')
-//fetch('COSMODE_single_level_elements_ASWDIR_S_2018011803_006.grib2')
-fetch('gdas.t00z.pgrb2.0p25.f000.grib2') // temperature in kelvins
+fetch('COSMODE_single_level_elements_ASWDIR_S_2018011803_006.grib2')
+//fetch('gdas.t00z.pgrb2.0p25.f000.grib2') // temperature in kelvins
 //fetch('gdas.t00z.pgrb2.1p00.f000.grib2') // winds
 //fetch('winds.grb')
     .then(response => response.arrayBuffer())
@@ -40,15 +40,15 @@ const decodeGRIB2File = function(buffer){
     for (let i = 0; i < gribFileBuffers.length; i++){
         gribFiles[i] = new GRIB2(gribFileBuffers[i]);
         decodeGRIB2Buffer(gribFileBuffers[i], gribFiles[i]);
-        paintData(gribFiles[i].data);
+        drawData(gribFiles[i].data);
     }
 }
 
-
-const paintData = function(data){
+// Draw the grid datapoints
+const drawData = function(data){
     var canvas = document.createElement("canvas");
     canvas.width = data.grid.numLongPoints;
-    canvas.height = data.grid.numLatPoints;
+    canvas.height = data.grid.numLatPoints;  
 
     var ctx = canvas.getContext("2d");
     var imgData = ctx.createImageData(canvas.width, canvas.height);
@@ -60,6 +60,7 @@ const paintData = function(data){
         min = Math.min(min, data.values[i]);
     }
 
+    // How data points are stored is specified in section 3
     for (let i = 0; i < imgData.data.length; i += 4) {
         let value = data.values[i/4];
         let alpha = data.values[i/4] === null ? 0 : 255;
@@ -73,11 +74,21 @@ const paintData = function(data){
 
     ctx.putImageData(imgData, 0, 0);
 
+
     //let img = new Image();
     //img.src = canvas.toDataURL("image/jpeg");
 
     document.body.append(canvas);
 }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -123,8 +134,8 @@ const parseData = function(decodedGrib){
 
     grid.numPoints = getContentByInfo(decodedGrib[3],'Number of data points');
 
-    grid.numLatPoints = getContentByInfo(decodedGrib[3],'Ni — number of points along a parallel');
-    grid.numLongPoints = getContentByInfo(decodedGrib[3],'Nj — number of points along a meridian');
+    grid.numLongPoints = getContentByInfo(decodedGrib[3],'Ni — number of points along a parallel');
+    grid.numLatPoints = getContentByInfo(decodedGrib[3],'Nj — number of points along a meridian');
     
     grid.latStart = getContentByInfo(decodedGrib[3],'La1 — latitude of first grid point (see Note 1)') / 1e6;
     grid.lonStart = getContentByInfo(decodedGrib[3],'Lo1 — longitude of first grid point (see Note 1)') / 1e6;
@@ -134,6 +145,8 @@ const parseData = function(decodedGrib){
 
     grid.incI = getContentByInfo(decodedGrib[3],'Di — i direction increment (see Notes 1 and 5)') / 1e6;
     grid.incJ = getContentByInfo(decodedGrib[3],'Dj — j direction increment (see Note 1 and 5)') / 1e6;
+
+    grid.scanningMode = getContentRefByInfo(decodedGrib[3], 'Scanning mode (flags — see Flag Table 3.4 and Note 6)');
 
     // Check if numPoints corresponds to numLatPoints * numLongPoints
     if (grid.numPoints != grid.numLatPoints * grid.numLongPoints)
@@ -187,8 +200,6 @@ const parseData = function(decodedGrib){
         // Decompress
         for (let i = 0; i < values.length; i++)
             values[i] = compression.decompress(values[i]);
-        
-            
     } 
     // Grid point data - complex packing
     // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-2.shtml
@@ -326,7 +337,7 @@ const parseData = function(decodedGrib){
     else if(template == '5.4') { 
         
         // Read precision (32, 64 or 128 Floating point type)
-        let dataType = decodedGrib[5][4].contentRef; // GRIB2.tables['5.7'][getContentByInfo(decodedGrib[5], 'Precision (See code Table 5.7)')]
+        let dataType = getContentRefByInfo(decodedGrib[5], 'Precision (See code Table 5.7)'); //decodedGrib[5][4].contentRef;
         let byteSize;
         let type;
         if (dataType.includes("32-bit")) {
@@ -357,7 +368,7 @@ const parseData = function(decodedGrib){
     // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect6.shtml
     // https://www.unidata.ucar.edu/blogs/developer/entry/grib_bitmaps_are_not_such
     if (decodedGrib[6][2].content !== 255) {
-        console.warn("Bitmap is present: " + decodedGrib[6][2].contentRef)
+        console.warn("Bitmap is present: " + getContentRefByInfo(decodedGrib[6], 'Bit-map indicator (See Table 6.0) (See note 1 below)')); //decodedGrib[6][2].contentRef)
         // Bitmap
         if (decodedGrib[6][2].content == 0){
             // Read bitmap
@@ -385,13 +396,53 @@ const parseData = function(decodedGrib){
         }
     }
 
+    
+
+
+
+
+    // Scanning mode (section 3)
+    // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-4.shtml
+    // Reorganize the data points so they start on the north-west and finish in the south-east
+
+
+    // Flip using vertical axis (left becomes right, right becomes left)
+    if (grid.scanningMode[0][0] == 1) { // Points in the first row or column scan in the -i (-x) direction
+        console.error('TODO: Scanning mode: the data needs to be mirroed in the vertical axis (east should be west and viceversa)');
+    }
+    // Flip using horizontal axis (top becomes bottom, bottom becomes top)
+    if (grid.scanningMode[1][0] == 0) { // Points in the first row or column scan in the -j (-y) direction
+        let horizontalFlipValues = [];
+        for (let i = 0; i < data.values.length; i++){
+            let colN = i % grid.numLongPoints;
+            let rowN = Math.floor (i / grid.numLongPoints);
+
+            let flippedIndex = (grid.numLatPoints - rowN - 1) * grid.numLongPoints + colN;
+            horizontalFlipValues[i] = data.values[flippedIndex];
+        }
+        data.values = horizontalFlipValues;
+    }
+    // Other scanning modes
+    // TODO: the grid can be diamond-shaped, meaning that it is not as simple as painting a point per pixel. Probably it is needed to assing a lat-long value to each datapoint, or to deal with it in the draw function
+    if (grid.scanningMode[2][0] == 1) console.error('TODO: Scanning mode: Adjacent points in the j (y) direction are consecutive')
+    if (grid.scanningMode[3][0] == 1) console.error('TODO: Scanning mode: Adjacent rows scan in the opposite direction')
+    if (grid.scanningMode[4][0] == 1) console.error('TODO: Scanning mode: Points within odd rows are offset by Di/2 in i(x) direction') // Making a grid with diamonds and not squares
+    if (grid.scanningMode[5][0] == 1) console.error('TODO: Scanning mode: Points within even rows are offset by Di/2 in i(x) direction') // Making a grid with diamonds and not squares
+    // Offset all lat coordinates by Dj/2 (Scanning mode: Points are offset by Dj/2 in j(y) direction)
+    if (grid.scanningMode[6][0] == 1) {
+        // Check direction
+        let jDirection = grid.scanningMode[1][0] == 0 ? -1 : 1;
+        // Apply offset
+        grid.latEnd = grid.latEnd + jDirection * grid.incJ/2;
+        grid.latStart = grid.latStart + jDirection * grid.incJ/2;
+    }
+    if (grid.scanningMode[7][0] == 1) console.error('TODO: Scanning mode: 8th bit at https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-4.shtml')
+
+
+
     console.log(data.values);
 
 
-    /*for (var i = 0; i< 10; i++){
-        let byteContent = decodedGrib[7][2].content.slice(i*2, i*2 + 2);
-        console.log(compression.decompress(new DataView(byteContent).getUint16()));
-    }*/
 
     return data;
 }
@@ -500,13 +551,7 @@ const unpackComplexPacking = function(decodedGrib, rawData, compression, inwwInd
         }
     }
 
-    let max = 0;
-    let min = 0;
-    for (let i = 0; i < packedArray.length; i++){
-        max = packedArray[i] > max ? packedArray[i] : max;
-        min = packedArray[i] < min ? packedArray[i] : min;
-    }
-    console.log("Max: " + max + ", Min: " + min);
+    calcMaxMin(packedArray);
 
     return packedArray;
 }
@@ -514,7 +559,15 @@ const unpackComplexPacking = function(decodedGrib, rawData, compression, inwwInd
 
 
 
-
+const calcMaxMin = function(array){
+    let max = 0;
+    let min = 0;
+    for (let i = 0; i < array.length; i++) {
+        max = array[i] > max ? array[i] : max;
+        min = array[i] < min ? array[i] : min;
+    }
+    console.log("Max: " + max + ", Min: " + min);
+}
 
 
 
@@ -537,7 +590,7 @@ const readValuesFromBuffer = function(arraybuffer, bitsPerValue, numValues, inBi
     // Example
     //var a = new Uint16Array(arraybuffer.slice(0,2)); // small endian
     //var b = new DataView(arraybuffer).getUint16(); // big endian (one can specify little endian too)
-    //var c = bits2num(bytes2bits(new Uint8Array(arraybuffer.slice(0,2))));
+    //var c = bits2uint8(bytes2bits(new Uint8Array(arraybuffer.slice(0,2))));
     //console.log("Small endian uint16: " + a + ", Big endian uint16: " + b + ", Using strings: " + c); 
 
 
@@ -551,7 +604,7 @@ const readValuesFromBuffer = function(arraybuffer, bitsPerValue, numValues, inBi
     var bitsString = bytes2bits(rawUint8);
     bitsString = bitsString.slice(bitIndex);
     for (var i = 0; i < numValues * bitsPerValue; i += bitsPerValue) //
-        values2ndmethod.push(bits2num(bitsString.substr(i, bitsPerValue)));
+        values2ndmethod.push(bits2uint8(bitsString.substr(i, bitsPerValue)));
     
 
     //for (var i = 0; i < numValues; i++)
@@ -569,6 +622,13 @@ const getContentByInfo = function(sectionArray, infoValue){
     for (let i = 0; i < sectionArray.length; i++){
         if (sectionArray[i].info === infoValue)
             return sectionArray[i].content;
+    }
+}
+// Get contentRef by infoValue
+const getContentRefByInfo = function(sectionArray, infoValue){
+    for (let i = 0; i < sectionArray.length; i++){
+        if (sectionArray[i].info === infoValue)
+            return sectionArray[i].contentRef;
     }
 }
 
@@ -637,11 +697,35 @@ const decodeSection = function(buffer, section){
             }
         }
 
-        
 
         // Decode bytes
-        let byteContent = buffer.slice(prop.startIndex-1, prop.startIndex-1 + prop.size);
-        prop.content = decodeByte(byteContent, prop.type)
+        let byteContentBuffer = buffer.slice(prop.startIndex - 1, prop.startIndex - 1 + prop.size);
+        let tempPropContent = decodeByte(byteContentBuffer, prop.type);
+
+
+        // Regulations
+        // https://apps.ecmwf.int/codes/grib/format/grib2/regulations/
+        // 92.1.5 - First bit (most significative) indicates positive/negative
+        let sign = 1;
+        if (prop.regulation){
+            if (prop.regulation == '92.1.5'){
+                // Check if first bit is 1, indicating that the number is negative
+                let byteContentUint8 = new Uint8Array(byteContentBuffer); // Transform to uint8 for ease of transformations from bytes to bits to uint8
+                let isNegative = byteContentUint8[0] >> 7; // Decode byte and get the first bit by shifting
+                if (isNegative){
+                    // Turn first significative byte to 0
+                    let strBits = bytes2bits([byteContentUint8[0]]);
+                    if (strBits[0] != 1) console.error("something is going wrong here");
+                    strBits = '0' + strBits.substr(1); // Replace the first bit for a 0
+                    byteContentUint8[0] = bits2uint8(strBits);
+                    // Decode bits according to property type using the new modified buffer and a negative sign
+                    tempPropContent = -decodeByte(byteContentUint8.buffer, prop.type);
+                }
+            }
+        }
+        // Decoded bytes
+        prop.content = tempPropContent;
+
 
         // Decode table content
         if ("table" in prop){
@@ -649,6 +733,26 @@ const decodeSection = function(buffer, section){
                 prop.contentRef = GRIB2.tables[prop.table][prop.content];
             } catch (error){
                 console.log(prop.table + " is not defined." + GRIB2.tables[prop.table]);
+            }
+        }
+
+        // Decode flag table content (only for 3.3 and 3.4 tables)
+        // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp3-0.shtml
+        // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-3.shtml
+        // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-4.shtml
+        if ("flagTable" in prop){
+            // Decode flags
+            prop.contentRef = [];
+            // Transform decimal to bits
+            let flagBits = bytes2bits([prop.content]);
+            // Iterate through flags
+            for (let i = 0; i < flagBits.length; i++){
+                // Start from lower bits
+                let flag = flagBits[flagBits.length - 1 - i];
+                // Check table
+                let flagContent = GRIB2.tables[prop.flagTable][i + 1][flag];
+                // Store
+                prop.contentRef.push(flagContent);
             }
         }
 
@@ -714,7 +818,7 @@ function bytes2bits(bytes)
     return bits;
 }
 // Returns unsigned int
-function bits2num(bits){
+function bits2uint8(bits){
     let value = 0;
     for (let i = 0; i < bits.length; i++)
         value += parseInt(bits[bits.length - (i+1)]) ? Math.pow(2, i) : 0;
