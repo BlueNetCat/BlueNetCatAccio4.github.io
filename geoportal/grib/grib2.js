@@ -191,23 +191,31 @@ class GRIB2 {
         },
         // Resolution and Component Flags
         '3.3': { // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table3-3.shtml
+            1: ['Reserved', 'Reserved'],
+            2: ['Reserved', 'Reserved'],
+            3: ['0: i direction increments not given', '1: i direction increments given'],
+            4: ['0: j direction increments not given', '1: j direction increments given'],
+            5: ['0: Resolved u and v components of vector quantities relative to easterly and northerly directions', '1: Resolved u and v components of vector quantities relative to the defined grid in the direction of increasing x and y(or i and j) coordinates, respectively.'],
+            6: ['Reserved - set to zero'],
+            7: ['Reserved - set to zero'],
+            8: ['Reserved - set to zero']
             // It is an int8, with bit information
             // 0000 0000
-            0: 'i and j direction increments not given. Resolved u and v components of vector quantities relative to easterly and northerly directions.',
+            //0: 'i and j direction increments not given. Resolved u and v components of vector quantities relative to easterly and northerly directions.',
             // 0000 0100
-            4: 'i direction increments given. j direction increments not given. Resolved u and v components of vector quantities relative to easterly and northerly directions.',
+            //4: 'i direction increments given. j direction increments not given. Resolved u and v components of vector quantities relative to easterly and northerly directions.',
             // 0000 1000
-            8: 'i direction increments not given. j direction increments given. Resolved u and v components of vector quantities relative to easterly and northerly directions.',
+            //8: 'i direction increments not given. j direction increments given. Resolved u and v components of vector quantities relative to easterly and northerly directions.',
             // 0000 1100
-            12: 'i and j direction increments given. Resolved u and v components of vector quantities relative to easterly and northerly directions.',
+            //12: 'i and j direction increments given. Resolved u and v components of vector quantities relative to easterly and northerly directions.',
             // 0001 0000
-            16: 'i and j direction increments not given. Resolved u and v components of vector quantities relative to the defined grid in the direction of increasing x and y (or i and j) coordinates, respectively.',
+            //16: 'i and j direction increments not given. Resolved u and v components of vector quantities relative to the defined grid in the direction of increasing x and y (or i and j) coordinates, respectively.',
             // 0001 0100
-            20: 'i direction increments given. j direction increments not given. Resolved u and v components of vector quantities relative to the defined grid in the direction of increasing x and y (or i and j) coordinates, respectively.',
+            //20: 'i direction increments given. j direction increments not given. Resolved u and v components of vector quantities relative to the defined grid in the direction of increasing x and y (or i and j) coordinates, respectively.',
             // 0001 1000
-            24: 'i direction increments not given. j direction increments given. Resolved u and v components of vector quantities relative to the defined grid in the direction of increasing x and y (or i and j) coordinates, respectively.',
+            //24: 'i direction increments not given. j direction increments given. Resolved u and v components of vector quantities relative to the defined grid in the direction of increasing x and y (or i and j) coordinates, respectively.',
             // 0001 1100
-            24: 'i and j direction increments given. Resolved u and v components of vector quantities relative to the defined grid in the direction of increasing x and y (or i and j) coordinates, respectively.'
+            //24: 'i and j direction increments given. Resolved u and v components of vector quantities relative to the defined grid in the direction of increasing x and y (or i and j) coordinates, respectively.'
             //1-2: Reserved
             //3: ['0: i direction increments not given','1: i direction increments given'],
             //4: ['0: j direction increments not given','1: j direction increments given'],
@@ -1014,7 +1022,7 @@ class GRIB2 {
             255: 'Missing'
         }
     }
-
+    // Static templates
     static templates = {
         // Section 3 - Grid Definition Template Number
         // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect3.shtml
@@ -1117,7 +1125,7 @@ class GRIB2 {
                 startIndex: 55,
                 size: 1,
                 content: null,
-                table: '3.3',
+                flagTable: '3.3',
                 type: 'uint8',
                 info: 'Resolution and component flags (see Flag Table 3.3)'
             },
@@ -1153,7 +1161,7 @@ class GRIB2 {
                 startIndex: 72,
                 size: 1,
                 content: null,
-                table: '3.4',
+                flagTable: '3.4',
                 type: 'uint8',
                 info: 'Scanning mode (flags — see Flag Table 3.4 and Note 6)'
             },
@@ -1270,7 +1278,7 @@ class GRIB2 {
                 startIndex: 55,
                 size: 1,
                 content: null,
-                table: '3.3',
+                flagTable: '3.3',
                 type: 'uint8',
                 info: 'Resolution and component flags (see Flag Table 3.3)'
             },
@@ -1306,7 +1314,7 @@ class GRIB2 {
                 startIndex: 72,
                 size: 1,
                 content: null,
-                table: '3.4',
+                flagTable: '3.4',
                 type: 'uint8',
                 info: 'Scanning mode (flags — see Flag Table 3.4 and Note 6)'
             },
@@ -1442,7 +1450,7 @@ class GRIB2 {
                 startIndex: 55,
                 size: 1,
                 content: null,
-                table: '3.3',
+                flagTable: '3.3',
                 type: 'uint8',
                 info: 'Resolution and component flags (see Flag Table 3.3)'
             },
@@ -1478,7 +1486,7 @@ class GRIB2 {
                 startIndex: 72,
                 size: 1,
                 content: null,
-                table: '3.4',
+                flagTable: '3.4',
                 type: 'uint8',
                 info: 'Scanning mode (flags — see Flag Table 3.4)'
             },
@@ -1614,7 +1622,7 @@ class GRIB2 {
                 startIndex: 55,
                 size: 1,
                 content: null,
-                table: '3.3',
+                flagTable: '3.3',
                 type: 'uint8',
                 info: 'Resolution and component flags (see Flag Table 3.3)'
             },
@@ -1650,7 +1658,7 @@ class GRIB2 {
                 startIndex: 72,
                 size: 1,
                 content: null,
-                table: '3.4',
+                flagTable: '3.4',
                 type: 'uint8',
                 info: 'Scanning mode (flags — see Flag Table 3.4)'
             },
@@ -1792,7 +1800,7 @@ class GRIB2 {
                 startIndex: 47,
                 size: 1,
                 content: null,
-                table: '3.3',
+                flagTable: '3.3',
                 type: 'uint8',
                 info: 'Resolution and component flags (see Flag Table 3.3)'
             },
@@ -1800,7 +1808,7 @@ class GRIB2 {
                 startIndex: 48,
                 size: 1,
                 content: null,
-                table: '3.4',
+                flagTable: '3.4',
                 type: 'uint8',
                 info: 'Scanning mode (flags — see Flag Table 3.4)'
             },
@@ -1913,7 +1921,7 @@ class GRIB2 {
                 startIndex: 47,
                 size: 1,
                 content: null,
-                table: '3.3',
+                flagTable: '3.3',
                 type: 'uint8',
                 info: 'Resolution and component flags (see Flag Table 3.3)'
             },
@@ -1921,7 +1929,7 @@ class GRIB2 {
                 startIndex: 48,
                 size: 1,
                 content: null,
-                table: '3.4',
+                flagTable: '3.4',
                 type: 'uint8',
                 info: 'Scanning mode (flags — see Flag Table 3.4)'
             },
@@ -2054,7 +2062,7 @@ class GRIB2 {
                 startIndex: 47,
                 size: 1,
                 content: null,
-                table: '3.3',
+                flagTable: '3.3',
                 type: 'uint8',
                 info: 'Resolution and component flags (see Flag Table 3.3)'
             },
@@ -2083,7 +2091,7 @@ class GRIB2 {
                 startIndex: 60,
                 size: 1,
                 content: null,
-                table: '3.4',
+                flagTable: '3.4',
                 type: 'uint8',
                 info: 'Scanning mode (flags — see Flag Table 3.4)'
             },
@@ -2569,8 +2577,10 @@ class GRIB2 {
         // Section 5 - Data Representation
         // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect5.shtml
         // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table5-0.shtml
+        
         // Grid point data - simple packing
         '5.0': [ // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_temp5-0.shtml
+            // https://apps.ecmwf.int/codes/grib/format/grib2/regulations/
             {
                 startIndex: 12,
                 size: 4,
@@ -2583,6 +2593,7 @@ class GRIB2 {
                 size: 2,
                 content: null,
                 type: 'int16',
+                regulation: '92.1.5',
                 info: 'Binary scale factor (E)'
             },
             {
@@ -2590,6 +2601,7 @@ class GRIB2 {
                 size: 2,
                 content: null,
                 type: 'int16',
+                regulation: '92.1.5',
                 info: 'Decimal scale factor (D)'
             },
             {
@@ -3226,7 +3238,7 @@ class GRIB2 {
 
     }
 
-
+    // Current data template
     constructor(buffer){
 
         this.buffer = buffer;
