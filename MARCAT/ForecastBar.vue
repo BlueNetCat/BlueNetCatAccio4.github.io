@@ -31,6 +31,12 @@
 
                 <!-- Data figures -->
                 <div class="row p-1 align-items-end flex-nowrap">
+                  <!-- Arrow right (from carousel) -->
+                  <!-- https://getbootstrap.com/docs/5.0/components/carousel/ -->
+                  <button class="carousel-control-next" type="button" @click.prevent="nextTimeFigureClicked" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
                   <!-- https://github.com/john015/vue-load-image -->
                   <div class="col btn btn-outline-light fig-col" :class="[fig.active ? 'active border border-dark': '']" :key="fig.id" :id="fig.id" @click.prevent="figureClicked" v-for="fig in figureInfo">
                     
@@ -49,6 +55,12 @@
                     </figure>
 
                   </div>
+                  <!-- Arrow left (from carousel) -->
+                  <!-- https://getbootstrap.com/docs/5.0/components/carousel/ -->
+                  <button class="carousel-control-prev" type="button" @click.prevent="prevTimeFigureClicked" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
 
 
                 </div>
@@ -341,6 +353,32 @@ export default {
       this.updateWMSURL();
     },
 
+    // Next / Previous time in Figures
+    nextTimeFigureClicked: function(event) {
+      // Time scale
+      let activeTimeScale;
+      Object.keys(this.timeScales).forEach(key => { if (this.timeScales[key].active) activeTimeScale = this.timeScales[key] }); // Returns active data type
+      // Add one to time interval
+      let interval = this.timeScales[activeTimeScale.id].interval;
+      let step = interval[interval.length - 1] - interval[interval.length - 2]; // Calculate step between last and before-last (newest dates)
+      interval.forEach((el,idx) => {interval[idx] = el + step});
+      this.timeScales[activeTimeScale.id].interval = interval;
+      // Change time interval
+      this.updateWMSURL();
+    },
+    prevTimeFigureClicked: function(event) {
+      // Time scale
+      let activeTimeScale;
+      Object.keys(this.timeScales).forEach(key => { if (this.timeScales[key].active) activeTimeScale = this.timeScales[key] }); // Returns active data type
+      // Remove one to time interval
+      let interval = this.timeScales[activeTimeScale.id].interval;
+      let step = interval[1] - interval[0]; // Calculate step between second and first (oldest dates)
+      interval.forEach((el,idx) => {interval[idx] = el - step})
+      this.timeScales[activeTimeScale.id].interval = interval;
+      // Change time interval
+      this.updateWMSURL();
+    },
+
     // Select/deselect options
     selectButtonInGroup: function(array, selKey){
       Object.keys(array).forEach(key => array[key].active = false);
@@ -603,6 +641,16 @@ export default {
 
 .btn-outline-dark :not(active) {
   background-color: rgba(255, 255, 255, 0.6);
+}
+
+.carousel-control-next-icon {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2ffff'><path d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/></svg>");
+}
+.carousel-control-prev-icon {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2ffff'><path d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/></svg>");
+}
+.carousel-control-next, .carousel-control-prev {
+  width: 7%;
 }
 
 </style>
