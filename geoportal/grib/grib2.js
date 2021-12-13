@@ -1022,7 +1022,7 @@ class GRIB2 {
             255: 'Missing'
         }
     }
-
+    // Static templates
     static templates = {
         // Section 3 - Grid Definition Template Number
         // https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_sect3.shtml
@@ -3238,7 +3238,7 @@ class GRIB2 {
 
     }
 
-
+    // Current data template
     constructor(buffer){
 
         this.buffer = buffer;
