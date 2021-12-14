@@ -2,6 +2,7 @@
     <div id="app-map">
 
       <div id="map" class="map position-absolute vh-100 vw-100"></div>
+      <wms-legend class="position-absolute top-0 end-0 d-sm-flex me-2 mt-5"></wms-legend>
     </div>
 </template>
 
@@ -16,6 +17,8 @@
 
 
 <script>
+import WMSLegend from "WMSLegend.vue";
+
 export default {
   name: 'app-map',
   created (){
@@ -186,7 +189,7 @@ export default {
     }
   },
   components: {
-    //"vue-load-image": VueLoadImage
+    "wms-legend": WMSLegend
   },
   computed: {
       foo: function () {

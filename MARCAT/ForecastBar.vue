@@ -12,7 +12,7 @@
           </h2>
           <!--div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample"-->
           <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
+            <div class="accordion-body p-0">
 
 
               <div class="container">
@@ -674,6 +674,7 @@ export default {
 }
 .carousel-control-next, .carousel-control-prev {
   width: 7%;
+  top: 80px;
 }
 
 .fs-7 {
