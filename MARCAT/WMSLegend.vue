@@ -1,6 +1,6 @@
 <template>
   <!-- Div container with mouse events -->
-  <div id="wms-legend" @mouseover="mouseIsOver = true" @mouseleave="mouseLeftLegend()" @click="legendClicked()">
+  <div id="wms-legend" @mouseover="mouseIsOver = true" @mouseleave="mouseLeftLegend()" @click.prevent="legendClicked($event)">
 
       <!-- Canvas with legend and interactivity -->
       <canvas @mousemove="updateMousePosition($event)" width="30" height="250" 
@@ -61,7 +61,7 @@ export default {
   methods: {
 
     // Legend clicked --> change style
-    legendClicked: function(){
+    legendClicked: function(event){
       // Circular shfit
       this.styles.push(this.styles.shift(1));
       // Replace in url
