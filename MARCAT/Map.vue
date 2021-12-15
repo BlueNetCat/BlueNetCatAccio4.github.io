@@ -2,7 +2,7 @@
     <div id="app-map">
 
       <div id="map" class="map position-absolute vh-100 vw-100"></div>
-      <wms-legend class="position-absolute top-0 end-0 d-sm-flex me-2 mt-5"></wms-legend>
+      <wms-legend @legendClicked="changeStyle($event)" ref="legendWMS" class="position-absolute top-0 end-0 d-sm-flex me-2 mt-5"></wms-legend>
     </div>
 </template>
 
@@ -174,6 +174,9 @@ export default {
       if (this.$root.$refs.animcanvas) // Reference defined in vueParser.js
         if (infoWMS.animation) // Defined in Timebar.vue
           this.$root.$refs.animcanvas.$defineWMSSource(infoWMS.exampleWMSURL, infoWMS.animation);
+      // If legend exists, update
+      if (this.$refs.legendWMS)
+        this.$refs.legendWMS.setWMSLegend(infoWMS);
     },
 
 
@@ -186,6 +189,18 @@ export default {
           selLayer = layerItem;
       })
       return selLayer;
+    },
+  
+    // Change the styles (WMSLegend.vue emit)
+    changeStyle: function(newStyle){
+      console.log("Defining new style: " + newStyle)
+      // Get params
+      let params = this.$getMapLayer('data').getSource().getParams();
+      params.STYLES = newStyle;
+      // Set params
+      this.$getMapLayer('data').getSource().updateParams(params);
+      // Update ForecastBar if it exists
+
     }
   },
   components: {

@@ -1,15 +1,16 @@
 <template>
   <!-- Div container with mouse events -->
-  <div id="wms-legend" @mouseover="mouseIsOver = true" @mouseleave="mouseLeftLegend()">
-    <!-- Canvas with legend and interactivity -->
-    <canvas @mousemove="updateMousePosition($event)" width="30" height="250" 
-        id="wmsLegendCanvas" ref="wmsLegendCanvas" class="img-fluid rounded"></canvas>
-    <!-- Tooltip -->
-    <div v-if=mouseIsOver class="tooltip fade show bs-tooltip-start" id="legendTooltip"
-        style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px;"><!--  transform: translate(-30px, 0px); -->
-      <div class="tooltip-arrow" style="position: absolute; top: 0px; transform: translate(0px, 8px); white-space: nowrap;"></div>
-      <div class="tooltip-inner">{{legendValue}} {{legendUnits}}</div>
-    </div>
+  <div id="wms-legend" @mouseover="mouseIsOver = true" @mouseleave="mouseLeftLegend()" @click="legendClicked()">
+
+      <!-- Canvas with legend and interactivity -->
+      <canvas @mousemove="updateMousePosition($event)" width="30" height="250" 
+          id="wmsLegendCanvas" ref="wmsLegendCanvas" class="img-fluid rounded"></canvas>
+      <!-- Tooltip -->
+      <div v-if=mouseIsOver class="tooltip fade show bs-tooltip-start" id="legendTooltip"
+          style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px;"><!--  transform: translate(-30px, 0px); -->
+        <div class="tooltip-arrow" style="position: absolute; top: 0px; transform: translate(0px, 8px); white-space: nowrap;"></div>
+        <div class="tooltip-inner">{{legendValue}} {{legendUnits}}</div>
+      </div>
 
   </div>
 </template>
@@ -41,23 +42,53 @@ export default {
 
   },
   mounted () {
-    this.setWMSLegend('');
+    //this.setWMSLegend('');
   },
   data () {
     return {
-      baseWMSLegendURL: "https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-qm?REQUEST=GetLegendGraphic&LAYER=sea_water_velocity&PALETTE=rainbow&COLORSCALERANGE=0%2C2",
+      baseWMSLegendURL: "{SOURCEURL}?REQUEST=GetLegendGraphic&LAYER={LAYER}&PALETTE={PALETTE}&COLORSCALERANGE={COLORRANGE}",
+      baseGetCapabilitiesURL: "{SOURCEURL}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities",
       mouseIsOver: false,
       mousePosition: {mouseX: 0, mouseY: 0},
       imgEl: undefined,
       legendValue: '',
       legendUnits: 'm/s',
+      range: [0,1],
+      styles: [],
+      currentURL: "",
     }
   },
   methods: {
-      
-    setWMSLegend: function(wmsURL){
-      wmsURL = "https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-qm?REQUEST=GetLegendGraphic&LAYER=sea_water_velocity&PALETTE=rainbow&COLORSCALERANGE=0%2C2";
 
+    // Legend clicked --> change style
+    legendClicked: function(){
+      // Circular shfit
+      this.styles.push(this.styles.shift(1));
+      // Replace in url
+      this.currentURL = SourceWMS.setWMSParameter(this.currentURL, 'PALETTE', this.styles[0].split('/')[1]);
+      this.imgEl.src = this.currentURL;
+
+      // Emit for changing styles
+      this.$emit('legendClicked', this.styles[0])
+    },
+
+    setWMSLegend: function(infoWMS){
+
+      // Define Legend WMS URL
+      let wmsURL = this.baseWMSLegendURL.replace('{SOURCEURL}', infoWMS.url);
+      wmsURL = wmsURL.replace('{LAYER}', infoWMS.params.LAYERS);
+      wmsURL = wmsURL.replace('{PALETTE}', infoWMS.params.STYLES.split('/')[1]);
+      wmsURL = wmsURL.replace('{COLORRANGE}', infoWMS.params.COLORSCALERANGE[0] + "," + infoWMS.params.COLORSCALERANGE[1]);
+      this.currentURL = wmsURL;
+
+      // Define range
+      this.range[0] = infoWMS.params.COLORSCALERANGE[0];
+      this.range[1] = infoWMS.params.COLORSCALERANGE[1];
+
+      // Get styles
+      this.getWMSStyles(infoWMS);
+
+      // Create image element to paint the legend graphic
       let canvas = this.$refs.wmsLegendCanvas;
       let ctx = canvas.getContext("2d");
       this.imgEl = document.createElement("img");
@@ -68,6 +99,36 @@ export default {
       };
     },
 
+    // Get WMS styles
+    getWMSStyles: function(infoWMS){
+      let capabilitiesURL = this.baseGetCapabilitiesURL.replace('{SOURCEURL}', infoWMS.url);
+      // fetch
+      fetch(capabilitiesURL).then(response => response.text())
+        .then(data => {
+          const parser = new DOMParser();
+          let xml = parser.parseFromString(data, "application/xml");
+          let layers = xml.querySelectorAll('Layer');
+          // Iterate through layers
+          layers.forEach(ll => {
+            // Get layer by its name
+            console.log(ll.firstElementChild.innerHTML);
+            if (ll.querySelector("Name").innerHTML == infoWMS.params.LAYERS){
+              let layerStyles = ll.querySelectorAll("Style");
+              // Store style names
+              layerStyles.forEach(ss => {
+                if (ss.querySelector("Name").innerHTML.includes("boxfill")) // Only boxfill styles
+                  this.styles.push(ss.querySelector("Name").innerHTML)
+              });
+              console.log(this.styles);
+            }
+          })
+        })
+        .catch(console.error);
+    },
+
+
+
+    // Draw legend and cursor
     draw: function(canvas){
       // Context
       let ctx = canvas.getContext("2d");
@@ -108,14 +169,16 @@ export default {
       }
     },
 
+
     // Update mouse Position (only happens when inside the canvas)
     updateMousePosition: function(event){
       this.mousePosition.mouseX = event.offsetX;
       this.mousePosition.mouseY = event.offsetY;
 
       let canvas = this.$refs.wmsLegendCanvas;
-
-      this.legendValue = ((canvas.height - event.offsetY)/canvas.height).toString();
+      // Calculate legend value
+      let normValue = (canvas.height - event.offsetY)/canvas.height;
+      this.legendValue = (normValue * (this.range[1] - this.range[0]) + this.range[0]).toFixed(2);
 
       let legendTooltipEl = document.getElementById("legendTooltip");
       legendTooltipEl.style.transform = "translate(-"+ canvas.width +"px, "+ (event.offsetY-12) +"px)";
@@ -153,6 +216,7 @@ export default {
 
 #wmsLegendCanvas:hover {
   border: 1px solid #000000!important;
+  cursor: pointer
 }
 
 </style>

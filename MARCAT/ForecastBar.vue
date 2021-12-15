@@ -213,7 +213,7 @@ export default {
           layerName: 'VHM0', // 'VMDR' for direction in degrees
           timeScales: ['h', 'h3', 'h6', 'h12'],
           range: [0, 6],
-          style: "boxfill%2Foccam",
+          style: "boxfill/occam_pastel-30",
           animation: {
             layerNames: ['VHM0', 'VMDR'], // Intensity, Angle
             format: 'value_angle',
