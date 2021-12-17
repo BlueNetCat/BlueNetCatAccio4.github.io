@@ -139,6 +139,7 @@ export default {
           productURL: "https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_PHY_006_013/INFORMATION",
           productURL2: "https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_BGC_006_014/INFORMATION",
           productURL3: "https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_WAV_006_017/INFORMATION",
+          productURL4: "https://resources.marine.copernicus.eu/product-detail/WIND_GLO_WIND_L4_NRT_OBSERVATIONS_012_004/INFORMATION",
           domainURL: "https://nrt.cmems-du.eu/thredds/wms",
           active: true
         },
@@ -221,16 +222,30 @@ export default {
           },
           active: false,
         },
-        "Chlorophyll": {
+        'Chlorophyll': {
           name: 'Chlorophyll',
           url: 'med-ogs-pft-an-fc',
           layerName: 'chl',
           timeScales: ['d', 'd3'],
           range: [0.01, 1],
-          style: "boxfill%2Foccam",
+          style: 'boxfill%2Foccam',
           active: false,// TODO BASE URL IS DIFFERENT
           // https://nrt.cmems-du.eu/thredds/wms/med-ogs-pft-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&TILED=true&COLORSCALERANGE=0.028321734%2C2.3005204&ELEVATION=-1.0182366371154785&LAYERS=chl&STYLES=boxfill%2Frainbow&TIME=2021-10-06T12%3A00%3A00.000Z&WIDTH=256&HEIGHT=256&CRS=EPSG%3A4326&BBOX=28.125%2C16.875%2C33.75%2C22.5
           // https://thredds.socib.es/thredds/wms/operational_models/oceanographical/hydrodynamics/wmop_surface/2021/09/roms_wmop_surface_20210922.nc?service=WMS&version=1.3.0&request=GetCapabilities
+        },
+        'Wind': {
+          name: 'Wind',
+          url: 'CERSAT-GLO-BLENDED_WIND_L4-V6-OBS_FULL_TIME_SERIE',
+          layerName: 'wind',
+          timeScales: ['nearrealtimeh6_h6', 'nearrealtimeh6_h12', 'nearrealtimeh6_h24'],
+          range: [0, 25],
+          style: "boxfill/occam",
+          animation: {
+            layerNames: ['eastward_wind', 'northward_wind'], // East, North
+            format: 'east_north',
+            type: 'velocity'
+          },
+          active: false,
         }
       },
       // 15min, hourly, daily, monthly means
@@ -244,30 +259,51 @@ export default {
         }, 
         'h': {
           id: 'h',
-          name: "1 hour",
+          name: '1 hour',
           url: 'h',
           interval: [-2, -1, 0, 1, 2],
           active: false
         },
         'h3': {
           id: 'h3',
-          name: "3 hours",
+          name: '3 hours',
           url: 'h',
           interval: [-6, -3, 0, 3, 6],
           active: false
         },
         'h6': {
           id: 'h6',
-          name: "6 hours",
+          name: '6 hours',
           url: 'h',
           interval: [-12. -6, 0, 6, 12],
           active: false
         },
         'h12': {
           id: 'h12',
-          name: "12 hours",
+          name: '12 hours',
           url: 'h',
           interval: [-24, -12, 0, 12, 24],
+          active: false
+        },
+        'nearrealtimeh6_h6': {
+          id: 'nearrealtimeh6_h6',
+          name: '6 hours',
+          url: 'nrth6',
+          interval: [-12, -6, 0, 6, 12],
+          active: false
+        },
+        'nearrealtimeh6_h12': {
+          id: 'nearrealtimeh6_h12',
+          name: '12 hours',
+          url: 'nrth6',
+          interval: [-24, -12, 0, 12, 24],
+          active: false
+        },
+        'nearrealtimeh6_h24': {
+          id: 'nearrealtimeh6_h24',
+          name: '24 hours',
+          url: 'nrth6',
+          interval: [-48, -24, 0, 24, 48],
           active: false
         },
         'd': {
@@ -428,7 +464,10 @@ export default {
       }
       
       // WMS url parameters
-      tmpURLData = tmpURLData.replace('{URLdataTypes}', activeDataType.url + '-' + activeTimeScale.url);
+      if (activeTimeScale.url == 'nrth6')
+        tmpURLData = tmpURLData.replace('{URLdataTypes}', activeDataType.url);
+      else
+        tmpURLData = tmpURLData.replace('{URLdataTypes}', activeDataType.url + '-' + activeTimeScale.url);
       tmpURLData = tmpURLData.replace('{LAYERNAME}', activeDataType.layerName);
       tmpURLData = tmpURLData.replace('{MINRANGE}', activeDataType.range[0]);
       tmpURLData = tmpURLData.replace('{MAXRANGE}', activeDataType.range[1]);
@@ -464,6 +503,15 @@ export default {
             caption =  this.weekDays[dd.getDay()] + " " + dd.getDate() + " at " + dd.getHours() + ':00';
             subcaption = activeTimeScale.interval[i] + 'h';
             dateSummary = caption +  "h, hourly mean";
+            break;
+          case 'nrth6':
+            // Set minutes
+            dd.setMinutes(0);
+            // Set hours
+            dd.setHours(Math.round(dd.getHours()/6)*6 + activeTimeScale.interval[i]);
+            caption =  this.weekDays[dd.getDay()] + " " + dd.getDate() + " at " + dd.getHours() + ':00';
+            subcaption = activeTimeScale.interval[i] + 'h';
+            dateSummary = caption +  "h, near real time 6 hourly observation";
             break;
           case 'd':
             dd.setDate(dd.getDate() + activeTimeScale.interval[i]);
@@ -539,8 +587,9 @@ export default {
             exampleWMSURL: tmpURL, // TODO: remove without consequences?
             animation: activeDataType.animation,
           }
+          this.layerInfoWMS.url = this.layerInfoWMS.url.replace('-' + activeTimeScale.url, '');
         }
-
+        
       }
 
       return this.figureInfo;
