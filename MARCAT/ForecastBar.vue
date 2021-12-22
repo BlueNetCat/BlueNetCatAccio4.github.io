@@ -179,7 +179,8 @@ export default {
           url: 'med-cmcc-cur-an-fc',
           layerName: 'sea_water_velocity',
           timeScales: ['h', 'h3', 'h6', 'h12', 'd', 'd3', 'm'],
-          range: [-1,1],
+          range: [0, 1.5],
+          units: 'm/s',
           style: "boxfill%2Foccam",//"vector%2Foccam",
           animation: {
             layerNames: ['uo','vo'], // East, North
@@ -194,6 +195,7 @@ export default {
           layerName: 'thetao',
           timeScales: ['h', 'h3', 'h6', 'h12', 'd', 'd3', 'm'],
           range: [10, 32],
+          units: 'ºC',
           style: "boxfill%2Foccam",
           active: false
         },
@@ -203,6 +205,7 @@ export default {
           layerName: 'so',
           timeScales: ['h', 'h3', 'h6', 'h12', 'd', 'd3', 'm'],
           range: [32, 41],
+          units: '‰',
           style: "boxfill%2Foccam",
           active: false
         },
@@ -212,6 +215,7 @@ export default {
           layerName: 'VHM0', // 'VMDR' for direction in degrees
           timeScales: ['h', 'h3', 'h6', 'h12'],
           range: [0, 6],
+          units: 'm',
           style: "boxfill/occam_pastel-30",
           animation: {
             layerNames: ['VHM0', 'VMDR'], // Intensity, Angle
@@ -226,6 +230,7 @@ export default {
           layerName: 'VHM0_WW', // 'VMDR' for direction in degrees
           timeScales: ['h', 'h3', 'h6', 'h12'],
           range: [0, 6],
+          units: 'm',
           style: "boxfill/occam_pastel-30",
           animation: {
             layerNames: ['VHM0_WW', 'VMDR_WW'], // Intensity, Angle
@@ -240,6 +245,7 @@ export default {
           layerName: 'chl',
           timeScales: ['d', 'd3'],
           range: [0.01, 1],
+          units: 'mg/m3',
           style: 'boxfill%2Foccam',
           active: false,// TODO BASE URL IS DIFFERENT
           // https://nrt.cmems-du.eu/thredds/wms/med-ogs-pft-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&TILED=true&COLORSCALERANGE=0.028321734%2C2.3005204&ELEVATION=-1.0182366371154785&LAYERS=chl&STYLES=boxfill%2Frainbow&TIME=2021-10-06T12%3A00%3A00.000Z&WIDTH=256&HEIGHT=256&CRS=EPSG%3A4326&BBOX=28.125%2C16.875%2C33.75%2C22.5
@@ -542,7 +548,8 @@ export default {
               'TIME': dd.toISOString(),
               'COLORSCALERANGE': activeDataType.range,
               'STYLES': activeDataType.style.replace('%2F', '/'),
-              'TRANSPARENT': true
+              'TRANSPARENT': true,
+              'UNITS': activeDataType.units
             },
             cacheSize: 500,
             zDirection: -1,

@@ -181,6 +181,11 @@ class SourceWMS {
         // For data stored in intensity and angle, the colorrange of the angle should go from 0 to 360
         if (animation.format == 'value_angle' && i == 1)
           wmsURL = SourceWMS.setWMSParameter(wmsURL, 'COLORSCALERANGE', '0,360');
+        // For data stored in east-north, there range should have negative values too
+          else if (animation.format == 'east_north'){
+            this.colorrange[0] = -this.colorrange[1];
+          wmsURL = SourceWMS.setWMSParameter(wmsURL, 'COLORSCALERANGE', this.colorrange.toString());
+        } 
         
         // Get WMS image data
         console.log("Loading data source WMS images...");
