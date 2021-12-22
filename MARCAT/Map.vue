@@ -2,6 +2,7 @@
     <div id="app-map">
 
       <div id="map" class="map position-absolute vh-100 vw-100"></div>
+      <wms-legend @legendClicked="changeStyle($event)" ref="legendWMS" class="position-absolute top-0 end-0 d-sm-flex me-2 mt-5"></wms-legend>
     </div>
 </template>
 
@@ -16,6 +17,8 @@
 
 
 <script>
+import WMSLegend from "WMSLegend.vue";
+
 export default {
   name: 'app-map',
   created (){
@@ -117,6 +120,8 @@ export default {
     }
   },
   methods: {
+
+    // PRIVATE METHODS
     // Figure clicked (TODO: emit)
     $initMap: function () {
       // Initialize map
@@ -148,6 +153,37 @@ export default {
     },
 
 
+    // Get layer function
+    $getMapLayer: function(layerName){
+      let selLayer;
+      this.$map.getLayers().forEach(layerItem => {
+        //console.log(layerItem.get('name'));
+        if (layerItem.get('name') == layerName)
+          selLayer = layerItem;
+      })
+      return selLayer;
+    },
+  
+
+
+
+
+    // INTERNAL EVENTS
+    // Change the styles (WMSLegend.vue emit)
+    changeStyle: function(newStyle){
+      // Get params
+      let params = this.$getMapLayer('data').getSource().getParams();
+      params.STYLES = newStyle;
+      // Set params
+      this.$getMapLayer('data').getSource().updateParams(params);
+      // Update ForecastBar if it exists
+      this.$emit('changeWMSStyle', newStyle);
+    },
+
+
+
+
+    // PUBLIC METHODS
     // Update WMS data source. This function is called from forecast-component
     $updateSourceWMS: function (infoWMS){
       // Create tile grid for faster rendering for low resolution WMS
@@ -167,26 +203,21 @@ export default {
 
       // Get information from forecast-component
       this.$getMapLayer('data').setSource(new ol.source.TileWMS(infoWMS));
-      // If animation exists, update
-      if (this.$root.$refs.animcanvas) // Reference defined in vueParser.js
-        if (infoWMS.animation) // Defined in Timebar.vue
-          this.$root.$refs.animcanvas.$defineWMSSource(infoWMS.exampleWMSURL, infoWMS.animation);
+      // Update legend
+      if (this.$refs.legendWMS)
+        this.$refs.legendWMS.setWMSLegend(infoWMS);
     },
 
-
-    // Get layer function
-    $getMapLayer: function(layerName){
-      let selLayer;
-      this.$map.getLayers().forEach(layerItem => {
-        //console.log(layerItem.get('name'));
-        if (layerItem.get('name') == layerName)
-          selLayer = layerItem;
-      })
-      return selLayer;
+    
+    // Get OL map object
+    $getOLMap: function(){
+      return this.$map;
     }
+
+
   },
   components: {
-    //"vue-load-image": VueLoadImage
+    "wms-legend": WMSLegend
   },
   computed: {
       foo: function () {

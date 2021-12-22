@@ -15,7 +15,7 @@ class AnimationEngine {
   // Constructor
   constructor(inCanvas, inMap) {
     this.canvasParticles = inCanvas; // this.canvasParticles = document.getElementById('animationCanvas');
-    this.map = inMap; // this.$root.$refs.map.$map
+    this.map = inMap; // OL map
     // Set height and width of the canvas
     this.canvasParticles.width = this.map.getViewport().offsetWidth;
     this.canvasParticles.height = this.map.getViewport().offsetHeight;
@@ -138,25 +138,25 @@ class SourceWMS {
 
     // Define WMS image url with a standard size
     // SIZE TODO: could be random size or according to lat-long extension?
-    wmsURL = this.setWMSParameter(wmsURL, 'WIDTH', '2048');
-    wmsURL = this.setWMSParameter(wmsURL, 'HEIGHT', '1024');
+    wmsURL = SourceWMS.setWMSParameter(wmsURL, 'WIDTH', '2048');
+    wmsURL = SourceWMS.setWMSParameter(wmsURL, 'HEIGHT', '1024');
 
     // BBOX
     this.bbox = this.medBBOX;//this.catseaBBOX;
-    wmsURL = this.setWMSParameter(wmsURL, 'BBOX', JSON.stringify(this.bbox).replace('[', '').replace(']', ''));
+    wmsURL = SourceWMS.setWMSParameter(wmsURL, 'BBOX', JSON.stringify(this.bbox).replace('[', '').replace(']', ''));
     // STYLE gray
     let style = 'boxfill/greyscale';
-    wmsURL = this.setWMSParameter(wmsURL, 'STYLES', style);
+    wmsURL = SourceWMS.setWMSParameter(wmsURL, 'STYLES', style);
 
     // PROJECTION EPSG:4326 (lat and long are equally distributed in pixels)
-    wmsURL = this.setWMSParameter(wmsURL, 'PROJECTION', 'EPSG:4326');
+    wmsURL = SourceWMS.setWMSParameter(wmsURL, 'PROJECTION', 'EPSG:4326');
 
     // OUT OF RANGE PIXELS &ABOVEMAXCOLOR=extend&BELOWMINCOLOR=extend
-    wmsURL = this.setWMSParameter(wmsURL, 'ABOVEMAXCOLOR', 'extend');
-    wmsURL = this.setWMSParameter(wmsURL, 'BELOWMINCOLOR', 'extend');
+    wmsURL = SourceWMS.setWMSParameter(wmsURL, 'ABOVEMAXCOLOR', 'extend');
+    wmsURL = SourceWMS.setWMSParameter(wmsURL, 'BELOWMINCOLOR', 'extend');
 
     // COLORRANGE
-    this.colorrange = this.getWMSParameter(wmsURL, 'COLORSCALERANGE').split('%2C');
+    this.colorrange = SourceWMS.getWMSParameter(wmsURL, 'COLORSCALERANGE').split('%2C');
     this.colorrange = this.colorrange.map((e) => parseFloat(e));
 
 
@@ -177,10 +177,10 @@ class SourceWMS {
     if (animation.layerNames.length == 2){
       for (let i = 0; i < 2; i++) {
         // LAYER east and north or intensity and angle
-        wmsURL = this.setWMSParameter(wmsURL, 'LAYERS', animation.layerNames[i]);
+        wmsURL = SourceWMS.setWMSParameter(wmsURL, 'LAYERS', animation.layerNames[i]);
         // For data stored in intensity and angle, the colorrange of the angle should go from 0 to 360
         if (animation.format == 'value_angle' && i == 1)
-          wmsURL = this.setWMSParameter(wmsURL, 'COLORSCALERANGE', '0,360');
+          wmsURL = SourceWMS.setWMSParameter(wmsURL, 'COLORSCALERANGE', '0,360');
         
         // Get WMS image data
         console.log("Loading data source WMS images...");
@@ -219,19 +219,19 @@ class SourceWMS {
 
 
   // Set WMS parameter
-  setWMSParameter(wmsURL, paramName, paramContent) {
+  static setWMSParameter(wmsURL, paramName, paramContent) {
     // If parameter does not exist
     if (wmsURL.indexOf(paramName + "=") == -1) {
       console.log("Parameter ", paramName, " does not exist in WMS URL");
       return wmsURL + '&' + paramName + '=' + paramContent;
     }
-    let currentContent = this.getWMSParameter(wmsURL, paramName);
+    let currentContent = SourceWMS.getWMSParameter(wmsURL, paramName);
     return wmsURL.replace(currentContent, paramContent);
   }
 
 
   // Get WMS parameter
-  getWMSParameter(wmsURL, paramName) {
+  static getWMSParameter(wmsURL, paramName) {
     // If parameter does not exist
     if (wmsURL.indexOf(paramName + "=") == -1) {
       console.log("Parameter ", paramName, " does not exist in WMS URL");
@@ -393,6 +393,7 @@ class Particle {
   // Variables
   numVerticesPath = 20;
   stepInPixels = 20; // Step (ideally in lat, long, not in pixels)
+  color = [0,0,0];
 
   // Constructor
   constructor(particleSystem){
@@ -410,10 +411,19 @@ class Particle {
     if (particleSystem.source.animation.type == 'velocity'){
       this.draw = this.drawVelocity;
       this.numVerticesPath = 20;
+      this.stepInPixels = 20;
     }
     else if (particleSystem.source.animation.type == 'wave'){
       this.draw = this.drawWaves;
       this.numVerticesPath = 8;
+      this.stepInPixels = 20;
+    }
+    else if (particleSystem.source.animation.type == 'whiteWave'){
+      this.draw = this.drawWaves;
+      this.numVerticesPath = 4;
+      this.stepInPixels = 20;
+      this.color = [255,255,255];
+      this.particleSystem.speedFactor = 6;
     }
 
     this.vertices = new Float32Array(this.numVerticesPath * 2); // XY values
@@ -573,7 +583,7 @@ class Particle {
     ctx.beginPath();
     ctx.lineWidth = value*15;
     //ctx.fillStyle = 'rgba(0, 0, 0, ', alphaFactor*0.0, ')';
-    ctx.strokeStyle = 'rgba(0, 0, 0, ' + alphaFactor * 0.5 + ')';
+    ctx.strokeStyle = 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] +', ' + alphaFactor * 0.5 + ')';
     ctx.moveTo(this.prevPos[0], this.prevPos[1])
     ctx.lineTo(this.currentPos[0], this.currentPos[1]);
 

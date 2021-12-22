@@ -12,7 +12,7 @@
           </h2>
           <!--div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample"-->
           <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
+            <div class="accordion-body p-0">
 
 
               <div class="container">
@@ -31,11 +31,17 @@
 
                 <!-- Data figures -->
                 <div class="row p-1 align-items-end flex-nowrap">
+                  <!-- Arrow right (from carousel) -->
+                  <!-- https://getbootstrap.com/docs/5.0/components/carousel/ -->
+                  <button class="carousel-control-next" type="button" @click.prevent="nextTimeFigureClicked" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
                   <!-- https://github.com/john015/vue-load-image -->
                   <div class="col btn btn-outline-light fig-col" :class="[fig.active ? 'active border border-dark': '']" :key="fig.id" :id="fig.id" @click.prevent="figureClicked" v-for="fig in figureInfo">
                     
                     <figure class="figure m-0">
-                      <img :id="fig.id" :src="fig.url" @error="onWMSImageNotFound($event)" class="figure-img img-fluid rounded" :alt="fig.caption">
+                      <img :id="fig.id" :src="fig.url" @load="onWMSImageLoaded($event)" @error="onWMSImageNotFound($event)" class="figure-img img-fluid rounded" :alt="fig.caption">
                       <!--vue-load-image>
                         <template v-slot:image>
                           <img :src="fig.url" @error="onWMSImageNotFound($event)" class="figure-img img-fluid rounded" :alt="fig.caption">
@@ -49,6 +55,12 @@
                     </figure>
 
                   </div>
+                  <!-- Arrow left (from carousel) -->
+                  <!-- https://getbootstrap.com/docs/5.0/components/carousel/ -->
+                  <button class="carousel-control-prev" type="button" @click.prevent="prevTimeFigureClicked" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
 
 
                 </div>
@@ -64,7 +76,7 @@
 
 
                 <!-- Source selection -->
-                <div class="row p-2 align-items-center flex-nowrap">
+                <div class="row p-1 align-items-center flex-nowrap">
                   <div class="col text-center">
                     <div class="btn-group" role="group" aria-label="Source selection" :key="source.id" :id="source.id" @click.prevent="sourceClicked" v-for="source in sources">
                       <button type="button" class="btn btn-sm btn-outline-dark" :class="[source.active ? 'active border': '']">{{source.id}}</button>
@@ -76,7 +88,7 @@
                 <div class="row">
                   <div class="col text-center">
                     <div :key="source.id" v-for="source in sources">
-                      <small v-if="source.active">Attribution: {{source.attribution}}<small>
+                      <p class="fs-7" v-if="source.active">Attribution: {{source.attribution}}</p>
                     </div>
                   </div>
                 </div>
@@ -108,15 +120,13 @@ export default {
   },
   mounted (){
     // Once mounted, update the WMS url of map
-    if (this.$root.$refs.map) // Reference defined in vueParser.js
-      this.$root.$refs.map.$updateSourceWMS(this.getWMSURL());
+    this.$emit('changeWMSSource', this.getWMSInfo());
   },
   data () {
     return {
       currentDataInformation: "",
       mobile: false,
       currentDate: new Date(),
-      days: [ -2, -1, 0, +1, +2],
       selectedDate: [false, false, true, false, false],
       weekDays: ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
@@ -202,7 +212,7 @@ export default {
           layerName: 'VHM0', // 'VMDR' for direction in degrees
           timeScales: ['h', 'h3', 'h6', 'h12'],
           range: [0, 6],
-          style: "boxfill%2Foccam",
+          style: "boxfill/occam_pastel-30",
           animation: {
             layerNames: ['VHM0', 'VMDR'], // Intensity, Angle
             format: 'value_angle',
@@ -210,17 +220,31 @@ export default {
           },
           active: false,
         },
-        "Chlorophyll": {
+        "Wind wave significant height": {
+          name: 'Wind wave significant height',
+          url: 'med-hcmr-wav-an-fc',
+          layerName: 'VHM0_WW', // 'VMDR' for direction in degrees
+          timeScales: ['h', 'h3', 'h6', 'h12'],
+          range: [0, 6],
+          style: "boxfill/occam_pastel-30",
+          animation: {
+            layerNames: ['VHM0_WW', 'VMDR_WW'], // Intensity, Angle
+            format: 'value_angle',
+            type: 'whiteWave'
+          },
+          active: false,
+        },
+        'Chlorophyll': {
           name: 'Chlorophyll',
           url: 'med-ogs-pft-an-fc',
           layerName: 'chl',
           timeScales: ['d', 'd3'],
           range: [0.01, 1],
-          style: "boxfill%2Foccam",
+          style: 'boxfill%2Foccam',
           active: false,// TODO BASE URL IS DIFFERENT
           // https://nrt.cmems-du.eu/thredds/wms/med-ogs-pft-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&TILED=true&COLORSCALERANGE=0.028321734%2C2.3005204&ELEVATION=-1.0182366371154785&LAYERS=chl&STYLES=boxfill%2Frainbow&TIME=2021-10-06T12%3A00%3A00.000Z&WIDTH=256&HEIGHT=256&CRS=EPSG%3A4326&BBOX=28.125%2C16.875%2C33.75%2C22.5
           // https://thredds.socib.es/thredds/wms/operational_models/oceanographical/hydrodynamics/wmop_surface/2021/09/roms_wmop_surface_20210922.nc?service=WMS&version=1.3.0&request=GetCapabilities
-        }
+        },
       },
       // 15min, hourly, daily, monthly means
       timeScales: {
@@ -233,28 +257,28 @@ export default {
         }, 
         'h': {
           id: 'h',
-          name: "1 hour",
+          name: '1 hour',
           url: 'h',
           interval: [-2, -1, 0, 1, 2],
           active: false
         },
         'h3': {
           id: 'h3',
-          name: "3 hours",
+          name: '3 hours',
           url: 'h',
           interval: [-6, -3, 0, 3, 6],
           active: false
         },
         'h6': {
           id: 'h6',
-          name: "6 hours",
+          name: '6 hours',
           url: 'h',
           interval: [-12. -6, 0, 6, 12],
           active: false
         },
         'h12': {
           id: 'h12',
-          name: "12 hours",
+          name: '12 hours',
           url: 'h',
           interval: [-24, -12, 0, 12, 24],
           active: false
@@ -286,13 +310,12 @@ export default {
       //dataURL: "https://nrt.cmems-du.eu/thredds/wms/med-cmcc-cur-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS=sea_water_velocity&COLORSCALERANGE=-1%2C1&STYLES=boxfill%2Foccam&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX=-1%2C36%2C9%2C44&TIME=2021-{MONTH}-{DAY}T12%253A00%253A00.000Z",
       //baseURL: "https://nrt.cmems-du.eu/thredds/wms/{URLdataTypes}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS={LAYERNAME}&COLORSCALERANGE={MINRANGE}%2C{MAXRANGE}&STYLES=boxfill%2Foccam&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX=-1%2C36%2C9%2C44&TIME=2021-{MONTH}-{DAY}T{HOURS}%253A{MINUTES}%253A00.000Z"
                 //https://nrt.cmems-du.eu/thredds/wms/med-ogs-pft-an-fc-m?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&TILED=true&COLORSCALERANGE=0.024503695%2C0.66972876&ELEVATION=-1.0182366371154785&LAYERS=chl&STYLES=boxfill%2Frainbow&TIME=2021-08-01T00%3A00%3A00.000Z&URL=https%3A%2F%2Fnrt.cmems-du.eu%2Fthredds%2Fwms%2Fmed-ogs-pft-an-fc-m&WIDTH=256&HEIGHT=256&CRS=EPSG%3A4326&BBOX=39.375%2C25.3125%2C42.1875%2C28.125
-      baseURL: "{DOMAIN}/{URLdataTypes}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS={LAYERNAME}&COLORSCALERANGE={MINRANGE}%2C{MAXRANGE}&ABOVEMAXCOLOR=extend&BELOWMINCOLOR=extend&STYLES={STYLE}&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX={BBOX}&TIME=2021-{MONTH}-{DAY}T{HOURS}:{MINUTES}:00.000Z"
+      baseURL: "{DOMAIN}/{URLdataTypes}?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS={LAYERNAME}&COLORSCALERANGE={MINRANGE}%2C{MAXRANGE}&ABOVEMAXCOLOR=extend&BELOWMINCOLOR=extend&STYLES={STYLE}&WIDTH=256&HEIGHT=256&CRS=CRS%3A84&BBOX={BBOX}&TIME={YEAR}-{MONTH}-{DAY}T{HOURS}:{MINUTES}:00.000Z"
       
    }
   },
   methods: {
-    // HTML
-    // Responsive html
+    // USER HTML ACTIONS
     checkScreenRatio: function(){
       let ratio = window.innerHeight / window.innerWidth;
       if (ratio < 1)
@@ -312,9 +335,8 @@ export default {
       console.log(this.selectedDate);
       this.updateWMSURL();
 
-      // Update WMS source in map component (emit?)
-      if (this.$root.$refs.map) // Reference defined in vueParser.js
-        this.$root.$refs.map.$updateSourceWMS(this.getWMSURL());
+      // Update WMS source in map component
+      this.$emit('changeWMSSource', this.getWMSInfo());
     },
 
     // Data type (SST, salinity, current)
@@ -341,17 +363,47 @@ export default {
       this.updateWMSURL();
     },
 
+    // Next / Previous time in Figures
+    nextTimeFigureClicked: function(event) {
+      // Time scale
+      let activeTimeScale = this.getActiveTimeScale();
+       // Add one to time interval
+      let interval = this.timeScales[activeTimeScale.id].interval;
+      let step = interval[interval.length - 1] - interval[interval.length - 2]; // Calculate step between last and before-last (newest dates)
+      interval.forEach((el,idx) => {interval[idx] = el + step});
+      this.timeScales[activeTimeScale.id].interval = interval;
+      // Change time interval
+      this.updateWMSURL();
+    },
+    prevTimeFigureClicked: function(event) {
+      // Time scale
+      let activeTimeScale = this.getActiveTimeScale();
+      // Remove one to time interval
+      let interval = this.timeScales[activeTimeScale.id].interval;
+      let step = interval[1] - interval[0]; // Calculate step between second and first (oldest dates)
+      interval.forEach((el,idx) => {interval[idx] = el - step})
+      this.timeScales[activeTimeScale.id].interval = interval;
+      // Change time interval
+      this.updateWMSURL();
+    },
+
     // Select/deselect options
     selectButtonInGroup: function(array, selKey){
       Object.keys(array).forEach(key => array[key].active = false);
       array[selKey].active = true;
+    },
+    // Returns active time scale
+    getActiveTimeScale: function(){
+      let activeTimeScale;
+      Object.keys(this.timeScales).forEach(key => { if (this.timeScales[key].active) activeTimeScale = this.timeScales[key] }); // Returns active data type
+      return activeTimeScale;
     },
 
 
 
 
 
-  
+    // INTERNAL METHODS
     // Generate WMS url
     updateWMSURL: function(){
 
@@ -377,10 +429,16 @@ export default {
       // https://resources.marine.copernicus.eu/product-detail/MEDSEA_ANALYSISFORECAST_BGC_006_014/INFORMATION
 
       // Time scale
-      let activeTimeScale;
-      Object.keys(this.timeScales).forEach(key => { if (this.timeScales[key].active) activeTimeScale = this.timeScales[key] }); // Returns active data type
+      let activeTimeScale = this.getActiveTimeScale();
 
-
+      // Fix: sometimes activeTimeScale.interval loses the last item, no apparent reason. Maybe it is a vue bug. I haven't sorted it out
+      if (activeTimeScale.interval.length < this.selectedDate.length){
+        let step = activeTimeScale.interval[1] - activeTimeScale.interval[0];
+        activeTimeScale.interval.push(activeTimeScale.interval[activeTimeScale.interval.length -1] + step);
+        console.warn('timeScales lost one item in interval. It has been recovered.');
+      }
+      
+      // WMS url parameters
       tmpURLData = tmpURLData.replace('{URLdataTypes}', activeDataType.url + '-' + activeTimeScale.url);
       tmpURLData = tmpURLData.replace('{LAYERNAME}', activeDataType.layerName);
       tmpURLData = tmpURLData.replace('{MINRANGE}', activeDataType.range[0]);
@@ -410,7 +468,7 @@ export default {
           case 'h':
             dd.setHours(dd.getHours() + activeTimeScale.interval[i]);
             // Depends on data service. Again, check GetCapabilities?
-            if (activeDataType.name == "Wave significant height" || activeDataType.name == "Chlorophyll") // https://nrt.cmems-du.eu/thredds/wms/med-hcmr-wav-an-fc-h?request=GetCapabilities&service=WMS
+            if (activeDataType.name == "Wave significant height" || activeDataType.name == "Chlorophyll" || activeDataType.name == "Wind wave significant height") // https://nrt.cmems-du.eu/thredds/wms/med-hcmr-wav-an-fc-h?request=GetCapabilities&service=WMS
               dd.setMinutes(0)
             else
               dd.setMinutes(30); // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-mld-an-fc-hts?request=GetCapabilities&service=WMS
@@ -439,6 +497,7 @@ export default {
             break;
         }
         // URL
+        tmpURL = tmpURL.replace("{YEAR}", dd.getFullYear().toString());
         tmpURL = tmpURL.replace("{MONTH}", (dd.getMonth()+1).toString().padStart(2,"0"));
         tmpURL = tmpURL.replace("{DAY}", dd.getDate().toString().padStart(2,"0"));
         tmpURL = tmpURL.replace("{HOURS}", dd.getHours().toString().padStart(2,"0"));
@@ -492,18 +551,38 @@ export default {
             animation: activeDataType.animation,
           }
         }
-
+        
       }
 
       return this.figureInfo;
     },
 
 
+
+
+
+
+
+    // INTERNAL EVENTS
+    // Image loaded, reset loadCount
+    onWMSImageLoaded: function (event){
+      let imgEl = event.currentTarget;
+      imgEl.loadCount = 0; // Control for recursivity
+    },
+
     // Image not found (usually monthly mean)
     onWMSImageNotFound: function(event){
       let imgEl = event.currentTarget;
+      // Recursivity
+      imgEl.loadCount = imgEl.loadCount == undefined ? 1 : (imgEl.loadCount + 1); // Control for recursivity
+      // Active time scale should be monthly
+      let activeTimeScale = this.getActiveTimeScale();
+      if (imgEl.loadCount > 4 || activeTimeScale.id != 'm'){
+        imgEl.src = '../img/noData.png';
+        return;
+      }
       let url = imgEl.src;
-      console.log(url);
+      console.warn("WMS URL not valid. Trying other hours and minutes. Recursive load count: "+ imgEl.loadCount +" URL: " + url);
       let time = this.getWMSParameter(url, 'TIME');
       let date = new Date(time);
       // Go back in time 12h
@@ -545,8 +624,24 @@ export default {
     },
 
     // Return WMS info for OpenLayers layer
-    getWMSURL: function(){
+    getWMSInfo: function(){
       return this.layerInfoWMS;
+    },
+
+
+
+
+
+    // PUBLIC METHODS
+    // Change WMS Style (called from App Manager. When legend is clicked, style changes)
+    changeWMSStyle: function(newStyle){
+      // Get active data type
+      let activeDataType; // = this.dataTypes.find(el => return el.active == true)
+      Object.keys(this.dataTypes).forEach(key => { if (this.dataTypes[key].active) activeDataType = this.dataTypes[key] }); // Returns active data type
+      // Change style
+      activeDataType.style = newStyle;
+      // Update the WMS url of the figures
+      this.updateWMSURL();
     }
 
     
@@ -589,7 +684,7 @@ export default {
   background-color: rgba(255, 255, 255, 0.8);
 }
 .figure-img {
-  max-height: 16em
+  max-height: 10em
 }
 
 .fig-col.active {
@@ -603,6 +698,21 @@ export default {
 
 .btn-outline-dark :not(active) {
   background-color: rgba(255, 255, 255, 0.6);
+}
+
+.carousel-control-next-icon {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2ffff'><path d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/></svg>");
+}
+.carousel-control-prev-icon {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2ffff'><path d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/></svg>");
+}
+.carousel-control-next, .carousel-control-prev {
+  width: 7%;
+  top: 80px;
+}
+
+.fs-7 {
+  font-size: 0.8rem!important;
 }
 
 </style>
