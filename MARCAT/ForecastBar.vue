@@ -179,7 +179,7 @@ export default {
           url: 'med-cmcc-cur-an-fc',
           layerName: 'sea_water_velocity',
           timeScales: ['h', 'h3', 'h6', 'h12', 'd', 'd3', 'm'],
-          range: [-1,1],
+          range: [0, 1.5],
           units: 'm/s',
           style: "boxfill%2Foccam",//"vector%2Foccam",
           animation: {
