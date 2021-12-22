@@ -15,7 +15,7 @@ class AnimationEngine {
   // Constructor
   constructor(inCanvas, inMap) {
     this.canvasParticles = inCanvas; // this.canvasParticles = document.getElementById('animationCanvas');
-    this.map = inMap; // this.$root.$refs.map.$map
+    this.map = inMap; // OL map
     // Set height and width of the canvas
     this.canvasParticles.width = this.map.getViewport().offsetWidth;
     this.canvasParticles.height = this.map.getViewport().offsetHeight;

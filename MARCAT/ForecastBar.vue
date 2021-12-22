@@ -120,8 +120,7 @@ export default {
   },
   mounted (){
     // Once mounted, update the WMS url of map
-    if (this.$root.$refs.map) // Reference defined in vueParser.js
-      this.$root.$refs.map.$updateSourceWMS(this.getWMSURL());
+    this.$emit('changeWMSSource', this.getWMSInfo());
   },
   data () {
     return {
@@ -316,8 +315,7 @@ export default {
    }
   },
   methods: {
-    // HTML
-    // Responsive html
+    // USER HTML ACTIONS
     checkScreenRatio: function(){
       let ratio = window.innerHeight / window.innerWidth;
       if (ratio < 1)
@@ -337,9 +335,8 @@ export default {
       console.log(this.selectedDate);
       this.updateWMSURL();
 
-      // Update WMS source in map component (emit?)
-      if (this.$root.$refs.map) // Reference defined in vueParser.js
-        this.$root.$refs.map.$updateSourceWMS(this.getWMSURL());
+      // Update WMS source in map component
+      this.$emit('changeWMSSource', this.getWMSInfo());
     },
 
     // Data type (SST, salinity, current)
@@ -406,7 +403,7 @@ export default {
 
 
 
-  
+    // INTERNAL METHODS
     // Generate WMS url
     updateWMSURL: function(){
 
@@ -560,6 +557,13 @@ export default {
       return this.figureInfo;
     },
 
+
+
+
+
+
+
+    // INTERNAL EVENTS
     // Image loaded, reset loadCount
     onWMSImageLoaded: function (event){
       let imgEl = event.currentTarget;
@@ -620,8 +624,24 @@ export default {
     },
 
     // Return WMS info for OpenLayers layer
-    getWMSURL: function(){
+    getWMSInfo: function(){
       return this.layerInfoWMS;
+    },
+
+
+
+
+
+    // PUBLIC METHODS
+    // Change WMS Style (called from App Manager. When legend is clicked, style changes)
+    changeWMSStyle: function(newStyle){
+      // Get active data type
+      let activeDataType; // = this.dataTypes.find(el => return el.active == true)
+      Object.keys(this.dataTypes).forEach(key => { if (this.dataTypes[key].active) activeDataType = this.dataTypes[key] }); // Returns active data type
+      // Change style
+      activeDataType.style = newStyle;
+      // Update the WMS url of the figures
+      this.updateWMSURL();
     }
 
     

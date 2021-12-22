@@ -4,7 +4,7 @@
 
       <!-- Canvas with legend and interactivity -->
       <canvas @mousemove="updateMousePosition($event)" width="30" height="250" 
-          id="wmsLegendCanvas" ref="wmsLegendCanvas" class="img-fluid rounded"></canvas>
+          id="wmsLegendCanvas" ref="wmsLegendCanvas" class="img-fluid rounded" title="Click to change the colormap"></canvas>
       <!-- Tooltip -->
       <div v-if=mouseIsOver class="tooltip fade show bs-tooltip-start" id="legendTooltip"
           style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px;"><!--  transform: translate(-30px, 0px); -->
@@ -51,6 +51,7 @@ export default {
       mouseIsOver: false,
       mousePosition: {mouseX: 0, mouseY: 0},
       imgEl: undefined,
+      legendLoaded: false, // When imgEl is loaded becomes true
       legendValue: '',
       legendUnits: 'm/s',
       range: [0,1],
@@ -60,6 +61,7 @@ export default {
   },
   methods: {
 
+    // USER HTML ACTIONS
     // Legend clicked --> change style
     legendClicked: function(event){
       // Circular shfit
@@ -72,33 +74,10 @@ export default {
       this.$emit('legendClicked', this.styles[0])
     },
 
-    setWMSLegend: function(infoWMS){
 
-      // Define Legend WMS URL
-      let wmsURL = this.baseWMSLegendURL.replace('{SOURCEURL}', infoWMS.url);
-      wmsURL = wmsURL.replace('{LAYER}', infoWMS.params.LAYERS);
-      wmsURL = wmsURL.replace('{PALETTE}', infoWMS.params.STYLES.split('/')[1]);
-      wmsURL = wmsURL.replace('{COLORRANGE}', infoWMS.params.COLORSCALERANGE[0] + "," + infoWMS.params.COLORSCALERANGE[1]);
-      this.currentURL = wmsURL;
 
-      // Define range
-      this.range[0] = infoWMS.params.COLORSCALERANGE[0];
-      this.range[1] = infoWMS.params.COLORSCALERANGE[1];
 
-      // Get styles
-      this.getWMSStyles(infoWMS);
-
-      // Create image element to paint the legend graphic
-      let canvas = this.$refs.wmsLegendCanvas;
-      let ctx = canvas.getContext("2d");
-      this.imgEl = document.createElement("img");
-      this.imgEl.src = wmsURL;
-      // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
-      this.imgEl.onload = () =>{
-        this.draw(canvas);
-      };
-    },
-
+    // PRIVATE METHODS
     // Get WMS styles
     getWMSStyles: function(infoWMS){
       let capabilitiesURL = this.baseGetCapabilitiesURL.replace('{SOURCEURL}', infoWMS.url);
@@ -111,7 +90,7 @@ export default {
           // Iterate through layers
           layers.forEach(ll => {
             // Get layer by its name
-            console.log(ll.firstElementChild.innerHTML);
+            //console.log(ll.firstElementChild.innerHTML);
             if (ll.querySelector("Name").innerHTML == infoWMS.params.LAYERS){
               let layerStyles = ll.querySelectorAll("Style");
               // Store style names
@@ -119,7 +98,7 @@ export default {
                 if (ss.querySelector("Name").innerHTML.includes("boxfill")) // Only boxfill styles
                   this.styles.push(ss.querySelector("Name").innerHTML)
               });
-              console.log(this.styles);
+              //console.log(this.styles);
             }
           })
         })
@@ -130,6 +109,8 @@ export default {
 
     // Draw legend and cursor
     draw: function(canvas){
+      if (!this.legendLoaded)
+        return;
       // Context
       let ctx = canvas.getContext("2d");
       // Global composite
@@ -189,12 +170,44 @@ export default {
     // TODO:
     // A function that receives a value (RGB maybe?) and maps it in the legend.
     // When the mouse is moving on the map, the legend should show the value.
-
-
     mouseLeftLegend: function(){
       this.mouseIsOver = false;
       this.draw(this.$refs.wmsLegendCanvas);
-    }
+    },
+
+
+
+
+
+    // PUBLIC METHODS
+    setWMSLegend: function(infoWMS){
+      // Define Legend WMS URL
+      let wmsURL = this.baseWMSLegendURL.replace('{SOURCEURL}', infoWMS.url);
+      wmsURL = wmsURL.replace('{LAYER}', infoWMS.params.LAYERS);
+      wmsURL = wmsURL.replace('{PALETTE}', infoWMS.params.STYLES.split('/')[1]);
+      wmsURL = wmsURL.replace('{COLORRANGE}', infoWMS.params.COLORSCALERANGE[0] + "," + infoWMS.params.COLORSCALERANGE[1]);
+      this.currentURL = wmsURL;
+
+      // Define range
+      this.range[0] = infoWMS.params.COLORSCALERANGE[0];
+      this.range[1] = infoWMS.params.COLORSCALERANGE[1];
+
+      // Get styles from WMS service
+      this.getWMSStyles(infoWMS);
+
+      // Create image element to paint the legend graphic
+      let canvas = this.$refs.wmsLegendCanvas;
+      let ctx = canvas.getContext("2d");
+      this.imgEl = document.createElement("img");
+      this.imgEl.src = wmsURL;
+      // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
+      this.imgEl.onload = () =>{
+        this.legendLoaded = true;
+        this.draw(canvas);
+      };
+    },
+
+
 
   },
   components: {

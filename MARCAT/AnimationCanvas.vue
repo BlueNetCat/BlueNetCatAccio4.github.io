@@ -3,6 +3,7 @@
 
     <canvas id="animationCanvas" class ="position-absolute pe-none vh-100 vw-100"></canvas>
 
+
   </div>
 </template>
 
@@ -28,14 +29,14 @@ export default {
     }
   },
   methods: {
-    $start: function(wmsURL, animation){
-      this.$animEngine = new AnimationEngine(document.getElementById('animationCanvas'), this.$root.$refs.map.$map); // Reference defined in vueParser.js
+
+    // PRIVATE METHODS
+    $start: function(wmsURL, animation, olMap){
+      this.$animEngine = new AnimationEngine(document.getElementById('animationCanvas'), olMap); // Reference defined in vueParser.js
       this.$animEngine.setSource(wmsURL, animation);
       
       // Define map events for animation
       // Update canvas and positions
-      let olMap = this.$root.$refs.map.$map;
-
       olMap.on('moveend', () => {
         this.$animEngine.onMapMoveEnd();
       });
@@ -45,11 +46,15 @@ export default {
       });
     },
 
+
+
+
+    // PUBLIC METHODS
     // Defines the new source to use
-    $defineWMSSource: function(wmsURL, animation){ // Called from Map.vue
+    $defineWMSSource: function(wmsURL, animation, OLMap){ // Called from AppManager.vue
       // If it is the first time, start
       if (!this.$animEngine){
-        this.$start(wmsURL, animation);
+        this.$start(wmsURL, animation, OLMap);
         return;
       }
       // Update WMS source
