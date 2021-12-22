@@ -192,6 +192,9 @@ export default {
       this.range[0] = infoWMS.params.COLORSCALERANGE[0];
       this.range[1] = infoWMS.params.COLORSCALERANGE[1];
 
+      // Define units
+      this.legendUnits = infoWMS.params.UNITS;
+
       // Get styles from WMS service
       this.getWMSStyles(infoWMS);
 
