@@ -588,7 +588,7 @@ class Particle {
     ctx.beginPath();
     ctx.lineWidth = value*15;
     //ctx.fillStyle = 'rgba(0, 0, 0, ', alphaFactor*0.0, ')';
-    ctx.strokeStyle = 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] +', ' + alphaFactor * 0.5 + ')';
+    ctx.strokeStyle = 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] +', ' + alphaFactor * 0.5 + ')'; // Makes the app go slow, consider something different
     ctx.moveTo(this.prevPos[0], this.prevPos[1])
     ctx.lineTo(this.currentPos[0], this.currentPos[1]);
 

@@ -41,7 +41,7 @@
                   <div class="col btn btn-outline-light fig-col" :class="[fig.active ? 'active border border-dark': '']" :key="fig.id" :id="fig.id" @click.prevent="figureClicked" v-for="fig in figureInfo">
                     
                     <figure class="figure m-0">
-                      <img :id="fig.id" :src="fig.url" @load="onWMSImageLoaded($event)" @error="onWMSImageNotFound($event)" class="figure-img img-fluid rounded" :alt="fig.caption">
+                      <img :id="fig.id" :src="fig.url" :title="fig.date" @load="onWMSImageLoaded($event)" @error="onWMSImageNotFound($event)" class="figure-img img-fluid rounded" :alt="fig.caption">
                       <!--vue-load-image>
                         <template v-slot:image>
                           <img :src="fig.url" @error="onWMSImageNotFound($event)" class="figure-img img-fluid rounded" :alt="fig.caption">
@@ -528,6 +528,7 @@ export default {
           'caption': caption,
           'subcaption': subcaption,
           'url': tmpURL,
+          'date': dd.toString(),
           'active': this.selectedDate[i]//activeTimeScale.interval[i] == 0 ? true : false,
         }
 
@@ -551,6 +552,8 @@ export default {
               'TRANSPARENT': true,
               'UNITS': activeDataType.units
             },
+            name: activeDataType.name,
+            tooltip: this.currentDataInformation,
             cacheSize: 500,
             zDirection: -1,
             // Information for animation
