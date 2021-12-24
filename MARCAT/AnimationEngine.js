@@ -11,6 +11,8 @@ class AnimationEngine {
   canvasParticles = undefined;
   source = undefined;
   particles = undefined;
+  frameTime = 0;
+  FRAMERATE = 40; // in ms
 
   // Constructor
   constructor(inCanvas, inMap) {
@@ -21,6 +23,10 @@ class AnimationEngine {
     this.canvasParticles.height = this.map.getViewport().offsetHeight;
     // Set up variable for when map is moving
     this.mapIsMoving = false;
+    // https://stackoverflow.com/questions/11565471/removing-event-listener-which-was-added-with-bind
+    // Bind the event listeners
+    this.onMapMoveStart = this.onMapMoveStart.bind(this);  
+    this.onMapMoveEnd = this.onMapMoveEnd.bind(this);  
     // Start drawing loop (only once)
     this.update();
   }
@@ -44,9 +50,16 @@ class AnimationEngine {
 
   // Update the animation
   update(){
+    // Check if it is deleted before anything else, to stop de loop
+    if (this.canvasParticles.parentElement == null){
+      console.log("destroyed")
+      return;
+    }
+
     // Update timer
     let timeNow = performance.now();
     let dt = (timeNow - this.prevTime) / 1000; // in seconds;
+    this.frameTime = dt;
     this.prevTime = timeNow;
 
     // If data is loaded and layer is visible
@@ -57,7 +70,7 @@ class AnimationEngine {
 
     // Loop
     var that = this;
-    setTimeout(function() {that.update()}, 40); // Frame rate in milliseconds
+    setTimeout(function() {that.update()}, that.FRAMERATE); // Frame rate in milliseconds
   }
 
 
@@ -588,7 +601,8 @@ class Particle {
     ctx.beginPath();
     ctx.lineWidth = value*15;
     //ctx.fillStyle = 'rgba(0, 0, 0, ', alphaFactor*0.0, ')';
-    ctx.strokeStyle = 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] +', ' + alphaFactor * 0.5 + ')';
+    let colorStr = 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ', ' + alphaFactor * 0.5 + ')'
+    ctx.strokeStyle = colorStr; // Makes the app go slow, consider something different
     ctx.moveTo(this.prevPos[0], this.prevPos[1])
     ctx.lineTo(this.currentPos[0], this.currentPos[1]);
 

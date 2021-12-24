@@ -40,7 +40,7 @@ export default {
       let OLMap = this.$refs.map.$getOLMap();
       // Update animation
       if (infoWMS.animation)
-        this.$refs.animcanvas.$defineWMSSource(infoWMS.exampleWMSURL, infoWMS.animation, OLMap);
+        this.$refs.animcanvas.$defineWMSSource(infoWMS, infoWMS.animation, OLMap);
     },
     changeWMSStyle: function(newStyle){
       // Update Forecastbar
