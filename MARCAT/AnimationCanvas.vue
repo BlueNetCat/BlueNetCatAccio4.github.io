@@ -37,7 +37,7 @@ export default {
     return {
       $animEngine: undefined,
       $animations: [],
-      $OLMap: undefined
+      $OLMap: undefined,
     }
   },
   methods: {
@@ -52,17 +52,19 @@ export default {
       let idxSel;
       this.$data.$animations.forEach((a, idx) => {if (id == a.id) {animSel = a; idxSel = idx}});
       // Destroy animation item
-      this.$data.$animations.splice(idxSel, 1);
-      // TODO: DESTROY METHOD FOR AnimationEngine --> Remove loop setInterval, Remove event listeners
+      let animObj = this.$data.$animations.splice(idxSel, 1)[0]; // The animation will stop because the canvas has no parent element
+      // TODO: GC (reuse anim object?)
+      // Remove event listeners
+      let animEng = animObj.animEngine;
+      console.log("Deleted "+ animObj.id + ". Canvas parent element: " + animEng.canvasParticles.parentElement)
+      animEng.map.un('moveend', animEng.onMapMoveStart);
+      animEng.map.un('movestart', animEng.onMapMoveEnd);
+      animEng = null;
 
     },
 
     // PRIVATE METHODS
     $start: function(infoWMS, animation, OLMap){
-      
-      // Create new AnimationEngine
-      //this.$animEngine = new AnimationEngine(document.getElementById('animationCanvas'), OLMap); // Reference defined in vueParser.js
-      //this.$animEngine.setSource(infoWMS.exampleWMSURL, animation);
       
       // Declare OLMap
       this.$OLMap = OLMap;
@@ -73,24 +75,10 @@ export default {
         name: infoWMS.name,
         tooltip: infoWMS.tooltip,
         animInfo: animation,
-        infoWMS: infoWMS
+        infoWMS: infoWMS,
+        //animEngine: --> declared later, after its canvas is created by vue
       });
 
-      // Can only find the canvas once the front-end is updated?
-      /*let animEngine = new AnimationEngine(document.getElementById(infoWMS.name), OLMap);
-      animEngine.setSource(infoWMS.exampleWMSURL, animation);
-
-      // Define map events for animation
-      // Update canvas and positions
-      OLMap.on('moveend', () => {
-        //this.$animEngine.onMapMoveEnd();
-        animEngine.onMapMoveEnd();
-      });
-      // Clear canvas
-      OLMap.on('movestart', () => {
-        //this.$animEngine.onMapMoveStart();
-        animEngine.onMapMoveStart();
-      });*/
     },
 
     // When a new canvas is created in the :v-for loop, the animation is created
@@ -98,8 +86,12 @@ export default {
       if (canvas == null) // When an element is deleted this function is called too
         return
 
+      
       // Get the lastest animation element
       let animEl = this.$data.$animations[this.$data.$animations.length -1];
+
+      console.log("NEW ANIM CANVAS " + animEl.name);
+
 
       let animEngine = new AnimationEngine(canvas, this.$OLMap);
       animEngine.setSource(animEl.infoWMS.exampleWMSURL, animEl.animInfo);
@@ -108,15 +100,10 @@ export default {
 
       // Define map events for animation
       // Update canvas and positions
-      this.$OLMap.on('moveend', () => {
-        //this.$animEngine.onMapMoveEnd();
-        animEngine.onMapMoveEnd();
-      });
+      this.$OLMap.on('moveend', animEngine.onMapMoveEnd);
       // Clear canvas
-      this.$OLMap.on('movestart', () => {
-        //this.$animEngine.onMapMoveStart();
-        animEngine.onMapMoveStart();
-      });
+      this.$OLMap.on('movestart', animEngine.onMapMoveStart);
+
     },
 
 
@@ -128,6 +115,7 @@ export default {
         this.$start(infoWMS, animation, OLMap);
         return;
       }
+      console.log("SHOULD NEVER GET HERE");
       // Update WMS source
       this.$animEngine.setSource(infoWMS.exampleWMSURL, animation);
     },
@@ -137,7 +125,6 @@ export default {
 
   },
   computed: {
-  
   }
 }
 
