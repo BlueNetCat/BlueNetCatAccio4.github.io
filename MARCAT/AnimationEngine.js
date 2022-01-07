@@ -13,10 +13,14 @@ class AnimationEngine {
   particles = undefined;
   frameTime = 0;
   FRAMERATE = 40; // in ms
+  isDestroyed = false;
+  static numActiveAnimations = 0;
 
   // Constructor
-  constructor(inCanvas, inMap) {
-    this.canvasParticles = inCanvas; // this.canvasParticles = document.getElementById('animationCanvas');
+  constructor(inCanvas, inMap, wmsURL, animation) {
+    AnimationEngine.numActiveAnimations += 1; // Count the active animations
+
+    this.canvasParticles = inCanvas; // Canvas
     this.map = inMap; // OL map
     // Set height and width of the canvas
     this.canvasParticles.width = this.map.getViewport().offsetWidth;
@@ -25,14 +29,9 @@ class AnimationEngine {
     this.mapIsMoving = false;
     // https://stackoverflow.com/questions/11565471/removing-event-listener-which-was-added-with-bind
     // Bind the event listeners
-    this.onMapMoveStart = this.onMapMoveStart.bind(this);  
-    this.onMapMoveEnd = this.onMapMoveEnd.bind(this);  
-    // Start drawing loop (only once)
-    this.update();
-  }
+    this.onMapMoveStart = this.onMapMoveStart.bind(this);
+    this.onMapMoveEnd = this.onMapMoveEnd.bind(this);
 
-  // Functions
-  setSource(wmsURL, animation){
     // Create source
     this.source = new SourceWMS(animation);
     // Create particle system
@@ -45,7 +44,31 @@ class AnimationEngine {
 
     // Load data
     this.source.updateWMSSource(wmsURL, animation);
+
+    // Start drawing loop (only once)
+    this.update();
   }
+
+  destroyer(){
+    AnimationEngine.numActiveAnimations += -1;
+    this.isDestroyed = true;
+  }
+
+  // Functions
+  /*setSource(wmsURL, animation){
+    // Create source
+    this.source = new SourceWMS(animation);
+    // Create particle system
+    this.particles = new ParticleSystem(this.canvasParticles, this.source, this.map);
+    this.particles.clear();
+
+    // Define callback when data is loaded
+    //this.source.defineOnLoadCallback(this.particles.repositionParticles.bind(this.particles));
+    this.source.defineOnLoadCallback(this.onSourceLoad.bind(this));
+
+    // Load data
+    this.source.updateWMSSource(wmsURL, animation);
+  }*/
 
 
   // Update the animation
@@ -53,6 +76,10 @@ class AnimationEngine {
     // Check if it is deleted before anything else, to stop de loop
     if (this.canvasParticles.parentElement == null){
       console.log("destroyed")
+      return;
+    }
+    if (this.isDestroyed){
+      console.log("destroyed by destroyer");
       return;
     }
 
@@ -69,8 +96,9 @@ class AnimationEngine {
           this.particles.draw(dt);
 
     // Loop
-    var that = this;
-    setTimeout(function() {that.update()}, that.FRAMERATE); // Frame rate in milliseconds
+    //var that = this;
+    //setTimeout(function() {that.update()}, that.FRAMERATE); // Frame rate in milliseconds
+    setTimeout(() => this.update() , this.FRAMERATE);
   }
 
 
@@ -105,8 +133,17 @@ class AnimationEngine {
       this.particles.clear();
     this.mapIsMoving = true;
   }
+
+
+
+
+  // PUBLIC METHOD
+  static getNumActiveAnimations(){
+    return AnimationEngine.numActiveAnimations;
+  }
   
 }
+
 
 
 
@@ -364,6 +401,8 @@ class ParticleSystem {
   resizeNumParticles(){
     let numPixels = this.canvas.width * this.canvas.height;
     let numParticlesFactor = numPixels / this.fullScreenPixels;
+    // Active number of animations
+    numParticlesFactor /= AnimationEngine.getNumActiveAnimations();
     // Define number of particles
     this.numParticles = Math.min(Math.round(numParticlesFactor * this.fullScreenNumParticles), this.fullScreenNumParticles);
   }
