@@ -6,6 +6,9 @@
 // Particle
 
 class AnimationEngine {
+  // Static variables
+  static numActiveAnimations = 0;
+
   // Variables
   prevTime = 0;
   canvasParticles = undefined;
@@ -14,7 +17,7 @@ class AnimationEngine {
   frameTime = 0;
   FRAMERATE = 40; // in ms
   isDestroyed = false;
-  static numActiveAnimations = 0;
+  
 
   // Constructor
   constructor(inCanvas, inMap, wmsURL, animation) {
@@ -55,7 +58,7 @@ class AnimationEngine {
   }
 
   // Functions
-  /*setSource(wmsURL, animation){
+  setSource(wmsURL, animation){
     // Create source
     this.source = new SourceWMS(animation);
     // Create particle system
@@ -68,7 +71,7 @@ class AnimationEngine {
 
     // Load data
     this.source.updateWMSSource(wmsURL, animation);
-  }*/
+  }
 
 
   // Update the animation
