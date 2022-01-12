@@ -239,7 +239,7 @@ export default {
           },
           active: false,
         },
-        "Wave period": {
+        /*"Wave period": {
           name: 'Wave period',
           scientificName: 'Sea surface wave mean period from variance spectral density inverse frequency moment',
           url: 'med-hcmr-wav-an-fc',
@@ -249,7 +249,7 @@ export default {
           units: 's',
           style: "boxfill/sst_36", //occam_pastel-30",
           active: false,
-        },
+        },*/
         'Chlorophyll': {
           name: 'Chlorophyll',
           url: 'med-ogs-pft-an-fc',
