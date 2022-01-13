@@ -40,8 +40,13 @@
                   <!-- https://github.com/john015/vue-load-image -->
                   <div class="col btn btn-outline-light fig-col" :class="[fig.active ? 'active border border-dark': '']" :key="fig.id" :id="fig.id" @click.prevent="figureClicked" v-for="fig in figureInfo">
                     
-                    <figure class="figure m-0">
-                      <img :id="fig.id" :src="fig.url" :title="fig.date" @load="onWMSImageLoaded($event)" @error="onWMSImageNotFound($event)" class="figure-img img-fluid rounded" :alt="fig.caption">
+                    <figure class="figure m-0 position-relative">
+                      <img :id="fig.id" :src="fig.url" :title="fig.date" :ref="el => onWMSImageLoadStart(el, fig)" @load="onWMSImageLoaded($event, fig)" @error="onWMSImageNotFound($event)" class="figure-img img-fluid rounded" :alt="fig.caption">
+                      
+                      <div v-show="fig.isLoading" class="spinner-border text-dark" style="position: relative; margin-top: -60%; margin-inline: 20%" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+
                       <!--vue-load-image>
                         <template v-slot:image>
                           <img :src="fig.url" @error="onWMSImageNotFound($event)" class="figure-img img-fluid rounded" :alt="fig.caption">
@@ -76,7 +81,8 @@
 
 
                 <!-- Source selection -->
-                <div class="row p-1 align-items-center flex-nowrap">
+                <!-- Hidden because only CMEMS is setup -->
+                <div class="row p-1 align-items-center flex-nowrap" hidden>
                   <div class="col text-center">
                     <div class="btn-group" role="group" aria-label="Source selection" :key="source.id" :id="source.id" @click.prevent="sourceClicked" v-for="source in sources">
                       <button type="button" class="btn btn-sm btn-outline-dark" :class="[source.active ? 'active border': '']">{{source.id}}</button>
@@ -331,6 +337,11 @@ export default {
       
    }
   },
+
+
+
+
+
   methods: {
     // USER HTML ACTIONS
     checkScreenRatio: function(){
@@ -349,7 +360,6 @@ export default {
       })
       // Highlight selected date
       this.selectedDate[event.currentTarget.id] = true;
-      console.log(this.selectedDate);
       this.updateWMSURL();
 
       // Update WMS source in map component
@@ -389,6 +399,11 @@ export default {
       let step = interval[interval.length - 1] - interval[interval.length - 2]; // Calculate step between last and before-last (newest dates)
       interval.forEach((el,idx) => {interval[idx] = el + step});
       this.timeScales[activeTimeScale.id].interval = interval;
+      // Update active date and date
+      // TODO: temporary solution -> if the selected date goes out of menu, it won't come back as selected
+      this.selectedDate.shift(1);
+      this.selectedDate.push(false);
+ 
       // Change time interval
       this.updateWMSURL();
     },
@@ -400,6 +415,11 @@ export default {
       let step = interval[1] - interval[0]; // Calculate step between second and first (oldest dates)
       interval.forEach((el,idx) => {interval[idx] = el - step})
       this.timeScales[activeTimeScale.id].interval = interval;
+      // Update active date and date
+      // TODO: temporary solution -> if the selected date goes out of menu, it won't come back as selected
+      this.selectedDate.unshift(1);
+      this.selectedDate.pop();
+      this.selectedDate[0] = false;
       // Change time interval
       this.updateWMSURL();
     },
@@ -585,10 +605,24 @@ export default {
 
 
     // INTERNAL EVENTS
+    // Image added and loading
+    onWMSImageLoadStart: function(imgEl, fig){
+      // If image already exists, but a property of it changed, this event is triggered
+      if (imgEl.width != 0 && imgEl.currentSrc == imgEl.src){
+        return;
+      }
+      
+      console.log("Loading image started");
+      fig.isLoading = true;
+      imgEl.style.opacity = 0.2;
+    },
     // Image loaded, reset loadCount
-    onWMSImageLoaded: function (event){
+    onWMSImageLoaded: function (event, fig){
+      console.log("Loading image ended");
       let imgEl = event.currentTarget;
       imgEl.loadCount = 0; // Control for recursivity
+      fig.isLoading = false;
+      imgEl.style.opacity = 1;
     },
 
     // Image not found (usually monthly mean)

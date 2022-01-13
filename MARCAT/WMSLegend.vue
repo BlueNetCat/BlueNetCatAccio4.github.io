@@ -174,7 +174,7 @@ export default {
     },
 
 
-    // Update mouse Position (only happens when inside the canvas)
+    // Update mouse Position (only happens when inside the legend canvas)
     updateMousePosition: function(event){
       this.mousePosition.mouseX = event.offsetX;
       this.mousePosition.mouseY = event.offsetY;
@@ -203,7 +203,7 @@ export default {
       // Find the value that corresponds to a color
       let normValue = this.getValueFromColor(color);
       // Calculate value according to index
-      let value = normValue * (this.range[1] - this.range[0]) - this.range[0];
+      let value = normValue * (this.range[1] - this.range[0]) + this.range[0];
       // Show in legend
       this.legendValue = value.toFixed(2);
       // Position legend
