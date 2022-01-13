@@ -1,13 +1,20 @@
 <template>
   <!-- Div container with mouse events -->
-  <div id="wms-legend" @mouseover="mouseIsOver = true" @mouseleave="mouseLeftLegend()" @click.prevent="legendClicked($event)">
+  <div id="wms-legend" @click.prevent="legendClicked($event)">
 
       <!-- Canvas with legend and interactivity -->
-      <canvas @mousemove="updateMousePosition($event)" width="30" height="250" 
+      <canvas @mouseover="mouseIsOver = true" @mouseleave="mouseLeftLegend()" @mousemove="updateMousePosition($event)" width="30" height="250" 
           id="wmsLegendCanvas" ref="wmsLegendCanvas" class="img-fluid rounded" title="Click to change the colormap"></canvas>
       <!-- Tooltip -->
       <div v-if=mouseIsOver class="tooltip fade show bs-tooltip-start" id="legendTooltip"
-          style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px;"><!--  transform: translate(-30px, 0px); -->
+          style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px; transform: translate(-30px, 125px);">
+        <div class="tooltip-arrow" style="position: absolute; top: 0px; transform: translate(0px, 8px); white-space: nowrap;"></div>
+        <div class="tooltip-inner">{{legendValue}} {{legendUnits}}</div>
+      </div>
+
+      <!-- Tooltip mouse moving on map -->
+      <div v-else-if=showValueMap class="tooltip fade show bs-tooltip-start" id="legendTooltipMapValue"
+          style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px; opacity: 0.7; transform: translate(-30px, 125px);">
         <div class="tooltip-arrow" style="position: absolute; top: 0px; transform: translate(0px, 8px); white-space: nowrap;"></div>
         <div class="tooltip-inner">{{legendValue}} {{legendUnits}}</div>
       </div>
@@ -57,6 +64,8 @@ export default {
       range: [0,1],
       styles: [],
       currentURL: "",
+      legendColorRef: undefined,
+      showValueMap: false,
     }
   },
   methods: {
@@ -119,7 +128,7 @@ export default {
       // Top-left: 5 height, 2 width
       // Bottom-rigth: 257 height, 25
       // Size: 24x253
-      ctx.drawImage(this.imgEl, 2, 5, 24, 253, 0, 0, canvas.width, canvas.height)
+      ctx.drawImage(this.imgEl, 2, 5, 24, 253, 0, 0, canvas.width, canvas.height);
       // 25%, 50%, 75% lines
       ctx.strokeStyle = 'rgba(0,0,0,255)';
       ctx.lineWidth = 0.5;
@@ -150,6 +159,20 @@ export default {
       }
     },
 
+    // Draw for transforming img into pixel data
+    drawToLegendColorReference(){
+      // Create canvas
+      let tmpCnv = document.createElement('canvas');
+      tmpCnv.width=1;
+      tmpCnv.height=100; // Resolution
+      // Paint image to canvas
+      let ctx = tmpCnv.getContext("2d");
+      ctx.globalCompositeOperation = "source-destination";
+      ctx.drawImage(this.imgEl, 2, 5, 24, 253, 0, 0, tmpCnv.width, tmpCnv.height);
+      // Get image data
+      this.legendColorRef = tmpCnv.getContext("2d").getImageData(0,0,tmpCnv.width,tmpCnv.height).data;
+    },
+
 
     // Update mouse Position (only happens when inside the canvas)
     updateMousePosition: function(event){
@@ -168,7 +191,51 @@ export default {
     },
 
     // TODO:
-    // A function that receives a value (RGB maybe?) and maps it in the legend.
+    // Receives a color value (RGB) and maps it in the legend.
+    showValueAtColor: function(color){
+      // If outside the land (alpha = 0), do not show
+      this.showValueMap = true;
+      if (color[3] == 0 || this.mouseIsOver){
+        this.showValueMap = false;
+        return;
+      }
+
+      // Find the value that corresponds to a color
+      let normValue = this.getValueFromColor(color);
+      // Calculate value according to index
+      let value = normValue * (this.range[1] - this.range[0]) - this.range[0];
+      // Show in legend
+      this.legendValue = value.toFixed(2);
+      // Position legend
+      let legendTooltipEl = document.getElementById("legendTooltipMapValue");
+      if (legendTooltipEl == null){
+        return;
+      }
+      let cnv = this.$refs.wmsLegendCanvas;
+      legendTooltipEl.style.transform = "translate(-"+ cnv.width +"px, "+ ((normValue*-1+1)*cnv.height - 12) +"px)";
+    },
+
+    // Get value from color
+    getValueFromColor: function(color){
+      // Find the color that is more similar to the legend color reference
+      let normValue = 0;
+      let minDiff = 100;
+      // Iterate over legend reference
+      for (let i = 0; i < this.legendColorRef.length/4; i++){
+        let el1 = color[0]-this.legendColorRef[i*4];
+        let el2 = color[1]-this.legendColorRef[i*4 + 1];
+        let el3 = color[2]-this.legendColorRef[i*4 + 2];
+        // Euclidean distance
+        let diff = Math.sqrt( (el1)*(el1) + (el2)*(el2) + (el3)*(el3) );
+        // Store min diff
+        if (diff < minDiff){
+          minDiff = diff;
+          normValue = i / (this.legendColorRef.length/4); // normValue goes from 0 to 1
+        }
+      }
+      return normValue*-1 + 1;
+    },
+
     // When the mouse is moving on the map, the legend should show the value.
     mouseLeftLegend: function(){
       this.mouseIsOver = false;
@@ -203,10 +270,12 @@ export default {
       let ctx = canvas.getContext("2d");
       this.imgEl = document.createElement("img");
       this.imgEl.src = wmsURL;
+      this.imgEl.crossOrigin = "Anonymous";
       // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
       this.imgEl.onload = () =>{
         this.legendLoaded = true;
         this.draw(canvas);
+        this.drawToLegendColorReference();
       };
     },
 
@@ -233,6 +302,10 @@ export default {
 #wmsLegendCanvas:hover {
   border: 1px solid #000000!important;
   cursor: pointer
+}
+
+.tooltip {
+  transition: all 0.05s ease-in-out;
 }
 
 </style>

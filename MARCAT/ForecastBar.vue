@@ -216,7 +216,7 @@ export default {
           timeScales: ['h', 'h3', 'h6', 'h12'],
           range: [0, 6],
           units: 'm',
-          style: "boxfill/occam_pastel-30",
+          style: "boxfill/alg",//occam_pastel-30",
           animation: {
             layerNames: ['VHM0', 'VMDR'], // Intensity, Angle
             format: 'value_angle',
@@ -231,7 +231,7 @@ export default {
           timeScales: ['h', 'h3', 'h6', 'h12'],
           range: [0, 6],
           units: 'm',
-          style: "boxfill/occam_pastel-30",
+          style: "boxfill/sst_36", //occam_pastel-30",
           animation: {
             layerNames: ['VHM0_WW', 'VMDR_WW'], // Intensity, Angle
             format: 'value_angle',
@@ -239,6 +239,17 @@ export default {
           },
           active: false,
         },
+        /*"Wave period": {
+          name: 'Wave period',
+          scientificName: 'Sea surface wave mean period from variance spectral density inverse frequency moment',
+          url: 'med-hcmr-wav-an-fc',
+          layerName: 'VTM10', // Check out other period measures
+          timeScales: ['h', 'h3', 'h6', 'h12'],
+          range: [0, 18],
+          units: 's',
+          style: "boxfill/sst_36", //occam_pastel-30",
+          active: false,
+        },*/
         'Chlorophyll': {
           name: 'Chlorophyll',
           url: 'med-ogs-pft-an-fc',
@@ -474,7 +485,7 @@ export default {
           case 'h':
             dd.setHours(dd.getHours() + activeTimeScale.interval[i]);
             // Depends on data service. Again, check GetCapabilities?
-            if (activeDataType.name == "Wave significant height" || activeDataType.name == "Chlorophyll" || activeDataType.name == "Wind wave significant height") // https://nrt.cmems-du.eu/thredds/wms/med-hcmr-wav-an-fc-h?request=GetCapabilities&service=WMS
+            if (activeDataType.url == "med-hcmr-wav-an-fc" || activeDataType.url == "med-ogs-pft-an-fc") // https://nrt.cmems-du.eu/thredds/wms/med-hcmr-wav-an-fc-h?request=GetCapabilities&service=WMS
               dd.setMinutes(0)
             else
               dd.setMinutes(30); // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-mld-an-fc-hts?request=GetCapabilities&service=WMS

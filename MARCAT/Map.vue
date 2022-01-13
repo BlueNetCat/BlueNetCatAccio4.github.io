@@ -1,7 +1,7 @@
 <template>
     <div id="app-map">
 
-      <div id="map" class="map position-absolute vh-100 vw-100"></div>
+      <div id="map" ref="OLMap" class="map position-absolute vh-100 vw-100"></div>
       <wms-legend @legendClicked="changeStyle($event)" ref="legendWMS" class="position-absolute top-0 end-0 d-sm-flex me-2 mt-5"></wms-legend>
     </div>
 </template>
@@ -26,6 +26,12 @@ export default {
   },
   mounted () {
     this.$initMap();
+    this.$refs.OLMap.addEventListener('mousemove', this.onMouseMove);
+  },
+  umounted () {
+    this.$refs.OLMap.removeEventListener('mousemove', this.onMouseMove);
+    this.$map.un('moveend', this.onMapMoveEnd);
+    this.$map.un('movestart', this.onMapMoveStart);
   },
   data () {
     return {
@@ -116,7 +122,15 @@ export default {
           zIndex: -1,
           //opacity: 0.9
         })
-      }
+      },
+      $canvasData: undefined,
+      $progress: {
+        loading: 0,
+        loaded: 0
+      },
+      $layerData: undefined,
+      isLayerDataReady: false,
+      $pixelColor: [0,0,0,0],
     }
   },
   methods: {
@@ -150,6 +164,10 @@ export default {
       // Set css
       document.getElementsByClassName('ol-attribution')[0].style.bottom = 'auto';
       document.getElementsByClassName('ol-attribution')[0].style.top = '.5em';
+
+      // Declare onmapmove events
+      this.$map.on('moveend', this.onMapMoveEnd);
+      this.$map.on('movestart', this.onMapMoveStart);
     },
 
 
@@ -173,12 +191,103 @@ export default {
     changeStyle: function(newStyle){
       // Get params
       let params = this.$getMapLayer('data').getSource().getParams();
+      // Check if the new style is the current
+      if (params.STYLES == newStyle)
+        return;
+      // If style is different, update source
       params.STYLES = newStyle;
       // Set params
       this.$getMapLayer('data').getSource().updateParams(params);
+      // Source needs to reload
+      this.isLayerDataReady = false;
       // Update ForecastBar if it exists
       this.$emit('changeWMSStyle', newStyle);
     },
+
+    // Mouse move on map
+    onMouseMove: function(event){
+      // Return if map is moving
+      if (this.isMapMoving)
+        return;
+      // Get lat long coordinates
+      let coord = this.$map.getCoordinateFromPixel([event.clientX, event.clientY]);
+      coord = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
+      // Emit
+      this.$emit('mouseMove', coord);
+      // Change legend tooltip value
+      if (this.$refs.legendWMS){
+        if (this.isLayerDataReady){
+          let color = this.getDataAtPixel(event.clientX, event.clientY);
+          this.$refs.legendWMS.showValueAtColor(color);
+        }
+      }
+    },
+
+    // Map moves
+    onMapMoveEnd: function(){
+      this.isMapMoving = false;
+      // If data is loaded, update the pixel information once the map move finishes
+      // TODO: this could be optimized --> get a canvas with all data and relate lat-long to that canvas
+      if (this.isLayerDataReady)
+        this.updateSourceData();
+    },
+    onMapMoveStart: function(){
+      this.isMapMoving = true;
+    },
+
+
+    // Declare loading tile events
+    registerLoadTilesEvents: function(source){
+      // Source is a ol.source
+      let progress = this.$data.$progress;
+      progress.loading = 0;
+      progress.loaded = 0;
+      this.isLayerDataReady = false;
+      source.on('tileloadstart',() => progress.loading += 1);
+      source.on('tileloadend', () => {
+        progress.loaded += 1; 
+        if (progress.loading == progress.loaded)
+          this.onTilesLoaded();
+      });
+      /*source.on('tileloaderror', () => {
+        progress.loaded += 1; 
+        if (progress.loading == progress.loaded)
+          this.onTilesLoaded();
+      });*/
+    },
+
+
+    // Store pixel information once tiles are loaded
+    onTilesLoaded: function(){   
+      this.isLayerDataReady = true;
+      this.updateSourceData();
+    },
+
+    // Update the data pixels
+    updateSourceData: function(){
+      // Get ol layer
+      let layer = this.$getMapLayer('data');
+      // Get canvas
+      let tmpCnv = layer.getRenderer().getImage();
+      // Get data
+      this.$data.$layerData = tmpCnv.getContext("2d").getImageData(0,0,tmpCnv.width,tmpCnv.height);
+      // Store width to access pixels
+      this.layerDataWidth = tmpCnv.width;
+    },
+
+
+    // Get pixel data
+    getDataAtPixel: function(x , y){
+      let imgArrayPos = (x + y * this.layerDataWidth) * 4; // + 1,2,3 if you want (R)GBA
+      let imgData = this.$data.$layerData.data;
+      let color = this.$data.$pixelColor;
+      color[0] = imgData[imgArrayPos]
+      color[1] = imgData[imgArrayPos+1]
+      color[2] = imgData[imgArrayPos+2]
+      color[3] = imgData[imgArrayPos+3];
+      return color;
+    },
+    
 
 
 
@@ -200,9 +309,16 @@ export default {
         resolutions: resolutions,
         tileSize: tileSize
       });
+      
+      // Avoid cross origin problems when getting pixel data (The canvas has been tainted by cross-origin data.)
+      infoWMS.crossOrigin= 'anonymous';
 
       // Get information from forecast-component
-      this.$getMapLayer('data').setSource(new ol.source.TileWMS(infoWMS));
+      let source = new ol.source.TileWMS(infoWMS);
+      this.$getMapLayer('data').setSource(source);
+      // Tracking the load progress
+      this.registerLoadTilesEvents(source);
+
       // Update legend
       if (this.$refs.legendWMS)
         this.$refs.legendWMS.setWMSLegend(infoWMS);
