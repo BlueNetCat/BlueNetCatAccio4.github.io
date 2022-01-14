@@ -38,16 +38,17 @@
 
 export default {
   name: "app-animation",
+  // https://github.com/vuejs/vue/issues/1988
   created(){
-
+    // Non-reactive variables
+    this.$options.animations = [];
+    this.$options.OLMap = undefined;
   },
   mounted () {
 
   },
   data () {
     return {
-      $animations: [],
-      $OLMap: undefined,
       animHTML: [],
     }
   },
@@ -60,7 +61,7 @@ export default {
       let id = event.currentTarget.id;
       // Find animEl
       let animSel;
-      this.$data.$animations.forEach(a => {if (id == a.id) animSel = a;});
+      this.$options.animations.forEach(a => {if (id == a.id) animSel = a;});
       animSel.canvas.hidden = !animSel.canvas.hidden;
       // Change button class
       if (animSel.canvas.hidden){ // Add opacity class
@@ -73,7 +74,7 @@ export default {
       // Get id
       let id = event.currentTarget.parentElement.id;
       // Destroy animation
-      this.$destroyAnim(id);
+      this.destroyAnim(id);
       // Update visibility of remaining buttons
       let delIdx;
       this.animHTML.forEach((el, idx) => {if (el.id == id) delIdx = idx});
@@ -85,10 +86,10 @@ export default {
 
 
     // PRIVATE METHODS
-    $start: function(infoWMS, animation, OLMap){
+    start: function(infoWMS, animation, OLMap){
       
       // Declare OLMap
-      this.$OLMap = OLMap;
+      this.$options.OLMap = OLMap;
 
       // Create canvas
       let canvas = document.createElement("canvas");
@@ -99,16 +100,16 @@ export default {
       this.$refs["app-animation"].appendChild(canvas);
 
       // Create animation engine
-      let animEngine = new AnimationEngine(canvas, this.$OLMap, infoWMS.exampleWMSURL, animation);
+      let animEngine = new AnimationEngine(canvas, this.$options.OLMap, infoWMS.exampleWMSURL, animation);
 
       // Define map events for animation
       // Update canvas and positions
-      this.$OLMap.on('moveend', animEngine.onMapMoveEnd);
+      this.$options.OLMap.on('moveend', animEngine.onMapMoveEnd);
       // Clear canvas
-      this.$OLMap.on('movestart', animEngine.onMapMoveStart);
+      this.$options.OLMap.on('movestart', animEngine.onMapMoveStart);
 
       // Store animation in array
-      this.$data.$animations.push({
+      this.$options.animations.push({
         id: infoWMS.name,
         name: infoWMS.name,
         infoWMS: infoWMS,
@@ -128,13 +129,13 @@ export default {
 
 
     // Destroys the animation clicked
-    $destroyAnim: function(id){
+    destroyAnim: function(id){
       // Find selected animation and index
       let animSel;
       let idxSel;
-      this.$data.$animations.forEach((a, idx) => {if (id == a.id) {animSel = a; idxSel = idx}});
+      this.$options.animations.forEach((a, idx) => {if (id == a.id) {animSel = a; idxSel = idx}});
       // Destroy animation item
-      let animObj = this.$data.$animations.splice(idxSel, 1)[0]; // The animation will stop because the canvas has no parent element
+      let animObj = this.$options.animations.splice(idxSel, 1)[0]; // The animation will stop because the canvas has no parent element
       // TODO: GC (reuse anim object?)
       // Remove canvas from HTML DOM
       animObj.canvas.remove();
@@ -154,15 +155,15 @@ export default {
 
     // PUBLIC METHODS
     // Defines the new source to use
-    $defineWMSSource: function(infoWMS, animation, OLMap){ // Called from AppManager.vue
+    defineWMSSource: function(infoWMS, animation, OLMap){ // Called from AppManager.vue
       // Check if an animation of the same type exists
       let animExists = false;
       let animObj;
-      this.$data.$animations.forEach(a => {if (infoWMS.name == a.name) {animExists = true; animObj = a;}});
+      this.$options.animations.forEach(a => {if (infoWMS.name == a.name) {animExists = true; animObj = a;}});
 
       if (!animExists){
         // Create new animation
-        this.$start(infoWMS, animation, OLMap);
+        this.start(infoWMS, animation, OLMap);
       } else {
         // Update WMS source
         animObj.animEngine.setSource(infoWMS.exampleWMSURL, animation);

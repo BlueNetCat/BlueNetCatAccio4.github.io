@@ -1,7 +1,14 @@
 <template>
     <div id="app-map">
-
+      <!-- OL map -->
       <div id="map" ref="OLMap" class="map position-absolute vh-100 vw-100"></div>
+      <!-- Progress bar load tiles -->
+      <div v-show="!progress.isLoaded" class="position-absolute m-0 btn-dark" style="width: 100%; height: 10px; opacity: 0.8" :style="{'max-width': progress.progressPercent + '%'}">
+        <div class="spinner-border text-dark" style="position: relative; margin-top: 20px; margin-left: 20px" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <!-- Legend -->
       <wms-legend @legendClicked="changeStyle($event)" ref="legendWMS" class="position-absolute top-0 end-0 d-sm-flex me-2 mt-5"></wms-legend>
     </div>
 </template>
@@ -22,22 +29,9 @@ import WMSLegend from "WMSLegend.vue";
 export default {
   name: 'app-map',
   created (){
-    
-  },
-  mounted () {
-    this.$initMap();
-    this.$refs.OLMap.addEventListener('mousemove', this.onMouseMove);
-  },
-  umounted () {
-    this.$refs.OLMap.removeEventListener('mousemove', this.onMouseMove);
-    this.$map.un('moveend', this.onMapMoveEnd);
-    this.$map.un('movestart', this.onMapMoveStart);
-  },
-  data () {
-    return {
-      $map: undefined,
-      $wmsURLexample: undefined,
-      layers: {
+    // Declare non-reactive variables
+    this.$options.map= undefined;
+    this.$options.layers = {
         bathymetry: new ol.layer.Tile({
             name: 'bathymetry',
             source: new ol.source.XYZ ({ // https://openlayers.org/en/latest/examples/xyz.html
@@ -122,35 +116,46 @@ export default {
           zIndex: -1,
           //opacity: 0.9
         })
-      },
-      $canvasData: undefined,
-      $progress: {
+      };
+    this.$options.layerData = undefined;
+    this.$options.pixelColor = [0, 0, 0, 0];
+  },
+  mounted () {
+    this.initMap();
+    this.$refs.OLMap.addEventListener('mousemove', this.onMouseMove);
+  },
+  umounted () {
+    this.$refs.OLMap.removeEventListener('mousemove', this.onMouseMove);
+    this.$options.map.un('moveend', this.onMapMoveEnd);
+    this.$options.map.un('movestart', this.onMapMoveStart); 
+  },
+  data () {
+    return {
+      progress: {
         loading: 0,
         loaded: 0
       },
-      $layerData: undefined,
       isLayerDataReady: false,
-      $pixelColor: [0,0,0,0],
     }
   },
   methods: {
 
     // PRIVATE METHODS
     // Figure clicked (TODO: emit)
-    $initMap: function () {
+    initMap: function () {
       // Initialize map
-      this.$map = new ol.Map({
+      this.$options.map = new ol.Map({
         layers : [
           // Data layer
-          this.layers.data,
+          this.$options.layers.data,
           // Bathymetry
-          //this.layers.bathymetry,
+          //this.$options.layers.bathymetry,
           // Graticule layer
-          this.layers.graticule,
+          this.$options.layers.graticule,
           // Shoreline
-          this.layers.shoreline,
+          this.$options.layers.shoreline,
           // 12 nm
-          this.layers.eez12nm,
+          this.$options.layers.eez12nm,
           
         ],
         target: 'map',
@@ -166,15 +171,15 @@ export default {
       document.getElementsByClassName('ol-attribution')[0].style.top = '.5em';
 
       // Declare onmapmove events
-      this.$map.on('moveend', this.onMapMoveEnd);
-      this.$map.on('movestart', this.onMapMoveStart);
+      this.$options.map.on('moveend', this.onMapMoveEnd);
+      this.$options.map.on('movestart', this.onMapMoveStart);
     },
 
 
     // Get layer function
-    $getMapLayer: function(layerName){
+    getMapLayer: function(layerName){
       let selLayer;
-      this.$map.getLayers().forEach(layerItem => {
+      this.$options.map.getLayers().forEach(layerItem => {
         //console.log(layerItem.get('name'));
         if (layerItem.get('name') == layerName)
           selLayer = layerItem;
@@ -190,14 +195,14 @@ export default {
     // Change the styles (WMSLegend.vue emit)
     changeStyle: function(newStyle){
       // Get params
-      let params = this.$getMapLayer('data').getSource().getParams();
+      let params = this.getMapLayer('data').getSource().getParams();
       // Check if the new style is the current
       if (params.STYLES == newStyle)
         return;
       // If style is different, update source
       params.STYLES = newStyle;
       // Set params
-      this.$getMapLayer('data').getSource().updateParams(params);
+      this.getMapLayer('data').getSource().updateParams(params);
       // Source needs to reload
       this.isLayerDataReady = false;
       // Update ForecastBar if it exists
@@ -210,7 +215,7 @@ export default {
       if (this.isMapMoving)
         return;
       // Get lat long coordinates
-      let coord = this.$map.getCoordinateFromPixel([event.clientX, event.clientY]);
+      let coord = this.$options.map.getCoordinateFromPixel([event.clientX, event.clientY]);
       coord = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
       // Emit
       this.$emit('mouseMove', coord);
@@ -239,15 +244,23 @@ export default {
     // Declare loading tile events
     registerLoadTilesEvents: function(source){
       // Source is a ol.source
-      let progress = this.$data.$progress;
+      let progress = this.progress;
       progress.loading = 0;
       progress.loaded = 0;
+      progress.isLoaded = false;
+      progress.progressPercent = 0;
       this.isLayerDataReady = false;
-      source.on('tileloadstart',() => progress.loading += 1);
+      source.on('tileloadstart',() => {
+        progress.loading += 1;
+        progress.isLoaded = false;
+      });
       source.on('tileloadend', () => {
-        progress.loaded += 1; 
-        if (progress.loading == progress.loaded)
+        progress.loaded += 1;
+        progress.progressPercent = 100*progress.loaded/progress.loading;
+        if (progress.loading == progress.loaded){
           this.onTilesLoaded();
+          progress.isLoaded = true;
+        }
       });
       /*source.on('tileloaderror', () => {
         progress.loaded += 1; 
@@ -266,11 +279,11 @@ export default {
     // Update the data pixels
     updateSourceData: function(){
       // Get ol layer
-      let layer = this.$getMapLayer('data');
+      let layer = this.getMapLayer('data');
       // Get canvas
       let tmpCnv = layer.getRenderer().getImage();
       // Get data
-      this.$data.$layerData = tmpCnv.getContext("2d").getImageData(0,0,tmpCnv.width,tmpCnv.height);
+      this.$options.layerData = tmpCnv.getContext("2d").getImageData(0,0,tmpCnv.width,tmpCnv.height);
       // Store width to access pixels
       this.layerDataWidth = tmpCnv.width;
     },
@@ -279,8 +292,8 @@ export default {
     // Get pixel data
     getDataAtPixel: function(x , y){
       let imgArrayPos = (x + y * this.layerDataWidth) * 4; // + 1,2,3 if you want (R)GBA
-      let imgData = this.$data.$layerData.data;
-      let color = this.$data.$pixelColor;
+      let imgData = this.$options.layerData.data;
+      let color = this.$options.pixelColor;
       color[0] = imgData[imgArrayPos]
       color[1] = imgData[imgArrayPos+1]
       color[2] = imgData[imgArrayPos+2]
@@ -293,8 +306,8 @@ export default {
 
 
     // PUBLIC METHODS
-    // Update WMS data source. This function is called from forecast-component
-    $updateSourceWMS: function (infoWMS){
+    // Update WMS data source. This function is called from AppManager.vue
+    updateSourceWMS: function (infoWMS){
       // Create tile grid for faster rendering for low resolution WMS
       let extent = ol.proj.get('EPSG:3857').getExtent();
       let tileSize = 512;
@@ -313,9 +326,9 @@ export default {
       // Avoid cross origin problems when getting pixel data (The canvas has been tainted by cross-origin data.)
       infoWMS.crossOrigin= 'anonymous';
 
-      // Get information from forecast-component
+      // Create OL source from ForecastBar.vue object
       let source = new ol.source.TileWMS(infoWMS);
-      this.$getMapLayer('data').setSource(source);
+      this.getMapLayer('data').setSource(source);
       // Tracking the load progress
       this.registerLoadTilesEvents(source);
 
@@ -326,8 +339,8 @@ export default {
 
     
     // Get OL map object
-    $getOLMap: function(){
-      return this.$map;
+    getOLMap: function(){
+      return this.$options.map;
     }
 
 
@@ -336,8 +349,7 @@ export default {
     "wms-legend": WMSLegend
   },
   computed: {
-      foo: function () {
-      }
+      //foo: function () {}
   }
 }
 </script>

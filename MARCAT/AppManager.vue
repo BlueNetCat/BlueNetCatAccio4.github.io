@@ -36,11 +36,11 @@ export default {
   methods: {
     changeWMSSource: function(infoWMS){
       // Update map
-      this.$refs.map.$updateSourceWMS(infoWMS);
-      let OLMap = this.$refs.map.$getOLMap();
+      this.$refs.map.updateSourceWMS(infoWMS);
+      let OLMap = this.$refs.map.getOLMap();
       // Update animation
       if (infoWMS.animation)
-        this.$refs.animcanvas.$defineWMSSource(infoWMS, infoWMS.animation, OLMap);
+        this.$refs.animcanvas.defineWMSSource(infoWMS, infoWMS.animation, OLMap);
     },
     changeWMSStyle: function(newStyle){
       // Update Forecastbar

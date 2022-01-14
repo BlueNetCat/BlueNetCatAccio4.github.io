@@ -612,13 +612,13 @@ export default {
         return;
       }
       
-      console.log("Loading image started");
+      //console.log("Loading image started");
       fig.isLoading = true;
       imgEl.style.opacity = 0.2;
     },
     // Image loaded, reset loadCount
     onWMSImageLoaded: function (event, fig){
-      console.log("Loading image ended");
+      //console.log("Loading image ended");
       let imgEl = event.currentTarget;
       imgEl.loadCount = 0; // Control for recursivity
       fig.isLoading = false;
