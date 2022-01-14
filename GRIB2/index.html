@@ -1,0 +1,131 @@
+<html>
+
+<head>
+    <title>GRIB2</title>
+
+
+    <!-- Bootstrap 5.0 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- HTML menus -->
+    <!--link rel="stylesheet" href="../css/menu.css"-->
+
+    <!-- Openlayers library -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css">
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+
+
+    <!-- GRIB2 decoders -->
+    <script src='./grib2.js'></script>
+    <script src='./grib2utils.js'></script>
+
+</head>
+
+<body style="background-color: aqua; margin: 0; padding: 0;">
+    <!-- Bootstrap 5.0 and Popper https://getbootstrap.com/docs/5.0/getting-started/introduction/ -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+
+    <!-- Open layers map -->
+    <div id="map" ondrop=onDropFile(event) ondragover=onDragOver(event) class="map position-absolute vh-100 vw-100"></div>
+
+    <!-- Drag and drop info -->
+    <div class="position-absolute container" style="text-align: center;max-width: 100%;"> Drag and drop you GRIB files </div>
+
+
+
+
+
+<script>
+    // Openlayers map
+    const map = new ol.Map({
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.TileWMS({
+                        url: 'https://ahocevar.com/geoserver/wms',
+                        params: {
+                            'LAYERS': 'ne:NE1_HR_LC_SR_W_DR',
+                            'TILED': true,
+                        },
+                        cacheSize: 500,
+                        crossOrigin: 'anonymous',
+                    }),
+                }),
+            ],
+            target: 'map',
+            view: new ol.View({
+                projection: 'EPSG:4326',
+                center: [0, 0],
+                zoom: 2,
+            }),
+        });
+
+
+
+    // On drag over event (nothing happens)
+    // https://github.com/Web-based-vocoder/webbasedVocoder/blob/main/script.js
+    const onDragOver = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    // On drop event
+    //fetch('winds.grb')
+        //.then(response => response.arrayBuffer())
+        //.then(buffer => decodeGRIB2File(buffer))
+        //.catch(error => console.log(error));
+    const onDropFile = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        console.log("Files dropped");
+
+        let files = event.dataTransfer.files;
+        // Iterate files
+        for (let i = 0; i < files.length; i++) {
+            let file = files[i];
+            let reader = new FileReader();
+            reader.fileName = file.name;
+            
+
+            // Load files
+            reader.addEventListener('load', e => {
+                
+                let arrayBuffer = e.target.result;
+                let fName = reader.fileName;
+                console.log(fName + ' received.');
+
+                // Decode grib file
+                gribFiles = decodeGRIB2File(arrayBuffer);
+                let gribFile = gribFiles[0];
+
+                // Add data to map
+                if (gribFile.data.grid.lonStart > 180){
+                    gribFile.data.grid.lonStart = gribFile.data.grid.lonStart-360;
+                }
+                let extent = [gribFile.data.grid.lonStart, gribFile.data.grid.latStart, gribFile.data.grid.lonEnd, gribFile.data.grid.latEnd];
+                console.log(extent);
+                let imageLayer = new ol.layer.Image({
+                    source: new ol.source.ImageStatic({
+                        url: gribFile.imgEl.src,
+                        projection: 'EPSG:4326',
+                        imageExtent: extent
+                    }),
+                    opacity: 0.8
+                });
+                map.addLayer(imageLayer);
+
+            });
+            // Trigger the load event
+            reader.readAsArrayBuffer(file);
+        }
+    };
+
+</script>
+
+</body>
+
+</html>
