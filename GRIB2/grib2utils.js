@@ -1,5 +1,4 @@
-let myBuffer = null;
-let gribFiles = [];
+
 
 //fetch('COSMODE_single_level_elements_PS_2018020500_000.grib2')
 //fetch('COSMODE_single_level_elements_ASWDIR_S_2018011803_006.grib2')
@@ -12,9 +11,10 @@ let gribFiles = [];
 
 
 const decodeGRIB2File = function (buffer) {
-    myBuffer = buffer;
+
 
     let gribByteIndex = 0;
+    let gribFiles = [];
     let gribFileBuffers = [];
 
     // Separate GRIB buffers
@@ -25,13 +25,14 @@ const decodeGRIB2File = function (buffer) {
         gribByteIndex += gribLength;
     }
 
+    console.log("Number of grib buffers: " + gribFileBuffers.length);
     // Iterate over GRIB buffers
     for (let i = 0; i < gribFileBuffers.length; i++) {
         gribFiles[i] = new GRIB2(gribFileBuffers[i]);
         decodeGRIB2Buffer(gribFileBuffers[i], gribFiles[i]);
         gribFiles[i].imgEl = getImgElement(gribFiles[i].data);
     }
-
+    
     return gribFiles;
 }
 
@@ -66,7 +67,7 @@ const getImgElement = function (data) {
 
     ctx.putImageData(imgData, 0, 0);
 
-    let img = new Image();
+    let img = new Image(canvas.width, canvas.height);
     img.src = canvas.toDataURL("image/png");
 
     return img;
