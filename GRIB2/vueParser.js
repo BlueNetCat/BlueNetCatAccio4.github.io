@@ -22,7 +22,7 @@ const options = {
 
   const app = Vue.createApp({
     components: {
-      'app-manager': Vue.defineAsyncComponent(() => loadModule('./AppManager.vue', options)),
+      'grib-manager': Vue.defineAsyncComponent(() => loadModule('./GRIBFileManager.vue', options)),
     },
-    template: '<app-manager></app-manager>'
+    template: '<grib-manager></grib-manager>'
   });

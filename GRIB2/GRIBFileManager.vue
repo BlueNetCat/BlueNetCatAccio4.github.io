@@ -1,5 +1,5 @@
 <template>
-  <div id="app-manager">
+  <div id="grib-manager">
 
     <!-- Open layers map -->
     <div id="map" v-on:drop="onDropFile($event)" v-on:dragover="onDragOver($event)" class="map position-absolute vh-100 vw-100"></div>
@@ -31,7 +31,7 @@
 //import Map from "Map.vue";
 
 export default {
-  name: "app-manager",
+  name: "grib-manager",
   created(){
 
   },
@@ -59,9 +59,11 @@ export default {
         }),
     });
     // Load an example of a grib file
-    //fetch('COSMODE_single_level_elements_PS_2018020500_000.grib2')
-    //fetch('COSMODE_single_level_elements_ASWDIR_S_2018011803_006.grib2')
-    fetch('winds.grb')
+    //fetch('datasets/COSMODE_single_level_elements_PS_2018020500_000.grib2')
+    //fetch('datasets/COSMODE_single_level_elements_ASWDIR_S_2018011803_006.grib2')
+    //fetch('datasets/gdas.t00z.pgrb2.0p25.f000.grib2') // temperature in kelvins
+    //fetch('datasets/gdas.t00z.pgrb2.1p00.f000.grib2') // winds
+    fetch('datasets/winds.grb')
         .then(response => response.arrayBuffer())
         .then(buffer => decodeGRIB2File(buffer))
         .then(gribFiles => this.addGribToMap(gribFiles, 'example'))
@@ -77,7 +79,6 @@ export default {
   methods: {
     addLayerHTML: function(name, layer) {
       this.layersEl.push({name, layer});
-      console.log(this.layersEl);
     },
 
     // When layer name is clicked
@@ -86,7 +87,6 @@ export default {
       console.log(event.currentTarget.id);
       this.layersEl.forEach(ll => {if (ll.name == event.currentTarget.id) {
         ll.layer.setVisible(!ll.layer.getVisible());
-        console.log(ll.layer.getSource());
       }})
     },
 
@@ -143,11 +143,18 @@ export default {
         let gribFile = gribFiles[j];
 
         // Add data to map
-        if (gribFile.data.grid.lonStart > 180){
-            gribFile.data.grid.lonStart = gribFile.data.grid.lonStart-360;
+        let minLat = Math.min(gribFile.data.grid.latStart, gribFile.data.grid.latEnd);
+        let maxLat = Math.max(gribFile.data.grid.latStart, gribFile.data.grid.latEnd);
+        let minLon = gribFile.data.grid.lonStart;//Math.min(gribFile.data.grid.lonStart, gribFile.data.grid.lonEnd);
+        let maxLon = gribFile.data.grid.lonEnd;//Math.max(gribFile.data.grid.lonStart, gribFile.data.grid.lonEnd);
+
+        if (minLon > 180){
+            minLon = minLon-360;
         }
-        let extent = [gribFile.data.grid.lonStart, gribFile.data.grid.latStart, gribFile.data.grid.lonEnd, gribFile.data.grid.latEnd];
-        console.log(extent);
+
+        let extent = [minLon, minLat, maxLon, maxLat];
+
+        //console.log(extent);
         let imageLayer = new ol.layer.Image({
             source: new ol.source.ImageStatic({
                 url: gribFile.imgEl.src,
@@ -167,10 +174,6 @@ export default {
 
   },
   computed: {
-    isLayerVisible(layerEl){
-      console.log(layerEl);
-      return "btn-primary"
-    }
   }
 }
 

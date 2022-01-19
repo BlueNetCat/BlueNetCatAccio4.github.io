@@ -3733,6 +3733,19 @@ class GRIB2 {
                     content: null, // Data
                     info: 'Data in a format described by data Template 7.X, where X is the data representation template number given in octets 10-11 of Section 5.',
                 },
+            ],
+
+
+
+            // SECTION 8 - End section
+            8: [
+                {
+                    startIndex: 1,
+                    size: 4,
+                    content: '',
+                    type: 'String',
+                    info: '"7777" - Coded according to the International Alphabet Number 5.'
+                }
             ]
         
         }

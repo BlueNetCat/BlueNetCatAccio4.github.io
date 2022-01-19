@@ -102,15 +102,25 @@ const decodeGRIB2Buffer = function (buffer, myGrib) {
         sectionBuffers.push(buffer.slice(sectionByteIndex, sectionByteIndex + sectionLength));
         sectionByteIndex += sectionLength;
     }
+    console.log("Number of sections inside grib buffer: " + sectionBuffers.length);
 
     // Decode section buffers
+    let usedSectionNumbers = [];
     for (let i = 0; i < sectionBuffers.length - 1; i++) { // (length - 1) because of end section has 4 bytes only (7777)
         let sectionNumber = new DataView(sectionBuffers[i].slice(4, 5)).getInt8();
         myGrib.dataTemplate[sectionNumber] = decodeSection(sectionBuffers[i], myGrib.dataTemplate[sectionNumber]);
+
+        // TODO: sections can be repeated
+        if (usedSectionNumbers.includes(sectionNumber))
+            console.error("TODO: section " + sectionNumber + "repeated: sections can be repeated inside GRIB. Right now only using the last repeated section");
+        usedSectionNumbers.push(sectionNumber);
     }
+    // Section 8 data template does not contain the section number
+    myGrib.dataTemplate[8] = decodeSection(sectionBuffers[sectionBuffers.length-1], myGrib.dataTemplate[8]);
+
 
     console.log(myGrib.dataTemplate);
-
+    // Transform from binary to JSON
     myGrib.data = parseData(myGrib.dataTemplate);
 
 }
@@ -278,55 +288,62 @@ const parseData = function (decodedGrib) {
 
         // Unpack Complex Packing
         let wwIndex = fieldWidth * (diffOrder + 1);
-        let packedArray = unpackComplexPacking(decodedGrib, rawData, compression, wwIndex);
+        let unpackedArray = unpackComplexPacking(decodedGrib, rawData, compression, wwIndex);
 
+        // Remove first n (one/two) values (they will be h1 and h2)
+        // https://apps.ecmwf.int/codes/grib/format/grib2/templates/5/3
         // (1) At decoding time, after bit string unpacking, the original scaled values are recovered by adding the overall minimum and summing up recursively.
         // (2) For differencing of order n, the first n values in the array that are not missing are set to zero in the packed array. These dummy values are not used in unpacking.
+        if (diffOrder == 2){
+            unpackedArray.shift();
+            unpackedArray.shift();
+        } else if (diffOrder == 1){
+            unpackedArray.shift();
+        }
 
-        // Decoding (f - original, g - first derivative, h - second derivative)
+        // At decoding time, after bit string unpacking, the original scaled values are recovered by adding the overall minimum and summing up recursively.
+        // https://apps.ecmwf.int/codes/grib/format/grib2/templates/5/3
+        // Add overall min
+        // https://apps.ecmwf.int/codes/grib/format/grib2/regulations/
+        // Y * 10D= R + (X1+X2) * 2E
+        // R = overallMin, X1+X2 = unpackedArray
+        unpackedArray.forEach((el, index, arr) => arr[index] += overallMin);
+
+        // Spatial differencing - Sum up recursively (f - original, g - first derivative, h - second derivative)
         // https://apps.ecmwf.int/codes/grib/format/grib2/templates/5/3
         let f = [];
-        let g = [];
-        let h = [];
-
-
-
-        // Second order
-        if (diffOrder == 2) {
-            // First values
-            f[0] = g[0] = h[0] = h1;
-            f[1] = h[1] = h2;
-
-            // H values
-            for (let i = 0; i < packedArray.length; i++) {
-                h.push(packedArray[i]);// + overallMin);
+        if (diffOrder == 2){
+            let h = unpackedArray;
+            h.unshift(h2); // Instead of removing first n values, you could just assign the h1, h2 here: h[0] = h1; h[1] = h2;
+            h.unshift(h1);
+            let g = [h1, h2 - h1]; // Second order
+            for (let i = 2; i < h.length; i++){
+                g[i] = h[i] + g[i-1];
             }
-            // G values
-            for (let i = 1; i < h.length - 1; i++) {
-                g[i] = h[i] - h[i - 1];
+            f = [h1]; // First order
+            for (let i = 1; i < g.length; i++){
+                f[i] = g[i] + f[i-1];
             }
-            // F values
-            for (let i = 2; i < g.length - 1; i++) {
-                f[i] = g[i] - g[i - 1];
-            }
-
-
-            if (grid.numPoints != f.length)
-                console.error("Length of raw datapoints (H) is not equal to grid points : grid.numPoints: " + grid.numPoints + ", h.length: " + h.length);
-
-
-            for (let i = 0; i < grid.numPoints; i++) {
-                values[i] = compression.decompress(f[i]);
+        } else if (diffOrder == 1){
+            let g = unpackedArray;
+            g.unshift(h1);
+            f = [h1]; // First order
+            for (let i = 1; i < g.length; i++) {
+                f[i] = g[i] + f[i - 1];
             }
         }
 
+        // Decoding (f - original, g - first derivative, h - second derivative)
+        // https://apps.ecmwf.int/codes/grib/format/grib2/templates/5/3
+        if (grid.numPoints != f.length)
+            console.error("Length of raw datapoints (H) is not equal to grid points : grid.numPoints: " + grid.numPoints + ", h.length: " + h.length);
 
-        var a = 0;
-        values[0] = values[10];
-        values[1] = values[10];
-        values[2] = values[10];
-        values[3] = values[10];
-
+        // Decompress ( apply D and E)
+        // https://apps.ecmwf.int/codes/grib/format/grib2/regulations/
+        // Y * 10D= R + (X1+X2) * 2E
+        for (let i = 0; i < grid.numPoints; i++) {
+            values[i] = compression.decompress(f[i]);
+        }
 
 
     }
@@ -447,7 +464,8 @@ const parseData = function (decodedGrib) {
 
 
 
-// TODO: SOMETHING WRONG! CHECK SIZE OF X2, IT SHOULD BE THE SAME AS NUMBER OF GRID POINTS-2
+// TODO: Total number of required bytes and total number of available bytes does not match
+// TODO: Revise X1 and X2 values
 // Unpack values (templates 5.2 and 5.3)
 const unpackComplexPacking = function (decodedGrib, rawData, compression, inwwIndex) {
 
@@ -532,12 +550,9 @@ const unpackComplexPacking = function (decodedGrib, rawData, compression, inwwIn
             // Two options: use the subsitute values specified or set all bits to 1?
             // How to know if it is primary or secondary? It should be specified in X1[i] (see note 10)
             // Constant value (see note 4)
-            X2[i] = new Array(numValuesPerGroup).fill(X1[i]);
+            X2[i] = new Array(numValuesPerGroup).fill(0);
         }
         else {
-            // TODO: REMOVE FIRST TWO VALUES??? WHY?? WHERE?
-            // https://apps.ecmwf.int/codes/grib/format/grib2/templates/5/3
-            // For differencing of order n, the first n values in the array that are not missing are set to zero in the packed array. These dummy values are not used in unpacking.
             X2[i] = readValuesFromBuffer(rawData.slice(lastByteIndex, lastByteIndex + numBytes), bitsPerValuePerGroup, numValuesPerGroup, lastBitIndex); // Because X2 are consecutive, we keep lastBitIndex
         }
         lastBitIndex = ((numValuesPerGroup * bitsPerValuePerGroup) + lastBitIndex) % 8; // LastBitIndex goes from 0 to 7, as every iteration we send the specific bytes to read.
