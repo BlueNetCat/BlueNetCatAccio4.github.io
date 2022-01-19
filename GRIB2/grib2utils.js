@@ -268,8 +268,13 @@ const parseData = function (decodedGrib) {
         // (1) Referring to the notation in Note 1 of data representation template 5.3, at order 1, the values stored in octet 6 - ww are g1 and gmin.At order 2, the values stored are h1, h2 and hmin.
         let h1 = decodeByte(rawData.slice(0, fieldWidth), numType);
         let h2 = decodeByte(rawData.slice(fieldWidth, fieldWidth * 2), numType); // Not used if difference order is 1
-        let overallMin = decodeByte(rawData.slice(fieldWidth * diffOrder, fieldWidth * (diffOrder + 1)), numType); //hmin
-        // (4) Overall minimum will be negative in most cases. First bit should indicate the sign:0 if positive, 1 if negative.
+
+        // (4) Overall minimum will be negative in most cases. First bit should indicate the sign: 0 if positive, 1 if negative.
+        // Regulation: '92.1.5'
+        let strBits = bytes2bits(new Uint8Array(rawData.slice(fieldWidth * diffOrder, fieldWidth * (diffOrder + 1)))); // Get string of bits
+        let sign = strBits[0] == '0' ? 1 : -1; // Check if first bit is negative
+        strBits = '0' + strBits.substring(1, strBits.length);
+        let overallMin = sign * bits2uint8(strBits); //hmin
 
         // Unpack Complex Packing
         let wwIndex = fieldWidth * (diffOrder + 1);

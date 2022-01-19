@@ -260,7 +260,7 @@ export default {
           name: 'Chlorophyll',
           url: 'med-ogs-pft-an-fc',
           layerName: 'chl',
-          timeScales: ['d', 'd3'],
+          timeScales: ['d', 'd3', 'm'],
           range: [0.01, 1],
           units: 'mg/m3',
           style: 'boxfill%2Foccam',
@@ -525,9 +525,15 @@ export default {
             dd.setMonth(dd.getMonth() + activeTimeScale.interval[i])
             // TODO: time intervals can be extracted from get capabilities?
             // https://nrt.cmems-du.eu/thredds/wms/med-cmcc-tem-an-fc-m?request=GetCapabilities&service=WMS
-            dd.setDate(16); // or 15. check here: https://view.marine.copernicus.eu/ViewService/?record_id=66fb61fa-c911-4f7e-aec1-959627bbf2b3
-            dd.setHours(12); // or 00?
-            dd.setMinutes(0);
+            if (activeDataType.name == 'Chlorophyll'){
+              dd.setDate(1);
+              dd.setHours(0);
+              dd.setMinutes(0);
+            } else {
+              dd.setDate(16); // or 15. check here: https://view.marine.copernicus.eu/ViewService/?record_id=66fb61fa-c911-4f7e-aec1-959627bbf2b3
+              dd.setHours(12); // or 00?
+              dd.setMinutes(0);
+            }
             caption = this.monthNames[dd.getMonth()] + ' ' + dd.getUTCFullYear();
             subcaption = 'Monthly average';
             dateSummary = caption + " " + subcaption;

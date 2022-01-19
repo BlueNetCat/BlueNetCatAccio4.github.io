@@ -1112,6 +1112,7 @@ class GRIB2 {
                 size: 4,
                 content: null,
                 type: 'uint32',
+                regulation: '92.1.5',
                 info: 'La1 — latitude of first grid point (see Note 1)'
             },
             {
@@ -1119,6 +1120,7 @@ class GRIB2 {
                 size: 4,
                 content: null,
                 type: 'uint32',
+                regulation: '92.1.5',
                 info: 'Lo1 — longitude of first grid point (see Note 1)'
             },
             {
@@ -1134,6 +1136,7 @@ class GRIB2 {
                 size: 4,
                 content: null,
                 type: 'uint32',
+                regulation: '92.1.5',
                 info: 'La2 — latitude of last grid point (see Note 1)'
             },
             {
@@ -1141,6 +1144,7 @@ class GRIB2 {
                 size: 4,
                 content: null,
                 type: 'uint32',
+                regulation: '92.1.5',
                 info: 'Lo2 — longitude of last grid point (see Note 1)'
             },
             {
