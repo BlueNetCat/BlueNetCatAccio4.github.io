@@ -61,9 +61,9 @@ export default {
     // Load an example of a grib file
     //fetch('datasets/COSMODE_single_level_elements_PS_2018020500_000.grib2')
     //fetch('datasets/COSMODE_single_level_elements_ASWDIR_S_2018011803_006.grib2')
-    //fetch('datasets/gdas.t00z.pgrb2.0p25.f000.grib2') // temperature in kelvins
+    fetch('datasets/gdas.t00z.pgrb2.0p25.f000.grib2') // temperature in kelvins
     //fetch('datasets/gdas.t00z.pgrb2.1p00.f000.grib2') // winds
-    fetch('datasets/winds.grb')
+    //fetch('datasets/winds.grb')
         .then(response => response.arrayBuffer())
         .then(buffer => decodeGRIB2File(buffer))
         .then(gribFiles => this.addGribToMap(gribFiles, 'example'))

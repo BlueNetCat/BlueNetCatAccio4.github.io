@@ -3242,6 +3242,9 @@ class GRIB2 {
 
     }
 
+    // TODO: Static code tables
+    // Fill them here and complete in grib2utils when parsing data
+
     // Current data template
     constructor(buffer){
 

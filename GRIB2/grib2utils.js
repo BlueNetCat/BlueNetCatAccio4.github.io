@@ -102,7 +102,9 @@ const decodeGRIB2Buffer = function (buffer, myGrib) {
         sectionBuffers.push(buffer.slice(sectionByteIndex, sectionByteIndex + sectionLength));
         sectionByteIndex += sectionLength;
     }
-    console.log("Number of sections inside grib buffer: " + sectionBuffers.length);
+
+    if (sectionBuffers.length > 8)
+        console.error("TODO: implement repeated sections in grib buffer. Number of sections inside grib buffer: " + sectionBuffers.length);
 
     // Decode section buffers
     let usedSectionNumbers = [];
@@ -140,6 +142,11 @@ const parseData = function (decodedGrib) {
     grid.numLongPoints = getContentByInfo(decodedGrib[3], 'Ni — number of points along a parallel');
     grid.numLatPoints = getContentByInfo(decodedGrib[3], 'Nj — number of points along a meridian');
 
+    // 92.1.7 The latitude values shall be limited to the range 0 to 90 degrees inclusive.The orientation
+    // shall be north latitude positive, south latitude negative. Bit 1 is set to 1 to indicate south
+    // latitude.
+    // 92.1.8 The longitude values shall be limited to the range 0 to 360 degrees inclusive.The
+    // orientation shall be east longitude positive, with only positive values being used.
     grid.latStart = getContentByInfo(decodedGrib[3], 'La1 — latitude of first grid point (see Note 1)') / 1e6;
     grid.lonStart = getContentByInfo(decodedGrib[3], 'Lo1 — longitude of first grid point (see Note 1)') / 1e6;
 
@@ -290,22 +297,13 @@ const parseData = function (decodedGrib) {
         let wwIndex = fieldWidth * (diffOrder + 1);
         let unpackedArray = unpackComplexPacking(decodedGrib, rawData, compression, wwIndex);
 
-        // Remove first n (one/two) values (they will be h1 and h2)
-        // https://apps.ecmwf.int/codes/grib/format/grib2/templates/5/3
-        // (1) At decoding time, after bit string unpacking, the original scaled values are recovered by adding the overall minimum and summing up recursively.
-        // (2) For differencing of order n, the first n values in the array that are not missing are set to zero in the packed array. These dummy values are not used in unpacking.
-        if (diffOrder == 2){
-            unpackedArray.shift();
-            unpackedArray.shift();
-        } else if (diffOrder == 1){
-            unpackedArray.shift();
-        }
+        
 
         // At decoding time, after bit string unpacking, the original scaled values are recovered by adding the overall minimum and summing up recursively.
         // https://apps.ecmwf.int/codes/grib/format/grib2/templates/5/3
         // Add overall min
         // https://apps.ecmwf.int/codes/grib/format/grib2/regulations/
-        // Y * 10D= R + (X1+X2) * 2E
+        // Y * 10^D= R + (X1+X2) * 2^E
         // R = overallMin, X1+X2 = unpackedArray
         unpackedArray.forEach((el, index, arr) => arr[index] += overallMin);
 
@@ -314,8 +312,19 @@ const parseData = function (decodedGrib) {
         let f = [];
         if (diffOrder == 2){
             let h = unpackedArray;
-            h.unshift(h2); // Instead of removing first n values, you could just assign the h1, h2 here: h[0] = h1; h[1] = h2;
-            h.unshift(h1);
+            // Remove first n (one/two) values (they will be h1 and h2)
+            // (1) At decoding time, after bit string unpacking, the original scaled values are recovered by adding the overall minimum and summing up recursively.
+            // (2) For differencing of order n, the first n values in the array that are not missing are set to zero in the packed array. These dummy values are not used in unpacking.
+            h[0] = h1;
+            h[1] = h2;
+            //(1) Spatial differencing is a pre - processing before group splitting at encoding time.It is 
+            // intended to reduce the size of sufficiently smooth fields, when combined with a splitting scheme 
+            // as described in Data Representation Template 5.2.At order 1, an initial field of values f is replaced 
+            // by a new field of values g, where g1 = f1, g2 = f2 - f1, ..., gn = fn - fn - 1. At order 2, the field 
+            // of values g is itself replaced by a new field of values h, where h1 = f1, h2 = f2, h3 = g3 - g2, ..., 
+            // hn = gn - gn - 1. To keep values positive, the overall minimum of the resulting field(either gmin or hmin) 
+            // is removed.At decoding time, after bit string unpacking, the original scaled values are recovered by adding 
+            // the overall minimum and summing up recursively.
             let g = [h1, h2 - h1]; // Second order
             for (let i = 2; i < h.length; i++){
                 g[i] = h[i] + g[i-1];
@@ -326,7 +335,7 @@ const parseData = function (decodedGrib) {
             }
         } else if (diffOrder == 1){
             let g = unpackedArray;
-            g.unshift(h1);
+            g[0] = h1;
             f = [h1]; // First order
             for (let i = 1; i < g.length; i++) {
                 f[i] = g[i] + f[i - 1];
@@ -345,6 +354,7 @@ const parseData = function (decodedGrib) {
             values[i] = compression.decompress(f[i]);
         }
 
+        calcMaxMin(values);
 
     }
     // Grid point data - IEEE Floating Point Data
@@ -426,16 +436,20 @@ const parseData = function (decodedGrib) {
         console.error('TODO: Scanning mode: the data needs to be mirroed in the vertical axis (east should be west and viceversa)');
     }
     // Flip using horizontal axis (top becomes bottom, bottom becomes top)
+    // TODO: SCANNING MODE DOES NOT NECESSARILY APPLIES. CHECK START GRID LATITUDE AND END GRID LATITUDE TO KNOW DIRECTION
     if (grid.scanningMode[1][0] == 0) { // Points in the first row or column scan in the -j (-y) direction
-        let horizontalFlipValues = [];
-        for (let i = 0; i < data.values.length; i++) {
-            let colN = i % grid.numLongPoints;
-            let rowN = Math.floor(i / grid.numLongPoints);
+        // If latitude first grid point is bigger than end point, it does not apply?
+        if (grid.latStart < grid.latEnd) { // Grid defines the first grid latitude point as the southest
+            let horizontalFlipValues = [];
+            for (let i = 0; i < data.values.length; i++) {
+                let colN = i % grid.numLongPoints;
+                let rowN = Math.floor(i / grid.numLongPoints);
 
-            let flippedIndex = (grid.numLatPoints - rowN - 1) * grid.numLongPoints + colN;
-            horizontalFlipValues[i] = data.values[flippedIndex];
+                let flippedIndex = (grid.numLatPoints - rowN - 1) * grid.numLongPoints + colN;
+                horizontalFlipValues[i] = data.values[flippedIndex];
+            }
+            data.values = horizontalFlipValues;
         }
-        data.values = horizontalFlipValues;
     }
     // Other scanning modes
     // TODO: the grid can be diamond-shaped, meaning that it is not as simple as painting a point per pixel. Probably it is needed to assing a lat-long value to each datapoint, or to deal with it in the draw function
@@ -475,9 +489,13 @@ const unpackComplexPacking = function (decodedGrib, rawData, compression, inwwIn
 
     let xxIndex = Math.ceil(NG * compression.bitsPerValue / 8) + wwIndex;
     // Group reference values (X1)
+    // NG group reference values (X1 in the decoding formula), each of which is encoded using the number of bits specified in octet 20 of Data Representation Template 5.0. 
+    // Bits set to zero shall be appended where necessary to ensure this sequence of numbers ends on an octet boundary.
     let X1 = readValuesFromBuffer(rawData.slice(wwIndex, xxIndex), compression.bitsPerValue, NG);
 
     // Group widths ((12) The group width is the number of bits used for every value in a group.)
+    // NG group widths, each of which is encoded using the number of bits specified in octet 37 of Data Representation Template 5.2.
+    // Bits set to zero shall be appended as necessary to ensure this sequence of numbers ends on an octet boundary.
     let bitsPerValueGroupWidth = getContentByInfo(decodedGrib[5], 'Number of bits used for the group widths (after the reference value in octet 36 has been removed)');
     let refGroupWidth = getContentByInfo(decodedGrib[5], 'Reference for group widths (see Note 12)');
     let yyIndex = Math.ceil(NG * bitsPerValueGroupWidth / 8) + xxIndex;
@@ -487,15 +505,20 @@ const unpackComplexPacking = function (decodedGrib, rawData, compression, inwwIn
 
 
     // Scaled group lengths
+    // NG scaled group lengths, each of which is encoded using the number of bits specified in octet 47 of Data Representation Template 5.2.
+    // Bits set to zero shall be appended as necessary to ensure this sequence of numbers ends on an octet boundary. (see Note 14 of Data Representation Template 5.2)
     let bitsPerValueScaledGL = getContentByInfo(decodedGrib[5], 'Number of bits used for the scaled group lengths (after subtraction of the reference value given in octets 38-41 and division by the length increment given in octet 42)');
-    let zzIndex = Math.ceil(NG * bitsPerValueScaledGL / 8) + yyIndex;
+    let zzIndex = Math.ceil(NG * bitsPerValueScaledGL / 8) + yyIndex; 
     let scaledGroupLengths = readValuesFromBuffer(rawData.slice(yyIndex, zzIndex), bitsPerValueScaledGL, NG);
 
     // Group lengths (The group length (L) is the number of values in a group.)
     // (1) Group lengths have no meaning for row by row packing, where groups are coordinate lines(so th grid description
     // section and possibly the bit - map section are enough); for consistency, associated field width and reference should then be
     // encoded as 0.
-    console.log('Grup splitting method used: ' + getContentByInfo(decodedGrib[5], 'Group splitting method used (see Code Table 5.4)'));
+    let groupSplittingMethod = getContentByInfo(decodedGrib[5], 'Group splitting method used (see Code Table 5.4)');
+    if (groupSplittingMethod != 1)
+        console.error('Group splitting method not implemented. See: https://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc/grib2_table5-4.shtml');
+    
     let groupLengths = [];
     let refGroupLength = getContentByInfo(decodedGrib[5], 'Reference for group lengths (see Note 13)');
     let lengthInc = getContentByInfo(decodedGrib[5], 'Length increment for the group lengths (see Note 14)');
@@ -505,11 +528,12 @@ const unpackComplexPacking = function (decodedGrib, rawData, compression, inwwIn
     // (3) Scaled group lengths, if present, are encoded for each group. But the true last group length (unscaled) should be taken from Data Representation Template.
     let lengthLastGroup = getContentByInfo(decodedGrib[5], 'True length of last group');
     if (lengthLastGroup != groupLengths[groupLengths.length - 1]) { // Double check
-        console.log("True length of last group is not the same as the last value in the gruop length array. " + lengthLastGroup + " vs " + groupLengths[groupLengths.length - 1]);
+        console.warn("True length of last group is not the same as the last value in the gruop length array. " + lengthLastGroup + " vs " + groupLengths[groupLengths.length - 1]);
         groupLengths[groupLengths.length - 1] = lengthLastGroup;
     }
 
     // Calculate total number of bytes
+    // Warnings
     let totalNumBytes = 0;
     let totalNumBits = 0;
     let totalNumPoints = 0;
@@ -518,8 +542,10 @@ const unpackComplexPacking = function (decodedGrib, rawData, compression, inwwIn
         totalNumPoints += groupLengths[i];
     }
     let section3NumPoints = getContentByInfo(decodedGrib[3], 'Number of data points');
-    console.log("Total number of required bytes: " + totalNumBits / 8 + ", Available bytes: " + rawData.byteLength);
-    console.log("Total number of points: " + totalNumPoints + ", Section 3 num of points: " + section3NumPoints);
+    if (totalNumPoints != section3NumPoints) console.warn("Total number of points: " + totalNumPoints + ", Section 3 num of points: " + section3NumPoints);
+    if ((totalNumBits / 8) - rawData.slice(zzIndex, rawData.byteLength).byteLength > 1)
+        console.warn("Total number of required bytes: " + totalNumBits / 8 + ", Available bytes: " + rawData.slice(zzIndex, rawData.byteLength).byteLength);
+    
 
     // Substitute values for missing data
     let primarySubstitute = getContentByInfo(decodedGrib[5], 'Primary missing value substitute');
@@ -554,17 +580,23 @@ const unpackComplexPacking = function (decodedGrib, rawData, compression, inwwIn
         }
         else {
             X2[i] = readValuesFromBuffer(rawData.slice(lastByteIndex, lastByteIndex + numBytes), bitsPerValuePerGroup, numValuesPerGroup, lastBitIndex); // Because X2 are consecutive, we keep lastBitIndex
+            lastBitIndex = ((numValuesPerGroup * bitsPerValuePerGroup) + lastBitIndex) % 8; // LastBitIndex goes from 0 to 7, as every iteration we send the specific bytes to read.
+            lastByteIndex = lastByteIndex + numBytes - Math.ceil(lastBitIndex/8); // Total num bits + shift amount, but stays in the current byte unless lastBitIndex is 0, meaning that the whole byte was read
         }
-        lastBitIndex = ((numValuesPerGroup * bitsPerValuePerGroup) + lastBitIndex) % 8; // LastBitIndex goes from 0 to 7, as every iteration we send the specific bytes to read.
-
+        
+        // Warn if the last byte index is not at the end of the data buffer
+        if (i == NG-1 && (lastByteIndex - rawData.byteLength) > 1) console.warn("LastByteIndex: " + lastByteIndex + ". Available bytes: " + rawData.byteLength);
+        
+        
+        
         // Unpack values
         // Add ref value (X1) to packed values (X2)
         for (let j = 0; j < numValuesPerGroup; j++) {
             packedArray.push(X2[i][j] + X1[i]);
         }
     }
-
-    calcMaxMin(packedArray);
+    // Regulation 92.9.4. Data shall be coded in the form of non-negative scaled differences from a reference value of the whole field plus, if applicable, a local reference value.
+    //calcMaxMin(packedArray);
 
     return packedArray;
 }
