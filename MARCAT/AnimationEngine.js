@@ -85,7 +85,7 @@ class AnimationEngine {
       console.log("destroyed by destroyer");
       return;
     }
-
+    
     // Update timer
     let timeNow = performance.now();
     let dt = (timeNow - this.prevTime) / 1000; // in seconds;
@@ -93,10 +93,12 @@ class AnimationEngine {
     this.prevTime = timeNow;
 
     // If data is loaded and layer is visible
-    if (this.source)
+    if (this.source){
+      //console.log(this.source.wmsURL);
       if (this.source.isReady)
         if (!this.mapIsMoving)
           this.particles.draw(dt);
+    }
 
     // Loop
     //var that = this;
@@ -187,6 +189,7 @@ class SourceWMS {
     this.loaded = 0;
     // Store animation information defined in ForecastBar.vue
     this.animation = animation;
+    this.wmsURL = wmsURL; // Only for debuggin;
 
 
     // Define WMS image url with a standard size
@@ -641,7 +644,7 @@ class Particle {
     // Change linewidth according to value
     ctx.stroke();
     ctx.beginPath();
-    ctx.lineWidth = value*15;
+    ctx.lineWidth = Math.max(value*15, 4);
     //ctx.fillStyle = 'rgba(0, 0, 0, ', alphaFactor*0.0, ')';
     let colorStr = 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ', ' + alphaFactor * 0.5 + ')'
     ctx.strokeStyle = colorStr; // Makes the app go slow, consider something different
